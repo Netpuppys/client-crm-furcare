@@ -30,6 +30,7 @@ const LoginForm = () => {
                 <div className='w-full h-[0.0625rem] bg-black'></div>
             </div>
             <button
+                onClick={() => setShowPassword(false)} 
                 className='px-4 mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
             >
                 One Time Code
