@@ -21,6 +21,7 @@ const Hero = () => {
 }
 
 const LoginPage = () => {
+
   return (
     <div className='w-full h-screen min-h-[50rem] flex items-center justify-center bg-white'>
         <Hero />
