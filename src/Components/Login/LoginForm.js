@@ -56,11 +56,11 @@ const LoginForm = () => {
     }
     
   return (
-    <div className='w-1/2 h-full flex flex-col items-center justify-center'>
+    <div className='w-full min-h-[70vh] h-full md:min-h-full md:w-1/2 py-10 md:py-0 flex flex-col items-center justify-center'>
         {/* login form */}
         {!forgotPassword &&
         <div className='max-w-80 w-full flex flex-col items-center justify-start'>
-            <div className='w-[7.125rem] h-[9.9375rem] mb-[2.8rem]'>
+            <div className='w-[7.125rem] h-[9.9375rem] mb-6 md:mb-[2.8rem]'>
                 <img
                     src={placeholderLogo}
                     className='w-full h-full'
@@ -71,7 +71,7 @@ const LoginForm = () => {
                 type='email'
                 name='email'
                 placeholder='User email'
-                className={`${(errors==="email")? "border-error-red mb-1" : "border-light-gray mb-6"}
+                className={`${(errors==="email")? "border-error-red mb-1" : "border-light-gray mb-4 md:mb-6"}
                     h-10 p-2 focus:outline-none w-full border-2 bg-transparent rounded-md placeholder:text-[#121C2D] placeholder:font-medium placeholder:text-sm`}
                 value={loginCredentials.email}
                 onChange={handleInput}
@@ -108,7 +108,7 @@ const LoginForm = () => {
                     Wrong password entered. 
                 </p>
             </div>}
-            <div className='w-full mb-6'>
+            <div className='w-full mb-4 md:mb-6'>
                 <button 
                     onClick={() => setForgotPassword(true)}
                     className='text-accent-blue font-semibold text-[14px] text-left'
@@ -124,7 +124,7 @@ const LoginForm = () => {
                 onClickHandler={handleSubmit}
             />
 
-            <div className='w-full flex flex-nowrap mt-6 items-center justify-center gap-[0.5rem]'>
+            <div className='w-full flex flex-nowrap mt-4 md:mt-6 items-center justify-center gap-[0.5rem]'>
                 <div className='w-full h-[0.0625rem] bg-black'></div>
                 <p className='text-xs w-full tracking-[0.00375rem] text-center px-0 text-[#121C2D] text-nowrap'>
                     Or Log In With
@@ -134,14 +134,14 @@ const LoginForm = () => {
             {!loginViaOtp && 
             <button
                 onClick={() => setLoginViaOtp(true)}
-                className='px-4 mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
+                className='px-4 mt-4 md:mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
             >
                 One Time Code
             </button>}
             {loginViaOtp && 
             <button
                 onClick={() => setLoginViaOtp(true)}
-                className='px-4 mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
+                className='px-4 mt-4 md:mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
             >
                 Resend Code
             </button>}
@@ -156,7 +156,7 @@ const LoginForm = () => {
         {/* login via code form */}
         {loginViaOtp && !forgotPassword &&
         <div className='max-w-[27rem] w-full pt-6 flex flex-col items-center justify-center gap-6'>
-            <p className='text-center text-[#121C2D] text-sm leading-[1.25rem]'>
+            <p className='text-center text-[#121C2D] px-2 text-sm leading-[1.25rem]'>
                 We sent a one time code to your registered mobile xxxxxx2601. Please enter the code below to log in.
             </p>
 
