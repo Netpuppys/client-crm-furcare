@@ -96,6 +96,7 @@ const LoginForm = () => {
                 value={loginCredentials.password}
                 onChange={handleInput}
             />
+            <div onClick={() => setShowPassword(false)} className='hidden'></div>
             {errors==="password" &&
             <div className='flex w-full items-center justify-start gap-1'>
                 <img
