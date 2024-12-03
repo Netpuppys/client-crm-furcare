@@ -3,11 +3,7 @@ import BlueButton from '../../ui/BlueButton'
 import placeholderLogo from "../../Assets/Login/placeholderLogo.png"
 import errorIcon from "../../Assets/icons/errorIcon.svg"
 import ForgotPassword from "./ForgotPassword"
-
-const demoLogin = {
-    email: "test@gmail.com",
-    password: "test@1234"
-}
+import axiosInstance from '../../utils/AxiosInstance'
 
 const LoginForm = () => {
     const [ showPassword, setShowPassword ] = useState(false)
@@ -34,7 +30,7 @@ const LoginForm = () => {
     };
 
     const isValidPassword = (password) => {
-        return password.length >= 6; // Example validation for password length
+        return password.length >= 8; // Example validation for password length
     };
 
     const isButtonDisabled =
@@ -42,21 +38,31 @@ const LoginForm = () => {
         !isValidPassword(loginCredentials.password);
 
     const handleSubmit = () => {
-        if (loginCredentials.email !== demoLogin.email) {
-            setErrors("email")
+        if (!isValidEmail(loginCredentials.email)) {
+            setErrors(["email"])
             return
         }
-
-        if (loginCredentials.password !== demoLogin.password) {
-            setErrors("password")
+        
+        if (!isValidPassword(loginCredentials.password)) {
+            setErrors(["password"])
             return
         }
+        
+        axiosInstance
+            .post("/api/v1/auth/login", loginCredentials)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.error(err)
+                setErrors(["email", "password"])
+            })
 
         setErrors("")
     }
     
   return (
-    <div className='w-full min-h-[70vh] h-full md:min-h-full md:w-1/2 py-10 md:py-0 flex flex-col items-center justify-center'>
+    <div className='w-full min-h-[50vh] h-full md:min-h-full md:w-full my-auto md:mx-w-1/2 py-10 md:py-0 flex flex-col items-center justify-center'>
         {/* login form */}
         {!forgotPassword &&
         <div className='max-w-80 w-full flex flex-col items-center justify-start'>
@@ -71,12 +77,12 @@ const LoginForm = () => {
                 type='email'
                 name='email'
                 placeholder='User email'
-                className={`${(errors==="email")? "border-error-red mb-1" : "border-light-gray mb-4 md:mb-6"}
+                className={`${errors.includes("email")? "border-error-red mb-1" : "border-light-gray mb-4 md:mb-6"}
                     h-10 p-2 focus:outline-none w-full border-2 bg-transparent rounded-md placeholder:text-[#121C2D] placeholder:font-medium placeholder:text-sm`}
                 value={loginCredentials.email}
                 onChange={handleInput}
             />
-            {errors==="email" &&
+            {errors.includes("email") &&
             <div className='flex w-full items-center justify-start gap-1 mb-6'>
                 <img
                     src={errorIcon}
@@ -91,13 +97,13 @@ const LoginForm = () => {
                 type={showPassword? 'text' : 'password'}
                 placeholder='Password'
                 name='password'
-                className={`${(errors==="password")? "border-error-red mb-1" : "border-light-gray mb-0"}
+                className={`${errors.includes("password")? "border-error-red mb-1" : "border-light-gray mb-0"}
                     h-10 p-2 focus:outline-none w-full border-2 bg-transparent rounded-md placeholder:text-[#121C2D] placeholder:font-medium placeholder:text-sm`}
                 value={loginCredentials.password}
                 onChange={handleInput}
             />
             <div onClick={() => setShowPassword(false)} className='hidden'></div>
-            {errors==="password" &&
+            {errors.includes("password") &&
             <div className='flex w-full items-center justify-start gap-1'>
                 <img
                     src={errorIcon}
