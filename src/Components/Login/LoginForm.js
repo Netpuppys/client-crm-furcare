@@ -55,6 +55,7 @@ const LoginForm = () => {
             .post("/api/v1/auth/login", loginCredentials)
             .then(res => {
                 console.log(res)
+                alert("Login Successful");
                 navigate('/dashboard')
             })
             .catch(err => {

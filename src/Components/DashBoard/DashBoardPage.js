@@ -1,5 +1,4 @@
 import React from 'react'
-import Sidebar from '../../ui/Sidebar'
 
 const DashBoardPage = () => {
   return (
