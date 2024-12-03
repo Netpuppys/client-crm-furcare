@@ -4,8 +4,11 @@ import placeholderLogo from "../../Assets/Login/placeholderLogo.png"
 import errorIcon from "../../Assets/icons/errorIcon.svg"
 import ForgotPassword from "./ForgotPassword"
 import axiosInstance from '../../utils/AxiosInstance'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = () => {
+    const navigate = useNavigate()
+
     const [ showPassword, setShowPassword ] = useState(false)
     const [ loginViaOtp, setLoginViaOtp ] = useState(false)
     const [ forgotPassword, setForgotPassword ] = useState(false)
@@ -52,6 +55,7 @@ const LoginForm = () => {
             .post("/api/v1/auth/login", loginCredentials)
             .then(res => {
                 console.log(res)
+                navigate('/dashboard')
             })
             .catch(err => {
                 console.error(err)
