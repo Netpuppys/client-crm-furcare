@@ -60,7 +60,17 @@ const LoginForm = () => {
             })
             .catch(err => {
                 console.error(err)
-                setErrors(["email", "password"])
+                if (err.response.data.message === "Invaild email") {
+                    setErrors(["email"])
+                    return
+                } else if (err.response.data.message === "Invaild password") {
+                    setErrors(["password"])
+                    return
+                }
+
+                if (err.status===429) {
+                    alert("Too many requests, Please try again later")
+                }
             })
 
         setErrors("")

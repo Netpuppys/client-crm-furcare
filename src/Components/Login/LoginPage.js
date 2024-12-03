@@ -5,7 +5,7 @@ import LoginForm from './LoginForm'
 const Hero = () => {
 
     return (
-        <div className='w-full md:w-fit h-[50vh] md:min-w-[calc(100vh*3/4)] md:aspect-[3/4] md:h-full overflow-hidden bg-accent-indigo'>
+        <div className='w-full hidden md:block md:w-fit h-[50vh] md:min-w-[calc(100vh*3/4)] md:aspect-[3/4] md:h-full overflow-hidden bg-accent-indigo'>
             <img
                 src={loginHeroImage}
                 className='w-full h-full'
