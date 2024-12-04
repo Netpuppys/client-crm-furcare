@@ -120,7 +120,7 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
                             <img src={isSelected(item.name)? item.icon : item.darkIcon} className='w-6' alt='' />
 
                             {sidebarExpanded &&
-                            <p className={`${isSelected(item.name)? "text-white" : "text-[#CACDD8]"} font-semibold`}>
+                            <p className={`${isSelected(item.name)? "text-white" : "text-[#CACDD8] hover:text-white"} font-semibold`}>
                                 {item.name}
                             </p>}
                         </button>
