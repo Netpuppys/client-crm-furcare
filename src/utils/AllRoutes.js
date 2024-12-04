@@ -1,17 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
 import LoginPage from '../Components/Login/LoginPage';
 import DashBoardPage from '../Components/DashBoard/DashBoardPage';
-import Sidebar from '../ui/Sidebar';
+import BusinessUnitsPage from '../Components/Admin/BusinessUnits/BusinessUnitsPage';
 
 const AllRoutes = () => {
   return (
     <Routes>
         <Route path='/' element={<LoginPage />} />
-
-        {/* <div className='w-full min-h-screen flx items-center justify-center pl-[20rem]'> */}
-        {/* <Sidebar /> */}
         <Route path='/dashboard' element={<DashBoardPage />} />
-        {/* </div> */}
+        <Route path='/admin/business-units' element={<BusinessUnitsPage />} />
     </Routes>
   )
 }

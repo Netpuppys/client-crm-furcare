@@ -55,8 +55,8 @@ const LoginForm = () => {
             .post("/api/v1/auth/login", loginCredentials)
             .then(res => {
                 console.log(res)
-                alert("Login Successful");
-                navigate('/dashboard')
+                localStorage.setItem("access", res.data.data.token)
+                navigate('/admin/business-units')
             })
             .catch(err => {
                 console.error(err)
