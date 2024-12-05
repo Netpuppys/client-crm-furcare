@@ -107,7 +107,6 @@ const BusinessUnitsPage = () => {
                 </Link>
             </div>
             <button
-                onClick={() => setCreateNew(true)}
                 className='bg-[#006DFA] w-[4.5rem] h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
             >
                 Create
@@ -129,9 +128,10 @@ const BusinessUnitsPage = () => {
                 </div>
             ))}
         </div>}
-
-        {createNew &&
-        <CreateNew />}
+        
+        <div className='mt-10'>
+            <CreateNew />
+        </div>
     </div>
   )
 }
