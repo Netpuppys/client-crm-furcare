@@ -107,7 +107,7 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
 
         currentItem && setSelectedOption(currentItem.name)
 
-        if (currentItem && currentItem.subItems && !modalOpen) {
+        if (currentItem && currentItem.subItems) {
             setModalOpen(true)
         }
     }, [currentPath])
