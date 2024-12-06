@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 const AlertContext = createContext();
 
-export const UserProvider = ({ children }) => {
+export const AlertProvider = ({ children }) => {
   const [ alert, setAlert ] = useState()
   
   useEffect(() => {
@@ -27,4 +27,4 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-export const useUserContext = () => useContext(AlertContext);
+export const useAlertContext = () => useContext(AlertContext);

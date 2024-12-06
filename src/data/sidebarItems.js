@@ -16,12 +16,12 @@ import socialDark from "../Assets/icons/sidebar/SocialDark.png";
 const sidebarItems = [
     {
       name: "Admin",
-    //   linkTo: "/admin",
+      linkTo: "/admin",
       icon: contactCenterAdmin,
       darkIcon: contactCenterAdminDark,
       subItems: [
         { name: "Animal Classes", linkTo: "/admin/animal-classes" },
-        { name: "Business Units", linkTo: "/admin/business-units" },
+        { name: "Branch Units", linkTo: "/admin/branch-units" },
         { name: "Config Management", linkTo: "/admin/config-management" },
         { name: "Content Library", linkTo: "/admin/content-library" },
         { name: "Diagnostic Integrations", linkTo: "/admin/diagnostic-integrations" },
@@ -60,7 +60,7 @@ const sidebarItems = [
     },
     {
       name: "Visits",
-    //   linkTo: "/visits",
+      linkTo: "/visits",
       icon: community,
       darkIcon: communityDark,
       subItems: [

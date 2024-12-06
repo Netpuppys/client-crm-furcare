@@ -52,11 +52,11 @@ const LoginForm = () => {
         }
         
         axiosInstance
-            .post("/api/v1/auth/login", loginCredentials)
+            .post("/api/v1/auth/staff/login", loginCredentials)
             .then(res => {
                 console.log(res)
                 localStorage.setItem("access", res.data.data.token)
-                navigate('/admin/business-units')
+                navigate('/admin/branch-units')
             })
             .catch(err => {
                 console.error(err)

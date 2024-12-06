@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import smallLogo from "../Assets/logo/smallLogo.png"
 import sidebarItems from '../data/sidebarItems'
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import closeIcon from "../Assets/icons/sidebar/close.png"
 import { useNavigate } from 'react-router-dom';
 
-const NestedComponents = ({ subItems }) => {
+const NestedComponents = ({ subItems, currentPath }) => {
     const navigate = useNavigate()
 
     const [ activeItem, setActiveItem ] = useState()
@@ -14,11 +14,35 @@ const NestedComponents = ({ subItems }) => {
         return (name === activeItem)? true : false
     }
 
+    function findSidebarItemByPath(subItems, currentPath) {
+        // Ensure the input is valid
+        if (!Array.isArray(subItems)) return null;
+      
+        for (const item of subItems) {
+            if (item.linkTo === currentPath) {
+                return item;
+            }
+        }
+
+        // Return null if no match is found
+        return null;
+    }
+
     const handleClick = (item) => {
         setActiveItem(item.name)
 
         navigate(item.linkTo)
     }
+
+    useEffect(() => {
+        const pathArray = currentPath.split("/").filter(item => item !== "")
+
+        if (pathArray.length > 1) {
+            const currentItem = findSidebarItemByPath(subItems, currentPath)
+
+            currentItem && setActiveItem(currentItem.name)
+        }
+    }, [currentPath, subItems])
 
     return (
         <div className='w-full flex flex-col gap-2 items-start justify-start'>
@@ -38,28 +62,24 @@ const NestedComponents = ({ subItems }) => {
 const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
     const navigate = useNavigate()
 
-    // function findSidebarItemByPath(sidebarItems, pathname) {
-    //     // Ensure the input is valid
-    //     if (!Array.isArray(sidebarItems)) return null;
+    function findSidebarItemByPath(sidebarItems, pathname) {
+        // Ensure the input is valid
+        if (!Array.isArray(sidebarItems)) return null;
+
+        const pathnameArray = pathname.split('/').filter(Boolean).map((item, index, array) => 
+            index === array.length - 1 ? `/${item}` : `/${item}`
+        );
       
-    //     for (const item of sidebarItems) {
-    //       // Check if the item's linkTo matches the pathname
-    //       if (item.linkTo === pathname) {
-    //         return item;
-    //       }
+        for (const item of sidebarItems) {
+
+            // Check if the item's linkTo matches the pathname
+            if (pathnameArray.includes(item.linkTo)) {
+                return item;
+            }
+        }
       
-    //       // Check subItems only if they exist and are valid
-    //       if (item.subItems && Array.isArray(item.subItems)) {
-    //         const found = findSidebarItemByPath(item.subItems, pathname);
-    //         if (found) {
-    //           return found;
-    //         }
-    //       }
-    //     }
-      
-    //     // Return null if no match is found
-    //     return null;
-    // }
+        return null;
+    }
 
     const [ selectedOption, setSelectedOption ] = useState()
     const [ modalOpen, setModalOpen ] = useState(false)
@@ -79,20 +99,25 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
 
         setSelectedOption(item.name)
 
-        item.linkTo && navigate(item.linkTo)
+        item.linkTo && !item.subItems && navigate(item.linkTo)
     }
 
-    // useEffect(() => {
-    //     const currentItem = findSidebarItemByPath(sidebarItems, currentPath)
+    useEffect(() => {
+        const currentItem = findSidebarItemByPath(sidebarItems, currentPath)
 
-    //     handleClick(currentItem)
-    // }, [currentPath])
+        currentItem && setSelectedOption(currentItem.name)
+
+        if (currentItem && currentItem.subItems && !modalOpen) {
+            setModalOpen(true)
+        }
+    }, [currentPath])
 
   return (
-    <div className={`${sidebarExpanded? "w-60" : "w-20"}
-        fixed top-0 h-screen bg-[#1F304C] border-r-2 border-[#394762]`}>
+    <div 
+        className={`${sidebarExpanded? "w-60" : "w-20"}
+        fixed top-0 h-screen bg-[#1F304C] border-r-2 border-[#394762]`}
+    >
         <div className='w-full h-full relative'>
-
             <div className='w-full h-[4.1875rem] border-b-2 border-[#394762] flex items-center justify-start gap-4 px-8'>
                 <img
                     src={smallLogo}
@@ -125,7 +150,7 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
                             </p>}
                         </button>
                         {isSelected(item.name) && item.subItems && modalOpen && sidebarExpanded &&
-                        <NestedComponents 
+                        <NestedComponents
                             subItems={item.subItems} 
                             currentPath={currentPath}
                         />}

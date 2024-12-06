@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Link } from 'react-router-dom'
 import CreateNew from './CreateNew'
 
@@ -20,8 +20,8 @@ const dummy = [
         currency: "INR"
     },
     {
-        branch: "Branch B",
-        branchId: 1101,
+        branch: "Branch C",
+        branchId: 1102,
         address: "148, HBCS, Domlur, Bengaluru 560071",
         type: "Practice",
         practice: "Clinic",
@@ -33,21 +33,21 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
     return (
         <div className='flex flex-col gap-2'>
             <div className='flex items-center justify-between'>
-                <p className=''>
+                <p className='capitalize'>
                     {branch}
                 </p>
-                <p className=''>
+                <p className='capitalize'>
                     ID: {branchId}
                 </p>
             </div>
             <div className='w-full flex items-center justify-start gap-2'>
-                <div className='w-4 bg-[#0B602D] aspect-square rounded-full'></div>
+                <div className='w-4 bg-[#0B602D] aspect-square capitalize rounded-full'></div>
                 <p className=''>
                     Active
                 </p>
             </div>
             <div className='bg-[#5856D6] w-full py-5 px-4 text-white font-medium flex flex-col gap-3'>
-                <div className='flex w-full items-start gap-1'>
+                <div className='flex w-full items-start gap-1 capitalize'>
                     <p className=''>
                         Address: 
                     </p>
@@ -55,7 +55,7 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
                         {address}
                     </p>
                 </div>
-                <div className='flex w-full items-start gap-1'>
+                <div className='flex w-full items-start gap-1 capitalize'>
                     <p className=''>
                         Type: 
                     </p>
@@ -63,7 +63,7 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
                         {type}
                     </p>
                 </div>
-                <div className='flex w-full items-start gap-1'>
+                <div className='flex w-full items-start gap-1 capitalize'>
                     <p className=''>
                         Practice Type: 
                     </p>
@@ -71,7 +71,7 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
                         {practice}
                     </p>
                 </div>
-                <div className='flex w-full items-start gap-1'>
+                <div className='flex w-full items-start gap-1 capitalize'>
                     <p className=''>
                         Currency: 
                     </p>
@@ -85,38 +85,35 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
 }
 
 const BusinessUnitsPage = () => {
-    const [ createNew, setCreateNew ] = useState(false)
 
   return (
     <div className='w-full min-h-full px-8 py-4'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
                 <Link
-                    to={"/admin"}
+                    // to={"/admin"}
                     className='underline'
                 >
                     Admin
                 </Link>
                 <span>{" "}/{" "}</span>
                 <Link
-                    to={"/admin/business-units"}
-                    onClick={() => setCreateNew(false)}
+                    to={"/admin/branch-units"}
                     className='underline'
                 >
-                    Business Units
+                    Branch Units
                 </Link>
             </div>
             <button
-                className='bg-[#006DFA] w-[4.5rem] h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
+                className='bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
             >
                 Create
             </button>
         </div>
 
-        {!createNew &&
         <div className='flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6'>
             {dummy.map((item, index) => (
-                <div onClick={() => setCreateNew(true)} className='max-w-[calc(33%-4rem)]' key={index}>
+                <div className='max-w-[calc(33%-4rem)]' key={index}>
                     <Card
                         branch={item.branch}
                         branchId={item.branchId}
@@ -127,7 +124,7 @@ const BusinessUnitsPage = () => {
                     />
                 </div>
             ))}
-        </div>}
+        </div>
         
         <div className='mt-10'>
             <CreateNew />

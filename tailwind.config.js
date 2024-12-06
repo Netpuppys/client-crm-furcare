@@ -11,7 +11,27 @@ module.exports = {
         "light-gray" : "#8891AA",
       }, 
       fontFamily: {
-        sfPro: ['SFProDisplay', 'sans-serif'], // Add fallback font if needed
+        sfPro: ['SFProDisplay', 'sans-serif'],
+      },
+      animation: {
+        alertShow: 'alertShow 0.5s ease',
+        alertHide: 'alertHide 0.5s ease'
+      },
+      keyframes: {
+        alertShow: {
+          from: {
+            bottom: "-4rem",
+          }, to: {
+            bottom: "0%"
+          }
+        },
+        alertHide: {
+          from: {
+            bottom: "0%",
+          }, to: {
+            bottom: "-4rem",
+          }
+        },
       },
     },
   },

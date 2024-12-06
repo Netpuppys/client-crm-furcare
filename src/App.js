@@ -1,9 +1,10 @@
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import AllRoutes from './utils/AllRoutes';
 import Sidebar from './ui/Sidebar';
-import {Theme} from '@twilio-paste/core/theme';
 import { useState } from 'react';
 import Navbar from './ui/Navbar';
+import { AlertProvider } from './utils/AlertContext';
+import Alert from './ui/Alert';
 
 function App() {
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true)
@@ -35,14 +36,15 @@ function App() {
       </div>
     );
   }
-  
+
   return (
     <div className="">
-      <Theme.Provider theme="default">
+      <AlertProvider>
         <BrowserRouter>
           <Layout />
         </BrowserRouter>
-      </Theme.Provider>
+        <Alert />
+      </AlertProvider>
     </div>
   );
 }
