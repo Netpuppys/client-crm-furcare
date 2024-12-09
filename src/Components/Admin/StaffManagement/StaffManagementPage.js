@@ -42,7 +42,7 @@ const data = [
   },
 ];
 
-const SuppliesTable = () => {
+const DiagnosticTable = () => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -56,17 +56,22 @@ const SuppliesTable = () => {
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-2">
-                <p className="">Items</p>
+                <p className="">Id</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-2">
-                <p className="">Vendors</p>
+                <p className="">Email</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
-
+            <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <div className="flex items-center gap-2">
+                <p className="">Roles</p>
+                <img src={informationIcon} className="w-5" alt="" />
+              </div>
+            </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-2">
                 <p className="">Status</p>
@@ -214,7 +219,7 @@ const CreateNewForm = () => {
     </div>
   );
 };
-function SuppliesManagementPage() {
+function StaffManagementPage() {
   const [createNew, setCreateNew] = useState(false);
 
   return (
@@ -241,7 +246,7 @@ function SuppliesManagementPage() {
       </div>
 
       <div className="w-full mt-6">
-        <SuppliesTable />
+        <DiagnosticTable />
       </div>
 
       <div
@@ -265,4 +270,4 @@ function SuppliesManagementPage() {
     </div>
   );
 }
-export default SuppliesManagementPage;
+export default StaffManagementPage;

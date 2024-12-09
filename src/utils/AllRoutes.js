@@ -6,6 +6,9 @@ import AnimalClassesPage from "../Components/Admin/AnimalClasses/AnimalClassesPa
 import ContentLibraryPage from "../Components/Admin/ContentLibrary/ContentLibraryPage";
 import DiagnosticIntegrationPage from "../Components/Admin/DiagnosticIntegration/DiagnosticIntegrationPage";
 import SuppliesManagementPage from "../Components/Admin/SuppliesManagement/SuppliesManagementPage";
+import StaffManagementPage from "../Components/Admin/StaffManagement/StaffManagementPage";
+import DocumentTemplatePage from "../Components/Admin/DocumentTemplates/DocumentTemplatePage";
+
 
 const AllRoutes = () => {
   return (
@@ -15,8 +18,10 @@ const AllRoutes = () => {
       <Route path="/admin/branch-units" element={<BusinessUnitsPage />} />
       <Route path="/admin/animal-classes" element={<AnimalClassesPage />} />
       <Route path="/admin/content-library" element={<ContentLibraryPage />} />
-      <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />}/>
-      <Route path="/admin/supplies-management" element={<SuppliesManagementPage />}/>
+      <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />} />
+      <Route path="/admin/supplies-management" element={<SuppliesManagementPage />} />
+      <Route path="/admin/staff-management" element={<StaffManagementPage />} />
+      <Route path="/admin/document-templates" element={<DocumentTemplatePage />} />
     </Routes>
   );
 };
