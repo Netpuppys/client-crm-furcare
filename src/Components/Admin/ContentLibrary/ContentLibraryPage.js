@@ -3,6 +3,7 @@ import { FaChevronDown } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
+import AddNewItemForm from "./components/AddNewItemForm";
 
 const data = [
   {
@@ -145,8 +146,8 @@ const ContentLibraryPage = () => {
           <TableComponent />
         </div>
 
-        <div className={`fixed top-0 shadow-2xl h-screen p-6 bg-white w-[40rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
-            <div className="flex items-center justify-between">
+        <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
+            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
               <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
                 Anesthesia Patient Monitoring
               </p>
@@ -156,6 +157,12 @@ const ContentLibraryPage = () => {
               >
                 <img src={closeIcon} className="w-7 " alt="" />
               </button>
+            </div>
+
+            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+              <AddNewItemForm 
+
+              />
             </div>
         </div>
     </div>

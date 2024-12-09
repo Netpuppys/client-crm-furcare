@@ -41,7 +41,7 @@ function getUniqueAnimalClasses(options, data) {
                             console.log("Selected value:", e.target.value);
                             setSelectedValue(e.target.value)
                         }}
-                        className='max-w-[17rem] w-full h-[2.25rem] rounded-md border border-[#8891AA] focus:outline-none'
+                        className='classic max-w-[17rem] w-full h-[2.25rem] rounded-md border border-[#8891AA] focus:outline-none'
                     >
                         <option value={""} className=''>
                             Choose Animal Class
