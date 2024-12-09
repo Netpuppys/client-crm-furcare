@@ -269,7 +269,10 @@ const DiagnosticIntegrationPage = () => {
             Admin
           </Link>
           <span> / </span>
-          <Link to={"/admin/diagnostic-integrations"} className="underline">
+          <Link 
+            to={"/admin/diagnostic-integrations"} 
+            className="underline"
+          >
             Diagnostic Integration
           </Link>
         </div>

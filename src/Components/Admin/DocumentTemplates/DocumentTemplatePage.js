@@ -93,10 +93,10 @@ const DocumentTemplatePage = () => {
                 </Link>
                 <span>{" "}/{" "}</span>
                 <Link
-                    to={"/admin/content-library"}
+                    to={"/admin/document-templates"}
                     className='underline'
                 >
-                    Content Library
+                    Document Templates
                 </Link>
             </div>
             <div className='flex items-center gap-6'>
