@@ -5,39 +5,31 @@ import closeIcon from "../../../Assets/icons/alert/close.png";
 
 const data = [
   {
-    name: "Over the counter supplies",
-    items: "Diets, Dental care items, Grooming Supplies",
-    url: "#",
+    name: "Manu Juneja",
+    id: "ces14",
+    url: "mjuneja@cessna.com",
+    roles: "Admin, Doctor, Manager",
     status: "Active",
   },
   {
-    name: "Physical exam equipments",
-    items: "Stethoscope, Thermometer, Wood’s lamp +5",
-    url: "#",
+    name: "Rishad Mohammed",
+    id: "ces15",
+    url: "rmohd@cessna.com",
+    roles: "Doctor",
     status: "Active",
   },
   {
-    name: "Treat & toy baskets",
-    items: "Pet food, Treats, Toys",
-    url: "#",
+    name: "Farseena Moideen",
+    id: "ces16",
+    url: "fmoid@cessna.com",
+    roles: "Receptionist, Tech Assistant +2",
     status: "Active",
   },
   {
-    name: "Medical record keeping",
-    items: "Tablet, Desktop, Laptop",
-    url: "#",
-    status: "Inactive",
-  },
-  {
-    name: "Surgery equipments",
-    items: "Lights, Surgery table, Anaesthesia equipment +5",
-    url: "#",
-    status: "Active",
-  },
-  {
-    name: "Drug & Supplies",
-    items: "Basic drugs, Patient cages, Microscope +3",
-    url: "#",
+    name: "Rishan Muneer",
+    id: "ces17",
+    url: "rmuneer@cessna.com",
+    roles: "Referral Doctor",
     status: "Inactive",
   },
 ];
@@ -84,13 +76,9 @@ const DiagnosticTable = () => {
           {data.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.items}</td>
-              <td className="px-4 py-2 text-sm">
-                <a href={item.url} className="text-blue-600 underline">
-                  link
-                </a>
-              </td>
-
+              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.id}</td>
+              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.url}</td>
+              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.roles}</td>
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
                   className={`w-2 aspect-square rounded-full ${
@@ -122,22 +110,24 @@ const CreateNewForm = () => {
     additionalNotes: "",
   });
 
-  const [fields, setFields] = useState([
-    { item: "", vendor: "" }, // Initial pair of item and vendor
-  ]);
+  const [roles, setRoles] = useState(["Admin", "Doctor"]); // Initial roles
+  const [inputValue, setInputValue] = useState("");
+
+  // Function to remove a role
+  const removeRole = (roleToRemove) => {
+    setRoles(roles.filter((role) => role !== roleToRemove));
+  };
+
+  // Function to add a new role
+  const addRole = () => {
+    if (inputValue.trim() && !roles.includes(inputValue)) {
+      setRoles([...roles, inputValue]);
+      setInputValue(""); // Clear the input field
+    }
+  };
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
-  const addField = () => {
-    setFields([...fields, { item: "", vendor: "" }]);
-  };
-
-  const handleFieldChange = (index, key, value) => {
-    const updatedFields = [...fields];
-    updatedFields[index][key] = value;
-    setFields(updatedFields);
   };
 
   const handleSubmit = () => {
@@ -166,46 +156,74 @@ const CreateNewForm = () => {
           onChange={(e) => handleInputChange("name", e.target.value)}
         />
       </div>
-      {fields.map((field, index) => (
-        <div key={index} className="flex w-full items-center justify-between">
-          <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
-              <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-              Items
-            </label>
+
+      <div className="flex items-center justify-between w-full">
+        <div className="w-[47.5%]">
+          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+            Email Address
+          </label>
+          <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
             <input
-              type="text"
-              className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-              placeholder="Placeholder"
-              value={field.item}
-              onChange={(e) => handleFieldChange(index, "item", e.target.value)}
+              type="email"
+              className="w-full focus:outline-none p-2"
+              placeholder="jdoe@oases"
+              value={formData.email}
+              onChange={(e) => handleInputChange("email", e.target.value)}
             />
+            <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
+              .com
+            </div>
           </div>
-          <div className="w-[47.5%]">
-            <div className="w-[98%] items-center flex justify-between">
-              <label className="w-fit font-medium text-[#121C2D] flex items-center gap-2">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Vendor
-              </label>
-              <button
-                onClick={addField}
-                className="text-[#006DFA] text-2xl leading-none"
-              >
-                +
-              </button>
+        </div>
+        <div className="w-[47.5%]">
+          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+            Phone Number
+          </label>
+          <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
+            <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
+              +91
             </div>
             <input
-              type="text"
-              className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-              placeholder="Placeholder"
-              value={field.vendor}
-              onChange={(e) =>
-                handleFieldChange(index, "vendor", e.target.value)
-              }
+              type="tel"
+              className="w-full focus:outline-none p-2"
+              placeholder="9447010765"
+              value={formData.number}
+              onChange={(e) => handleInputChange("number", e.target.value)}
             />
           </div>
         </div>
-      ))}
+      </div>
+      <div className="w-full flex flex-col gap-2">
+        <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <div className="w-1 aspect-square rounded-full bg-red-500"></div>
+          Role(s)
+        </label>
+        <div className="mt-1 w-full gap-2 flex p-2 border border-gray-300 focus:outline-none rounded-lg">
+          {roles.map((role) => (
+            <div
+              key={role}
+              className="flex items-center gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+            >
+              {role}
+              <button
+                onClick={() => removeRole(role)}
+                className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+              >
+                ✕
+              </button>
+            </div>
+          ))}
+          <input
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && addRole()}
+            className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
+          />
+        </div>
+      </div>
 
       {/* Submit Button */}
       <div className="h-full w-full items-end flex justify-end ">
@@ -233,15 +251,15 @@ function StaffManagementPage() {
             Admin
           </Link>
           <span> / </span>
-          <Link to={"/admin/supplies-management"} className="underline">
-            Supplies Management
+          <Link to={"/admin/staff-management"} className="underline">
+            Staff Management
           </Link>
         </div>
         <button
           onClick={() => setCreateNew(true)}
           className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
         >
-          Create
+          Add
         </button>
       </div>
 
@@ -256,7 +274,7 @@ function StaffManagementPage() {
       >
         <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
           <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-            Create Supply
+            Add Staff
           </p>
           <button onClick={() => setCreateNew(false)} className="">
             <img src={closeIcon} className="w-7 " alt="" />
