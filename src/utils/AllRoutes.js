@@ -5,6 +5,7 @@ import BusinessUnitsPage from "../Components/Admin/BusinessUnits/BusinessUnitsPa
 import AnimalClassesPage from "../Components/Admin/AnimalClasses/AnimalClassesPage";
 import ContentLibraryPage from "../Components/Admin/ContentLibrary/ContentLibraryPage";
 import DiagnosticIntegrationPage from "../Components/Admin/DiagnosticIntegration/DiagnosticIntegrationPage";
+import SuppliesManagementPage from "../Components/Admin/SuppliesManagement/SuppliesManagementPage";
 
 const AllRoutes = () => {
   return (
@@ -15,6 +16,7 @@ const AllRoutes = () => {
       <Route path="/admin/animal-classes" element={<AnimalClassesPage />} />
       <Route path="/admin/content-library" element={<ContentLibraryPage />} />
       <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />}/>
+      <Route path="/admin/supplies-management" element={<SuppliesManagementPage />}/>
     </Routes>
   );
 };
