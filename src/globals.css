@@ -3,29 +3,29 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/src/Assets/font/SFPRODISPLAYREGULAR.OTF') format('opentype');
+  font-family: "SFProDisplay";
+  src: url("/src/Assets/font/SFPRODISPLAYREGULAR.OTF") format("opentype");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/src/Assets/font/SFPRODISPLAYMEDIUM.OTF') format('opentype');
+  font-family: "SFProDisplay";
+  src: url("/src/Assets/font/SFPRODISPLAYMEDIUM.OTF") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'SFProDisplay';
-  src: url('/src/Assets/font/SFPRODISPLAYBOLD.OTF') format('opentype');
+  font-family: "SFProDisplay";
+  src: url("/src/Assets/font/SFPRODISPLAYBOLD.OTF") format("opentype");
   font-weight: 700;
   font-style: normal;
 }
 
 body {
   @apply font-sfPro font-normal;
-  
+
   margin: 0;
   /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -36,14 +36,14 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 .hero-image {
-  background: url(./Assets/Login/loginHero.png) #5856D6 50% / cover no-repeat;
+  background: url(./Assets/Login/loginHero.png) #5856d6 50% / cover no-repeat;
   mix-blend-mode: luminosity;
- /* background: #5856D6; */
+  /* background: #5856D6; */
 }
 select {
   -webkit-box-sizing: border-box;
@@ -60,5 +60,16 @@ select.classic {
     calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
   background-size: 5px 5px, 5px 5px, 1px 2em;
   background-repeat: no-repeat;
-  
 }
+.hideScrollbar::-webkit-scrollbar-thumb {
+  display: none;
+}
+.hideScrollbar::-webkit-scrollbar {
+  display: none;
+}
+/* ::-webkit-scrollbar-thumb {
+  display: none;
+}
+::-webkit-scrollbar {
+  display: none;
+} */
