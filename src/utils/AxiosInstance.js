@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// const baseURL = 'https://render-1-75jn.onrender.com'
 const baseURL = "https://backend.Furcareindia.com"
 
 const axiosInstance = axios.create({
