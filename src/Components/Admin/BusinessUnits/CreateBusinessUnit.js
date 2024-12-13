@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 
@@ -47,6 +47,7 @@ const departments = [
 
 
 const CreateBusinessUnit = () => {
+  const navigate = useNavigate()
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
 
@@ -56,8 +57,8 @@ const CreateBusinessUnit = () => {
   const { setAlert } = useAlertContext()
 
   const [ selectedOptions, setSelectedOptions ] = useState([]);
-  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-  const [ disabled, setDisabled ] = useState(false)
+  const [ isDropdownOpen, setIsDropdownOpen ] = useState(true);
+  // const [ disabled, setDisabled ] = useState(false)
   const [ formData, setFormData ] = useState({
     unitName: "",
     branchType: "",
@@ -73,18 +74,18 @@ const CreateBusinessUnit = () => {
     appointment: "",
   });
 
-  useEffect(() => {
-    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
-    const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
+  // useEffect(() => {
+  //   const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
+  //   const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
 
-    const checkServices = selectedOptions.length>0? true : false
+  //   const checkServices = selectedOptions.length>0? true : false
 
-    if (checkFromdata && checkServices) {
-      setDisabled(true)
-    } else {
-      setDisabled(false);
-    }
-  }, [formData, selectedOptions.length]);
+  //   if (checkFromdata && checkServices) {
+  //     setDisabled(true)
+  //   } else {
+  //     setDisabled(true);
+  //   }
+  // }, [formData, selectedOptions.length]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -135,10 +136,10 @@ const CreateBusinessUnit = () => {
 
   const handleSubmit = () => {
     // Validation logic
-    if (!formData.unitName || !formData.branchType || !formData.practiceType) {
-      setAlert("Please fill all required fields.");
-      return;
-    }
+    // if (!formData.unitName || !formData.branchType || !formData.practiceType) {
+    //   setAlert("Please fill all required fields.");
+    //   return;
+    // }
 
     // Log the form data
     // console.log("Submitted Form Data: ", formData);
@@ -183,6 +184,8 @@ const CreateBusinessUnit = () => {
     axiosInstance.post("/api/v1/business-branches", sendData)
       .then(response => {
         console.log("Success:", response.data);
+        setAlert("Created Successfully")
+        navigate("/admin/branch-units")
       })
       .catch(error => {
         console.error("Error:", error);
@@ -219,7 +222,6 @@ const CreateBusinessUnit = () => {
           </Link>
 
           <button
-            disabled={disabled}
             onClick={handleSubmit}
             className="bg-[#006DFA] border border-[#006DFA] disabled:border-[#E1E3EA] disabled:bg-[#E1E3EA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
           >
