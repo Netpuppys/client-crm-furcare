@@ -56,6 +56,7 @@ const LoginForm = () => {
             .then(res => {
                 console.log(res)
                 localStorage.setItem("access", res.data.data.token)
+                localStorage.setItem("name", res.data.data.name)
                 navigate('/admin/branch-units')
             })
             .catch(err => {
