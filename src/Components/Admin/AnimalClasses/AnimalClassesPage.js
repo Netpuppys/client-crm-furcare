@@ -133,7 +133,7 @@ const AnimalClassesPage = () => {
                         <td className="p-2 w-[30%]">
                             <Link
                                 href="#"
-                                className="text-blue-600 hover:underline font-medium"
+                                className="text-blue-600 hover:underline font-medium capitalize"
                             >
                                 {item.name}
                             </Link>
@@ -145,7 +145,7 @@ const AnimalClassesPage = () => {
                                 list
                                 <div className={`hidden group-hover:flex flex-col items-start justify-start gap-1 absolute top-full left-0 bg-white z-10 shadow-lg p-3 rounded-md mt-2 `}>
                                 {item.breeds.map((item, index) => (
-                                    <p key={index} className='text-blue-600'>
+                                    <p key={index} className='text-blue-600 capitalize'>
                                         {item}
                                     </p>
                                 ))}

@@ -57,8 +57,8 @@ const CreateBusinessUnit = () => {
   const { setAlert } = useAlertContext()
 
   const [ selectedOptions, setSelectedOptions ] = useState([]);
-  const [ isDropdownOpen, setIsDropdownOpen ] = useState(true);
-  // const [ disabled, setDisabled ] = useState(false)
+  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
+  const [ disabled, setDisabled ] = useState(false)
   const [ formData, setFormData ] = useState({
     unitName: "",
     branchType: "",
@@ -74,18 +74,16 @@ const CreateBusinessUnit = () => {
     appointment: "",
   });
 
-  // useEffect(() => {
-  //   const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
-  //   const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
+  useEffect(() => {
+    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
+    const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
 
-  //   const checkServices = selectedOptions.length>0? true : false
-
-  //   if (checkFromdata && checkServices) {
-  //     setDisabled(true)
-  //   } else {
-  //     setDisabled(true);
-  //   }
-  // }, [formData, selectedOptions.length]);
+    if (checkFromdata) {
+      setDisabled(false)
+    } else {
+      setDisabled(true);
+    }
+  }, [formData, selectedOptions]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -222,6 +220,7 @@ const CreateBusinessUnit = () => {
           </Link>
 
           <button
+            disabled={disabled}
             onClick={handleSubmit}
             className="bg-[#006DFA] border border-[#006DFA] disabled:border-[#E1E3EA] disabled:bg-[#E1E3EA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
           >
