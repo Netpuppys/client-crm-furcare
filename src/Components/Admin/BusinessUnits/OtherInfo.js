@@ -4,7 +4,7 @@ const buttons = [
   "Hospital Details",
   "Services",
   "Departments",
-  "Appointent Slots",
+  "Appointment Slots",
 ];
 
 const AddressForm = ({ branchData }) => {
@@ -19,7 +19,7 @@ const AddressForm = ({ branchData }) => {
         >
           Business Unit Type<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.name}
         </div>
       </div>
@@ -32,7 +32,7 @@ const AddressForm = ({ branchData }) => {
         >
           Practice Type<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.practice}
         </div>
       </div>
@@ -45,7 +45,7 @@ const AddressForm = ({ branchData }) => {
         >
           Address Line 1<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.addressLine1}
         </div>
       </div>
@@ -58,7 +58,7 @@ const AddressForm = ({ branchData }) => {
         >
           Address Line 2
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.addressLine2}
         </div>
       </div>
@@ -68,7 +68,7 @@ const AddressForm = ({ branchData }) => {
         <label htmlFor="city" className="text-gray-700 font-medium mb-1">
           City<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.city}
         </div>
       </div>
@@ -78,7 +78,7 @@ const AddressForm = ({ branchData }) => {
         <label htmlFor="state" className="text-gray-700 font-medium mb-1">
           State<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.state}
         </div>
       </div>
@@ -88,7 +88,7 @@ const AddressForm = ({ branchData }) => {
         <label htmlFor="country" className="text-gray-700 font-medium mb-1">
           Country<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.country}
         </div>
       </div>
@@ -98,7 +98,7 @@ const AddressForm = ({ branchData }) => {
         <label htmlFor="postalCode" className="text-gray-700 font-medium mb-1">
           Postal Code<span className="text-red-500"> *</span>
         </label>
-        <div className="border border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.postalCode}
         </div>
       </div>
@@ -107,14 +107,15 @@ const AddressForm = ({ branchData }) => {
 };
 
 const ServiceTable = ({ branchData }) => {
-  const services = [
-    // { name: "Emergency", price: "INR 100", status: "Active" },
-    // { name: "Grooming", price: "INR 100", status: "Active" },
-    // { name: "Vaccination", price: "INR 100", status: "Active" },
-    // { name: "Lab Services", price: "INR 100", status: "Inactive" },
-    // { name: "Surgery", price: "INR 100", status: "Inactive" },
-    // { name: "Wellness Exams", price: "INR 100", status: "Active" },
-  ];
+  const services = branchData.services
+  // const services = [
+  //   // { name: "Emergency", price: "INR 100", status: "Active" },
+  //   // { name: "Grooming", price: "INR 100", status: "Active" },
+  //   // { name: "Vaccination", price: "INR 100", status: "Active" },
+  //   // { name: "Lab Services", price: "INR 100", status: "Inactive" },
+  //   // { name: "Surgery", price: "INR 100", status: "Inactive" },
+  //   // { name: "Wellness Exams", price: "INR 100", status: "Active" },
+  // ];
 
   const getStatusStyle = (status) => {
     return status === "Active"
@@ -135,18 +136,18 @@ const ServiceTable = ({ branchData }) => {
         <tbody>
           {services.map((service, index) => (
             <tr key={index} className="border-b hover:bg-gray-50">
-              <td className="px-6 py-4">{service.name}</td>
-              <td className="px-6 py-4">{service.price}</td>
-              <td className="px-6 py-4">
-                <div className={getStatusStyle(service.status)}>
+              <td className="px-6 capitalize text-sm py-4">{service.serviceDetails.name}</td>
+              <td className="px-6 py-4 text-sm">{service.serviceDetails.price}</td>
+              <td className="px-6 py-4 text-sm">
+                <div className={getStatusStyle("Active")}>
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      service.status === "Active"
-                        ? "bg-green-500"
-                        : "bg-red-500"
+                      service.serviceDetails.status === "Active"
+                        ? "bg-red-500"
+                        : "bg-green-500"
                     }`}
                   ></span>
-                  {service.status}
+                  {service.serviceDetails.status? service.serviceDetails.status : "Active"}
                 </div>
               </td>
             </tr>
@@ -158,22 +159,7 @@ const ServiceTable = ({ branchData }) => {
 };
 
 const SpecialtiesTable = ({ branchData }) => {
-  const specialties = [
-    // { name: "Anaesthesiology", status: "Active" },
-    // { name: "Behavior", status: "Active" },
-    // { name: "Blood Bank", status: "Active" },
-    // { name: "Boarding", status: "Inactive" },
-    // { name: "Critical Care", status: "Inactive" },
-    // { name: "General Practice", status: "Active" },
-    // { name: "Cardiology", status: "Active" },
-    // { name: "Clinical Pathology", status: "Active" },
-    // { name: "Clinical Studies", status: "Active" },
-    // { name: "Crematorium", status: "Active" },
-    // { name: "Dentistry", status: "Active" },
-    // { name: "Dermatology", status: "Active" },
-    // { name: "Diagnostic Imaging", status: "Active" },
-    // { name: "Emergency", status: "Active" },
-  ];
+  const departments = branchData.departments
 
   const getStatusStyle = (status) => {
     return status === "Active"
@@ -191,19 +177,19 @@ const SpecialtiesTable = ({ branchData }) => {
           </tr>
         </thead>
         <tbody>
-          {specialties.map((specialty, index) => (
+          {departments.map((specialty, index) => (
             <tr key={index} className="border-b hover:bg-gray-50">
-              <td className="px-6 py-4">{specialty.name}</td>
-              <td className="px-6 py-4">
-                <div className={getStatusStyle(specialty.status)}>
+              <td className="px-6 py-4 text-sm capitalize">{specialty.departmentDetails.name}</td>
+              <td className="px-6 py-4 text-sm">
+                <div className={getStatusStyle("Active")}>
                   <span
                     className={`h-2 w-2 rounded-full ${
                       specialty.status === "Active"
-                        ? "bg-green-500"
-                        : "bg-red-500"
+                        ? "bg-red-500"
+                        : "bg-green-500"
                     }`}
                   ></span>
-                  {specialty.status}
+                  {specialty.status? specialty.status : "Active"}
                 </div>
               </td>
             </tr>
@@ -215,26 +201,13 @@ const SpecialtiesTable = ({ branchData }) => {
 };
 
 const Appointments = ({ branchData }) => {
-  const data = [
-    // {
-    //   name: "General Practice",
-    //   department: "General Practice",
-    //   reasons: "Allergies",
-    //   status: "Active",
-    // },
-    // {
-    //   name: "Placeholder",
-    //   department: "Placeholder",
-    //   reasons: "Placeholder",
-    //   status: "Active",
-    // },
-    // {
-    //   name: "Placeholder",
-    //   department: "Placeholder",
-    //   reasons: "Placeholder",
-    //   status: "Active",
-    // },
-  ];
+  const appointments = branchData.appointmentSlots
+
+  const getStatusStyle = (status) => {
+    return status === "Active"
+      ? "text-green-500 flex items-center gap-2"
+      : "text-red-500 flex items-center gap-2";
+  };
 
   return (
     <div className="overflow-x-auto mt-6">
@@ -256,22 +229,28 @@ const Appointments = ({ branchData }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((item, index) => (
+          {appointments.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="px-6 py-4 border-b last:border-none border-gray-200 text-sm text-gray-900">
                 {item.name}
               </td>
-              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
-                {item.department}
+              <td className="px-6 py-4 border-b border-gray-200 text-sm capitalize text-gray-900">
+                {item.department.name}
+              </td>
+              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900 flex items-center justify-start gap-1">
+                {item.reasons?.map((reason, id) => <span key={id} className="">{reason}{item.reasons.length-1===id? "" : ","}</span>)}
               </td>
               <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
-                {item.reasons}
-              </td>
-              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
-                <span className="flex items-center gap-2">
-                  <span className="h-2 w-2 rounded-full bg-green-500"></span>
-                  {item.status}
-                </span>
+                <div className={getStatusStyle("Active")}>
+                  <span
+                    className={`h-2 w-2 rounded-full ${
+                      item?.status === "Active"
+                        ? "bg-red-500"
+                        : "bg-green-500"
+                    }`}
+                  ></span>
+                  {item?.status? item?.status : "Active"}
+                </div>
               </td>
             </tr>
           ))}

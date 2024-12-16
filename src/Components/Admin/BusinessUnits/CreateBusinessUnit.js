@@ -63,7 +63,7 @@ const CreateBusinessUnit = () => {
     unitName: "",
     branchType: "",
     practiceType: "",
-    currency: "",
+    currency: "INR",
     address1: "",
     address2: "",
     city: "",
@@ -298,7 +298,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                disabled
                 placeholder="INR"
                 value={formData.currency}
                 onChange={(e) => handleInputChange("currency", e.target.value)}

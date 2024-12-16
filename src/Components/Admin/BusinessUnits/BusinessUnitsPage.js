@@ -3,33 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
 import axiosInstance from "../../../utils/AxiosInstance";
 
-// const dummy = [
-//   {
-//     branch: "Branch 40001",
-//     branchId: 1100,
-//     address: "148, HBCS, Domlur, Bengaluru 560071",
-//     type: "Practice",
-//     practice: "Clinic",
-//     currency: "INR",
-//   },
-//   {
-//     branch: "Branch B",
-//     branchId: 1101,
-//     address: "148, HBCS, Domlur, Bengaluru 560071",
-//     type: "Practice",
-//     practice: "Clinic",
-//     currency: "INR",
-//   },
-//   {
-//     branch: "Branch C",
-//     branchId: 1102,
-//     address: "148, HBCS, Domlur, Bengaluru 560071",
-//     type: "Practice",
-//     practice: "Clinic",
-//     currency: "INR",
-//   },
-// ];
-
 const Card = ({ branch, branchId, address, type, practice, currency }) => {
   return (
     <div className="flex flex-col gap-2">
@@ -39,7 +12,7 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
       </div>
       <div className="w-full flex items-center justify-start gap-2">
         <div className="w-4 bg-[#0B602D] aspect-square capitalize rounded-full"></div>
-        <p className="">Active</p>
+        <p className="capitalize">Active</p>
       </div>
       <div className="bg-[#5856D6] w-full py-5 px-4 text-white font-medium flex flex-col gap-3">
         <div className="flex w-full items-start gap-1 capitalize">
@@ -48,15 +21,15 @@ const Card = ({ branch, branchId, address, type, practice, currency }) => {
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
           <p className="">Type:</p>
-          <p className="">{type}</p>
+          <p className="capitalize">{type}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
           <p className="">Practice Type:</p>
-          <p className="">{practice}</p>
+          <p className="capitalize">{practice}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
           <p className="">Currency:</p>
-          <p className="">{currency}</p>
+          <p className="uppercase">{currency}</p>
         </div>
       </div>
     </div>

@@ -88,7 +88,7 @@ const AddNewItemForm = () => {
           <input
             type="text"
             className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Canine - Beagle"
+            placeholder="Animal Class - Breed"
             value={formData.animalType}
             onChange={(e) => handleInputChange("animalType", e.target.value)}
           />

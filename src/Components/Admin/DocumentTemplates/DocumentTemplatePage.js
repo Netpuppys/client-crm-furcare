@@ -80,7 +80,8 @@ const AppointmentsTable = () => {
 const DocumentTemplatePage = () => {
   const [ createNew, setCreateNew ] = useState(false)
   const [ activeButton, setActiveButton ] = useState(0)
-
+  const [ language, setLanguage ] = useState("English")
+ 
   return (
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
@@ -135,7 +136,35 @@ const DocumentTemplatePage = () => {
         <div className='fixed top-0 left-0 w-screen h-screen'>
             <div className='w-full h-full relative flex items-end justify-end'>
                 <div onClick={() => setCreateNew(false)} className='w-full h-full absolute top-0 left-0'></div>
-                <div className='h-[75vh] shadow-sm relative z-10 w-[45rem] bg-white pr-10'>
+                <div className='h-[75vh] shadow-sm relative z-10 w-[45rem] bg-white mr-10 border border-[#000000] border-opacity-30'>
+                    <div className='flex items-center justify-between px-10 h-[4.5rem]'>
+                      <p className='text-nowrap text-sm font-bold'>
+                        Book Appointment
+                      </p>
+                      <div className="flex">
+                        <button
+                          className={`py-2 px-4 border border-r-[0.5px] ${
+                            language === "English"
+                              ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
+                              : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                          }`}
+                          onClick={() => setLanguage("English")}
+                        >
+                          English
+                        </button>
+
+                        <button
+                          className={`py-2 px-4 border border-l-[0.5px] ${
+                            language === "Hindi"
+                              ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
+                              : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                          }`}
+                          onClick={() => setLanguage("Hindi")}
+                        >
+                          Hindi
+                        </button>
+                      </div>
+                    </div>
                     <ReactQuill
                         className="w-full h-full"
                         theme="snow"

@@ -2,19 +2,113 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance"
+import EditAnimalClass from './components/EditAnimalClass';
+
+const sampleAnimalClasses = [
+    {
+        name: "Canine",
+        breeds: [
+            "Shih Tzu",
+            "Labrador Retriever",
+            "Golden Retriever",
+            "German Shepherd"
+        ]
+    },
+    {
+        name: "Feline",
+        breeds: [
+            "Persian",
+            "Siamese",
+            "Maine Coon",
+            "Bengal"
+        ]
+    },
+    {
+        name: "Avian",
+        breeds: [
+            "Cockatiel",
+            "African Grey Parrot",
+            "Budgerigar",
+            "Canary"
+        ]
+    },
+    {
+        name: "Reptile",
+        breeds: [
+            "Leopard Gecko",
+            "Bearded Dragon",
+            "Corn Snake",
+            "Red-Eared Slider"
+        ]
+    },
+    {
+        name: "Equine",
+        breeds: [
+            "Arabian Horse",
+            "Thoroughbred",
+            "Shetland Pony",
+            "Clydesdale"
+        ]
+    },
+    {
+        name: "Rodent",
+        breeds: [
+            "Hamster",
+            "Guinea Pig",
+            "Chinchilla",
+            "Gerbil"
+        ]
+    },
+    {
+        name: "Amphibian",
+        breeds: [
+            "American Bullfrog",
+            "Axolotl",
+            "Fire-Bellied Toad",
+            "African Clawed Frog"
+        ]
+    },
+    {
+        name: "Aquatic",
+        breeds: [
+            "Betta Fish",
+            "Goldfish",
+            "Angelfish",
+            "Clownfish"
+        ]
+    },
+    {
+        name: "Arachnid",
+        breeds: [
+            "Tarantula",
+            "Scorpion",
+            "Wolf Spider",
+            "Jumping Spider"
+        ]
+    },
+    {
+        name: "Exotic",
+        breeds: [
+            "Sugar Glider",
+            "Hedgehog",
+            "Capybara",
+            "Ferret"
+        ]
+    }
+];
 
 const AnimalClassesPage = () => {
     const { setAlert } = useAlertContext()
 
     const [ addClasses, setAddClasses ] = useState(false)
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [ selectedValue, setSelectedValue ] = useState({})
+    const [ selectedValue, setSelectedValue ] = useState("")
+    const [ editAnimalClass, setEditAnimalClass ] = useState()
 
     useEffect(() => {
         axiosInstance
             .get("/api/v1/animal-classes")
             .then(res => {
-                console.log(res.data.data.data)
                 setAllAnimalClasses(res.data.data.data)
             })
             .catch(err => {
@@ -25,18 +119,18 @@ const AnimalClassesPage = () => {
     const handleAddAnimalClasses = () => {
         if (!selectedValue) return; // Prevent adding empty values
 
-        const breeds = selectedValue.breeds.split(",")
+        const animalClass = sampleAnimalClasses.find((item) => item.name === selectedValue)
 
         const data = {
-            name: selectedValue.name,
-            breeds: breeds
+            name: selectedValue,
+            breeds: animalClass.breeds
         }
 
         axiosInstance
             .post("/api/v1/animal-classes", data)
             .then(res => {
                 console.log(res)
-                setSelectedValue({})
+                setSelectedValue("")
                 setAddClasses(false)
                 setAlert("Animal Class Added Successfully.")
             })
@@ -64,11 +158,12 @@ const AnimalClassesPage = () => {
                     Animal Classes
                 </Link>
             </div>
+            {console.log(selectedValue)}
             <div className='flex items-center gap-6'>
                 {addClasses &&
                 <button
                     onClick={handleAddAnimalClasses}
-                    disabled={selectedValue.name && selectedValue.breeds? false : true}
+                    disabled={selectedValue? false : true}
                     className='bg-[#006DFA] px-3 disabled:border border-[#E1E3EA] disabled:bg-transparent disabled:text-[#AEB2C1] h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
                 >
                     <p className=''>
@@ -76,11 +171,11 @@ const AnimalClassesPage = () => {
                     </p>
                 </button>}
                 <button
-                    onClick={() => setAddClasses(true)}
+                    onClick={() => setAddClasses(prev => !prev)}
                     className='bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
                 >
                     <p className=''>
-                        Add
+                        {addClasses? "Close" : "Add"}
                     </p>
                 </button>
             </div>
@@ -99,68 +194,49 @@ const AnimalClassesPage = () => {
                 <tbody>
                     <tr className={`${addClasses? "black" : "hidden" } hover:bg-gray-50 hidde text-sm text-gray-700 border-b border-gray-200`}>
                         <td className="p-2 w-[30%] h-[2.25rem]">
-                            <input
-                                type='text'
-                                placeholder='Animal Class'
-                                className='max-w-[17rem] w-full px-2 h-[2.25rem] rounded-md border border-[#8891AA] focus:outline-none'
-                                value={selectedValue?.name}
-                                onChange={e => {
-                                    setSelectedValue(prev => ({
-                                        ...prev,
-                                        name: e.target.value
-                                    }))
-                                }}
-                            />
-                        </td>
-                        <td className='p-2 w-[30%] h-[2.25rem]'>
-                            <input
-                                text='text'
-                                placeholder='For example: Breed 1, Breed 2'
-                                className='max-w-[17rem] w-full px-2 h-[2.25rem] rounded-md border border-[#8891AA] focus:outline-none'
-                                value={selectedValue?.breeds}
-                                onChange={e => setSelectedValue(prev => ({
-                                    ...prev,
-                                    breeds: e.target.value
-                                }))}
-                            />
+                            <select
+                                className='max-w-[17rem] classic w-full px-2 h-[2.25rem] rounded-md border border-[#8891AA] focus:outline-none'
+                                value={selectedValue}
+                                onChange={e => setSelectedValue(e.target.value)}
+                            >
+                                <option value={""}>Select</option>
+                                {sampleAnimalClasses.map((item, id) => (
+                                    <option key={id} value={item.name}>{item.name}</option>
+                                ))}
+                            </select>
                         </td>
                     </tr>
-                {allAnimalClasses.map((item, index) => (
+
+                    {allAnimalClasses.map((item, index) => (
                     <tr
-                    key={index}
-                    className="hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-200"
+                        key={index}
+                        onClick={() => setEditAnimalClass(item)}
+                        className="hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-200"
                     >
                         <td className="p-2 w-[30%]">
-                            <Link
-                                href="#"
-                                className="text-blue-600 hover:underline font-medium capitalize"
-                            >
+                            <p className="text-blue-600 hover:underline font-medium capitalize">
                                 {item.name}
-                            </Link>
+                            </p>
                         </td>
                         <td className="p-2 w-[20%] relative">
-                            <div
-                                className="text-blue-600 group relative cursor-pointer underline"
-                            >
+                            <div className="text-blue-600 group relative cursor-pointer underline">
                                 list
-                                <div className={`hidden group-hover:flex flex-col items-start justify-start gap-1 absolute top-full left-0 bg-white z-10 shadow-lg p-3 rounded-md mt-2 `}>
-                                {item.breeds.map((item, index) => (
-                                    <p key={index} className='text-blue-600 capitalize'>
-                                        {item}
-                                    </p>
-                                ))}
-                            </div>
                             </div>
                         </td>
                         <td className="p-2 flex items-center w-[20%]">
                             <span className="h-2 w-2 rounded-full bg-green-600 mr-2"></span>
                             Active
                         </td>
-                    </tr>
-                ))}
+                    </tr>))}
                 </tbody>
             </table>
         </div>}
+
+        {editAnimalClass &&
+        <EditAnimalClass
+            editAnimalClass={editAnimalClass}
+            setEditAnimalClass={setEditAnimalClass}
+        />}
     </div>
   )
 }
