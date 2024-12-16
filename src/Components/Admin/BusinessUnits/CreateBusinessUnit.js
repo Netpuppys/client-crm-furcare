@@ -13,12 +13,6 @@ const options = [
   "Service E",
 ]
 
-const basePrices = [
-  400, 600, 800, 1000, 1200, 1400, 
-  1600, 1800, 2000, 2200, 2400, 
-  2600, 2800, 3000
-];
-
 const appointmentSlots = [
   {
     id: "675b049dc90ac3a44472a525",
@@ -493,16 +487,19 @@ const CreateBusinessUnit = () => {
                     <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
                       <p className="text-[#606B85] text-sm h-full">{formData.currency? formData.currency : "INR"}</p>
                     </div>
-                    <select
+                    <input
                       className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
                       value={selectedOptions[index].basePrice}
-                      onChange={e => handleServicePrice(e.target.value, index)}
-                    >
-                      <option value="">Field Text</option>
-                      {basePrices.map((item, index) => (
-                        <option value={item} key={index}>{item}</option>
-                      ))}
-                    </select>
+                      onChange={e => {
+                        const value = e.target.value;
+                        // Allow only numbers and a single decimal point
+                        const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+                        // Limit to 2 decimal places
+                        const twoDecimalValue = formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || '';
+                        handleServicePrice(twoDecimalValue, index);
+                      }}
+                      type="text"
+                    />
                   </div>
                 </div>
               ))}
