@@ -1,17 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
+import editIcon from "../../../Assets/icons/editIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
 
-const Card = ({ branch, branchId, address, type, practice, currency }) => {
+const Card = ({ branch, branchId, selected, address, type, practice, currency, businessUnitData }) => {
+  const navigate = useNavigate()
+
+  const handleEdit = () => {
+    navigate("/admin/branch-units/edit-business-unit", { state: { businessUnitData: businessUnitData } });
+  }
+
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-start gap-2">
+        {selected?
+        <div className="w-4 rounded-full aspect-square bg-[#006DFA] flex items-center justify-center">
+          <div className="w-[0.375rem] aspect-square rounded-full bg-white"></div>
+        </div> : 
+        <div className="w-4 rounded-full aspect-square bg-transparent border border-[#8891AA] flex items-center justify-center">
+        </div>}
+
         <p className="capitalize">{branch}</p>
-        <p className="capitalize">ID: {branchId}</p>
+        <button
+          onClick={handleEdit}
+          className=""
+        >
+          <img src={editIcon} className="h-4" alt="" />
+        </button>
       </div>
       <div className="w-full flex items-center justify-start gap-2">
-        <div className="w-4 bg-[#0B602D] aspect-square capitalize rounded-full"></div>
+        <div className="w-2 bg-[#0E7C3A] aspect-square capitalize rounded-full"></div>
         <p className="capitalize">Active</p>
       </div>
       <div className="bg-[#5856D6] w-full py-5 px-4 text-white font-medium flex flex-col gap-3">
@@ -85,11 +104,13 @@ const BusinessUnitsPage = () => {
           <div className="max-w-[calc(33%-4rem)]" onClick={() => setSelectedBusiness(index)} key={index}>
             <Card
               branch={item.name}
+              selected={selectedBusiness===index? true : false}
               branchId={item.businessUnitId}
               address={<>{item.addressLine1}, {item.addressLine2}, {item.city}, {item.state}, {item.country}</>}
               type={item.type}
               practice={item.practice}
               currency={item.currency}
+              businessUnitData={businessBranchesData[selectedBusiness]}
             />
           </div>
         ))}

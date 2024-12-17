@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance"
 import EditAnimalClass from './components/EditAnimalClass';
+import { toast } from 'react-toastify';
 
 const sampleAnimalClasses = [
     {
@@ -132,7 +133,8 @@ const AnimalClassesPage = () => {
                 console.log(res)
                 setSelectedValue("")
                 setAddClasses(false)
-                setAlert("Animal Class Added Successfully.")
+                // setAlert("Animal Class Added Successfully.")
+                toast.success("Animal Class Added Successfully")
             })
             .catch(err => {
                 console.error(err)
@@ -224,7 +226,7 @@ const AnimalClassesPage = () => {
                             </div>
                         </td>
                         <td className="p-2 flex items-center w-[20%]">
-                            <span className="h-2 w-2 rounded-full bg-green-600 mr-2"></span>
+                            <span className="h-2 w-2 rounded-full bg-[#0B602D] mr-2"></span>
                             Active
                         </td>
                     </tr>))}

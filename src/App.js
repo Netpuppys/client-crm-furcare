@@ -5,6 +5,8 @@ import { useState } from 'react';
 import Navbar from './ui/Navbar';
 import { AlertProvider } from './utils/AlertContext';
 import Alert from './ui/Alert';
+import { ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true)
@@ -22,7 +24,6 @@ function App() {
             setSidebarExpanded={setSidebarExpanded}
           />
         )}
-
         <div
           className={`w-full ${
             currentPath !== '/'
@@ -39,6 +40,7 @@ function App() {
 
   return (
     <div className="">
+      <ToastContainer closeOnClick={true} closeButton />
       <AlertProvider>
         <BrowserRouter>
           <Layout />

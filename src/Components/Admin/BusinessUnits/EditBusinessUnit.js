@@ -41,32 +41,32 @@ const departments = [
 
 
 
-const CreateBusinessUnit = () => {
+const EditBusinessUnit = () => {
   const navigate = useNavigate()
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
 
   const location = useLocation();
-  const businessUnitId = location.state?.businessUnitId;
+  const businessUnitData = location.state?.businessUnitData;
 
   const { setAlert } = useAlertContext()
 
-  const [ selectedOptions, setSelectedOptions ] = useState([]);
+  const [ selectedOptions, setSelectedOptions ] = useState(businessUnitData.services.map((item) => ({ service: item.serviceDetails.name , basePrice: "" })));
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
   const [ formData, setFormData ] = useState({
-    unitName: "",
-    branchType: "",
-    practiceType: "",
-    currency: "INR",
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    country: "",
-    postalCode: "",
-    department: "",
-    appointment: "",
+    unitName: businessUnitData.name,
+    branchType: businessUnitData.type,
+    practiceType: businessUnitData.practice,
+    currency: businessUnitData.currency,
+    address1: businessUnitData.addressLine1,
+    address2: businessUnitData.addressLine2,
+    city: businessUnitData.city,
+    state: businessUnitData.state,
+    country: businessUnitData.country,
+    postalCode: businessUnitData.postalCode,
+    department: businessUnitData.departments[0].departmentDetails.id,
+    appointment: "675b049dc90ac3a44472a525",
   });
 
   useEffect(() => {
@@ -128,60 +128,42 @@ const CreateBusinessUnit = () => {
   }, []);
 
   const handleSubmit = () => {
-    // Validation logic
-    // if (!formData.unitName || !formData.branchType || !formData.practiceType) {
-    //   setAlert("Please fill all required fields.");
-    //   return;
-    // }
+    // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
 
-    // Log the form data
-    // console.log("Submitted Form Data: ", formData);
-    // console.log(selectedOptions)
-
-    const appointment = appointmentSlots.find(item => item.id === formData.appointment)
-
-    const services = selectedOptions.map((item) => ({
-      serviceId: "675b03becef11a5735b8c16f",
-      basePrice: Number(item.basePrice),
-    }))
+    // const services = selectedOptions.map((item) => ({
+    //   serviceId: "675b03becef11a5735b8c16f",
+    //   basePrice: Number(item.basePrice),
+    // }))
 
     const sendData = {
       name: formData.unitName,
       type: formData.branchType,
       practice: formData.practiceType,
-      currency: formData.currency,
-      addressLine1: formData.address1,
-      addressLine2: formData.address2,
-      country: formData.country,
-      state: formData.state,
-      city: formData.city,
-      postalCode: formData.postalCode,
-      businessUnitId: businessUnitId,
-      services: services,
-      departments: [
-        {
-          departmentId: formData.department,
-        },
-      ],
-      appointmentSlots: [
-        {
-          name: appointment.name,
-          departmentId: formData.department,
-          reasons: appointment.reasons,
-        },
-      ],
+      // services: services,
+      // departments: [
+      //   {
+      //     departmentId: formData.department,
+      //   },
+      // ],
+      // appointmentSlots: [
+      //   {
+      //     name: appointment.name,
+      //     departmentId: formData.department,
+      //     reasons: appointment.reasons,
+      //   },
+      // ],
     };
     
-    axiosInstance.post("/api/v1/business-branches", sendData)
+    axiosInstance.patch(`/api/v1/business-branches/${businessUnitData.id}`, sendData)
       .then(response => {
         console.log("Success:", response.data);
-        setAlert("Created Successfully")
+        setAlert("Branch unit updated successfully")
         navigate("/admin/branch-units")
-        toast.success("Created Successfully")
+        toast.success("Branch unit updated successfully")
       })
       .catch(error => {
         console.error("Error:", error);
-      });    
+      });
   };
 
   return (
@@ -200,10 +182,10 @@ const CreateBusinessUnit = () => {
           </Link>
           <span> / </span>
           <Link
-            to={"/admin/branch-units/create-business-unit"}
+            to={"/admin/branch-units/edit-business-unit"}
             className="underline"
           >
-            Create Business Unit
+            Edit Business Unit
           </Link>
         </div>
         <div className="flex items-center justify-center gap-5">
@@ -236,7 +218,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 border placeholder:italic text-sm border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 border capitalize placeholder:italic text-sm border-gray-300 focus:outline-none rounded-lg"
                 placeholder="Placeholder"
                 value={formData.unitName}
                 onChange={(e) => handleInputChange("unitName", e.target.value)}
@@ -314,8 +296,9 @@ const CreateBusinessUnit = () => {
                 </div>
                 <input
                   type="search"
-                  className="w-full placeholder:italic text-sm focus:outline-none p-2"
+                  className="w-full placeholder:italic text-sm focus:outline-none p-2 disabled:bg-[#F4F4F6]"
                   placeholder="Placeholder"
+                  disabled
                   value={formData.address1}
                   onChange={(e) =>
                     handleInputChange("address1", e.target.value)
@@ -331,7 +314,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                disabled
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Placeholder"
                 value={formData.address2}
                 onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -348,7 +332,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                disabled
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Malad"
                 value={formData.city}
                 onChange={(e) => handleInputChange("city", e.target.value)}
@@ -362,7 +347,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                disabled
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Maharashtra"
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
@@ -379,7 +365,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                disabled
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="India"
                 value={formData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
@@ -393,7 +380,8 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                disabled
+                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Postal Code"
                 value={formData.postalCode}
                 onChange={(e) =>
@@ -555,4 +543,4 @@ const CreateBusinessUnit = () => {
   );
 };
 
-export default CreateBusinessUnit;
+export default EditBusinessUnit;

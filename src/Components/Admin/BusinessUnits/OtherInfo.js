@@ -119,7 +119,7 @@ const ServiceTable = ({ branchData }) => {
 
   const getStatusStyle = (status) => {
     return status === "Active"
-      ? "text-green-500 flex items-center gap-2"
+      ? "text-[#0B602D] flex items-center gap-2"
       : "text-red-500 flex items-center gap-2";
   };
 
@@ -144,7 +144,7 @@ const ServiceTable = ({ branchData }) => {
                     className={`h-2 w-2 rounded-full ${
                       service.serviceDetails.status === "Active"
                         ? "bg-red-500"
-                        : "bg-green-500"
+                        : "bg-[#0B602D]"
                     }`}
                   ></span>
                   {service.serviceDetails.status? service.serviceDetails.status : "Active"}
@@ -163,7 +163,7 @@ const SpecialtiesTable = ({ branchData }) => {
 
   const getStatusStyle = (status) => {
     return status === "Active"
-      ? "text-green-500 flex items-center gap-2"
+      ? "text-[#0B602D] flex items-center gap-2"
       : "text-red-500 flex items-center gap-2";
   };
 
@@ -186,7 +186,7 @@ const SpecialtiesTable = ({ branchData }) => {
                     className={`h-2 w-2 rounded-full ${
                       specialty.status === "Active"
                         ? "bg-red-500"
-                        : "bg-green-500"
+                        : "bg-[#0B602D]"
                     }`}
                   ></span>
                   {specialty.status? specialty.status : "Active"}
@@ -205,7 +205,7 @@ const Appointments = ({ branchData }) => {
 
   const getStatusStyle = (status) => {
     return status === "Active"
-      ? "text-green-500 flex items-center gap-2"
+      ? "text-[#0B602D] flex items-center gap-2"
       : "text-red-500 flex items-center gap-2";
   };
 
@@ -246,7 +246,7 @@ const Appointments = ({ branchData }) => {
                     className={`h-2 w-2 rounded-full ${
                       item?.status === "Active"
                         ? "bg-red-500"
-                        : "bg-green-500"
+                        : "bg-[#0B602D]"
                     }`}
                   ></span>
                   {item?.status? item?.status : "Active"}
@@ -275,7 +275,7 @@ const OtherInfo = ({ branchData }) => {
             } border-[#0263E0] h-10 bg-white overflow-hidden`}
           >
             <p
-              className={`w-full h-full flex items-center justify-center ${
+              className={`w-full h-full flex items-center text-[#606B85] justify-center ${
                 index === activeButton ? "border-x" : ""
               } border-[#CACDD8] px-3`}
             >

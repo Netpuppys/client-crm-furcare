@@ -89,7 +89,7 @@ const SuppliesTable = () => {
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
                   className={`w-2 aspect-square rounded-full ${
-                    item.status === "Active" ? "bg-green-500" : "bg-red-500"
+                    item.status === "Active" ? "bg-[#0B602D]" : "bg-red-500"
                   }`}
                 ></div>
                 <span
