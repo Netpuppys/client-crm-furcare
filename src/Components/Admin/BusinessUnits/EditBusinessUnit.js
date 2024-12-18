@@ -232,7 +232,7 @@ const EditBusinessUnit = () => {
                 Branch Type
               </label>
               <select
-                className="w-full classic mt-1 placeholder:italic text-sm p-2 border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 capitalize placeholder:italic text-sm p-2 border border-gray-300 rounded-lg focus:outline-none"
                 value={formData.branchType}
                 onChange={(e) =>
                   handleInputChange("branchType", e.target.value)
@@ -254,7 +254,7 @@ const EditBusinessUnit = () => {
                 Practice Type
               </label>
               <select
-                className="w-full classic mt-1 p-2 placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
                 value={formData.practiceType}
                 onChange={(e) =>
                   handleInputChange("practiceType", e.target.value)
@@ -274,7 +274,7 @@ const EditBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic uppercase text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 disabled
                 placeholder="INR"
                 value={formData.currency}
@@ -296,7 +296,7 @@ const EditBusinessUnit = () => {
                 </div>
                 <input
                   type="search"
-                  className="w-full placeholder:italic text-sm focus:outline-none p-2 disabled:bg-[#F4F4F6]"
+                  className="w-full placeholder:italic text-sm capitalize focus:outline-none p-2 disabled:bg-[#F4F4F6]"
                   placeholder="Placeholder"
                   disabled
                   value={formData.address1}
@@ -315,7 +315,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Placeholder"
                 value={formData.address2}
                 onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -333,7 +333,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Malad"
                 value={formData.city}
                 onChange={(e) => handleInputChange("city", e.target.value)}
@@ -348,7 +348,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Maharashtra"
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
@@ -366,7 +366,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="India"
                 value={formData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
@@ -381,7 +381,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Postal Code"
                 value={formData.postalCode}
                 onChange={(e) =>
@@ -414,7 +414,7 @@ const EditBusinessUnit = () => {
                   <div className="flex w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
-                        className="bg-[#F4F9FF] border border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.service}
@@ -440,7 +440,7 @@ const EditBusinessUnit = () => {
                           <label className="flex w-full items-center cursor-pointer">
                             <input
                               type="checkbox"
-                              className="mr-2 placeholder:italic text-sm"
+                              className="mr-2 placeholder:italic  text-sm"
                               checked={selectedOptions.some(obj => obj.service === option)}
                               onChange={() => handleCheckboxChange(option)}
                             />
@@ -502,7 +502,7 @@ const EditBusinessUnit = () => {
                 Department(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
                 value={formData.department}
                 onChange={(e) =>
                   handleInputChange("department", e.target.value)
@@ -524,7 +524,7 @@ const EditBusinessUnit = () => {
                 Appointment Slot(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
                 value={formData.appointment}
                 onChange={(e) =>
                   handleInputChange("appointment", e.target.value)
