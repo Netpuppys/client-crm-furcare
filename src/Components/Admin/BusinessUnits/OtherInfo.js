@@ -108,14 +108,6 @@ const AddressForm = ({ branchData }) => {
 
 const ServiceTable = ({ branchData }) => {
   const services = branchData.services
-  // const services = [
-  //   // { name: "Emergency", price: "INR 100", status: "Active" },
-  //   // { name: "Grooming", price: "INR 100", status: "Active" },
-  //   // { name: "Vaccination", price: "INR 100", status: "Active" },
-  //   // { name: "Lab Services", price: "INR 100", status: "Inactive" },
-  //   // { name: "Surgery", price: "INR 100", status: "Inactive" },
-  //   // { name: "Wellness Exams", price: "INR 100", status: "Active" },
-  // ];
 
   const getStatusStyle = (status) => {
     return status === "Active"
@@ -137,17 +129,15 @@ const ServiceTable = ({ branchData }) => {
           {services.map((service, index) => (
             <tr key={index} className="border-b hover:bg-gray-50">
               <td className="px-6 capitalize text-sm py-4">{service.serviceDetails.name}</td>
-              <td className="px-6 py-4 text-sm">{service.serviceDetails.price}</td>
+              <td className="px-6 py-4 text-sm">{service.basePrice}</td>
               <td className="px-6 py-4 text-sm">
                 <div className={getStatusStyle("Active")}>
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      service.serviceDetails.status === "Active"
-                        ? "bg-red-500"
-                        : "bg-[#0B602D]"
+                      !service.active? "bg-red-500" : "bg-[#0B602D]"
                     }`}
                   ></span>
-                  {service.serviceDetails.status? service.serviceDetails.status : "Active"}
+                  {service.active? "Active" : "inactive"}
                 </div>
               </td>
             </tr>
@@ -184,12 +174,10 @@ const SpecialtiesTable = ({ branchData }) => {
                 <div className={getStatusStyle("Active")}>
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      specialty.status === "Active"
-                        ? "bg-red-500"
-                        : "bg-[#0B602D]"
+                      !specialty.active? "bg-red-500" : "bg-[#0B602D]"
                     }`}
                   ></span>
-                  {specialty.status? specialty.status : "Active"}
+                  {specialty.active? "Active" : "Inactive"}
                 </div>
               </td>
             </tr>
@@ -244,12 +232,10 @@ const Appointments = ({ branchData }) => {
                 <div className={getStatusStyle("Active")}>
                   <span
                     className={`h-2 w-2 rounded-full ${
-                      item?.status === "Active"
-                        ? "bg-red-500"
-                        : "bg-[#0B602D]"
+                      !item?.active ? "bg-red-500" : "bg-[#0B602D]"
                     }`}
                   ></span>
-                  {item?.status? item?.status : "Active"}
+                  {item.active? "Active" : "Inactive"}
                 </div>
               </td>
             </tr>

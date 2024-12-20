@@ -6,13 +6,13 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 
-const options = [
-  "Service A",
-  "Service B",
-  "Service C",
-  "Service D",
-  "Service E",
-]
+// const options = [
+//   "Service A",
+//   "Service B",
+//   "Service C",
+//   "Service D",
+//   "Service E",
+// ]
 
 const appointmentSlots = [
   {
@@ -54,6 +54,7 @@ const CreateBusinessUnit = () => {
   const [ selectedOptions, setSelectedOptions ] = useState([]);
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
+  const [ options, setOptions ] = useState([])
   const [ formData, setFormData ] = useState({
     unitName: "",
     branchType: "",
@@ -68,6 +69,18 @@ const CreateBusinessUnit = () => {
     department: "",
     appointment: "",
   });
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/services")
+      .then(res => {
+        console.log(res.data.data.data)
+        setOptions(res.data.data.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
 
   useEffect(() => {
     const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
@@ -89,10 +102,10 @@ const CreateBusinessUnit = () => {
   };
 
   const handleCheckboxChange = (option) => {
-    if (selectedOptions.some(obj => obj.service === option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item.service !== option));
+    if (selectedOptions.some(obj => obj.service === option.name)) {
+      setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
     } else {
-      setSelectedOptions([...selectedOptions, { service: option, basePrice: "" }]);
+      setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
     }
   };
 
@@ -127,50 +140,120 @@ const CreateBusinessUnit = () => {
     };
   }, []);
 
+  function validateSendData(sendData) {
+    const errors = [];
+  
+    // Validate name
+    if (!sendData.name || typeof sendData.name !== "string") {
+      toast.error("Unit name is required.");
+    }
+  
+    // Validate type
+    if (!sendData.type || typeof sendData.type !== "string") {
+      toast.error("Branch type is required.");
+    }
+  
+    // Validate practice
+    if (!sendData.practice || typeof sendData.practice !== "string") {
+      toast.error("Practice type is required.");
+    }
+  
+    // Validate currency
+    if (!sendData.currency || typeof sendData.currency !== "string") {
+      toast.error("Currency is required.");
+    }
+  
+    // Validate addressLine1
+    if (!sendData.addressLine1 || typeof sendData.addressLine1 !== "string" || sendData.addressLine1.length < 10) {
+      toast.error("Address Line 1 is required, and at least 10 characters long.");
+    }
+  
+    // Validate addressLine2 (optional)
+    if (sendData.addressLine2 && typeof sendData.addressLine2 !== "string") {
+      toast.error("Address Line 2 if provided.");
+    }
+  
+    // Validate country
+    if (!sendData.country || typeof sendData.country !== "string") {
+      toast.error("Country is required.");
+    }
+  
+    // Validate state
+    if (!sendData.state || typeof sendData.state !== "string") {
+      toast.error("State is required.");
+    }
+  
+    // Validate city
+    if (!sendData.city || typeof sendData.city !== "string") {
+      toast.error("City is required.");
+    }
+  
+    // Validate postalCode
+    if (!sendData.postalCode || typeof Number(sendData.postalCode) !== "number" || sendData.postalCode.toString().length < 4) {
+      toast.error("Postal Code is required, must be a number, and at least 4 digits long.");
+    }
+  
+    // Validate services
+    if (!Array.isArray(sendData.services) || sendData.services.length === 0) {
+      toast.error("At least one service is required.");
+    } else {
+      sendData.services.forEach((service, index) => {
+        if (typeof service.basePrice !== "number") {
+          toast.error(`Base Price must be a number.`);
+        }
+      });
+    }
+  
+    // Validate departments
+    if (!Array.isArray(sendData.departments) || sendData.departments.length === 0) {
+      toast.error("At least one department is required.");
+    } 
+  
+    // Validate appointmentSlots
+    if (!Array.isArray(sendData.appointmentSlots) || sendData.appointmentSlots.length === 0) {
+      toast.error("At least one appointment slot is required.");
+    }
+  
+    return errors;
+  }
+  
+
   const handleSubmit = () => {
-    // Validation logic
-    // if (!formData.unitName || !formData.branchType || !formData.practiceType) {
-    //   setAlert("Please fill all required fields.");
-    //   return;
-    // }
-
-    // Log the form data
-    // console.log("Submitted Form Data: ", formData);
-    // console.log(selectedOptions)
-
     const appointment = appointmentSlots.find(item => item.id === formData.appointment)
 
     const services = selectedOptions.map((item) => ({
-      serviceId: "675b03becef11a5735b8c16f",
-      basePrice: Number(item.basePrice),
+      serviceId: "675b03becef11a5735b8c16f", // string
+      basePrice: Number(item.basePrice), // number
     }))
 
     const sendData = {
-      name: formData.unitName,
-      type: formData.branchType,
-      practice: formData.practiceType,
-      currency: formData.currency,
-      addressLine1: formData.address1,
-      addressLine2: formData.address2,
-      country: formData.country,
-      state: formData.state,
-      city: formData.city,
-      postalCode: formData.postalCode,
-      businessUnitId: businessUnitId,
-      services: services,
+      name: formData.unitName, // string
+      type: formData.branchType, // string
+      practice: formData.practiceType, // string
+      currency: formData.currency, // string
+      addressLine1: formData.address1, // string min length 10 letters
+      addressLine2: formData.address2, // optional string
+      country: formData.country, // string
+      state: formData.state, // string
+      city: formData.city, // string
+      postalCode: formData.postalCode, // number / integer min length 4
+      businessUnitId: businessUnitId, // number
+      services: services, 
       departments: [
         {
-          departmentId: formData.department,
+          departmentId: formData.department, // string
         },
       ],
       appointmentSlots: [
         {
-          name: appointment.name,
-          departmentId: formData.department,
-          reasons: appointment.reasons,
+          name: appointment.name, // string
+          departmentId: formData.department, // string
+          reasons: appointment.reasons, // string
         },
       ],
     };
+
+    validateSendData(sendData)
     
     axiosInstance.post("/api/v1/business-branches", sendData)
       .then(response => {
@@ -181,7 +264,7 @@ const CreateBusinessUnit = () => {
       })
       .catch(error => {
         console.error("Error:", error);
-      });    
+      });
   };
 
   return (
@@ -396,9 +479,16 @@ const CreateBusinessUnit = () => {
                 className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
                 placeholder="Postal Code"
                 value={formData.postalCode}
-                onChange={(e) =>
-                  handleInputChange("postalCode", e.target.value)
-                }
+                // onChange={(e) =>
+                //   handleInputChange("postalCode", e.target.value)
+                // }
+                onChange={e => {
+                  const value = e.target.value;
+                  // Allow only numbers and a single decimal point
+                  const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+                  // Limit to 2 decimal places
+                  handleInputChange("postalCode", formattedValue);
+                }}
               />
             </div>
           </div>
@@ -447,16 +537,16 @@ const CreateBusinessUnit = () => {
                     className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-gray-300 z-10 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {options.map((option) => (
+                      {options?.map((option) => (
                         <li className="p-2" key={option}>
-                          <label className="flex w-full items-center cursor-pointer">
+                          <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
                               type="checkbox"
                               className="mr-2 placeholder:italic text-sm"
-                              checked={selectedOptions.some(obj => obj.service === option)}
+                              checked={selectedOptions.some(obj => obj.service === option.name)}
                               onChange={() => handleCheckboxChange(option)}
                             />
-                            {option}
+                            {option.name}
                           </label>
                         </li>
                       ))}

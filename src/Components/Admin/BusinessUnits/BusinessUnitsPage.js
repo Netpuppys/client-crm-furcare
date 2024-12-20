@@ -65,10 +65,9 @@ const BusinessUnitsPage = () => {
     axiosInstance
       .get("/api/v1/business-branches")
       .then(res => {
-        console.log(res)
         setBusinessBranchesData(res.data.data.data)
       })
-      .then(err => {
+      .catch(err => {
         console.error(err)
       })
   }, [])
@@ -92,10 +91,8 @@ const BusinessUnitsPage = () => {
             Branch Units
           </Link>
         </div>
-        <button onClick={navigateToCreate}>
-          <button className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">
-            Create
-          </button>
+        <button onClick={navigateToCreate} className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">
+          Create
         </button>
       </div>
 

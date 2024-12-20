@@ -29,6 +29,7 @@ const sidebarItems = [
         { name: "Groups Management", linkTo: "/admin/groups-management" },
         { name: "Lead Types", linkTo: "/admin/lead-types" },
         { name: "Report Management", linkTo: "/admin/report-management" },
+        { name: "Roles & Permissions", linkTo: "/admin/roles-and-permissions" },
         { name: "Staff Management", linkTo: "/admin/staff-management" },
         { name: "Staff Scheduler", linkTo: "/admin/staff-scheduler" },
         { name: "Supplies Management", linkTo: "/admin/supplies-management" }

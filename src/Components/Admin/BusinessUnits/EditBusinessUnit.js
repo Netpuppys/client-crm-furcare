@@ -6,14 +6,6 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 
-const options = [
-  "Service A",
-  "Service B",
-  "Service C",
-  "Service D",
-  "Service E",
-]
-
 const appointmentSlots = [
   {
     id: "675b049dc90ac3a44472a525",
@@ -39,8 +31,6 @@ const departments = [
   }
 ];
 
-
-
 const EditBusinessUnit = () => {
   const navigate = useNavigate()
   const dropdownRef = useRef(null);
@@ -51,9 +41,10 @@ const EditBusinessUnit = () => {
 
   const { setAlert } = useAlertContext()
 
-  const [ selectedOptions, setSelectedOptions ] = useState(businessUnitData.services.map((item) => ({ service: item.serviceDetails.name , basePrice: "" })));
+  const [ selectedOptions, setSelectedOptions ] = useState(businessUnitData.services.map((item) => ({ service: item.serviceDetails.name , basePrice: item.basePrice })));
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
+  const [ options, setOptions ] = useState([])
   const [ formData, setFormData ] = useState({
     unitName: businessUnitData.name,
     branchType: businessUnitData.type,
@@ -68,6 +59,17 @@ const EditBusinessUnit = () => {
     department: businessUnitData.departments[0].departmentDetails.id,
     appointment: "675b049dc90ac3a44472a525",
   });
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/services")
+      .then(res => {
+        setOptions(res.data.data.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
 
   useEffect(() => {
     const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];

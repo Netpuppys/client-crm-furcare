@@ -4,17 +4,26 @@ import { GoSearch } from "react-icons/go";
 import supportIcon from "../Assets/icons/navbar/support.svg"
 import avatarIcon from "../Assets/icons/navbar/avatar.svg"
 import { useNavigate } from 'react-router-dom';
+import { useAppContext } from '../utils/AppContext';
 
 const Navbar = () => {
     const navigate = useNavigate()
 
+    const { branchDetails, selectedBranch, setSelectedBranch } = useAppContext()
+
     const [ showProfileOptions, setShowProfileOptions ] = useState(false)
+    const [ openChangeBranchModal, setOpenChangeBranchModal ] = useState(false)
 
     const username = localStorage.getItem("name")
 
     const handleLogOut = () => {
         localStorage.clear()
         navigate("/")
+    }
+
+    const handleBranchChange = (item) => {
+        setSelectedBranch(item)
+        setOpenChangeBranchModal(false)
     }
 
   return (
@@ -38,14 +47,31 @@ const Navbar = () => {
         </div>
 
         <div className='flex items-center gap-4'>
-            <button className='border h-6 bg-white border-[#E1E3EA] flex items-center rounded-md gap-2 px-3'>
-                <p className='text-[#121C2D] text-sm font-semibold text-center'>
-                    Branch 40001
-                </p>
-                <p className='text-xs text-[#606B85]'>
-                    <FaChevronDown />
-                </p>
-            </button>
+            <div className='w-fit h-fit relative'>
+                <button
+                    onClick={() => setOpenChangeBranchModal(prev => !prev)} 
+                    className='border relative h-7 bg-white border-[#E1E3EA] flex items-center rounded-md gap-2 px-3'
+                >
+                    <p className='text-[#121C2D] capitalize text-sm font-semibold text-center'>
+                        {selectedBranch?.name}
+                    </p>
+                    <p className='text-xs text-[#606B85]'>
+                        <FaChevronDown />
+                    </p>
+                </button>
+
+                <div className={`${openChangeBranchModal? "flex" : "hidden"} flex-col gap-1 absolute top-10 left-0 shadow-xl w-48 py-2 rounded-lg bg-white z-50 border border-[#E1E3EA] `}>
+                    {branchDetails?.map((item, index) => ( 
+                        <button
+                            key={index}
+                            onClick={() => handleBranchChange(item)}
+                            className={`${selectedBranch.id === item.id? "border-l-2 border-[#006DFA] text-[#006DFA] bg-[#F4F9FF]" : ""} hover:bg-[#F4F9FF] h-[2.25rem] flex items-center justify-start px-4 text-sm capitalize`}
+                        >
+                            {item?.name}
+                        </button>
+                    ))}
+                </div>
+            </div>
             <button
                 className='w-5 aspect-square'
             >
@@ -55,17 +81,19 @@ const Navbar = () => {
                     alt=''
                 />
             </button>
-            <button
-                onClick={() => setShowProfileOptions(prev => !prev)}
-                className='flex gap-2 items-center relative'
-            >
-                <div className='w-8 aspect-square rounded-full border border-[#E7DCFA] flex items-center justify-center'>
-                    <img src={avatarIcon} className='' alt='' />
-                </div>
-                <p className='text-xs text-[#606B85]'>
-                    {!showProfileOptions? <FaChevronDown /> : <FaChevronUp />}
-                </p>
+            <div className='w-fit h-fit relative'>
+                <button
+                    onClick={() => setShowProfileOptions(prev => !prev)}
+                    className='flex gap-2 items-center relative'
+                >
+                    <div className='w-8 aspect-square rounded-full border border-[#E7DCFA] flex items-center justify-center'>
+                        <img src={avatarIcon} className='' alt='' />
+                    </div>
 
+                    <p className='text-xs text-[#606B85]'>
+                        {!showProfileOptions? <FaChevronDown /> : <FaChevronUp />}
+                    </p>
+                </button>
                 <div className={`${showProfileOptions? "block" : "hidden"} w-48 z-40 absolute flex flex-col items-start justify-start right-0 top-[calc(100%+1.5rem)] border border-[#E1E3EA] bg-white shadow-2xl rounded-xl px-6 py-4 text-left`}>
                     <p className='py-2 text-[#606B85] text-xs font-medium capitalize'>
                         {username}
@@ -82,7 +110,7 @@ const Navbar = () => {
                         Logout
                     </button>
                 </div>
-            </button>
+            </div>
         </div>
     </div>
   )
