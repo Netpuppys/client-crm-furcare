@@ -10,6 +10,7 @@ import StaffManagementPage from "../Components/Admin/StaffManagement/StaffManage
 import DocumentTemplatePage from "../Components/Admin/DocumentTemplates/DocumentTemplatePage";
 import CreateBusinessUnit from "../Components/Admin/BusinessUnits/CreateBusinessUnit";
 import EditBusinessUnit from "../Components/Admin/BusinessUnits/EditBusinessUnit";
+import RolesAndPermissionsPage from "../Components/Admin/RolesAndPermissions/RolesAndPermissionsPage";
 
 
 const AllRoutes = () => {
@@ -22,6 +23,7 @@ const AllRoutes = () => {
       <Route path="/admin/content-library" element={<ContentLibraryPage />} />
       <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />} />
       <Route path="/admin/supplies-management" element={<SuppliesManagementPage />} />
+      <Route path="/admin/roles-and-permissions" element={<RolesAndPermissionsPage />} />
       <Route path="/admin/staff-management" element={<StaffManagementPage />} />
       <Route path="/admin/document-templates" element={<DocumentTemplatePage />} />
       <Route path="/admin/branch-units/create-business-unit" element={<CreateBusinessUnit/>}/>

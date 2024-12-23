@@ -218,7 +218,6 @@ const AnimalClassesPage = () => {
                 </button>
             </div>
         </div>
-        {console.log(selectedValue)}
 
         {branchAnimalClasses &&
         <div className='mt-6 w-full p-4'>
