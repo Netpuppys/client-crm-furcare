@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
@@ -76,7 +76,7 @@ const TableComponent = () => {
                 <td className="px-4 py-3 border-b border-gray-200 text-sm text-[#121C2D]">
                   <div className="flex gap-5 items-center">
                     <p className="w-5 text-xs text-[#606B85]">
-                      <FaChevronDown />
+                      {!openIndex.includes(index)? <FaChevronDown /> : <FaChevronUp />}
                     </p>
                     <p className="">
                       {category.category}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
+import BlueButton from "../../../ui/BlueButton";
+import deleteIcon from "../../../Assets/icons/deleteIcon.png"
 
 const data = [
   {
@@ -82,14 +84,14 @@ const SuppliesTable = () => {
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.items}</td>
               <td className="px-4 py-2 text-sm">
                 <a href={item.url} className="text-blue-600 underline">
-                  link
+                  List
                 </a>
               </td>
 
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
                   className={`w-2 aspect-square rounded-full ${
-                    item.status === "Active" ? "bg-[#0B602D]" : "bg-red-500"
+                    item.status === "Active" ? "bg-[#0B602D]" : "bg-[#C72323]"
                   }`}
                 ></div>
                 <span
@@ -146,6 +148,10 @@ const CreateNewForm = () => {
     console.log("Submitted Form Data: ", formData);
   };
 
+  const handleDelete = (id) => {
+    setFields(prev => prev.filter((_, index) => index !== id))
+  }
+ 
   return (
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
       {/* Name Input */}
@@ -161,9 +167,15 @@ const CreateNewForm = () => {
           onChange={(e) => handleInputChange("name", e.target.value)}
         />
       </div>
+      <div className="w-full flex items-center justify-start">
+        <BlueButton
+          text={"Add Item"}
+          onClickHandler={addField}
+        />
+      </div>
       {fields.map((field, index) => (
-        <div key={index} className="flex w-full items-center justify-between">
-          <div className="w-[47.5%]">
+        <div key={index} className="flex w-full h-20 items-end justify-between gap-6">
+          <div className="w-full">
             <label className="font-medium text-[#121C2D] flex items-center gap-2">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Items
@@ -176,18 +188,12 @@ const CreateNewForm = () => {
               onChange={(e) => handleFieldChange(index, "item", e.target.value)}
             />
           </div>
-          <div className="w-[47.5%]">
+          <div className="w-full">
             <div className="w-[98%] items-center flex justify-between">
               <label className="w-fit font-medium text-[#121C2D] flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Vendor
               </label>
-              <button
-                onClick={addField}
-                className="text-[#006DFA] text-2xl leading-none"
-              >
-                +
-              </button>
             </div>
             <input
               type="text"
@@ -199,6 +205,12 @@ const CreateNewForm = () => {
               }
             />
           </div>
+          <button
+            onClick={() => handleDelete(index)}
+            className="h-[2.625rem] min-w-4 flex items-center justify-center"
+          >
+            <img src={deleteIcon} className="w-full " alt="" />
+          </button>
         </div>
       ))}
 

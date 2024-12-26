@@ -38,7 +38,7 @@ const permissions = [
     },
 ];
 
-const CreateNewRole = ({ setAddNewModal }) => {
+const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
     const { selectedBranch } = useAppContext()
 
     const [ newRoleData, setNewRoleData ] = useState({
@@ -78,13 +78,12 @@ const CreateNewRole = ({ setAddNewModal }) => {
             branchAccess: ["675c29f27a9c7db85dcec6b5"]
         }
 
-        console.log(data)
-
         axiosInstance
             .post(`/api/v1/roles`, data)
             .then(res => {
                 console.log(res)
                 toast.success("Role Added Successfully")
+                fetchRolesList()
             })
             .catch(err => {
                 console.error(err)
@@ -114,7 +113,7 @@ const CreateNewRole = ({ setAddNewModal }) => {
         <div className="w-full h-full relative">
             <div className="w-full h-[4.75rem] flex items-center justify-between px-8">
                 <p className="text-xl font-semibold text-[#121C2D]">
-                    Edit Animal Class
+                    Edit Roles & Permissions
                 </p>
                 <button
                     onClick={handleClose}

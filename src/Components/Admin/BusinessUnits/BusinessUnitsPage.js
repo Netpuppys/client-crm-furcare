@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
 import editIcon from "../../../Assets/icons/editIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
@@ -80,16 +80,15 @@ const BusinessUnitsPage = () => {
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link
-            // to={"/admin"}
-            className="underline"
+          <p
+            className="underline inline cursor-default"
           >
             Admin
-          </Link>
+          </p>
           <span> / </span>
-          <Link to={"/admin/branch-units"} className="underline">
-            Branch Units
-          </Link>
+          <p className="underline inline cursor-default">
+            Business Units
+          </p>
         </div>
         <button onClick={navigateToCreate} className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">
           Create

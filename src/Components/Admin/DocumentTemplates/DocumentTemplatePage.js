@@ -4,7 +4,7 @@ import informationIcon from "../../../Assets/icons/informationIcon.png";
 import ReactQuill from 'react-quill';
 
 const buttons = [
-    "Appointment", "Client & Patient", "Order", "Vaccination", "Prescription", "Marketing"
+  "Appointment", "Client & Patient", "Order", "Vaccination", "Prescription", "Marketing"
 ]
 
 const data = [

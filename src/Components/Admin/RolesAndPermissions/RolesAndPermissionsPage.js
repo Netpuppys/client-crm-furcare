@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import axiosInstance from "../../../utils/AxiosInstance";
 import CreateNewRole from "./components/CreateNewRole";
-
 
 const RolesAndPermissionsPage = () => {
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
+  const [ loaded, setLoaded ] = useState(false)
 
   useEffect(() => {
     axiosInstance
@@ -18,8 +17,27 @@ const RolesAndPermissionsPage = () => {
       })
       .catch((err) => {
         console.error(err);
-      });
+      })
+      .finally(() => {
+        setLoaded(true)
+      })
   }, []);
+
+  const fetchRolesList = () => {
+    axiosInstance
+      .get(`/api/v1/roles`)
+      .then((res) => {
+        const response = res.data.data.data;
+        console.log(response);
+        setRolesList(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        setLoaded(true)
+      })
+  }
 
   return (
     <div className="w-full min-h-full px-8 py-4">
@@ -31,16 +49,17 @@ const RolesAndPermissionsPage = () => {
             <CreateNewRole
                 addNewModal={addNewModal}
                 setAddNewModal={setAddNewModal}
+                fetchRolesList={fetchRolesList}
             />
         </div>
 
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link className="underline">Admin</Link>
+          <p className="underline inline cursor-default">Admin</p>
           <span> / </span>
-          <Link to={"/admin/roles-and-permissions"} className="underline">
+          <p className="underline inline cursor-default">
             Roles and Permissions
-          </Link>
+          </p>
         </div>
         <button
           onClick={() => setAddNewModal(true)}
@@ -96,7 +115,7 @@ const RolesAndPermissionsPage = () => {
             ))}
           </tbody>
         </table>
-        {rolesList.length === 0 && (
+        {rolesList.length === 0 && loaded && (
           <div className="w-full h-10 flex items-center justify-center">
             Roles Not Found
           </div>

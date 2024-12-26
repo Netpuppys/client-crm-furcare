@@ -46,6 +46,7 @@ const EditBusinessUnit = () => {
   const [ disabled, setDisabled ] = useState(false)
   const [ options, setOptions ] = useState([])
   const [ formData, setFormData ] = useState({
+    active: businessUnitData.active,
     unitName: businessUnitData.name,
     branchType: businessUnitData.type,
     practiceType: businessUnitData.practice,
@@ -172,23 +173,21 @@ const EditBusinessUnit = () => {
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link
-            // to={"/admin"}
-            className="underline"
+          <p
+            className="underline inline cursor-default"
           >
             Admin
-          </Link>
+          </p>
           <span> / </span>
           <Link to={"/admin/branch-units"} className="underline">
-            Branch Units
+            Business Units
           </Link>
           <span> / </span>
-          <Link
-            to={"/admin/branch-units/edit-business-unit"}
-            className="underline"
+          <p
+            className="underline inline cursor-default"
           >
             Edit Business Unit
-          </Link>
+          </p>
         </div>
         <div className="flex items-center justify-center gap-5">
           <Link to={"/admin/branch-units"}>
@@ -211,8 +210,37 @@ const EditBusinessUnit = () => {
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
         <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-lg space-y-6">
-          {/* Name Input */}
-          <div className="flex w-full items-center justify-between">
+          <div className="flex w-full items-center justify-between gap-10">
+            <div className="w-[9rem]">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                Status
+              </label>
+              <div className="flex mt-1 h-[2.25rem]">
+                <button
+                  className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
+                    formData.active
+                      ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
+                      : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                  }`}
+                  onClick={() => handleInputChange("active", true)}
+                >
+                    Active
+                </button>
+
+                <button
+                  className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
+                    !formData.active
+                      ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
+                      : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                  }`}
+                  onClick={() => handleInputChange("active", false)}
+                >
+                    Inactive 
+                </button>
+              </div>
+            </div>
+            {/* Name Input */}
             <div className="w-[47.5%]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}

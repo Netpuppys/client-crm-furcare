@@ -5,52 +5,7 @@ import closeIcon from "../../../Assets/icons/alert/close.png";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 
-// const data = [
-//   {
-//     name: "Manu Juneja",
-//     id: "ces14",
-//     url: "mjuneja@cessna.com",
-//     roles: "Admin, Doctor, Manager",
-//     status: "Active",
-//   },
-//   {
-//     name: "Rishad Mohammed",
-//     id: "ces15",
-//     url: "rmohd@cessna.com",
-//     roles: "Doctor",
-//     status: "Active",
-//   },
-//   {
-//     name: "Farseena Moideen",
-//     id: "ces16",
-//     url: "fmoid@cessna.com",
-//     roles: "Receptionist, Tech Assistant +2",
-//     status: "Active",
-//   },
-//   {
-//     name: "Rishan Muneer",
-//     id: "ces17",
-//     url: "rmuneer@cessna.com",
-//     roles: "Referral Doctor",
-//     status: "Inactive",
-//   },
-// ];
-
-const DiagnosticTable = () => {
-  const [ staffData, setStaffData ] = useState([])
-
-  useState(() => {
-    axiosInstance
-      .get(`/api/v1/staff`)
-      .then(res => {
-        const response = res.data.data.data
-        console.log(response)
-        setStaffData(response)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }, [])
+const DiagnosticTable = ({ staffData }) => {
 
   return (
     <div className="overflow-x-auto">
@@ -116,7 +71,7 @@ const DiagnosticTable = () => {
   );
 };
 
-const CreateNewForm = () => {
+const CreateNewForm = ({ fetchStaffData }) => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -181,6 +136,7 @@ const CreateNewForm = () => {
       .then(res => {
         console.log(res)
         toast.success("Staff member added successfully")
+        fetchStaffData()
       })
       .catch(err => {
         console.error(err)
@@ -323,7 +279,34 @@ const CreateNewForm = () => {
 };
 
 function StaffManagementPage() {
-  const [createNew, setCreateNew] = useState(false);
+  const [ createNew, setCreateNew] = useState(false);
+  const [ staffData, setStaffData ] = useState([])
+
+  useState(() => {
+    axiosInstance
+      .get(`/api/v1/staff`)
+      .then(res => {
+        const response = res.data.data.data
+        console.log(response)
+        setStaffData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
+
+  const fetchStaffData = () => {
+    axiosInstance
+      .get(`/api/v1/staff`)
+      .then(res => {
+        const response = res.data.data.data
+        console.log(response)
+        setStaffData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 
   return (
     <div className="w-full min-h-full px-8 py-4">
@@ -349,7 +332,9 @@ function StaffManagementPage() {
       </div>
 
       <div className="w-full mt-6">
-        <DiagnosticTable />
+        <DiagnosticTable 
+          staffData={staffData}
+        />
       </div>
 
       <div
@@ -367,7 +352,9 @@ function StaffManagementPage() {
         </div>
 
         <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <CreateNewForm />
+          <CreateNewForm 
+            fetchStaffData={fetchStaffData}
+          />
         </div>
       </div>
     </div>

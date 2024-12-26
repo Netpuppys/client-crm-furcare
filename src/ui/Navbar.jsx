@@ -26,8 +26,23 @@ const Navbar = () => {
         setOpenChangeBranchModal(false)
     }
 
+    const handleBranchModalOpen = () => {
+        setShowProfileOptions(false)
+        setOpenChangeBranchModal(prev => !prev)
+    }
+
+    const handleProfileModalOpen = () => {
+        setOpenChangeBranchModal(false)
+        setShowProfileOptions(prev => !prev)
+    }
+
   return (
     <div className='w-full px-10 h-[4.75rem] bg-[#F9F9FA] border-b-2 border-[#E1E3EA] flex items-center justify-between'>
+
+        {(showProfileOptions || openChangeBranchModal) &&
+        <div onClick={() => { setOpenChangeBranchModal(false); setShowProfileOptions(false) }} className='w-screen bg-transparent h-screen z-10 fixed top-0 left-0'>
+        </div>}
+
         <div className='flex gap-20 items-center'>
             <p className='font-semibold text-[#121C2D] text-xl'>
                 Oases Vet
@@ -49,8 +64,8 @@ const Navbar = () => {
         <div className='flex items-center gap-4'>
             <div className='w-fit h-fit relative'>
                 <button
-                    onClick={() => setOpenChangeBranchModal(prev => !prev)} 
-                    className='border relative h-7 bg-white border-[#E1E3EA] flex items-center rounded-md gap-2 px-3'
+                    onClick={handleBranchModalOpen}
+                    className='border relative h-7 bg-white focus:outline-none border-[#E1E3EA] flex items-center rounded-md gap-2 px-3'
                 >
                     <p className='text-[#121C2D] capitalize text-sm font-semibold text-center'>
                         {selectedBranch?.name}
@@ -60,7 +75,7 @@ const Navbar = () => {
                     </p>
                 </button>
 
-                <div className={`${openChangeBranchModal? "flex" : "hidden"} flex-col gap-1 absolute top-10 left-0 shadow-xl w-48 py-2 rounded-lg bg-white z-50 border border-[#E1E3EA] `}>
+                <div className={`${openChangeBranchModal? "flex" : "hidden"} flex-col gap-1 absolute top-10 right-0 shadow-xl w-48 py-2 rounded-lg bg-white z-50 border border-[#E1E3EA] `}>
                     {branchDetails?.map((item, index) => ( 
                         <button
                             key={index}
@@ -70,20 +85,27 @@ const Navbar = () => {
                             {item?.name}
                         </button>
                     ))}
+                    <button
+                            // onClick={() => handleBranchChange(item)}
+                            className={`
+                             hover:bg-[#F4F9FF] h-[2.25rem] flex items-center justify-start px-4 text-sm capitalize`}
+                        >
+                            Change Branch
+                        </button>
                 </div>
             </div>
-            <button
-                className='w-5 aspect-square'
-            >
+
+            <button className='w-5 aspect-square'>
                 <img
                     src={supportIcon}
                     className='w-full h-full'
                     alt=''
                 />
             </button>
+
             <div className='w-fit h-fit relative'>
                 <button
-                    onClick={() => setShowProfileOptions(prev => !prev)}
+                    onClick={handleProfileModalOpen}
                     className='flex gap-2 items-center relative'
                 >
                     <div className='w-8 aspect-square rounded-full border border-[#E7DCFA] flex items-center justify-center'>
@@ -96,7 +118,7 @@ const Navbar = () => {
                 </button>
                 <div className={`${showProfileOptions? "block" : "hidden"} w-48 z-40 absolute flex flex-col items-start justify-start right-0 top-[calc(100%+1.5rem)] border border-[#E1E3EA] bg-white shadow-2xl rounded-xl px-6 py-4 text-left`}>
                     <p className='py-2 text-[#606B85] text-xs font-medium capitalize'>
-                        {username}
+                        Dr. {username}
                     </p>
                     <button 
                         className='text-sm py-1 text-[#121C2D]'

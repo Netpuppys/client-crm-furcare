@@ -15,25 +15,54 @@ const AddressForm = ({ branchData }) => {
       <div className="w-[45%] flex flex-col">
         <label
           htmlFor="businessUnitType"
-          className="text-gray-700 font-medium mb-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
         >
-          Business Unit Type<span className="text-red-500"> *</span>
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Business Unit Name 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.name}
         </div>
       </div>
 
-      {/* Practice Type */}
+      {/* Business type */}
+      <div className="w-[45%] flex flex-col">
+        <label
+          htmlFor="businessUnitType"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+        >
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Business Type 
+        </label>
+        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          {branchData?.type}
+        </div>
+      </div>
+
       <div className="w-[45%] flex flex-col">
         <label
           htmlFor="practiceType"
-          className="text-gray-700 font-medium mb-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
         >
-          Practice Type<span className="text-red-500"> *</span>
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Practice Type 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.practice}
+        </div>
+      </div>
+
+      {/* currency */}
+      <div className="w-[45%] flex flex-col">
+        <label
+          htmlFor="businessUnitType"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+        >
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Currency 
+        </label>
+        <div className="border uppercase border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+          {branchData?.currency}
         </div>
       </div>
 
@@ -41,9 +70,10 @@ const AddressForm = ({ branchData }) => {
       <div className="w-[45%] flex flex-col">
         <label
           htmlFor="addressLine1"
-          className="text-gray-700 font-medium mb-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
         >
-          Address Line 1<span className="text-red-500"> *</span>
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Address Line 1 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.addressLine1}
@@ -54,8 +84,9 @@ const AddressForm = ({ branchData }) => {
       <div className="w-[45%] flex flex-col">
         <label
           htmlFor="addressLine2"
-          className="text-gray-700 font-medium mb-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
         >
+          <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Address Line 2
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
@@ -65,8 +96,9 @@ const AddressForm = ({ branchData }) => {
 
       {/* City */}
       <div className="w-[45%] flex flex-col">
-        <label htmlFor="city" className="text-gray-700 font-medium mb-1">
-          City<span className="text-red-500"> *</span>
+        <label htmlFor="city" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+        <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          City 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.city}
@@ -75,8 +107,9 @@ const AddressForm = ({ branchData }) => {
 
       {/* State */}
       <div className="w-[45%] flex flex-col">
-        <label htmlFor="state" className="text-gray-700 font-medium mb-1">
-          State<span className="text-red-500"> *</span>
+        <label htmlFor="state" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+        <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          State 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.state}
@@ -85,8 +118,9 @@ const AddressForm = ({ branchData }) => {
 
       {/* Country */}
       <div className="w-[45%] flex flex-col">
-        <label htmlFor="country" className="text-gray-700 font-medium mb-1">
-          Country<span className="text-red-500"> *</span>
+        <label htmlFor="country" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+        <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Country 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.country}
@@ -95,8 +129,9 @@ const AddressForm = ({ branchData }) => {
 
       {/* Postal Code */}
       <div className="w-[45%] flex flex-col">
-        <label htmlFor="postalCode" className="text-gray-700 font-medium mb-1">
-          Postal Code<span className="text-red-500"> *</span>
+        <label htmlFor="postalCode" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+        <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
+          Postal Code 
         </label>
         <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.postalCode}
@@ -108,12 +143,6 @@ const AddressForm = ({ branchData }) => {
 
 const ServiceTable = ({ branchData }) => {
   const services = branchData.services
-
-  const getStatusStyle = (status) => {
-    return status === "Active"
-      ? "text-[#0B602D] flex items-center gap-2"
-      : "text-red-500 flex items-center gap-2";
-  };
 
   return (
     <div className="overflow-x-auto max-w-[50rem] mt-6">
@@ -131,10 +160,10 @@ const ServiceTable = ({ branchData }) => {
               <td className="px-6 capitalize text-sm py-4">{service.serviceDetails.name}</td>
               <td className="px-6 py-4 text-sm">{service.basePrice}</td>
               <td className="px-6 py-4 text-sm">
-                <div className={getStatusStyle("Active")}>
+                <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
-                    className={`h-2 w-2 rounded-full ${
-                      !service.active? "bg-red-500" : "bg-[#0B602D]"
+                    className={`h-3 w-3 ${
+                      !service.active? "bg-[#C72323] rotate-45 rounded-sm" : "bg-[#0B602D] rounded-full"
                     }`}
                   ></span>
                   {service.active? "Active" : "inactive"}
@@ -151,12 +180,6 @@ const ServiceTable = ({ branchData }) => {
 const SpecialtiesTable = ({ branchData }) => {
   const departments = branchData.departments
 
-  const getStatusStyle = (status) => {
-    return status === "Active"
-      ? "text-[#0B602D] flex items-center gap-2"
-      : "text-red-500 flex items-center gap-2";
-  };
-
   return (
     <div className="overflow-x-auto max-w-[50rem] mt-6">
       <table className="table-auto border-collapse w-full text-left bg-white shadow-md rounded-md">
@@ -171,10 +194,10 @@ const SpecialtiesTable = ({ branchData }) => {
             <tr key={index} className="border-b hover:bg-gray-50">
               <td className="px-6 py-4 text-sm capitalize">{specialty.departmentDetails.name}</td>
               <td className="px-6 py-4 text-sm">
-                <div className={getStatusStyle("Active")}>
+                <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
-                    className={`h-2 w-2 rounded-full ${
-                      !specialty.active? "bg-red-500" : "bg-[#0B602D]"
+                    className={`h-3 w-3 ${
+                      !specialty.active? "bg-[#C72323] rotate-45 rounded-sm" : "bg-[#0B602D] rounded-full"
                     }`}
                   ></span>
                   {specialty.active? "Active" : "Inactive"}
@@ -190,12 +213,6 @@ const SpecialtiesTable = ({ branchData }) => {
 
 const Appointments = ({ branchData }) => {
   const appointments = branchData.appointmentSlots
-
-  const getStatusStyle = (status) => {
-    return status === "Active"
-      ? "text-[#0B602D] flex items-center gap-2"
-      : "text-red-500 flex items-center gap-2";
-  };
 
   return (
     <div className="overflow-x-auto mt-6">
@@ -229,10 +246,10 @@ const Appointments = ({ branchData }) => {
                 {item.reasons?.map((reason, id) => <span key={id} className="">{reason}{item.reasons.length-1===id? "" : ","}</span>)}
               </td>
               <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
-                <div className={getStatusStyle("Active")}>
+                <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
-                    className={`h-2 w-2 rounded-full ${
-                      !item?.active ? "bg-red-500" : "bg-[#0B602D]"
+                    className={`h-3 w-3 ${
+                      !item?.active ? "bg-[#C72323] rotate-45 rounded-sm" : "bg-[#0B602D] rounded-full"
                     }`}
                   ></span>
                   {item.active? "Active" : "Inactive"}

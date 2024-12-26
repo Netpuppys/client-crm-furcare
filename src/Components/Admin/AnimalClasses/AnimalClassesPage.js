@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
 import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance"
 import EditAnimalClass from './components/EditAnimalClass';
@@ -110,6 +109,7 @@ const AnimalClassesPage = () => {
     const [ editAnimalClass, setEditAnimalClass ] = useState()
     const [ filterredSamples, setFilterredSamples ] = useState()
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
+    const [ loaded, setLoaded ] = useState(false)
 
     useEffect(() => {
         axiosInstance
@@ -157,6 +157,9 @@ const AnimalClassesPage = () => {
             .catch(err => {
                 console.error(err)
             })
+            .finally(() => {
+                setLoaded(true)
+            })
     }, [addClasses, selectedBranch])
 
     const handleAddAnimalClasses = () => {
@@ -183,19 +186,17 @@ const AnimalClassesPage = () => {
     <div className='w-full min-h-full px-8 py-4'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <Link
-                    to={"#"}
-                    className='underline'
+                <p
+                    className='underline inline cursor-default'
                 >
                     Admin
-                </Link>
+                </p>
                 <span>{" "}/{" "}</span>
-                <Link
-                    to={"/admin/animal-classes"}
-                    className='underline'
+                <p
+                    className='underline inline cursor-default'
                 >
                     Animal Classes
-                </Link>
+                </p>
             </div>
             <div className='flex items-center gap-6'>
                 {addClasses &&
@@ -261,14 +262,14 @@ const AnimalClassesPage = () => {
                                 list
                             </div>
                         </td>
-                        <td className="p-2 flex items-center w-[20%]">
-                            <span className="h-2 w-2 rounded-full bg-[#0B602D] mr-2"></span>
+                        <td className="p-2 flex items-center w-[20%] text-[#121C2D]">
+                            <span className="h-3 w-3 rounded-full bg-[#0B602D] mr-2"></span>
                             Active
                         </td>
                     </tr>))}
                 </tbody>
             </table>
-            {branchAnimalClasses.length === 0 &&
+            {branchAnimalClasses.length === 0 && loaded &&
             <div className='w-full h-10 flex items-center justify-center'>
                 No Animal Classes Found
             </div>}

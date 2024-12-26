@@ -1,41 +1,12 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import { FaSearch } from "react-icons/fa";
+import axiosInstance from "../../../utils/AxiosInstance";
+import { toast } from "react-toastify";
+import { useAppContext } from "../../../utils/AppContext";
 
-const data = [
-  {
-    name: "Unique Biodiagnostics Vet Path Lab Lab",
-    location: "Parel, Mumbai",
-    postalCode: "400012",
-    url: "#",
-    status: "Active",
-  },
-  {
-    name: "Super Vet's Clinic & Diagnostics",
-    location: "Chembur East, Mumbai",
-    postalCode: "400071",
-    url: "#",
-    status: "Active",
-  },
-  {
-    name: "Animal Profile Veterinary Clinic & Diagn..",
-    location: "Baner, Pune",
-    postalCode: "411045",
-    url: "#",
-    status: "Active",
-  },
-  {
-    name: "Exotic Pet Clinic",
-    location: "Takarkhada, Silvassa",
-    postalCode: "396230",
-    url: "#",
-    status: "Inactive",
-  },
-];
-
-const DiagnosticTable = () => {
+const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -71,30 +42,30 @@ const DiagnosticTable = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
-          {data.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+          {diagnosticIntegrationsData.map((item, index) => (
+            <tr key={index} className="hover:bg-gray-50 capitalize">
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">
-                {item.location}
+                {item.city}{", "}{item.state}
               </td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">
                 {item.postalCode}
               </td>
               <td className="px-4 py-2 text-sm">
-                <a href={item.url} className="text-blue-600 underline">
+                <a target="blank" href={item.url} className="text-blue-600 underline">
                   link
                 </a>
               </td>
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
-                  className={`w-2 aspect-square rounded-full ${
-                    item.status === "Active" ? "bg-green-500" : "bg-red-500"
+                  className={`w-3 aspect-square ${
+                    item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
                   }`}
                 ></div>
                 <span
                   className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
                 >
-                  {item.status}
+                  {item.active? "Active" : "Inactive"}
                 </span>
               </td>
             </tr>
@@ -105,30 +76,70 @@ const DiagnosticTable = () => {
   );
 };
 
-const CreateNewForm = () => {
-  const [formData, setFormData] = useState({
-    category: "",
-    gender: "",
-    animalType: "",
-    ageRange: "",
-    healthConcerns: "",
-    sterilizationStatus: "",
-    additionalNotes: "",
+const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
+  const { selectedBranch } = useAppContext()
+
+  const [ disabled, setDisabled ] = useState(true)
+  const [ formData, setFormData ] = useState({
+    name: "",
+    address1: "",
+    address2: "",
+    city: "",
+    state: "",
+    country: "",
+    postalCode: ""
   });
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  useEffect(() => {
+    const requiredFields = ["name", "address1", "city", "state", "country", "postalCode"];
+    const missingFields = requiredFields.filter((field) => !formData[field]?.trim());
+
+    if (missingFields.length > 0) {
+      setDisabled(true)
+    } else {
+      setDisabled(false)
+    }
+  }, [formData])
+
   const handleSubmit = () => {
     // Validation logic
-    if (!formData.category || !formData.gender || !formData.animalType) {
-      alert("Please fill all required fields.");
+    const requiredFields = ["name", "address1", "city", "state", "country", "postalCode"];
+    const missingFields = requiredFields.filter((field) => !formData[field]?.trim());
+
+    if (missingFields.length > 0) {
+      toast.error(`Please fill in the following fields: ${missingFields.join(", ")}`);
       return;
     }
 
     // Log the form data
     console.log("Submitted Form Data: ", formData);
+
+    const businessInfo = {
+      name: formData.name,
+      addressLine1: formData.address1,
+      addressLine2: formData.address2,
+      city: formData.city,
+      state: formData.state,
+      country: formData.country,
+      postalCode: formData.postalCode,
+      url: "https://www.johnselectronics.com",
+      businessBranchId: selectedBranch.id
+    };
+
+    axiosInstance
+      .post(`/api/v1/diagnostic-integrations`, businessInfo)
+      .then(res => {
+        console.log(res)
+        toast.success("Submitted Successfully")
+        fetchDiagnosticsDetails()
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
 
   return (
@@ -140,8 +151,8 @@ const CreateNewForm = () => {
         </label>
         <input
           type="text"
-          className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-          placeholder="Anesthesia and Surgery"
+          className="mt-1 p-2 border capitalize border-gray-300 focus:outline-none rounded-lg"
+          placeholder="Name"
           value={formData.name}
           onChange={(e) => handleInputChange("name", e.target.value)}
         />
@@ -160,8 +171,8 @@ const CreateNewForm = () => {
             </div>
             <input
               type="search"
-              className="w-full focus:outline-none p-2"
-              placeholder="M.G Road B-106 Sector"
+              className="w-full capitalize focus:outline-none p-2"
+              placeholder="Address line 1"
               value={formData.address1}
               onChange={(e) => handleInputChange("address1", e.target.value)}
             />
@@ -174,8 +185,8 @@ const CreateNewForm = () => {
           </label>
           <input
             type="text"
-            className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Building A-101 "
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            placeholder="Address line 2"
             value={formData.address2}
             onChange={(e) => handleInputChange("address2", e.target.value)}
           />
@@ -191,8 +202,8 @@ const CreateNewForm = () => {
           </label>
           <input
             type="text"
-            className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Malad"
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            placeholder="City"
             value={formData.city}
             onChange={(e) => handleInputChange("city", e.target.value)}
           />
@@ -204,8 +215,8 @@ const CreateNewForm = () => {
           </label>
           <input
             type="text"
-            className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Maharashtra"
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            placeholder="State"
             value={formData.state}
             onChange={(e) => handleInputChange("state", e.target.value)}
           />
@@ -221,12 +232,13 @@ const CreateNewForm = () => {
           </label>
           <input
             type="text"
-            className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="India"
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            placeholder="Country"
             value={formData.country}
             onChange={(e) => handleInputChange("country", e.target.value)}
           />
         </div>
+
         <div className="w-[47.5%]">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
@@ -235,9 +247,15 @@ const CreateNewForm = () => {
           <input
             type="text"
             className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="400001"
+            placeholder="Postal Code"
             value={formData.postalCode}
-            onChange={(e) => handleInputChange("postalCode", e.target.value)}
+             onChange={(e) => {
+              const value = e.target.value;
+              // Allow only numbers and limit the length to 6
+              if (/^\d*$/.test(value) && value.length <= 6) {
+                handleInputChange("postalCode", value);
+              }
+            }}
           />
         </div>
       </div>
@@ -245,7 +263,8 @@ const CreateNewForm = () => {
       {/* Submit Button */}
       <div className="h-full w-full items-end flex justify-end ">
         <button
-          className="py-2 px-4 bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
+          disabled={disabled}
+          className="py-2 px-4 disabled:bg-gray-400 bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
           onClick={handleSubmit}
         >
           Save
@@ -256,25 +275,50 @@ const CreateNewForm = () => {
 };
 
 const DiagnosticIntegrationPage = () => {
-  const [createNew, setCreateNew] = useState(false);
+  const [ createNew, setCreateNew] = useState(false);
+  const [ diagnosticIntegrationsData, setDiagnosticIntegrationsData ] = useState([])
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/diagnostic-integrations")
+      .then(res => {
+        const response = res.data.data.data
+        console.log(response)
+        setDiagnosticIntegrationsData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
+
+  const fetchDiagnosticsDetails = () => {
+    axiosInstance
+      .get("/api/v1/diagnostic-integrations")
+      .then(res => {
+        const response = res.data.data.data
+        console.log(response)
+        setDiagnosticIntegrationsData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
 
   return (
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link
-            // to={"/admin"}
-            className="underline"
+          <p
+            className="underline inline cursor-default"
           >
             Admin
-          </Link>
+          </p>
           <span> / </span>
-          <Link 
-            to={"/admin/diagnostic-integrations"} 
-            className="underline"
+          <p
+            className="underline inline cursor-default"
           >
             Diagnostic Integration
-          </Link>
+          </p>
         </div>
         <button
           onClick={() => setCreateNew(true)}
@@ -285,7 +329,9 @@ const DiagnosticIntegrationPage = () => {
       </div>
 
       <div className="w-full mt-6">
-        <DiagnosticTable />
+        <DiagnosticTable 
+          diagnosticIntegrationsData={diagnosticIntegrationsData}
+        />
       </div>
 
       <div
@@ -303,7 +349,9 @@ const DiagnosticIntegrationPage = () => {
         </div>
 
         <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <CreateNewForm />
+          <CreateNewForm
+            fetchDiagnosticsDetails={fetchDiagnosticsDetails}
+          />
         </div>
       </div>
     </div>
