@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import ReactQuill from 'react-quill';
 
@@ -11,12 +10,12 @@ const data = [
     {
         name: "Over the counter supplies",
         language: "English, Hindi",
-        status: "Active",
+        active: "Active",
     },
     {
         name: "Physical exam equipments",
         language: "English, Hindi",
-        status: "Active",
+        active: false,
     },
 ];
   
@@ -59,14 +58,14 @@ const AppointmentsTable = () => {
   
                 <td className="px-4 py-2 text-sm flex items-center">
                   <div
-                    className={`w-2 aspect-square rounded-full ${
-                      item.status === "Active" ? "bg-[#0B602D]" : "bg-red-500"
+                    className={`w-3 aspect-square ${
+                      item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
                     }`}
                   ></div>
                   <span
                     className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
                   >
-                    {item.status}
+                    {item.active? "Active" : "Inactive"}
                   </span>
                 </td>
               </tr>
@@ -86,19 +85,17 @@ const DocumentTemplatePage = () => {
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <Link
-                    // to={"/admin"}
-                    className='underline'
+                <p
+                  className='underline inline cursor-default'
                 >
                     Admin
-                </Link>
+                </p>
                 <span>{" "}/{" "}</span>
-                <Link
-                    to={"/admin/document-templates"}
-                    className='underline'
+                <p
+                    className='underline inline cursor-default'
                 >
                     Document Templates
-                </Link>
+                </p>
             </div>
             <div className='flex items-center gap-6'>
                 <button

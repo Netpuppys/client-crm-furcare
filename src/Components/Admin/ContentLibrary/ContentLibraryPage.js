@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
-import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
@@ -118,19 +117,17 @@ const ContentLibraryPage = () => {
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <Link
-                    // to={"/admin"}
-                    className='underline'
+                <p
+                    className='underline inline cursor-default'
                 >
                     Admin
-                </Link>
+                </p>
                 <span>{" "}/{" "}</span>
-                <Link
-                    to={"/admin/content-library"}
-                    className='underline'
+                <p
+                    className='underline inline cursor-default'
                 >
                     Content Library
-                </Link>
+                </p>
             </div>
             <div className='flex items-center gap-6'>
                 <button

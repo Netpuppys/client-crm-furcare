@@ -107,9 +107,15 @@ const RolesAndPermissionsPage = () => {
                     list
                   </div>
                 </td>
-                <td className="p-2 flex items-center w-[20%]">
-                  <span className="h-2 w-2 rounded-full bg-[#0B602D] mr-2"></span>
-                  Active
+                <td className="p-2 flex items-center w-[20%] gap-1">
+                <div
+                  className={`min-w-3 aspect-square ${
+                    item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
+                  }`}
+                ></div>
+                  <span className="">
+                    {item.active? "Active" : "Inactive"}
+                  </span>
                 </td>
               </tr>
             ))}

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import BlueButton from "../../../ui/BlueButton";
@@ -10,37 +9,37 @@ const data = [
     name: "Over the counter supplies",
     items: "Diets, Dental care items, Grooming Supplies",
     url: "#",
-    status: "Active",
+    active: "Active",
   },
   {
     name: "Physical exam equipments",
     items: "Stethoscope, Thermometer, Wood’s lamp +5",
     url: "#",
-    status: "Active",
+    active: false,
   },
   {
     name: "Treat & toy baskets",
     items: "Pet food, Treats, Toys",
     url: "#",
-    status: "Active",
+    active: "Active",
   },
   {
     name: "Medical record keeping",
     items: "Tablet, Desktop, Laptop",
     url: "#",
-    status: "Inactive",
+    active: "Inactive",
   },
   {
     name: "Surgery equipments",
     items: "Lights, Surgery table, Anaesthesia equipment +5",
     url: "#",
-    status: "Active",
+    active: "Active",
   },
   {
     name: "Drug & Supplies",
     items: "Basic drugs, Patient cages, Microscope +3",
     url: "#",
-    status: "Inactive",
+    active: false,
   },
 ];
 
@@ -90,14 +89,14 @@ const SuppliesTable = () => {
 
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
-                  className={`w-2 aspect-square rounded-full ${
-                    item.status === "Active" ? "bg-[#0B602D]" : "bg-[#C72323]"
+                  className={`w-3 aspect-square ${
+                    item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
                   }`}
                 ></div>
                 <span
                   className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
                 >
-                  {item.status}
+                  {item.active? "Active" : "Inactive"}
                 </span>
               </td>
             </tr>
@@ -233,16 +232,16 @@ function SuppliesManagementPage() {
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link
-            // to={"/admin"}
-            className="underline"
+          <p
+            className='underline inline cursor-default'
           >
             Admin
-          </Link>
+          </p>
           <span> / </span>
-          <Link to={"/admin/supplies-management"} className="underline">
+          <p
+            className='underline inline cursor-default'>
             Supplies Management
-          </Link>
+          </p>
         </div>
         <button
           onClick={() => setCreateNew(true)}

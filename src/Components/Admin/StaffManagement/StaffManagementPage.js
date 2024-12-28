@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import axiosInstance from "../../../utils/AxiosInstance";
@@ -53,8 +52,8 @@ const DiagnosticTable = ({ staffData }) => {
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.roles}</td>
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
-                  className={`w-2 aspect-square rounded-full ${
-                    item.status === "Active" ? "bg-green-500" : "bg-red-500"
+                  className={`w-3 aspect-square ${
+                    item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
                   }`}
                 ></div>
                 <span
@@ -312,16 +311,16 @@ function StaffManagementPage() {
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <Link
-            // to={"/admin"}
-            className="underline"
+          <p
+            className='underline inline cursor-default'
           >
             Admin
-          </Link>
+          </p>
           <span> / </span>
-          <Link to={"/admin/staff-management"} className="underline">
+          <p
+            className='underline inline cursor-default'>
             Staff Management
-          </Link>
+          </p>
         </div>
         <button
           onClick={() => setCreateNew(true)}
