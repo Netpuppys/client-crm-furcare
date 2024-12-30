@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import { useAlertContext } from '../../../utils/AlertContext';
-import axiosInstance from "../../../utils/AxiosInstance"
+import axiosInstance from "../../../utils/AxiosInstance";
 import EditAnimalClass from './components/EditAnimalClass';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../../../utils/AppContext';
@@ -263,8 +263,16 @@ const AnimalClassesPage = () => {
                             </div>
                         </td>
                         <td className="p-2 flex items-center w-[20%] text-[#121C2D]">
-                            <span className="h-3 w-3 rounded-full bg-[#0B602D] mr-2"></span>
-                            Active
+                            <div
+                                className={`w-3 aspect-square ${
+                                    item.availableAt[0].active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
+                                }`}
+                            ></div>
+                            <span
+                                className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
+                                >
+                                {item.availableAt[0].active? "Active" : "Inactive"}
+                            </span>
                         </td>
                     </tr>))}
                 </tbody>

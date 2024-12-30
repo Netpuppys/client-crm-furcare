@@ -49,7 +49,13 @@ const DiagnosticTable = ({ staffData }) => {
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.id}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.email}</td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.roles}</td>
+              <td className="px-4 py-2 text-sm text-[#121C2D]">
+                {item?.roles?.map((role, id) => (
+                  <span key={id} className="">
+                    {role.roleDetails.name}{item.roles.length>id+1? ", " : ""}
+                  </span>
+                ))}
+              </td>
               <td className="px-4 py-2 text-sm flex items-center">
                 <div
                   className={`w-3 aspect-square ${

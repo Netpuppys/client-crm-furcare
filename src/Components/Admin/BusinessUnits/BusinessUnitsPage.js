@@ -4,7 +4,7 @@ import OtherInfo from "./OtherInfo";
 import editIcon from "../../../Assets/icons/editIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
 
-const Card = ({ branch, branchId, selected, address, type, practice, currency, businessUnitData }) => {
+const Card = ({ branch, active, selected, address, type, practice, currency, businessUnitData }) => {
   const navigate = useNavigate()
 
   const handleEdit = () => {
@@ -30,8 +30,16 @@ const Card = ({ branch, branchId, selected, address, type, practice, currency, b
         </button>
       </div>
       <div className="w-full flex items-center justify-start gap-2">
-        <div className="w-2 bg-[#0E7C3A] aspect-square capitalize rounded-full"></div>
-        <p className="capitalize">Active</p>
+        <div
+          className={`w-3 aspect-square ${
+            active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
+          }`}
+        ></div>
+        <span
+          className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
+        >
+          {active? "Active" : "Inactive"}
+        </span>
       </div>
       <div className="bg-[#5856D6] w-full py-5 px-4 text-white font-medium flex flex-col gap-3">
         <div className="flex w-full items-start gap-1 capitalize">
@@ -99,6 +107,7 @@ const BusinessUnitsPage = () => {
         {businessBranchesData?.map((item, index) => (
           <div className="max-w-[calc(33%-4rem)]" onClick={() => setSelectedBusiness(index)} key={index}>
             <Card
+              active={item.active}
               branch={item.name}
               selected={selectedBusiness===index? true : false}
               branchId={item.businessUnitId}

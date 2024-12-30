@@ -142,6 +142,7 @@ const EditBusinessUnit = () => {
       name: formData.unitName,
       type: formData.branchType,
       practice: formData.practiceType,
+      active: formData.active
       // services: services,
       // departments: [
       //   {

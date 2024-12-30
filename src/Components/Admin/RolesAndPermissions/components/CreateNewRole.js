@@ -33,7 +33,7 @@ const permissions = [
     },
     {
         action: "delete",
-        resource: "documenr",
+        resource: "document",
         name: "Document",
     },
 ];
@@ -75,7 +75,9 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
             name: newRoleData.name,
             permissions: updatedPermissions,
             businessUnitId: selectedBranch.id,
-            branchAccess: ["675c29f27a9c7db85dcec6b5"]
+            // branchAccess: ["675c29f27a9c7db85dcec6b5"],
+            isStaff: Boolean(newRoleData.staff),
+            accessLevel: newRoleData.accessLevel
         }
 
         axiosInstance
@@ -167,8 +169,8 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                                 className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             >
                                 <option value={""}>Select Option</option>
-                                <option value={"yes"}>Yes</option>
-                                <option value={"no"}>No</option>
+                                <option value={true}>Yes</option>
+                                <option value={false}>No</option>
                             </select>
                         </div>
                     </div>
