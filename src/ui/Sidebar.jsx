@@ -54,7 +54,7 @@ const NestedComponents = ({ subItems, currentPath }) => {
             isSelected(item.name)
               ? "text-white bg-white bg-opacity-10 backdrop-blur-sm rounded-md"
               : "text-[#CACDD8]"
-          } pl-6 w-full text-left py-1 text-xs font-semibold leading-[20px]`}
+          } pl-6 w-full text-left py-1 text-xs leading-[20px]`}
         >
           {item.name}
         </button>
@@ -164,7 +164,7 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
                       isSelected(item.name)
                         ? "text-white"
                         : "text-[#CACDD8] hover:text-white"
-                    } font-semibold`}
+                    }`}
                   >
                     {item.name}
                   </p>

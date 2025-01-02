@@ -71,7 +71,7 @@ const Navbar = () => {
                         {selectedBranch?.name}
                     </p>
                     <p className='text-xs text-[#606B85]'>
-                        <FaChevronDown />
+                        {!openChangeBranchModal? <FaChevronDown /> : <FaChevronUp />}
                     </p>
                 </button>
 
