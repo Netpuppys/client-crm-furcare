@@ -3,6 +3,7 @@ import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
+import BlueButton from "../../../ui/BlueButton";
 
 const DiagnosticTable = ({ staffData }) => {
 
@@ -90,6 +91,16 @@ const CreateNewForm = ({ fetchStaffData }) => {
   const [ rolesList, setRolesList ] = useState([])
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ dropDownList, setDropDownList ] = useState([])
+  const [ disabled, setDisabled ] = useState(true)
+
+  useEffect(() => {
+    if (formData.name === "" || formData.phone === "" || formData.email === "" || roles.length===0 ) {
+      setDisabled(true)
+      return
+    }
+
+    setDisabled(false)
+  }, [formData, roles])
 
   useEffect(() => {
     axiosInstance
@@ -272,12 +283,11 @@ const CreateNewForm = ({ fetchStaffData }) => {
 
       {/* Submit Button */}
       <div className="h-full w-full items-end flex justify-end ">
-        <button
-          className="py-2 px-4 bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
+        <BlueButton
+          onClickHandler={handleSubmit}
+          text={"Save"}
+          disabled={disabled}
+        />
       </div>
     </div>
   );

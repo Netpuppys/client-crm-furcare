@@ -12,6 +12,7 @@ import CreateBusinessUnit from "../Components/Admin/BusinessUnits/CreateBusiness
 import EditBusinessUnit from "../Components/Admin/BusinessUnits/EditBusinessUnit";
 import RolesAndPermissionsPage from "../Components/Admin/RolesAndPermissions/RolesAndPermissionsPage";
 import ReportManagementPage from "../Components/Admin/ReportManagement/ReportManagementPage";
+import GroupManagementPage from "../Components/Admin/GroupManagement/GroupManagementPage";
 
 
 const AllRoutes = () => {
@@ -24,6 +25,7 @@ const AllRoutes = () => {
       <Route path="/admin/content-library" element={<ContentLibraryPage />} />
       <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />} />
       <Route path="/admin/supplies-management" element={<SuppliesManagementPage />} />
+      <Route path="/admin/groups-management" element={<GroupManagementPage />} />
       <Route path="/admin/report-management" element={<ReportManagementPage />} />
       <Route path="/admin/roles-and-permissions" element={<RolesAndPermissionsPage />} />
       <Route path="/admin/staff-management" element={<StaffManagementPage />} />

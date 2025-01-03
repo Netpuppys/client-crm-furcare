@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
 import editIcon from "../../../Assets/icons/editIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
+import { useAppContext } from "../../../utils/AppContext";
 
 const Card = ({ branch, active, selected, address, type, practice, currency, businessUnitData }) => {
   const navigate = useNavigate()
@@ -66,6 +67,8 @@ const Card = ({ branch, active, selected, address, type, practice, currency, bus
 const BusinessUnitsPage = () => {
   const navigate = useNavigate()
 
+  const { selectedBranch, setSelectedBranch } = useAppContext()
+
   const [ businessBranchesData, setBusinessBranchesData ] = useState()
   const [ selectedBusiness, setSelectedBusiness ] = useState(0)
 
@@ -95,7 +98,7 @@ const BusinessUnitsPage = () => {
           </p>
           <span> / </span>
           <p className="underline inline cursor-default">
-            Business Units
+            Branch Units
           </p>
         </div>
         <button onClick={navigateToCreate} className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">
@@ -105,26 +108,26 @@ const BusinessUnitsPage = () => {
 
       <div className="flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         {businessBranchesData?.map((item, index) => (
-          <div className="max-w-[calc(33%-4rem)]" onClick={() => setSelectedBusiness(index)} key={index}>
+          <div className="max-w-[calc(33%-4rem)]" onClick={() => { setSelectedBusiness(index); setSelectedBranch(item) }} key={index}>
             <Card
               active={item.active}
               branch={item.name}
-              selected={selectedBusiness===index? true : false}
+              selected={selectedBranch?.id===item?.id? true : false}
               branchId={item.businessUnitId}
               address={<>{item.addressLine1}, {item.addressLine2}, {item.city}, {item.state}, {item.country}</>}
               type={item.type}
               practice={item.practice}
               currency={item.currency}
-              businessUnitData={businessBranchesData[selectedBusiness]}
+              businessUnitData={item}
             />
           </div>
         ))}
       </div>
 
-      {businessBranchesData &&
+      {selectedBranch &&
       <div className="mt-10">
         <OtherInfo 
-          branchData={businessBranchesData[selectedBusiness]}
+          branchData={selectedBranch}
         />
       </div>}
     </div>

@@ -156,7 +156,7 @@ const ServiceTable = ({ branchData }) => {
         </thead>
         <tbody>
           {services.map((service, index) => (
-            <tr key={index} className="border-b hover:bg-gray-50">
+            <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50">
               <td className="px-6 capitalize text-sm py-4">{service.serviceDetails.name}</td>
               <td className="px-6 py-4 text-sm">{service.basePrice}</td>
               <td className="px-6 py-4 text-sm">
@@ -178,7 +178,7 @@ const ServiceTable = ({ branchData }) => {
 };
 
 const SpecialtiesTable = ({ branchData }) => {
-  const departments = branchData.departments
+  const departments = branchData.departments;
 
   return (
     <div className="overflow-x-auto max-w-[50rem] mt-6">
@@ -191,7 +191,7 @@ const SpecialtiesTable = ({ branchData }) => {
         </thead>
         <tbody>
           {departments.map((specialty, index) => (
-            <tr key={index} className="border-b hover:bg-gray-50">
+            <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50">
               <td className="px-6 py-4 text-sm capitalize">{specialty.departmentDetails.name}</td>
               <td className="px-6 py-4 text-sm">
                 <div className={`text-[#121C2D] flex items-center gap-2`}>
@@ -236,7 +236,7 @@ const Appointments = ({ branchData }) => {
         <tbody>
           {appointments.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-6 py-4 border-b last:border-none border-gray-200 text-sm text-gray-900">
+              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
                 {item.name}
               </td>
               <td className="px-6 py-4 border-b border-gray-200 text-sm capitalize text-gray-900">

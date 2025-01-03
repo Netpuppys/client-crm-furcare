@@ -1,77 +1,84 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import BlueButton from '../../../../ui/BlueButton'
 import closeIcon from "../../../../Assets/icons/alert/close.png";
 import { useAppContext } from '../../../../utils/AppContext';
 import axiosInstance from '../../../../utils/AxiosInstance';
 import { toast } from 'react-toastify';
 
-const accessLevelOptions = [ "businessUnit", "businessBranch" ]
-
 const permissions = [
     {
-        action: "read",
-        resource: "animalClass",
         name: "Animal Class",
+        value: {
+            action: "read",
+            resource: "animalClass",
+        }
     },
     {
-        action: "delete",
-        resource: "animalClass",
         name: "Animal Class",
+        value: {
+            action: "delete",
+            resource: "animalClass",
+        }
     },
     {
-        action: "read",
-        resource: "diagnosticIntegration",
         name: "Diagnostic Integrations",
+        value: {
+            action: "read",
+            resource: "diagnosticIntegration",
+        }
     },
     {
-        action: "delete",
-        resource: "diagnosticIntegration",
         name: "Diagnostic Integrations",
+        value: {
+            action: "delete",
+            resource: "diagnosticIntegration",
+        }
     },
     {
-        action: "read",
-        resource: "document",
         name: "Document",
+        value: {
+            action: "read",
+            resource: "document",
+        }
     },
     {
-        action: "delete",
-        resource: "document",
         name: "Document",
+        value: {
+            action: "delete",
+            resource: "document",
+        }
     },
 ];
 
-const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
-    const inputRef = useRef(null);
 
-    const { selectedBranch } = useAppContext();
+const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesList }) => {
+    const { selectedBranch } = useAppContext()
 
     const [ newRoleData, setNewRoleData ] = useState({
-        name: "",
-        permissions: [],
-        accessLevel: "",
-        staff: ""
+        name: selectedRole?.name,
+        permissions: selectedRole?.permissions,
+        accessLevel: selectedRole?.accessLevel,
+        staff: selectedRole?.isStaff
     })
     const [ disabled, setDisabled ] = useState(true)
-
+    
     useEffect(() => {
-        if (newRoleData.name === "" || newRoleData.permissions.length===0 || newRoleData.accessLevel === "" || newRoleData.staff === "") {
-            setDisabled(true)
-            return
+        const initialData = {
+            name: selectedRole?.name,
+            permissions: selectedRole?.permissions,
+            accessLevel: selectedRole?.accessLevel,
+            staff: selectedRole?.isStaff
         }
 
-        setDisabled(false)
-    }, [newRoleData])
+        const isChanged = JSON.stringify(initialData) !== JSON.stringify(newRoleData)? true : false
 
-    useEffect(() => {
-        // Delay focus to ensure the input is mounted
-        const timeout = setTimeout(() => {
-          if (inputRef.current) {
-            inputRef.current.focus();
-          }
-        }, 50);
-    
-        return () => clearTimeout(timeout); // Cleanup timeout
-    }, []);
+        if (isChanged) {
+            setDisabled(false)
+        } else {
+            setDisabled(true)
+        }
+
+    }, [selectedRole, newRoleData])
 
     const handleClose = () => {
         setNewRoleData({
@@ -80,7 +87,8 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
             accessLevel: "",
             staff: ""
           })
-        setAddNewModal(false)
+        setEditRole(false)
+        setSelectedRole(null)
     }
     
     const handleInputChange = (e, name) => {
@@ -140,7 +148,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
         <div className="w-full h-full relative">
             <div className="w-full h-[4.75rem] flex items-center justify-between px-8">
                 <p className="text-xl font-semibold text-[#121C2D]">
-                    Add Roles & Permissions
+                    Edit Roles & Permissions
                 </p>
                 <button
                     onClick={handleClose}
@@ -160,7 +168,6 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                         <input
                             type="text"
                             placeholder="Role Name"
-                            ref={inputRef}
                             className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             value={newRoleData.name}
                             onChange={e => handleInputChange(e, "name")}
@@ -174,16 +181,13 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                                 <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                                 Access Level
                             </label>
-                            <select 
+                            <input
+                                type="text"
+                                placeholder="Access level"
                                 value={newRoleData.accessLevel}
                                 onChange={e => handleInputChange(e, "accessLevel")}
-                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
-                            >
-                                <option value={""}>Select Option</option>
-                                {accessLevelOptions.map((item, index) => (
-                                    <option key={index} value={item}>{item}</option>
-                                ))}
-                            </select>
+                                className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                            />
                         </div>
                     </div>
                     <div className="w-1/2 mt-10 flex items-center justify-start">
@@ -221,15 +225,15 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                             <input 
                                 type="checkbox" 
                                 checked={newRoleData.permissions.some(
-                                    (perm) => JSON.stringify(perm) === JSON.stringify(item)
+                                    (perm) => JSON.stringify(perm) === JSON.stringify(item.value)
                                 )}
-                                onChange={() => handlePermissionsChange(item)} 
+                                onChange={() => handlePermissionsChange(item.value)} 
                             />
                             <span className="slider round"></span>
                         </label>
                         <div className='flex gap-2 items-center'>
                             <div className='bg-[#F4F4F6] text-xs capitalize text-[#8891AA] rounded-lg border border-[#8891AA] py-[0.125rem] w-[4rem] flex items-center justify-center'>
-                                {item.action}
+                                {item.value.action}
                             </div>
                             <p className="text-[#121C2D] text-sm font-medium ">
                                 {item.name}
@@ -242,12 +246,12 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
             <div className="absolute bottom-8 right-6">
                 <BlueButton 
                     text={"Save"} 
-                    onClickHandler={handleSubmit} 
-                    disabled={disabled}
+                    onClickHandler={handleSubmit}
+                    disabled={disabled} 
                 />
             </div>
         </div>
     )
 }
 
-export default CreateNewRole;
+export default EditNewRoles;

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../utils/AxiosInstance";
 import CreateNewRole from "./components/CreateNewRole";
+import EditNewRoles from "./components/EditNewRoles";
 
 const RolesAndPermissionsPage = () => {
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
   const [ loaded, setLoaded ] = useState(false)
+  const [ editRole, setEditRole ] = useState()
+  const [ selectedRole, setSelectedRole ] = useState()
 
   useEffect(() => {
     axiosInstance
@@ -53,6 +56,20 @@ const RolesAndPermissionsPage = () => {
             />
         </div>
 
+        {editRole && 
+        <div
+            className={`${
+            editRole ? "block" : "hidden"
+            } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
+        >
+            <EditNewRoles
+                setEditRole={setEditRole}
+                selectedRole={selectedRole}
+                setSelectedRole={setSelectedRole}
+                fetchRolesList={fetchRolesList}
+            />
+        </div>}
+
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
           <p className="underline inline cursor-default">Admin</p>
@@ -84,8 +101,8 @@ const RolesAndPermissionsPage = () => {
             {rolesList?.map((item, index) => (
               <tr
                 key={index}
-                // onClick={() => setEditAnimalClass(item)}
-                className="hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-200"
+                onClick={() => { setEditRole(true); setSelectedRole(item) }}
+                className="hover:bg-gray-50 text-sm text-gray-700 last:border-b-0 border-b border-gray-200"
               >
                 <td className="p-2 w-[20%]">
                   <p className="text-[#121C2D] hover:underline capitalize">
@@ -94,12 +111,12 @@ const RolesAndPermissionsPage = () => {
                 </td>
                 <td className="p-2 w-[20%] relative">
                   <p className="text-[#121C2D] hover:underline capitalize">
-                    {item.permissions[0].resource}
+                    {item.accessLevel}
                   </p>
                 </td>
                 <td className="p-2 w-[20%] relative">
                   <p className="text-[#121C2D] hover:underline capitalize">
-                    Yes
+                    {item.isStaff? "Yes" : "No"}
                   </p>
                 </td>
                 <td className="p-2 w-[20%] relative">

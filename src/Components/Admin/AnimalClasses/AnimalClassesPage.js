@@ -250,7 +250,7 @@ const AnimalClassesPage = () => {
                     <tr
                         key={index}
                         onClick={() => setEditAnimalClass(item)}
-                        className="hover:bg-gray-50 text-sm text-gray-700 border-b border-gray-200"
+                        className="hover:bg-gray-50 text-sm text-gray-700 last:border-b-0 border-b border-gray-200"
                     >
                         <td className="p-2 w-[30%]">
                             <p className="text-blue-600 hover:underline font-medium capitalize">
