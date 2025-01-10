@@ -63,8 +63,8 @@ const ReportTable = ({ reportData, setEditGroup }) => {
                 <td className="px-4 py-2 text-sm text-[#0263E0] capitalize font-semibold">
                     {item.name}
                 </td>
-                <td className="px-4 py-2 text-sm text-[#121C2D]">
-                    {item.businessBranchId}
+                <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
+                    {item.type}
                 </td>
                 <td className="px-4 py-2 text-sm relative">
                     <button
