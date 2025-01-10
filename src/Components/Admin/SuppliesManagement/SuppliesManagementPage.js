@@ -1,49 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import BlueButton from "../../../ui/BlueButton";
 import deleteIcon from "../../../Assets/icons/deleteIcon.png"
+import axiosInstance from "../../../utils/AxiosInstance";
+import { useAppContext } from "../../../utils/AppContext";
+import { toast } from "react-toastify";
 
-const data = [
-  {
-    name: "Over the counter supplies",
-    items: "Diets, Dental care items, Grooming Supplies",
-    url: "#",
-    active: "Active",
-  },
-  {
-    name: "Physical exam equipments",
-    items: "Stethoscope, Thermometer, Wood’s lamp +5",
-    url: "#",
-    active: false,
-  },
-  {
-    name: "Treat & toy baskets",
-    items: "Pet food, Treats, Toys",
-    url: "#",
-    active: "Active",
-  },
-  {
-    name: "Medical record keeping",
-    items: "Tablet, Desktop, Laptop",
-    url: "#",
-    active: "Inactive",
-  },
-  {
-    name: "Surgery equipments",
-    items: "Lights, Surgery table, Anaesthesia equipment +5",
-    url: "#",
-    active: "Active",
-  },
-  {
-    name: "Drug & Supplies",
-    items: "Basic drugs, Patient cages, Microscope +3",
-    url: "#",
-    active: false,
-  },
-];
+const SuppliesTable = ({ suppliesData }) => {
 
-const SuppliesTable = () => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -77,10 +42,18 @@ const SuppliesTable = () => {
           </tr>
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
-          {data.map((item, index) => (
+          {suppliesData?.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.items}</td>
+              <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
+                {item.name}
+              </td>
+              <td className="px-4 py-2 text-sm text-[#121C2D]">
+                {item.items.map((obj, id) => (
+                  <p key={id} className="capitalize">
+                    {obj.name}{item.items.length>1? ", " : ""}
+                  </p>
+                ))}
+              </td>
               <td className="px-4 py-2 text-sm">
                 <a href={item.url} className="text-blue-600 underline">
                   List
@@ -107,49 +80,118 @@ const SuppliesTable = () => {
   );
 };
 
-const CreateNewForm = () => {
+const CreateNewForm = ({ fetchSuppliesData }) => {
+  const { selectedBranch } = useAppContext()
+
+  const [ vendorList, setVendorList ] = useState([])
   const [formData, setFormData] = useState({
-    category: "",
-    gender: "",
-    animalType: "",
-    ageRange: "",
-    healthConcerns: "",
-    sterilizationStatus: "",
-    additionalNotes: "",
+    name: "",
+    item: [
+      { name: "", vendor: {} }
+    ]
   });
 
-  const [fields, setFields] = useState([
-    { item: "", vendor: "" }, // Initial pair of item and vendor
-  ]);
+  useEffect(() => {
+    if (!selectedBranch?.id) {
+      return
+    }
+
+    axiosInstance
+      .get(`/api/v1/vendors?businessUnitId=${selectedBranch.id}`)
+      .then(res => {
+        const response = res.data.data.data;
+        setVendorList(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [selectedBranch])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   const addField = () => {
-    setFields([...fields, { item: "", vendor: "" }]);
+    setFormData((prev) => ({
+      ...prev,
+      item: [...prev.item, { name: "", vendor: "" }]
+    }));
   };
 
   const handleFieldChange = (index, key, value) => {
-    const updatedFields = [...fields];
-    updatedFields[index][key] = value;
-    setFields(updatedFields);
+    setFormData((prev) => {
+      const updatedItems = [...prev.item];
+      updatedItems[index][key] = value;
+      return { ...prev, item: updatedItems };
+    });
+  };
+
+  const handleVendorFieldChange = (index, key, value) => {
+    setFormData((prev) => {
+      const updatedItems = [...prev.item];
+      updatedItems[index][key] = JSON.parse(value);
+      return { ...prev, item: updatedItems };
+    });
+  };
+
+  const handleDelete = (index) => {
+    setFormData((prev) => ({
+      ...prev,
+      item: prev.item.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = () => {
     // Validation logic
-    if (!formData.category || !formData.gender || !formData.animalType) {
-      alert("Please fill all required fields.");
+    if (!formData.name) {
+      alert("Name is required.");
       return;
     }
 
-    // Log the form data
-    console.log("Submitted Form Data: ", formData);
-  };
+    // Validate each item in the item array
+    const itemErrors = formData.item.map((item) => {
+      const errors = {};
+      if (!item.name) {
+        errors.name = "Item name is required.";
+      }
+      if (!item.vendor?.id) {
+        errors.vendor = "Vendor is required.";
+      }
+      return errors;
+    });
 
-  const handleDelete = (id) => {
-    setFields(prev => prev.filter((_, index) => index !== id))
-  }
+    // Check if any item has errors
+    const hasErrors = itemErrors.some((error) => Object.keys(error).length > 0);
+
+    if (hasErrors) {
+      // Alert the user or handle validation errors
+      toast.error("Please fill all required fields for each item.");
+      return;
+    }
+
+    const sendData = {
+      name: formData.name,
+      businessBranchId: selectedBranch.id,
+      items: formData.item.map((item) => (
+        {
+          name: item.name,
+          vendorId: item.vendor.id
+        }
+      ))
+    }
+
+    axiosInstance
+      .post(`/api/v1/supplies`, sendData)
+      .then(res => {
+        console.log(res)
+        toast.success("Created Successfully")
+        fetchSuppliesData()
+      })
+      .catch(err => {
+        console.error(err)
+        toast.error("Something went wrong")
+      })
+  };
  
   return (
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
@@ -160,7 +202,7 @@ const CreateNewForm = () => {
         </label>
         <input
           type="text"
-          className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+          className="mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
           placeholder="Placeholder"
           value={formData.name}
           onChange={(e) => handleInputChange("name", e.target.value)}
@@ -172,19 +214,19 @@ const CreateNewForm = () => {
           onClickHandler={addField}
         />
       </div>
-      {fields.map((field, index) => (
+      {formData.item.map((field, index) => (
         <div key={index} className="flex w-full h-20 items-end justify-between gap-6">
           <div className="w-full">
             <label className="font-medium text-[#121C2D] flex items-center gap-2">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-              Items
+              Item
             </label>
             <input
               type="text"
-              className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
               placeholder="Placeholder"
-              value={field.item}
-              onChange={(e) => handleFieldChange(index, "item", e.target.value)}
+              value={field.name}
+              onChange={(e) => handleFieldChange(index, "name", e.target.value)}
             />
           </div>
           <div className="w-full">
@@ -194,16 +236,30 @@ const CreateNewForm = () => {
                 Vendor
               </label>
             </div>
-            <input
-              type="text"
-              className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            {/* <input
+              type="search"
+              className="w-full mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
               placeholder="Placeholder"
-              value={field.vendor}
-              onChange={(e) =>
-                handleFieldChange(index, "vendor", e.target.value)
-              }
-            />
+              value={field.vendor.name}
+              onChange={(e) => handleFieldChange(index, "vendor", e.target.value)}
+            /> */}
+            <select
+              value={JSON.stringify(field.vendor) || ""}
+              onChange={(e) => handleVendorFieldChange(index, "vendor", e.target.value)}
+              className="w-full classic mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
+            >
+              <option value={JSON.stringify({})}>Select Vendor</option>
+              {vendorList.map((vendor, vendorId) => (
+                <option
+                  key={vendorId}
+                  value={JSON.stringify(vendor)}
+                >
+                  {vendor.name}
+                </option>
+              ))}
+            </select>
           </div>
+          {/* {index!==0 && */}
           <button
             onClick={() => handleDelete(index)}
             className="h-[2.625rem] min-w-4 flex items-center justify-center"
@@ -225,8 +281,34 @@ const CreateNewForm = () => {
     </div>
   );
 };
+
 function SuppliesManagementPage() {
-  const [createNew, setCreateNew] = useState(false);
+  const [ createNew, setCreateNew ] = useState(false);
+  const [ suppliesData, setSuppliesData ] = useState([]);
+
+  const fetchSuppliesData = () => {
+    axiosInstance
+      .get("/api/v1/supplies")
+      .then(res => {
+        const response = res.data.data.data
+        setSuppliesData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/supplies")
+      .then(res => {
+        const response = res.data.data.data
+        setSuppliesData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
 
   return (
     <div className="w-full min-h-full px-8 py-4">
@@ -252,7 +334,9 @@ function SuppliesManagementPage() {
       </div>
 
       <div className="w-full mt-6">
-        <SuppliesTable />
+        <SuppliesTable 
+          suppliesData={suppliesData}
+        />
       </div>
 
       <div
@@ -270,7 +354,9 @@ function SuppliesManagementPage() {
         </div>
 
         <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <CreateNewForm />
+          <CreateNewForm 
+            fetchSuppliesData={fetchSuppliesData}
+          />
         </div>
       </div>
     </div>

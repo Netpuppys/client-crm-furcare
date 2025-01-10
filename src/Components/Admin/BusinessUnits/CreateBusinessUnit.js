@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 // const options = [
 //   "Service A",
 //   "Service B",
-//   "Service C",
+//   "Service C", 
 //   "Service D",
 //   "Service E",
 // ]
@@ -38,8 +38,6 @@ const departments = [
     updatedAt: new Date("2024-12-12T15:39:51.502Z")
   }
 ];
-
-
 
 const CreateBusinessUnit = () => {
   const navigate = useNavigate()

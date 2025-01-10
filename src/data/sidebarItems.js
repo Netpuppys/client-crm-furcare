@@ -21,7 +21,7 @@ const sidebarItems = [
       darkIcon: contactCenterAdminDark,
       subItems: [
         { name: "Animal Classes", linkTo: "/admin/animal-classes" },
-        { name: "Branch Units", linkTo: "/admin/branch-units" },
+        { name: "Business Units", linkTo: "/admin/branch-units" },
         { name: "Config Management", linkTo: "/admin/config-management" },
         { name: "Content Library", linkTo: "/admin/content-library" },
         { name: "Diagnostic Integrations", linkTo: "/admin/diagnostic-integrations" },

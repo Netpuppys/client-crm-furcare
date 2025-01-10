@@ -85,7 +85,7 @@ const BusinessUnitsPage = () => {
 
   const navigateToCreate = () => {
     navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });
-  };  
+  };
 
   return (
     <div className="w-full min-h-full px-8 py-4">
@@ -98,7 +98,7 @@ const BusinessUnitsPage = () => {
           </p>
           <span> / </span>
           <p className="underline inline cursor-default">
-            Branch Units
+            Business Units
           </p>
         </div>
         <button onClick={navigateToCreate} className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">

@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import ReactQuill from 'react-quill';
+import BlueButton from '../../../ui/BlueButton';
 
 const buttons = [
   "Appointment", "Client & Patient", "Order", "Vaccination", "Prescription", "Marketing"
@@ -132,8 +133,10 @@ const DocumentTemplatePage = () => {
         {createNew &&
         <div className='fixed top-0 left-0 w-screen h-screen'>
             <div className='w-full h-full relative flex items-end justify-end'>
+
                 <div onClick={() => setCreateNew(false)} className='w-full h-full absolute top-0 left-0'></div>
-                <div className='h-[75vh] shadow-sm relative z-10 w-[45rem] bg-white mr-10 border border-[#000000] border-opacity-30'>
+
+                <div className='h-[45rem] shadow-sm relative z-10 w-[45rem] bg-white mr-10 relative border border-[#000000] border-opacity-30'>
                     <div className='flex items-center justify-between px-10 h-[4.5rem]'>
                       <p className='text-nowrap text-sm font-bold'>
                         Book Appointment
@@ -163,12 +166,17 @@ const DocumentTemplatePage = () => {
                       </div>
                     </div>
                     <ReactQuill
-                        className="w-full h-full"
+                        className="w-full h-[32.5rem]"
                         theme="snow"
                         // value={formData.additionalNotes}
                         // onChange={(value) => handleInputChange("additionalNotes", value)}
                         placeholder="Write additional notes here..."
                     />
+                    <div className='w-full absolute bottom-0 left-0 h-20 flex items-center justify-end px-4'>
+                          <BlueButton 
+                            text={"Save"}
+                          />
+                    </div>
                 </div>
             </div>
         </div>}
