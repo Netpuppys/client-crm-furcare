@@ -45,7 +45,7 @@ const NestedComponents = ({ subItems, currentPath }) => {
   }, [currentPath, subItems]);
 
   return (
-    <div className="w-full flex flex-col gap-2 items-start justify-start">
+    <div className="w-fit ml-6  flex flex-col gap-2 items-start justify-start">
       {subItems.map((item, id) => (
         <button
           key={id}
@@ -54,7 +54,7 @@ const NestedComponents = ({ subItems, currentPath }) => {
             isSelected(item.name)
               ? "text-white bg-white bg-opacity-10 backdrop-blur-sm rounded-md"
               : "text-[#CACDD8]"
-          } pl-6 w-full text-left py-1 text-xs leading-[20px]`}
+          }   px-4 w-full text-left py-1 text-xs leading-[20px]`}
         >
           {item.name}
         </button>
@@ -120,7 +120,11 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
 
   return (
     <div
-      className={`${sidebarExpanded ? "w-60" : "w-20"}
+      className={`${
+        sidebarExpanded
+          ? "w-60 animate-sidebarExpand"
+          : "w-20 animate-sidebarClose"
+      }
         fixed top-0 h-screen bg-[#1F304C] border-r-2 border-[#394762]`}
     >
       <div className="w-full h-full relative">
@@ -131,14 +135,14 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
           )}
         </div>
 
-        <div className="w-full px-6 hideScrollbar py-10 flex h-[calc(100%-4.1875rem)] overflow-y-auto flex-col items-start justify-start gap-3">
+        <div className="w-full px-2 hideScrollbar py-10 flex h-[calc(100%-4.1875rem)] overflow-y-auto flex-col items-start justify-start gap-3">
           {sidebarItems.map((item, id) => (
             <div key={id} className="w-full h-fit">
               <button
                 onClick={() => handleClick(item)}
                 className="flex items-center py-2 gap-2"
               >
-                {item.subItems && sidebarExpanded && (
+                {item.subItems && (
                   <p
                     className={`${
                       isSelected(item.name) ? "text-white" : "text-[#8891AA]"
@@ -154,7 +158,7 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
 
                 <img
                   src={isSelected(item.name) ? item.icon : item.darkIcon}
-                  className="w-6"
+                  className={`w-6 ${item.subItems ? "" : "ml-[20px]"}`}
                   alt=""
                 />
 

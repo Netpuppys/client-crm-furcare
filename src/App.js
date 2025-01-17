@@ -1,16 +1,16 @@
-import { BrowserRouter, useLocation } from 'react-router-dom';
-import AllRoutes from './utils/AllRoutes';
-import Sidebar from './ui/Sidebar';
-import { useState } from 'react';
-import Navbar from './ui/Navbar';
-import { AlertProvider } from './utils/AlertContext';
-import Alert from './ui/Alert';
-import { ToastContainer } from 'react-toastify';
-import { AppProvider } from './utils/AppContext';
+import { BrowserRouter, useLocation } from "react-router-dom";
+import AllRoutes from "./utils/AllRoutes";
+import Sidebar from "./ui/Sidebar";
+import { useState } from "react";
+import Navbar from "./ui/Navbar";
+import { AlertProvider } from "./utils/AlertContext";
+import Alert from "./ui/Alert";
+import { ToastContainer } from "react-toastify";
+import { AppProvider } from "./utils/AppContext";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [ sidebarExpanded, setSidebarExpanded ] = useState(true)
+  const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   function Layout() {
     const location = useLocation();
@@ -18,7 +18,7 @@ function App() {
 
     return (
       <div className="">
-        {currentPath !== '/' && (
+        {currentPath !== "/" && (
           <Sidebar
             currentPath={currentPath}
             sidebarExpanded={sidebarExpanded}
@@ -27,12 +27,16 @@ function App() {
         )}
         <div
           className={`w-full ${
-            currentPath !== '/'
-              ? `${sidebarExpanded ? 'pl-60' : 'pl-20'}`
-              : ''
+            currentPath !== "/"
+              ? `${
+                  sidebarExpanded
+                    ? "pl-60 animate-sidebarExpandPadding"
+                    : "pl-20 animate-sidebarClosePadding"
+                }`
+              : ""
           }`}
         >
-          {currentPath !== '/' && <Navbar />}
+          {currentPath !== "/" && <Navbar />}
           <AllRoutes />
         </div>
       </div>
