@@ -60,7 +60,7 @@ const Navbar = () => {
             <div className='w-fit h-fit relative'>
                 <button
                     onClick={handleBranchModalOpen}
-                    className='border relative h-7 bg-white focus:outline-none border-[#E1E3EA] flex items-center rounded-md gap-2 px-3'
+                    className={`border relative h-7 cursor-pointer bg-white focus:outline-none border-[#E1E3EA] flex items-center rounded-md gap-2 px-3 ${openChangeBranchModal? "z-50" : ""}`}
                 >
                     <p className='text-[#121C2D] capitalize text-sm font-semibold text-center'>
                         {selectedBranch?.name}

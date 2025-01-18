@@ -5,6 +5,8 @@ import { useAppContext } from '../../../../utils/AppContext';
 import axiosInstance from '../../../../utils/AxiosInstance';
 import { toast } from 'react-toastify';
 
+const accessLevelOptions = [ "businessUnit", "businessBranch" ]
+
 const permissions = [
     {
         name: "Animal Class",
@@ -168,7 +170,8 @@ const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesLi
                         <input
                             type="text"
                             placeholder="Role Name"
-                            className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                            disabled
+                            className="mt-1 focus:outline-none disabled:cursor-not-allowed border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             value={newRoleData.name}
                             onChange={e => handleInputChange(e, "name")}
                         />
@@ -181,13 +184,16 @@ const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesLi
                                 <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                                 Access Level
                             </label>
-                            <input
-                                type="text"
-                                placeholder="Access level"
+                            <select 
                                 value={newRoleData.accessLevel}
                                 onChange={e => handleInputChange(e, "accessLevel")}
-                                className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
-                            />
+                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                            >
+                                <option value={""}>Select Option</option>
+                                {accessLevelOptions.map((item, index) => (
+                                    <option key={index} value={item}>{item}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                     <div className="w-1/2 mt-10 flex items-center justify-start">
@@ -198,8 +204,9 @@ const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesLi
                             </label>
                             <select 
                                 value={newRoleData.staff}
+                                disabled
                                 onChange={e => handleInputChange(e, "staff")}
-                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                                className="mt-1 classic focus:outline-none border disabled:cursor-not-allowed disabled:opacity-100 border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             >
                                 <option value={""}>Select Option</option>
                                 <option value={true}>Yes</option>

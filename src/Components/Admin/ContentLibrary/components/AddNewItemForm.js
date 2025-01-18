@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 import ReactQuill from "react-quill";
+import anesthesiaPatientMonitoringData from "./data";
+
 
 const AddNewItemForm = () => {
   const [formData, setFormData] = useState({
-    category: "",
-    gender: "",
-    animalType: "",
-    ageRange: "",
+    category: "Anesthesia and Surgery",
+    gender: "Female",
+    animalType: "Canine - Beagle",
+    ageRange: 12,
     healthConcerns: "",
     sterilizationStatus: "",
-    additionalNotes: "",
+    additionalNotes: anesthesiaPatientMonitoringData,
   });
 
   const handleInputChange = (key, value) => {
@@ -19,10 +21,10 @@ const AddNewItemForm = () => {
 
   const handleSubmit = () => {
     // Validation logic
-    if (!formData.category || !formData.gender || !formData.animalType) {
-      alert("Please fill all required fields.");
-      return;
-    }
+    // if (!formData.category || !formData.gender || !formData.animalType) {
+    //   alert("Please fill all required fields.");
+    //   return;
+    // }
 
     // Log the form data
     console.log("Submitted Form Data: ", formData);

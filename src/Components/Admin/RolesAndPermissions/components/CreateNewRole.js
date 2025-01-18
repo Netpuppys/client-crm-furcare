@@ -161,7 +161,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                             type="text"
                             placeholder="Role Name"
                             ref={inputRef}
-                            className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                            className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md  flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             value={newRoleData.name}
                             onChange={e => handleInputChange(e, "name")}
                         />
@@ -177,7 +177,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                             <select 
                                 value={newRoleData.accessLevel}
                                 onChange={e => handleInputChange(e, "accessLevel")}
-                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             >
                                 <option value={""}>Select Option</option>
                                 {accessLevelOptions.map((item, index) => (
@@ -195,7 +195,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
                             <select 
                                 value={newRoleData.staff}
                                 onChange={e => handleInputChange(e, "staff")}
-                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
                             >
                                 <option value={""}>Select Option</option>
                                 <option value={true}>Yes</option>

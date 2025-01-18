@@ -1,26 +1,29 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import informationIcon from "../../../Assets/icons/informationIcon.png";
-import ReactQuill from 'react-quill';
-import BlueButton from '../../../ui/BlueButton';
+import CreateNewDocumentTemplate from './components/CreateNewDocumentTemplate';
+import closeIcon from "../../../Assets/icons/alert/close.png"
+import axiosInstance from '../../../utils/AxiosInstance';
+import { useAppContext } from '../../../utils/AppContext';
+import EditDocumentTemplate from './components/EditDocumentTemplate';
 
-const buttons = [
+const types = [
   "Appointment", "Client & Patient", "Order", "Vaccination", "Prescription", "Marketing"
 ]
 
-const data = [
-    {
-        name: "Over the counter supplies",
-        language: "English, Hindi",
-        active: "Active",
-    },
-    {
-        name: "Physical exam equipments",
-        language: "English, Hindi",
-        active: false,
-    },
-];
+// const data = [
+//     {
+//         name: "Over the counter supplies",
+//         language: "English, Hindi",
+//         active: "Active",
+//     },
+//     {
+//         name: "Physical exam equipments",
+//         language: "English, Hindi",
+//         active: false,
+//     },
+// ];
   
-const AppointmentsTable = () => {
+const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
     return (
       <div className="overflow-x-auto">
         <table className="min-w-full">
@@ -48,12 +51,14 @@ const AppointmentsTable = () => {
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E1E3EA]">
-            {data.map((item, index) => (
-              <tr key={index} className="hover:bg-gray-50">
-                <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
+            {tableData.map((item, index) => (
+              <tr key={index} onClick={() => setOpenEditModule(item)} className="hover:bg-gray-50 cursor-pointer">
+                <td className="px-4 py-2 capitalize text-sm text-[#121C2D]">{item.name}</td>
                 <td className="px-4 py-2 text-sm">
-                  <p className=''>
-                    {item.language}
+                  <p className='capitalize'>
+                    {item.body.map((language, id) => (
+                      <span key={id}>{language.language}{item.body.length===id+1? "" : ", "}</span>
+                    ))}
                   </p>
                 </td>
   
@@ -78,9 +83,40 @@ const AppointmentsTable = () => {
 };
 
 const DocumentTemplatePage = () => {
+  const { selectedBranch } = useAppContext()
+
   const [ createNew, setCreateNew ] = useState(false)
-  const [ activeButton, setActiveButton ] = useState(0)
-  const [ language, setLanguage ] = useState("English")
+  const [ activeButton, setActiveButton ] = useState(types[0])
+  const [ tableData, setTableData ] = useState([])
+  const [ openEditModule, setOpenEditModule ] = useState(null)
+
+  const fetchData = () => {
+    setTableData([])
+
+    axiosInstance
+      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch}&type=${activeButton}`)
+      .then(res => {
+        console.log(res)
+        setTableData(res.data.data.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }
+
+  useEffect(() => {
+    setTableData([])
+
+    axiosInstance
+      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch}&type=${activeButton}`)
+      .then(res => {
+        console.log(res)
+        setTableData(res.data.data.data)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [selectedBranch, activeButton])
  
   return (
     <div className='w-full min-h-full px-8 py-4 relative'>
@@ -110,13 +146,13 @@ const DocumentTemplatePage = () => {
 
         <div className='mt-6 w-full'>
             <div className='w-full border-b border-[#CACDD8]'>
-                {buttons.map((item, index) => (
+                {types.map((item, index) => (
                 <button
-                    onClick={() => setActiveButton(index)}
                     key={index}
-                    className={`rounded-t-lg relative ${index===activeButton? "border-t-2 -bottom-[2px] bg-white " : ""} border-[#0263E0] h-10 bg-white overflow-hidden`}
+                    onClick={() => setActiveButton(item)}
+                    className={`rounded-t-lg relative ${item===activeButton? "border-t-2 -bottom-[2px] bg-white " : ""} border-[#0263E0] h-10 bg-white overflow-hidden`}
                 >
-                    <p className={`w-full h-full flex items-center justify-center ${index===activeButton? "border-x" : ""} border-[#CACDD8] px-3`}>
+                    <p className={`w-full h-full flex items-center justify-center ${item===activeButton? "border-x" : ""} border-[#CACDD8] px-3`}>
                         {item}
                     </p>
                 </button>))}
@@ -124,60 +160,56 @@ const DocumentTemplatePage = () => {
         </div>
 
         <div className='mt-6 w-full'>
-            {activeButton === 0 &&
+            {/* {activeButton === 0 && */}
             <div className='w-full'>
-                <AppointmentsTable />
-            </div>}
+                <AppointmentsTable 
+                  tableData={tableData}
+                  setOpenEditModule={setOpenEditModule}
+                />
+            </div>
         </div>
 
-        {createNew &&
-        <div className='fixed top-0 left-0 w-screen h-screen'>
-            <div className='w-full h-full relative flex items-end justify-end'>
+        <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
+            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+              <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                Add Document Template
+              </p>
+              <button
+                onClick={() => setCreateNew(false)}
+                className=""
+              >
+                <img src={closeIcon} className="w-7 " alt="" />
+              </button>
+            </div>
 
-                <div onClick={() => setCreateNew(false)} className='w-full h-full absolute top-0 left-0'></div>
+            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+              <CreateNewDocumentTemplate 
+                types={types}
+                fetchData={fetchData}
+              />
+            </div>
+        </div>
 
-                <div className='h-[45rem] shadow-sm relative z-10 w-[45rem] bg-white mr-10 relative border border-[#000000] border-opacity-30'>
-                    <div className='flex items-center justify-between px-10 h-[4.5rem]'>
-                      <p className='text-nowrap text-sm font-bold'>
-                        Book Appointment
-                      </p>
-                      <div className="flex">
-                        <button
-                          className={`py-2 px-4 border border-r-[0.5px] ${
-                            language === "English"
-                              ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                              : "border-gray-300 text-[#121C2D] rounded-l-lg"
-                          }`}
-                          onClick={() => setLanguage("English")}
-                        >
-                          English
-                        </button>
+        {openEditModule &&
+        <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${openEditModule? "right-0 block" : "right-full hidden z-50"} `}>
+            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+              <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                Edit Document Template
+              </p>
+              <button
+                onClick={() => setOpenEditModule(false)}
+                className=""
+              >
+                <img src={closeIcon} className="w-7 " alt="" />
+              </button>
+            </div>
 
-                        <button
-                          className={`py-2 px-4 border border-l-[0.5px] ${
-                            language === "Hindi"
-                              ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                              : "border-gray-300 text-[#121C2D] rounded-r-lg"
-                          }`}
-                          onClick={() => setLanguage("Hindi")}
-                        >
-                          Hindi
-                        </button>
-                      </div>
-                    </div>
-                    <ReactQuill
-                        className="w-full h-[32.5rem]"
-                        theme="snow"
-                        // value={formData.additionalNotes}
-                        // onChange={(value) => handleInputChange("additionalNotes", value)}
-                        placeholder="Write additional notes here..."
-                    />
-                    <div className='w-full absolute bottom-0 left-0 h-20 flex items-center justify-end px-4'>
-                          <BlueButton 
-                            text={"Save"}
-                          />
-                    </div>
-                </div>
+            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+              <EditDocumentTemplate 
+                types={types}
+                openEditModule={openEditModule}
+                fetchData={fetchData}
+              />
             </div>
         </div>}
     </div>

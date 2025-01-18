@@ -152,3 +152,19 @@ input:checked + .slider:before {
 .slider.round:before {
   border-radius: 50%;
 }
+
+.w-md-editor {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+  border-color: #cccccc !important;
+}
+
+.w-md-editor-text-input {
+  background-color: #ffffff !important;
+  color: #000000 !important;
+}
+
+.w-md-editor-toolbar {
+  background-color: #f8f9fa !important;
+  border-bottom: 1px solid #cccccc !important;
+}

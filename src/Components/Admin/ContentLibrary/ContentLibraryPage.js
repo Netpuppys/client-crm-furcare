@@ -3,12 +3,13 @@ import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
+import BlueButton from "../../../ui/BlueButton"
 
 const data = [
   {
     category: "Anaesthesia & Surgery",
     items: [
-      { topic: "Anaesthesia Patient Monitoring", status: "Active" },
+      { topic: "Anaesthesia Patient Monitoring", status: "Active", click: true },
       { topic: "Canine Castration", status: "Active" },
       { topic: "Canine Spay", status: "Active" },
       { topic: "Dental Prophy", status: "Active" },
@@ -31,7 +32,7 @@ const data = [
   },
 ];
 
-const TableComponent = () => {
+const TableComponent = ({ handleCreateNew }) => {
   const [ openIndex, setOpenIndex ] = useState([])
 
   const handleOpenSubItems = (index) => {
@@ -41,6 +42,12 @@ const TableComponent = () => {
       setOpenIndex((prev) => [...prev, index]); // Use spread operator to add the index
     }
   };
+
+  const handleClick = (item) => {
+    if (item.click) {
+      handleCreateNew()
+    }
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -92,7 +99,11 @@ const TableComponent = () => {
               {openIndex.includes(index) && 
               category.items.map((item, idx) => (
                 <tr key={idx} >
-                  <td className="px-4 py-3 border-b text-[#0263E0] text-sm border-gray-200">{item.topic}</td>
+                  <td className="px-4 py-3 border-b text-[#0263E0] text-sm border-gray-200">
+                    <button onClick={() => handleClick(item)} disabled={!item.click? true : false} className="">
+                      {item.topic}
+                    </button>
+                  </td>
                   <td className="px-4 py-3 border-b border-gray-200">
                     <div className="w-full flex gap-3 items-center">
                       <div className="w-3 bg-[#0B602D] aspect-square rounded-full"></div>
@@ -113,6 +124,10 @@ const TableComponent = () => {
 const ContentLibraryPage = () => {
   const [ createNew, setCreateNew ] = useState(false)
 
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
+
   return (
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
@@ -130,17 +145,16 @@ const ContentLibraryPage = () => {
                 </p>
             </div>
             <div className='flex items-center gap-6'>
-                <button
-                    onClick={() => setCreateNew(true)}
-                    className='bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
-                >
-                    Create
-                </button>
+                <BlueButton
+                  text={"Create"}
+                  onClickHandler={handleCreateNew}
+                  disabled={true}
+                />
             </div>
         </div>
         
         <div className="mt-6">
-          <TableComponent />
+          <TableComponent handleCreateNew={handleCreateNew} />
         </div>
 
         <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
