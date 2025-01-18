@@ -99,7 +99,7 @@ const Navbar = () => {
             <div className='w-fit h-fit relative'>
                 <button
                     onClick={handleProfileModalOpen}
-                    className='flex gap-2 items-center relative'
+                    className={`flex gap-2 items-center relative ${showProfileOptions? "z-50" : ""}`}
                 >
                     <div className='w-8 aspect-square rounded-full border border-[#E7DCFA] flex items-center justify-center'>
                         <img src={avatarIcon} className='' alt='' />
