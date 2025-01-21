@@ -17,13 +17,18 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
   const [ roles, setRoles] = useState([]); // Initial roles
   const [ inputValue, setInputValue] = useState("");
   const [ inputFocus, setInputFocus ] = useState(false)
-  const [ dropDownListStatic, setDropDownListStatic ] = useState(["english", "hindi"])
+  const [ dropDownListStatic, setDropDownListStatic ] = useState()
   const [ disabled, setDisabled ] = useState(true)
   const [ dropDownList, setDropDownList ] = useState(dropDownListStatic)
+  const [ selectedLanguage, setSelectedLanguage ] = useState()
+  const [ selectedLanguageIndex, setSelectedLanguageIndex ] = useState(0)
 
   useEffect(() => {
-    setDropDownListStatic(["english", "hindi"])
-  }, [])
+    const langArr = openEditModule.body.map((item) => item.language)
+
+    setDropDownListStatic(langArr)
+    setSelectedLanguage(langArr[0])
+  }, [openEditModule])
 
   useEffect(() => {
     if (inputValue) {
@@ -52,13 +57,13 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
       return;
     }
 
-    if (formData.name === openEditModule.name && formData.type === openEditModule.type && formData.additionalNotes === openEditModule.body[0].body) {
+    if (formData.name === openEditModule.name && formData.type === openEditModule.type && formData.additionalNotes === openEditModule.body[selectedLanguageIndex].body) {
         setDisabled(true)
       return;
     }
 
     setDisabled(false)
-  }, [formData, roles, openEditModule])
+  }, [formData, roles, openEditModule, selectedLanguageIndex])
 
   const handleDropDownClick = (value) => {
     setRoles(prev => ([
@@ -88,7 +93,7 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
             },
             {
                 language: "hindi",
-                body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
+                body: "<p>प्रिय {patientName}, आपकी नियुक्ति {appointment…बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।</p>"
             }
         ],
     }
@@ -105,6 +110,12 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
             toast.error("Something Went Wrong")
         })
   };
+
+  const handleLanguageChange = (lang, index) => {
+    setSelectedLanguage(lang)
+    setSelectedLanguageIndex(index)
+    setFormData((prev) => ({ ...prev, additionalNotes: openEditModule?.body[index].body }));
+  }
 
   return (
     <div className="p-6 flex flex-col justify-center items-end mx-auto bg-white rounded-lg space-y-6">
@@ -138,13 +149,13 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
                 value={formData.name}
                 placeholder="Placeholder"
                 onChange={e => handleInputChange("name", e.target.value)}
-                className="mt-1 p-2 border border-gray-300 placeholder:italic focus:outline-none rounded-lg classic"
+                className="mt-1 p-2 border capitalize border-gray-300 placeholder:italic focus:outline-none rounded-lg classic"
             />
         </div>
 
       </div>
 
-      {/* Health Concerns Dropdown */}
+      {/* Languages Dropdown */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col w-full">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
@@ -190,6 +201,53 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
             ))}
           </div>}
         </div>
+        </div>
+      </div>
+
+      <div className="flex w-full items-center justify-between gap-12">
+        {/* Category Input */}
+        <div className="flex flex-col w-1/2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+            Select language to view{" "}
+          </label>
+          <div className="flex mt-1">
+            {/* <button
+              className={`py-2 px-4 border border-r-[0.5px] ${
+                formData.gender === "Male"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
+                  : "border-gray-300 text-[#121C2D] rounded-l-lg"
+              }`}
+              onClick={() => handleInputChange("gender", "Male")}
+            >
+              English
+            </button>
+
+            <button
+              className={`py-2 px-4 border border-l-[0.5px] ${
+                formData.gender === "Female"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
+                  : "border-gray-300 text-[#121C2D] rounded-r-lg"
+              }`}
+              onClick={() => handleInputChange("gender", "Female")}
+            >
+              Hindi
+            </button> */}
+
+            {dropDownListStatic?.map((lang, id) => (
+              <button
+                key={id}
+                className={`py-2 px-4 border first:border-r-[0.5px] last:border-l-[0.5px] capitalize ${
+                  selectedLanguage === lang
+                    ? "border-[#006DFA] last:border-l-gray-300 text-[#006DFA] bg-[#F4F9FF] first:border-r-gray-300"
+                    : "border-gray-300 text-[#121C2D] first:rounded-l-lg last:rounded-r-lg"
+                }`}
+                onClick={() => handleLanguageChange(lang, id)}
+              >
+                {lang}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
