@@ -1,7 +1,7 @@
-import { BrowserRouter, useLocation } from "react-router-dom";
+import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import AllRoutes from "./utils/AllRoutes";
 import Sidebar from "./ui/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Navbar from "./ui/Navbar";
 import { AlertProvider } from "./utils/AlertContext";
 import Alert from "./ui/Alert";
@@ -14,7 +14,17 @@ function App() {
 
   function Layout() {
     const location = useLocation();
+    const navigate = useNavigate(); 
     const currentPath = location.pathname;
+
+    useEffect(() => {
+      const access = localStorage.getItem("access");
+      const userName = localStorage.getItem("name");
+
+      if (!access || !userName) {
+        navigate("/"); // Redirect to root if conditions aren't met
+      }
+    }, [navigate]); 
 
     return (
       <div className="">
