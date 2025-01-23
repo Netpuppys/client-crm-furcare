@@ -1,8 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import BlueButton from '../../../../ui/BlueButton'
 import closeIcon from "../../../../Assets/icons/alert/close.png"
+import axiosInstance from '../../../../utils/AxiosInstance'
+import { useAppContext } from '../../../../utils/AppContext'
+import { useAlertContext } from '../../../../utils/AlertContext'
 
-const EditAnimalClass = ({ editAnimalClass, setEditAnimalClass }) => {
+const EditAnimalClass = ({ editAnimalClass, refreshList, setEditAnimalClass }) => {
+    const { selectedBranch } = useAppContext()
+
+    console.log(selectedBranch.id, editAnimalClass.id)
+
+    const { setAlert } = useAlertContext()
+
     const [ active, setActive ] = useState(editAnimalClass.availableAt[0].active)
     const [ disabled, setDisabled ] = useState(true)
 
@@ -12,8 +21,21 @@ const EditAnimalClass = ({ editAnimalClass, setEditAnimalClass }) => {
             return
         }
 
-        setDisabled(true)
+        setDisabled(false)
     }, [active, editAnimalClass])
+
+    const handleUpdateAnimalClass = () => {
+        axiosInstance
+            .patch(`/api/v1/business-branches/${selectedBranch.id}/animal-classes/${editAnimalClass.id}`, { active: active })
+            .then(res => {
+                refreshList()
+                console.log(res)
+                setAlert("Animal Class Successfully Updated")
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }
 
   return (
     <div className='w-[50rem] h-screen shadow-2xl fixed top-0 right-0 bg-white z-40 overflow-hidden'>
@@ -91,6 +113,7 @@ const EditAnimalClass = ({ editAnimalClass, setEditAnimalClass }) => {
             <div className='fixed bottom-8 right-6'>
                 <BlueButton 
                     text={"Save"}
+                    onClickHandler={handleUpdateAnimalClass}
                     disabled={disabled}
                 />
             </div>

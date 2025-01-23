@@ -39,6 +39,26 @@ const AnimalClassesPage = () => {
             })
     }, [])
 
+    const refreshList = () => {
+        axiosInstance
+            .get(`/api/v1/animal-classes?business_branch_id=${selectedBranch.id}`)
+            .then(res => {
+                const response = res.data.data.data
+                setEditAnimalClass(null)
+                if (response.length > 0) {
+                    setBranchAnimalClasses(response)
+                } else {
+                    setBranchAnimalClasses([])
+                }
+            })
+            .catch(err => {
+                console.error(err)
+            })
+            .finally(() => {
+                setLoaded(true)
+            })
+    }
+
     useEffect(() => {
         if (branchAnimalClasses?.length > 0 && allAnimalClasses?.length > 0) {
             // Convert names in branchAnimalClasses to lowercase and store in a Set
@@ -210,6 +230,7 @@ const AnimalClassesPage = () => {
         {editAnimalClass &&
         <EditAnimalClass
             editAnimalClass={editAnimalClass}
+            refreshList={refreshList}
             setEditAnimalClass={setEditAnimalClass}
         />}
     </div>
