@@ -1,21 +1,22 @@
 import { BrowserRouter, useLocation, useNavigate } from "react-router-dom";
 import AllRoutes from "./utils/AllRoutes";
 import Sidebar from "./ui/Sidebar";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Navbar from "./ui/Navbar";
 import { AlertProvider } from "./utils/AlertContext";
 import Alert from "./ui/Alert";
 import { ToastContainer } from "react-toastify";
-import { AppProvider } from "./utils/AppContext";
+import { AppProvider, useAppContext } from "./utils/AppContext";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const [sidebarExpanded, setSidebarExpanded] = useState(true);
 
   function Layout() {
     const location = useLocation();
     const navigate = useNavigate(); 
     const currentPath = location.pathname;
+
+    const {  sidebarExpanded } = useAppContext()
 
     useEffect(() => {
       const access = localStorage.getItem("access");
@@ -24,15 +25,13 @@ function App() {
       if (!access || !userName) {
         navigate("/"); // Redirect to root if conditions aren't met
       }
-    }, [navigate]); 
+    }, [navigate]);
 
     return (
       <div className="">
         {currentPath !== "/" && (
           <Sidebar
             currentPath={currentPath}
-            sidebarExpanded={sidebarExpanded}
-            setSidebarExpanded={setSidebarExpanded}
           />
         )}
         <div

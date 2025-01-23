@@ -5,23 +5,35 @@ import closeIcon from "../../../Assets/icons/alert/close.png"
 import axiosInstance from '../../../utils/AxiosInstance';
 import { useAppContext } from '../../../utils/AppContext';
 import EditDocumentTemplate from './components/EditDocumentTemplate';
+import { useNavigate } from 'react-router-dom';
+import BlueButton from '../../../ui/BlueButton';
 
 const types = [
-  "Appointment", "Client & Patient", "Order", "Vaccination", "Prescription", "Marketing"
-]
-
-// const data = [
-//     {
-//         name: "Over the counter supplies",
-//         language: "English, Hindi",
-//         active: "Active",
-//     },
-//     {
-//         name: "Physical exam equipments",
-//         language: "English, Hindi",
-//         active: false,
-//     },
-// ];
+  {
+    name: "Appointment",
+    serverName: "Appointment"
+  },
+  {
+    name: "Client & Patient",
+    serverName: "Client_And_Patient"
+  },
+  {
+    name: "Order",
+    serverName: "Order"
+  },
+  {
+    name: "Vaccination",
+    serverName: "Vaccination"
+  },
+  {
+    name: "Prescription",
+    serverName: "Prescription"
+  },
+  {
+    name: "Marketing",
+    serverName: "Marketing"
+  }
+];
   
 const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
     return (
@@ -83,12 +95,19 @@ const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
 };
 
 const DocumentTemplatePage = () => {
-  const { selectedBranch } = useAppContext()
+  const navigate = useNavigate()
+
+  const { selectedBranch, setSidebarExpanded } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false)
-  const [ activeButton, setActiveButton ] = useState(types[0])
+  const [ activeButton, setActiveButton ] = useState(types[0].serverName)
   const [ tableData, setTableData ] = useState([])
   const [ openEditModule, setOpenEditModule ] = useState(null)
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+  }
 
   const fetchData = () => {
     setTableData([])
@@ -117,16 +136,21 @@ const DocumentTemplatePage = () => {
         console.error(err)
       })
   }, [selectedBranch, activeButton])
+
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
  
   return (
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <p
-                  className='underline inline cursor-default'
+                <button 
+                  onClick={handleAdminClick}
+                  className='underline inline'
                 >
                     Admin
-                </p>
+                </button>
                 <span>{" "}/{" "}</span>
                 <p
                     className='underline inline cursor-default'
@@ -135,12 +159,10 @@ const DocumentTemplatePage = () => {
                 </p>
             </div>
             <div className='flex items-center gap-6'>
-                <button
-                    onClick={() => setCreateNew(true)}
-                    className='bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
-                >
-                    Create
-                </button>
+                <BlueButton
+                  onClickHandler={handleCreateNew}
+                  text={"Create"}
+                />
             </div>
         </div>
 
@@ -149,11 +171,11 @@ const DocumentTemplatePage = () => {
                 {types.map((item, index) => (
                 <button
                     key={index}
-                    onClick={() => setActiveButton(item)}
-                    className={`rounded-t-lg relative ${item===activeButton? "border-t-2 -bottom-[2px] bg-white " : ""} border-[#0263E0] h-10 bg-white overflow-hidden`}
+                    onClick={() => setActiveButton(item.serverName)}
+                    className={`rounded-t-lg relative ${item.serverName===activeButton? "border-t-2 -bottom-[2px] bg-white " : ""} border-[#0263E0] h-10 bg-white overflow-hidden`}
                 >
-                    <p className={`w-full h-full flex items-center justify-center ${item===activeButton? "border-x" : ""} border-[#CACDD8] px-3`}>
-                        {item}
+                    <p className={`w-full h-full flex items-center justify-center ${item.serverName===activeButton? "border-x" : ""} border-[#CACDD8] px-3`}>
+                        {item.name}
                     </p>
                 </button>))}
             </div>

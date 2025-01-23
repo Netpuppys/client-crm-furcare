@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 const buttons = [
-  "Hospital Details",
+  "Branch Details",
   "Services",
   "Departments",
   "Appointment Slots",
@@ -275,12 +275,12 @@ const OtherInfo = ({ branchData }) => {
             key={index}
             className={`rounded-t-lg relative ${
               index === activeButton ? "border-t-2 -bottom-[2px] bg-white " : ""
-            } border-[#0263E0] h-10 bg-white overflow-hidden`}
+            } border-[#0263E0] h-10 bg-white overflow-hidden `}
           >
             <p
-              className={`w-full h-full flex items-center text-[#606B85] justify-center ${
-                index === activeButton ? "border-x" : ""
-              } border-[#CACDD8] px-3`}
+              className={`w-full h-full flex items-center  justify-center ${
+                index === activeButton ? "border-x text-[#0263E0] font-medium" : "text-[#606B85]"
+              } border-[#CACDD8] px-5`}
             >
               {item}
             </p>

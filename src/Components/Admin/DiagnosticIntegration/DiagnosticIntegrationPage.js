@@ -5,6 +5,10 @@ import { FaSearch } from "react-icons/fa";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import { useAppContext } from "../../../utils/AppContext";
+import { useNavigate } from "react-router-dom";
+import { useAlertContext } from "../../../utils/AlertContext";
+import statesInIndia from "../../../data/StatesIndia";
+import BlueButton from "../../../ui/BlueButton";
 
 const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
   return (
@@ -77,6 +81,8 @@ const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
 };
 
 const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
+  const { setAlert } = useAlertContext()
+
   const { selectedBranch } = useAppContext()
 
   const [ disabled, setDisabled ] = useState(true)
@@ -86,7 +92,7 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
     address2: "",
     city: "",
     state: "",
-    country: "",
+    country: "India",
     postalCode: ""
   });
 
@@ -134,7 +140,7 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
       .post(`/api/v1/diagnostic-integrations`, businessInfo)
       .then(res => {
         console.log(res)
-        toast.success("Submitted Successfully")
+        setAlert("Submitted Successfully")
         fetchDiagnosticsDetails()
       })
       .catch(err => {
@@ -205,7 +211,11 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
             className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
             placeholder="City"
             value={formData.city}
-            onChange={(e) => handleInputChange("city", e.target.value)}
+            onChange={(e) => {
+              // Remove numbers from the input value
+              const filteredValue = e.target.value.replace(/[0-9]/g, "");
+              handleInputChange("city", filteredValue);
+            }}          
           />
         </div>
         <div className="w-[47.5%]">
@@ -213,13 +223,28 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             State
           </label>
-          <input
+          {/* <input
             type="text"
             className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
             placeholder="State"
             value={formData.state}
             onChange={(e) => handleInputChange("state", e.target.value)}
-          />
+          /> */}
+          <select
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
+            value={formData.state}
+            onChange={(e) => handleInputChange("state", e.target.value)}
+          >
+            <option value={""}>State</option>
+            {statesInIndia.map((item, index) => (
+              <option
+                key={index}
+                value={item}
+              >
+                {item}
+              </option>
+            ))}
+          </select>
         </div>
       </div>
 
@@ -232,7 +257,8 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
           </label>
           <input
             type="text"
-            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+            disabled
+            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6] disabled:opacity-70"
             placeholder="Country"
             value={formData.country}
             onChange={(e) => handleInputChange("country", e.target.value)}
@@ -278,6 +304,15 @@ const DiagnosticIntegrationPage = () => {
   const [ createNew, setCreateNew] = useState(false);
   const [ diagnosticIntegrationsData, setDiagnosticIntegrationsData ] = useState([])
 
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+}
+
   useEffect(() => {
     axiosInstance
       .get("/api/v1/diagnostic-integrations")
@@ -304,15 +339,20 @@ const DiagnosticIntegrationPage = () => {
       })
   }
 
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
+
   return (
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className="underline inline cursor-default"
+          <button
+            onClick={handleAdminClick}
+            className="underline inline"
           >
             Admin
-          </p>
+          </button>
           <span> / </span>
           <p
             className="underline inline cursor-default"
@@ -320,12 +360,10 @@ const DiagnosticIntegrationPage = () => {
             Diagnostic Integration
           </p>
         </div>
-        <button
-          onClick={() => setCreateNew(true)}
-          className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
-        >
-          Create
-        </button>
+        <BlueButton
+          onClickHandler={handleCreateNew}
+          text={"Create"}
+        />
       </div>
 
       <div className="w-full mt-6">

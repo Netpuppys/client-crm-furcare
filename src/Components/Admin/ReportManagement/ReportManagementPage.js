@@ -5,10 +5,14 @@ import closeIcon from "../../../Assets/icons/alert/close.png";
 import LabelFieldsList from "./component/LabelFieldsList";
 import EditReport from "./component/EditReport";
 import CreateNewReport from "./component/CreateNewReport";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../utils/AppContext";
+import BlueButton from "../../../ui/BlueButton";
 
 const ReportTable = ({ reportData, setEditGroup }) => {
   const [ showLabelsList, setShowLabelsList ] = useState()
   const [ selectedGroup, setSelectedGroup ] = useState()
+
 
   const handleListClick = (data, index) => {
       setShowLabelsList(index)
@@ -115,9 +119,18 @@ const ReportTable = ({ reportData, setEditGroup }) => {
 };
 
 function ReportManagementPage() {
-    const [ createNew, setCreateNew] = useState(false);
-    const [ reportData, setReportData ] = useState([]);
-    const [ editGroup, setEditGroup ] = useState()
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+
+  const [ createNew, setCreateNew] = useState(false);
+  const [ reportData, setReportData ] = useState([]);
+  const [ editGroup, setEditGroup ] = useState()
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+  }
 
     const fetchAllReports = () => {
       axiosInstance
@@ -143,26 +156,36 @@ function ReportManagementPage() {
           })
     }, [])
 
+    const handleCreateNew = () => {
+      setCreateNew(true)
+    }
+
   return (
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className="underline inline cursor-default"
+          <button
+            onClick={handleAdminClick}
+            className="underline inline"
           >
             Admin
-          </p>
+          </button>
           <span> / </span>
           <p className="underline inline cursor-default">
             Report Management
           </p>
         </div>
-        <button
+        {/* <button
           onClick={() => setCreateNew(true)}
           className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
         >
           Create
-        </button>
+        </button> */}
+          <BlueButton
+            onClickHandler={handleCreateNew}
+            text={"Create"}
+          />
+
       </div>
 
       <div className="w-full mt-6">

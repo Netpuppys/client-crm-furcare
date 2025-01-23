@@ -6,6 +6,8 @@ import deleteIcon from "../../../Assets/icons/deleteIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { useAlertContext } from "../../../utils/AlertContext";
 
 const SuppliesTable = ({ suppliesData }) => {
 
@@ -81,6 +83,8 @@ const SuppliesTable = ({ suppliesData }) => {
 };
 
 const CreateNewForm = ({ fetchSuppliesData }) => {
+  const { setAlert } = useAlertContext()
+
   const { selectedBranch } = useAppContext()
 
   const [ vendorList, setVendorList ] = useState([])
@@ -184,7 +188,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
       .post(`/api/v1/supplies`, sendData)
       .then(res => {
         console.log(res)
-        toast.success("Created Successfully")
+        setAlert("Created Successfully")
         fetchSuppliesData()
       })
       .catch(err => {
@@ -283,8 +287,17 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
 };
 
 function SuppliesManagementPage() {
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+
   const [ createNew, setCreateNew ] = useState(false);
   const [ suppliesData, setSuppliesData ] = useState([]);
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+  }
 
   const fetchSuppliesData = () => {
     axiosInstance
@@ -310,27 +323,30 @@ function SuppliesManagementPage() {
       })
   }, [])
 
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
+
   return (
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className='underline inline cursor-default'
+          <button
+            onClick={handleAdminClick}
+            className='underline inline'
           >
             Admin
-          </p>
+          </button>
           <span> / </span>
           <p
             className='underline inline cursor-default'>
             Supplies Management
           </p>
         </div>
-        <button
-          onClick={() => setCreateNew(true)}
-          className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
-        >
-          Create
-        </button>
+        <BlueButton
+          onClickHandler={handleCreateNew}
+          text={"Create"}
+        />
       </div>
 
       <div className="w-full mt-6">

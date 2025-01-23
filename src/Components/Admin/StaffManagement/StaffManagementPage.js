@@ -4,6 +4,9 @@ import closeIcon from "../../../Assets/icons/alert/close.png";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../ui/BlueButton";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../utils/AppContext";
+import { useAlertContext } from "../../../utils/AlertContext";
 
 const DiagnosticTable = ({ staffData }) => {
 
@@ -78,6 +81,8 @@ const DiagnosticTable = ({ staffData }) => {
 };
 
 const CreateNewForm = ({ fetchStaffData }) => {
+  const { setAlert } = useAlertContext()
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -151,7 +156,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
       .post(`/api/v1/staff`, sendData)
       .then(res => {
         console.log(res)
-        toast.success("Staff member added successfully")
+        setAlert("Staff member added successfully")
         fetchStaffData()
       })
       .catch(err => {
@@ -294,10 +299,19 @@ const CreateNewForm = ({ fetchStaffData }) => {
 };
 
 function StaffManagementPage() {
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+
   const [ createNew, setCreateNew] = useState(false);
   const [ staffData, setStaffData ] = useState([])
 
-  useState(() => {
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+}
+
+  useEffect(() => {
     axiosInstance
       .get(`/api/v1/staff`)
       .then(res => {
@@ -323,27 +337,30 @@ function StaffManagementPage() {
       })
   }
 
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
+
   return (
     <div className="w-full min-h-full px-8 py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className='underline inline cursor-default'
+          <button
+            onClick={handleAdminClick}
+            className='underline inline'
           >
             Admin
-          </p>
+          </button>
           <span> / </span>
           <p
             className='underline inline cursor-default'>
             Staff Management
           </p>
         </div>
-        <button
-          onClick={() => setCreateNew(true)}
-          className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
-        >
-          Add
-        </button>
+        <BlueButton
+          onClickHandler={handleCreateNew}
+          text={"Add"}
+        />
       </div>
 
       <div className="w-full mt-6">

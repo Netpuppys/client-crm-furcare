@@ -5,12 +5,15 @@ import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 import { FiCheck, FiPlus } from "react-icons/fi";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
+import { useAlertContext } from "../../../../utils/AlertContext";
 
 const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-In Appointments", "Appointment Slots", "Doctors" ]
 const frequencyArray = [ 'day', 'week', 'month' ]
 const appointmentTypes = [ 'appointments', 'admin', 'client_and_patient', 'inventory', 'communication', 'visits', 'leads' ]
 
 const CreateNewReport = ({ fetchAllReports }) => {
+    const { setAlert } = useAlertContext() 
+    
     const { branchDetails, selectedBranch } = useAppContext()
 
     const [ formData, setFormData] = useState({
@@ -55,7 +58,7 @@ const CreateNewReport = ({ fetchAllReports }) => {
             .post(`/api/v1/reports`, sendData)
             .then(res => {
                 console.log(res)
-                toast.success("Report created Successfully")
+                setAlert("Report created Successfully")
                 fetchAllReports()
             })
             .catch(err => {

@@ -9,10 +9,13 @@ const EditGroup = ({ editGroup, setGroupData }) => {
 
     const [ disabled, setDisabled ] = useState(true);
     const [ formData, setFormData ] = useState({
-        name: editGroup?.name,
-        description: editGroup?.description,
-        resourses: editGroup?.resources
+        name: editGroup.name,
+        description: editGroup.description,
+        resourses: ["676bf1041923dfac96de330b"]
+        // editGroup?.resources
     });
+
+    console.log(editGroup)
 
     useEffect(() => {
         if (formData.name === "" || formData.description === "" || !formData.resourses || !formData.resourses.length>0 ) {

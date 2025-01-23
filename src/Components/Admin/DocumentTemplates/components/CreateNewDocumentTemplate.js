@@ -5,9 +5,12 @@ import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
+import { useAlertContext } from "../../../../utils/AlertContext";
 
 const CreateNewDocumentTemplate = ({ types, fetchData }) => {
     const { selectedBranch } = useAppContext()
+
+    const { setAlert } = useAlertContext()
 
   const [formData, setFormData] = useState({
     type: "",
@@ -76,7 +79,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
         .post("/api/v1/document-templates", sendData)
         .then(res => {
             console.log(res)
-            toast.success("Added Successfully")
+            setAlert("Added Successfully")
             fetchData()
         })
         .catch(err => {
@@ -86,7 +89,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
   };
 
   return (
-    <div className="p-6 flex flex-col justify-center items-end mx-auto bg-white rounded-lg space-y-6">
+    <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6 h-full relative">
       <div className="flex w-full items-center justify-between gap-12">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
@@ -101,7 +104,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
             >
                 <option value={""}>Select</option>
                 {types.map((type, id) => (
-                    <option value={type} key={id}>{type}</option>
+                    <option value={type.serverName} key={id}>{type.name}</option>
                 ))}
             </select>
         </div>
@@ -185,11 +188,13 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
       </div>
 
       {/* Submit Button */}
+      <div className="w-fit h-fit absolute bottom-8 right-6">
         <BlueButton 
             text={"Save"}
             onClickHandler={handleSubmit}
             disabled={disabled}
         />
+      </div>
     </div>
   );
 };

@@ -5,6 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
+import statesInIndia from "../../../data/StatesIndia";
 
 // const options = [
 //   "Service A",
@@ -62,7 +63,7 @@ const CreateBusinessUnit = () => {
     address2: "",
     city: "",
     state: "",
-    country: "",
+    country: "India",
     postalCode: "",
     department: "",
     appointment: "",
@@ -258,7 +259,7 @@ const CreateBusinessUnit = () => {
         console.log("Success:", response.data);
         setAlert("Created Successfully")
         navigate("/admin/branch-units")
-        toast.success("Created Successfully")
+        setAlert("Created Successfully")
       })
       .catch(error => {
         console.error("Error:", error);
@@ -429,9 +430,13 @@ const CreateBusinessUnit = () => {
               <input
                 type="text"
                 className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
-                placeholder="Malad"
+                placeholder="City"
                 value={formData.city}
-                onChange={(e) => handleInputChange("city", e.target.value)}
+                onChange={(e) => {
+                  // Remove numbers from the input value
+                  const filteredValue = e.target.value.replace(/[0-9]/g, "");
+                  handleInputChange("city", filteredValue);
+                }} 
               />
             </div>
             {/* state selection */}
@@ -440,13 +445,28 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 State
               </label>
-              <input
+              {/* <input
                 type="text"
                 className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
                 placeholder="Maharashtra"
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
-              />
+              /> */}
+              <select
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg classic"
+                value={formData.state}
+                onChange={(e) => handleInputChange("state", e.target.value)}
+              >
+                <option value={""}>State</option>
+                {statesInIndia.map((item, index) => (
+                  <option
+                    key={index}
+                    value={item}
+                  >
+                    {item}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
@@ -459,8 +479,9 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
-                placeholder="India"
+                disabled
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6] disabled:opacity-70"
+                placeholder="Country"
                 value={formData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
               />

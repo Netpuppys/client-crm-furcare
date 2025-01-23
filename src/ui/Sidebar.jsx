@@ -4,6 +4,7 @@ import sidebarItems from "../data/sidebarItems";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import closeIcon from "../Assets/icons/sidebar/close.png";
 import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../utils/AppContext";
 
 const NestedComponents = ({ subItems, currentPath }) => {
   const navigate = useNavigate();
@@ -63,8 +64,10 @@ const NestedComponents = ({ subItems, currentPath }) => {
   );
 };
 
-const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
+const SidebarComp = ({ currentPath }) => {
   const navigate = useNavigate();
+
+  const {  sidebarExpanded, setSidebarExpanded } = useAppContext()
 
   function findSidebarItemByPath(sidebarItems, pathname) {
     // Ensure the input is valid
@@ -101,6 +104,11 @@ const SidebarComp = ({ currentPath, sidebarExpanded, setSidebarExpanded }) => {
 
     if (item.subItems && !modalOpen) {
       setModalOpen(true);
+    }
+
+    if (item.subItems && !sidebarExpanded) {
+      setModalOpen(true);
+      setSidebarExpanded(true);
     }
 
     setSelectedOption(item.name);

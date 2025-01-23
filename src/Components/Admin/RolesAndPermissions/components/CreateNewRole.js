@@ -3,7 +3,7 @@ import BlueButton from '../../../../ui/BlueButton'
 import closeIcon from "../../../../Assets/icons/alert/close.png";
 import { useAppContext } from '../../../../utils/AppContext';
 import axiosInstance from '../../../../utils/AxiosInstance';
-import { toast } from 'react-toastify';
+import { useAlertContext } from '../../../../utils/AlertContext';
 
 const accessLevelOptions = [ "businessUnit", "businessBranch" ]
 
@@ -42,6 +42,8 @@ const permissions = [
 
 const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
     const inputRef = useRef(null);
+
+    const { setAlert } = useAlertContext()
 
     const { selectedBranch } = useAppContext();
 
@@ -109,7 +111,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
             .post(`/api/v1/roles`, data)
             .then(res => {
                 console.log(res)
-                toast.success("Role Added Successfully")
+                setAlert("Role Added Successfully")
                 fetchRolesList()
             })
             .catch(err => {

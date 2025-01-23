@@ -2,13 +2,25 @@ import React, { useEffect, useState } from "react";
 import axiosInstance from "../../../utils/AxiosInstance";
 import CreateNewRole from "./components/CreateNewRole";
 import EditNewRoles from "./components/EditNewRoles";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../../utils/AppContext";
+import BlueButton from "../../../ui/BlueButton";
 
 const RolesAndPermissionsPage = () => {
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+  
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
   const [ loaded, setLoaded ] = useState(false)
   const [ editRole, setEditRole ] = useState()
   const [ selectedRole, setSelectedRole ] = useState()
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+  }
 
   useEffect(() => {
     axiosInstance
@@ -42,6 +54,10 @@ const RolesAndPermissionsPage = () => {
       })
   }
 
+  const handleCreateNew = () => {
+    setAddNewModal(true)
+  }
+
   return (
     <div className="w-full min-h-full px-8 py-4">
         <div
@@ -72,18 +88,21 @@ const RolesAndPermissionsPage = () => {
 
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p className="underline inline cursor-default">Admin</p>
+          <button
+            onClick={handleAdminClick}
+            className="underline inline"
+          >
+            Admin
+          </button>
           <span> / </span>
           <p className="underline inline cursor-default">
             Roles and Permissions
           </p>
         </div>
-        <button
-          onClick={() => setAddNewModal(true)}
-          className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
-        >
-          Add
-        </button>
+        <BlueButton
+            onClickHandler={handleCreateNew}
+            text={"Add"}
+        />
       </div>
 
       <div className="mt-6 w-full p-4">

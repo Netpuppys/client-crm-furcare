@@ -4,9 +4,11 @@ import ReactQuill from "react-quill";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
+import { useAlertContext } from "../../../../utils/AlertContext";
 
 
 const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
+  const { setAlert } = useAlertContext()
 
   const [formData, setFormData] = useState({
     type: openEditModule?.type,
@@ -102,7 +104,7 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
         .patch(`/api/v1/document-templates/${openEditModule.id}`, sendData)
         .then(res => {
             console.log(res)
-            toast.success("Changed Successfully")
+            setAlert("Changed Successfully")
             fetchData()
         })
         .catch(err => {
@@ -118,7 +120,7 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
   }
 
   return (
-    <div className="p-6 flex flex-col justify-center items-end mx-auto bg-white rounded-lg space-y-6">
+    <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6 h-full relative">
       <div className="flex w-full items-center justify-between gap-12">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
@@ -133,7 +135,7 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
             >
                 <option value={""}>Select</option>
                 {types.map((type, id) => (
-                    <option value={type} key={id}>{type}</option>
+                    <option value={type.serverName} key={id}>{type.name}</option>
                 ))}
             </select>
         </div>
@@ -264,11 +266,13 @@ const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
       </div>
 
       {/* Submit Button */}
+      <div className="w-fit h-fit absolute bottom-8 right-6">
         <BlueButton 
             text={"Save"}
             onClickHandler={handleSubmit}
             disabled={disabled}
         />
+      </div>
     </div>
   );
 };

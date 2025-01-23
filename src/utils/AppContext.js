@@ -6,6 +6,7 @@ const AppContext = createContext();
 export const AppProvider = ({ children }) => {
   const [ branchDetails, setBranchDetails ] = useState()
   const [ selectedBranch, setSelectedBranch ] = useState()
+  const [ sidebarExpanded, setSidebarExpanded ] = useState(true);
 
   const fetchBranchDetails = useCallback(() => {
     axiosInstance
@@ -28,7 +29,9 @@ export const AppProvider = ({ children }) => {
       value={{
         branchDetails,
         selectedBranch,
-        setSelectedBranch
+        setSelectedBranch,
+        sidebarExpanded,
+        setSidebarExpanded,
       }}
     >
       {children}

@@ -4,6 +4,8 @@ import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
 import BlueButton from "../../../ui/BlueButton"
+import { useAppContext } from "../../../utils/AppContext";
+import { useNavigate } from "react-router-dom";
 
 const data = [
   {
@@ -124,19 +126,29 @@ const TableComponent = ({ handleCreateNew }) => {
 const ContentLibraryPage = () => {
   const [ createNew, setCreateNew ] = useState(false)
 
+  const navigate = useNavigate()
+
+  const { setSidebarExpanded } = useAppContext()
+
   const handleCreateNew = () => {
     setCreateNew(true)
+  }
+
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
   }
 
   return (
     <div className='w-full min-h-full px-8 py-4 relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <p
-                    className='underline inline cursor-default'
+                <button
+                    onClick={handleAdminClick}
+                    className='underline inline'
                 >
                     Admin
-                </p>
+                </button>
                 <span>{" "}/{" "}</span>
                 <p
                     className='underline inline cursor-default'
@@ -171,9 +183,7 @@ const ContentLibraryPage = () => {
             </div>
 
             <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-              <AddNewItemForm 
-
-              />
+              <AddNewItemForm />
             </div>
         </div>
     </div>

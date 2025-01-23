@@ -4,6 +4,7 @@ import OtherInfo from "./OtherInfo";
 import editIcon from "../../../Assets/icons/editIcon.png"
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
+import BlueButton from "../../../ui/BlueButton";
 
 const Card = ({ branch, active, selected, address, type, practice, currency, businessUnitData }) => {
   const navigate = useNavigate()
@@ -67,7 +68,7 @@ const Card = ({ branch, active, selected, address, type, practice, currency, bus
 const BusinessUnitsPage = () => {
   const navigate = useNavigate()
 
-  const { selectedBranch, setSelectedBranch } = useAppContext()
+  const { selectedBranch, setSelectedBranch, setSidebarExpanded } = useAppContext()
 
   const [ businessBranchesData, setBusinessBranchesData ] = useState()
   const [ selectedBusiness, setSelectedBusiness ] = useState(0)
@@ -83,27 +84,34 @@ const BusinessUnitsPage = () => {
       })
   }, [])
 
+  const handleAdminClick = () => {
+    setSidebarExpanded(false)
+    navigate("/admin/branch-units")
+}
+
   const navigateToCreate = () => {
     navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });
   };
 
   return (
-    <div className="w-full min-h-full px-8 py-4">
+    <div className="w-full min-h-full px-8 py-4 overflow-y-auto">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className="underline inline cursor-default"
+          <button
+            onClick={handleAdminClick}
+            className="underline inline"
           >
             Admin
-          </p>
+          </button>
           <span> / </span>
           <p className="underline inline cursor-default">
             Business Units
           </p>
         </div>
-        <button onClick={navigateToCreate} className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center">
-          Create
-        </button>
+        <BlueButton
+          onClickHandler={navigateToCreate}
+          text={"Create"}
+        />
       </div>
 
       <div className="flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">

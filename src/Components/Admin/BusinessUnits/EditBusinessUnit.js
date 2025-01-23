@@ -4,7 +4,6 @@ import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
-import { toast } from "react-toastify";
 
 const appointmentSlots = [
   {
@@ -163,7 +162,6 @@ const EditBusinessUnit = () => {
         console.log("Success:", response.data);
         setAlert("Branch unit updated successfully")
         navigate("/admin/branch-units")
-        toast.success("Branch unit updated successfully")
       })
       .catch(error => {
         console.error("Error:", error);
@@ -367,7 +365,11 @@ const EditBusinessUnit = () => {
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
                 placeholder="Malad"
                 value={formData.city}
-                onChange={(e) => handleInputChange("city", e.target.value)}
+                onChange={(e) => {
+                  // Remove numbers from the input value
+                  const filteredValue = e.target.value.replace(/[0-9]/g, "");
+                  handleInputChange("city", filteredValue);
+                }}          
               />
             </div>
             {/* state selection */}

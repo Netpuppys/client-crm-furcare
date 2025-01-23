@@ -2,106 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance";
 import EditAnimalClass from './components/EditAnimalClass';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 import { useAppContext } from '../../../utils/AppContext';
+import { useNavigate } from 'react-router-dom';
 
-// const allAnimalClasses = [
-//     {
-//         name: "Canine",
-//         breeds: [
-//             "Shih Tzu",
-//             "Labrador Retriever",
-//             "Golden Retriever",
-//             "German Shepherd"
-//         ]
-//     },
-//     {
-//         name: "Feline",
-//         breeds: [
-//             "Persian",
-//             "Siamese",
-//             "Maine Coon",
-//             "Bengal"
-//         ]
-//     },
-//     {
-//         name: "Avian",
-//         breeds: [
-//             "Cockatiel",
-//             "African Grey Parrot",
-//             "Budgerigar",
-//             "Canary"
-//         ]
-//     },
-//     {
-//         name: "Reptile",
-//         breeds: [
-//             "Leopard Gecko",
-//             "Bearded Dragon",
-//             "Corn Snake",
-//             "Red-Eared Slider"
-//         ]
-//     },
-//     {
-//         name: "Equine",
-//         breeds: [
-//             "Arabian Horse",
-//             "Thoroughbred",
-//             "Shetland Pony",
-//             "Clydesdale"
-//         ]
-//     },
-//     {
-//         name: "Rodent",
-//         breeds: [
-//             "Hamster",
-//             "Guinea Pig",
-//             "Chinchilla",
-//             "Gerbil"
-//         ]
-//     },
-//     {
-//         name: "Amphibian",
-//         breeds: [
-//             "American Bullfrog",
-//             "Axolotl",
-//             "Fire-Bellied Toad",
-//             "African Clawed Frog"
-//         ]
-//     },
-//     {
-//         name: "Aquatic",
-//         breeds: [
-//             "Betta Fish",
-//             "Goldfish",
-//             "Angelfish",
-//             "Clownfish"
-//         ]
-//     },
-//     {
-//         name: "Arachnid",
-//         breeds: [
-//             "Tarantula",
-//             "Scorpion",
-//             "Wolf Spider",
-//             "Jumping Spider"
-//         ]
-//     },
-//     {
-//         name: "Exotic",
-//         breeds: [
-//             "Sugar Glider",
-//             "Hedgehog",
-//             "Capybara",
-//             "Ferret"
-//         ]
-//     },
-// ];
 
 const AnimalClassesPage = () => {
     const { setAlert } = useAlertContext()
 
-    const { selectedBranch } = useAppContext()
+    const navigate = useNavigate()
+
+    const { selectedBranch, setSidebarExpanded } = useAppContext()
 
     const [ addClasses, setAddClasses ] = useState(false)
     const [ branchAnimalClasses, setBranchAnimalClasses ] = useState([])
@@ -110,6 +21,12 @@ const AnimalClassesPage = () => {
     const [ filterredSamples, setFilterredSamples ] = useState()
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
     const [ loaded, setLoaded ] = useState(false)
+    const [ disabled, setDisabled ] = useState()
+
+    const handleAdminClick = () => {
+        setSidebarExpanded(false)
+        navigate("/admin/branch-units")
+    }
 
     useEffect(() => {
         axiosInstance
@@ -131,6 +48,10 @@ const AnimalClassesPage = () => {
             const missingNames = allAnimalClasses.filter(
                 sampleItem => !existingNames.has(sampleItem.name.toLowerCase())
             );
+
+            if (missingNames.length===0) {
+                setDisabled(true)
+            }
     
             // Update the state with filtered samples
             setFilterredSamples(missingNames);
@@ -174,7 +95,7 @@ const AnimalClassesPage = () => {
                 setSelectedValue("")
                 setAddClasses(false)
                 // setAlert("Animal Class Added Successfully.")
-                toast.success("Animal Class Added Successfully")
+                setAlert("Animal Class Added Successfully")
             })
             .catch(err => {
                 console.error(err)
@@ -183,14 +104,16 @@ const AnimalClassesPage = () => {
     };
 
   return (
-    <div className='w-full min-h-full px-8 py-4'>
+    <div className='w-full min-h-full px-8 py-4 overflow-y-auto'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <p
-                    className='underline inline cursor-default'
+                <button
+                    // to={"/admin/branch-units"}
+                    onClick={handleAdminClick}
+                    className='underline inline cursor-pointer'
                 >
                     Admin
-                </p>
+                </button>
                 <span>{" "}/{" "}</span>
                 <p
                     className='underline inline cursor-default'
@@ -210,8 +133,9 @@ const AnimalClassesPage = () => {
                     </p>
                 </button>}
                 <button
+                    disabled={disabled}
                     onClick={() => setAddClasses(prev => !prev)}
-                    className='bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
+                    className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent hover:text-accent-blue border border-accent-blue text-white text-nowrap bg-accent-blue rounded-lg font-medium leading-[1.25rem] text-sm' 
                 >
                     <p className=''>
                         {addClasses? "Close" : "Add"}

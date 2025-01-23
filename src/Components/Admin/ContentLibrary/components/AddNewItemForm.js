@@ -1,19 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 import ReactQuill from "react-quill";
 import anesthesiaPatientMonitoringData from "./data";
-
+import axiosInstance from "../../../../utils/AxiosInstance";
 
 const AddNewItemForm = () => {
   const [formData, setFormData] = useState({
     category: "Anesthesia and Surgery",
     gender: "Female",
-    animalType: "Canine - Beagle",
+    animalType: "Canine",
     ageRange: 12,
     healthConcerns: "",
     sterilizationStatus: "",
     additionalNotes: anesthesiaPatientMonitoringData,
   });
+  const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
+
+  useEffect(() => {
+    axiosInstance
+      .get('/api/v1/animal-classes')
+      .then(res => {
+        console.log(res)
+        setAllAnimalClasses(res.data.data.data)
+      })
+      .then(err => {
+        console.error(err)
+      })
+  }, [])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -87,13 +100,28 @@ const AddNewItemForm = () => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Animal Type{" "}
           </label>
-          <input
+          {/* <input
             type="text"
             className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
             placeholder="Animal Class - Breed"
             value={formData.animalType}
             onChange={(e) => handleInputChange("animalType", e.target.value)}
-          />
+          /> */}
+          <select
+            className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
+            value={formData.animalType}
+            onChange={(e) => handleInputChange("animalType", e.target.value)}
+          >
+            <option value={""}>Animal Type</option>
+            {allAnimalClasses?.map((item, index) => (
+              <option
+                key={index}
+                value={item.name}
+              >
+                {item.name}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* Age Range Input */}
