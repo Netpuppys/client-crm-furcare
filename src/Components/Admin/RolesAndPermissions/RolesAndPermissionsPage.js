@@ -5,6 +5,7 @@ import EditNewRoles from "./components/EditNewRoles";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../../utils/AppContext";
 import BlueButton from "../../../ui/BlueButton";
+import informationIcon from "../../../Assets/icons/informationIcon.png";
 
 const RolesAndPermissionsPage = () => {
   const navigate = useNavigate()
@@ -109,11 +110,41 @@ const RolesAndPermissionsPage = () => {
         <table className="w-full">
           <thead>
             <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
-              <th className="p-2">Name</th>
+              {/* <th className="p-2">Name</th>
               <th className="p-2">Access Level</th>
               <th className="p-2">Staff</th>
               <th className="p-2">Permissions</th>
-              <th className="p-2">Status</th>
+              <th className="p-2">Status</th> */}
+              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                <div className="flex items-center gap-2">
+                  <p className="">Name</p>
+                  <img src={informationIcon} className="w-5" alt="" />
+                </div>
+              </th>
+              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                <div className="flex items-center gap-2">
+                  <p className="">Access Level</p>
+                  <img src={informationIcon} className="w-5" alt="" />
+                </div>
+              </th>
+              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                <div className="flex items-center gap-2">
+                  <p className="">Staff</p>
+                  <img src={informationIcon} className="w-5" alt="" />
+                </div>
+              </th>
+              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                <div className="flex items-center gap-2">
+                  <p className="">Permissions</p>
+                  <img src={informationIcon} className="w-5" alt="" />
+                </div>
+              </th>
+              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                <div className="flex items-center gap-2">
+                  <p className="">Status</p>
+                  <img src={informationIcon} className="w-5" alt="" />
+                </div>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -140,7 +171,7 @@ const RolesAndPermissionsPage = () => {
                 </td>
                 <td className="p-2 w-[20%] relative">
                   <div className="text-[#0263E0] group relative cursor-pointer underline">
-                    list
+                    List
                   </div>
                 </td>
                 <td className="p-2 flex items-center w-[20%] gap-1">

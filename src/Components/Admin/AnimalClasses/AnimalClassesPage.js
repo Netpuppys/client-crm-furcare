@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance";
 import EditAnimalClass from './components/EditAnimalClass';
+import informationIcon from "../../../Assets/icons/informationIcon.png";
 // import { toast } from 'react-toastify';
 import { useAppContext } from '../../../utils/AppContext';
 import { useNavigate } from 'react-router-dom';
@@ -169,9 +170,24 @@ const AnimalClassesPage = () => {
             <table className="w-full">
                 <thead>
                 <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
-                    <th className="p-2">Name</th>
-                    <th className="p-2">Breeds</th>
-                    <th className="p-2">Status</th>
+                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                        <div className="flex items-center gap-2">
+                            <p className="">Name</p>
+                            <img src={informationIcon} className="w-5" alt="" />
+                        </div>
+                    </th>
+                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                        <div className="flex items-center gap-2">
+                            <p className="">Breeds</p>
+                            <img src={informationIcon} className="w-5" alt="" />
+                        </div>
+                    </th>
+                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                        <div className="flex items-center gap-2">
+                            <p className="">Status</p>
+                            <img src={informationIcon} className="w-5" alt="" />
+                        </div>
+                    </th>
                 </tr>
                 </thead>
                 <tbody>

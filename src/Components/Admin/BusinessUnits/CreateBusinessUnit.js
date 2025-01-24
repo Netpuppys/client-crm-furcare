@@ -6,6 +6,7 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import statesInIndia from "../../../data/StatesIndia";
+import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
 // const options = [
 //   "Service A",
@@ -48,8 +49,11 @@ const CreateBusinessUnit = () => {
   const location = useLocation();
   const businessUnitId = location.state?.businessUnitId;
 
-  const { setAlert } = useAlertContext()
+  const autocompleteServiceRef = useRef(null);
 
+  const { setAlert } = useAlertContext()
+  
+  const [ suggestions, setSuggestions ] = useState([]);
   const [ selectedOptions, setSelectedOptions ] = useState([]);
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
@@ -215,7 +219,6 @@ const CreateBusinessUnit = () => {
   
     return errors;
   }
-  
 
   const handleSubmit = () => {
     const appointment = appointmentSlots.find(item => item.id === formData.appointment)
@@ -264,6 +267,39 @@ const CreateBusinessUnit = () => {
       .catch(error => {
         console.error("Error:", error);
       });
+  };
+
+  const handleAddressInputChange = (e) => {
+    handleInputChange("address1", e.target.value);
+  
+    // Fetch autocomplete predictions
+    if (!autocompleteServiceRef.current && window.google) {
+      autocompleteServiceRef.current = new window.google.maps.places.AutocompleteService();
+    }
+  
+    if (autocompleteServiceRef.current && e.target.value) {
+      autocompleteServiceRef.current.getPlacePredictions(
+        {
+          input: e.target.value,
+          componentRestrictions: { country: "in" }, // Restrict to India
+        },
+        (predictions, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            setSuggestions(predictions || []);
+          } else {
+            setSuggestions([]);
+          }
+        }
+      );
+    } else {
+      setSuggestions([]);
+    }
+  };  
+
+  const handleSuggestionClick = (place) => {
+    handleInputChange("address1", place.description);
+    setSuggestions([]);
+    console.log(place); // Pass the selected address back to the parent component
   };
 
   return (
@@ -389,20 +425,33 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 1
               </label>
-              <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
-                <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
-                  <FaSearch className="text-[#606B85] h-full" />
+              <GoogleMapsLoader>
+                <div className="flex mt-1  border border-gray-300 rounded-lg relative">
+                  <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
+                    <FaSearch className="text-[#606B85] h-full" />
+                  </div>
+                  <input
+                    type="search"
+                    className="w-full capitalize rounded-r-lg focus:outline-none p-2"
+                    placeholder="Address line 1"
+                    value={formData.address1}
+                    onChange={handleAddressInputChange}
+                  />
+                  {suggestions.length > 0 && (
+                    <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
+                      {suggestions.map((suggestion) => (
+                        <li
+                          key={suggestion.place_id}
+                          className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
+                          onClick={() => handleSuggestionClick(suggestion)}
+                        >
+                          {suggestion.description}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <input
-                  type="search"
-                  className="w-full capitalize placeholder:italic text-sm focus:outline-none p-2"
-                  placeholder="Placeholder"
-                  value={formData.address1}
-                  onChange={(e) =>
-                    handleInputChange("address1", e.target.value)
-                  }
-                />
-              </div>
+              </GoogleMapsLoader>
             </div>
             {/* Address Selection 2 */}
             <div className="w-[47.5%]">

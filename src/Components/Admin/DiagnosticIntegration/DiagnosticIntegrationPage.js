@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import { FaSearch } from "react-icons/fa";
@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import statesInIndia from "../../../data/StatesIndia";
 import BlueButton from "../../../ui/BlueButton";
+import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
 const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
   return (
@@ -47,12 +48,12 @@ const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
           {diagnosticIntegrationsData.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50 capitalize">
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">{item.name}</td>
+              <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
                 {item.city}{", "}{item.state}
               </td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">
+              <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
                 {item.postalCode}
               </td>
               <td className="px-4 py-2 text-sm">
@@ -60,7 +61,7 @@ const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
                   link
                 </a>
               </td>
-              <td className="px-4 py-2 text-sm flex items-center">
+              <td className="px-4 py-2 text-sm flex items-center capitalize">
                 <div
                   className={`w-3 aspect-square ${
                     item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"
@@ -85,6 +86,9 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
 
   const { selectedBranch } = useAppContext()
 
+  const autocompleteServiceRef = useRef(null);
+
+  const [ suggestions, setSuggestions ] = useState([]);
   const [ disabled, setDisabled ] = useState(true)
   const [ formData, setFormData ] = useState({
     name: "",
@@ -95,6 +99,18 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
     country: "India",
     postalCode: ""
   });
+
+  useEffect(() => {
+    setFormData({
+      name: "",
+      address1: "",
+      address2: "",
+      city: "",
+      state: "",
+      country: "India",
+      postalCode: ""
+    })
+  }, [])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -148,6 +164,39 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
       })
   };
 
+  const handleAddressInputChange = (e) => {
+    handleInputChange("address1", e.target.value);
+  
+    // Fetch autocomplete predictions
+    if (!autocompleteServiceRef.current && window.google) {
+      autocompleteServiceRef.current = new window.google.maps.places.AutocompleteService();
+    }
+  
+    if (autocompleteServiceRef.current && e.target.value) {
+      autocompleteServiceRef.current.getPlacePredictions(
+        {
+          input: e.target.value,
+          componentRestrictions: { country: "in" }, // Restrict to India
+        },
+        (predictions, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            setSuggestions(predictions || []);
+          } else {
+            setSuggestions([]);
+          }
+        }
+      );
+    } else {
+      setSuggestions([]);
+    }
+  };  
+
+  const handleSuggestionClick = (place) => {
+    handleInputChange("address1", place.description);
+    setSuggestions([]);
+    console.log(place); // Pass the selected address back to the parent component
+  };
+
   return (
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
       {/* Name Input */}
@@ -171,19 +220,35 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Address line 1
           </label>
-          <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
-            <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
-              <FaSearch className="text-[#606B85] h-full" />
+          <GoogleMapsLoader>
+            <div className="flex mt-1  border border-gray-300 rounded-lg relative">
+              <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
+                <FaSearch className="text-[#606B85] h-full" />
+              </div>
+              <input
+                type="search"
+                className="w-full capitalize rounded-r-lg focus:outline-none p-2"
+                placeholder="Address line 1"
+                value={formData.address1}
+                onChange={handleAddressInputChange}
+              />
+              {suggestions.length > 0 && (
+                <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
+                  {suggestions.map((suggestion) => (
+                    <li
+                      key={suggestion.place_id}
+                      className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                    >
+                      {suggestion.description}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
-            <input
-              type="search"
-              className="w-full capitalize focus:outline-none p-2"
-              placeholder="Address line 1"
-              value={formData.address1}
-              onChange={(e) => handleInputChange("address1", e.target.value)}
-            />
-          </div>
+          </GoogleMapsLoader>
         </div>
+
         <div className="w-[47.5%]">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
@@ -387,9 +452,10 @@ const DiagnosticIntegrationPage = () => {
         </div>
 
         <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+          {createNew &&
           <CreateNewForm
             fetchDiagnosticsDetails={fetchDiagnosticsDetails}
-          />
+          />}
         </div>
       </div>
     </div>

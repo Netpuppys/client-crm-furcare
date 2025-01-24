@@ -55,7 +55,7 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                             onClick={() => handleListClick(item.resources, index)}
                             className="text-blue-600 underline"
                         >
-                            List
+                            list
                         </button>
                         {showResourceList===index && 
                         <div className="absolute top-[calc(100%+0.3rem)] z-50 left-1">
