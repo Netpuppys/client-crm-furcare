@@ -371,10 +371,7 @@ const DiagnosticIntegrationPage = () => {
 
   const navigate = useNavigate()
 
-  const { setSidebarExpanded } = useAppContext()
-
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
 }
 

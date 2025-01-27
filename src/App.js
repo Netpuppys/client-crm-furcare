@@ -16,7 +16,7 @@ function App() {
     const navigate = useNavigate(); 
     const currentPath = location.pathname;
 
-    const {  sidebarExpanded } = useAppContext()
+    const { sidebarExpanded } = useAppContext()
 
     useEffect(() => {
       const access = localStorage.getItem("access");

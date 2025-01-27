@@ -5,7 +5,6 @@ import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../ui/BlueButton";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../utils/AppContext";
 import { useAlertContext } from "../../../utils/AlertContext";
 
 const DiagnosticTable = ({ staffData }) => {
@@ -301,13 +300,10 @@ const CreateNewForm = ({ fetchStaffData }) => {
 function StaffManagementPage() {
   const navigate = useNavigate()
 
-  const { setSidebarExpanded } = useAppContext()
-
   const [ createNew, setCreateNew] = useState(false);
   const [ staffData, setStaffData ] = useState([])
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
 }
 

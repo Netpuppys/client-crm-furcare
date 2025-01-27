@@ -13,7 +13,7 @@ const AnimalClassesPage = () => {
 
     const navigate = useNavigate()
 
-    const { selectedBranch, setSidebarExpanded } = useAppContext()
+    const { selectedBranch } = useAppContext()
 
     const [ addClasses, setAddClasses ] = useState(false)
     const [ branchAnimalClasses, setBranchAnimalClasses ] = useState([])
@@ -25,7 +25,6 @@ const AnimalClassesPage = () => {
     const [ disabled, setDisabled ] = useState()
 
     const handleAdminClick = () => {
-        setSidebarExpanded(false)
         navigate("/admin/branch-units")
     }
 

@@ -97,7 +97,7 @@ const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
 const DocumentTemplatePage = () => {
   const navigate = useNavigate()
 
-  const { selectedBranch, setSidebarExpanded } = useAppContext()
+  const { selectedBranch } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false)
   const [ activeButton, setActiveButton ] = useState(types[0].serverName)
@@ -105,7 +105,6 @@ const DocumentTemplatePage = () => {
   const [ openEditModule, setOpenEditModule ] = useState(null)
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
   }
 

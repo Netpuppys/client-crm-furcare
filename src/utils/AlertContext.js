@@ -9,7 +9,7 @@ export const AlertProvider = ({ children }) => {
     const timer = setTimeout(() => {
       console.log(alert)
       setAlert(null);
-    }, 5000);
+    }, 10000);
   
     // Cleanup function to clear the timeout
     return () => clearTimeout(timer);

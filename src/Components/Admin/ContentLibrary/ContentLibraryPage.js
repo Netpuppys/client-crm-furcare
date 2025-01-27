@@ -4,7 +4,6 @@ import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
 import BlueButton from "../../../ui/BlueButton"
-import { useAppContext } from "../../../utils/AppContext";
 import { useNavigate } from "react-router-dom";
 
 const data = [
@@ -128,14 +127,11 @@ const ContentLibraryPage = () => {
 
   const navigate = useNavigate()
 
-  const { setSidebarExpanded } = useAppContext()
-
   const handleCreateNew = () => {
     setCreateNew(true)
   }
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
   }
 

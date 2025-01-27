@@ -6,7 +6,6 @@ import LabelFieldsList from "./component/LabelFieldsList";
 import EditReport from "./component/EditReport";
 import CreateNewReport from "./component/CreateNewReport";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../utils/AppContext";
 import BlueButton from "../../../ui/BlueButton";
 
 const ReportTable = ({ reportData, setEditGroup }) => {
@@ -121,14 +120,11 @@ const ReportTable = ({ reportData, setEditGroup }) => {
 function ReportManagementPage() {
   const navigate = useNavigate()
 
-  const { setSidebarExpanded } = useAppContext()
-
   const [ createNew, setCreateNew] = useState(false);
   const [ reportData, setReportData ] = useState([]);
   const [ editGroup, setEditGroup ] = useState()
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
   }
 

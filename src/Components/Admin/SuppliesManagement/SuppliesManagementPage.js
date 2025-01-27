@@ -289,13 +289,10 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
 function SuppliesManagementPage() {
   const navigate = useNavigate()
 
-  const { setSidebarExpanded } = useAppContext()
-
   const [ createNew, setCreateNew ] = useState(false);
   const [ suppliesData, setSuppliesData ] = useState([]);
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
   }
 

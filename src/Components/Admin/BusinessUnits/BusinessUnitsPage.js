@@ -68,7 +68,7 @@ const Card = ({ branch, active, selected, address, type, practice, currency, bus
 const BusinessUnitsPage = () => {
   const navigate = useNavigate()
 
-  const { selectedBranch, setSelectedBranch, setSidebarExpanded } = useAppContext()
+  const { selectedBranch, setSelectedBranch } = useAppContext()
 
   const [ businessBranchesData, setBusinessBranchesData ] = useState()
   const [ selectedBusiness, setSelectedBusiness ] = useState(0)
@@ -85,7 +85,6 @@ const BusinessUnitsPage = () => {
   }, [])
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
 }
 

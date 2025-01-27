@@ -5,20 +5,16 @@ import GroupManagementTable from "./components/GroupManagementTable";
 import CreateNewGroup from "./components/CreateNewGroup";
 import EditGroup from "./components/EditGroup";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../utils/AppContext";
 import BlueButton from "../../../ui/BlueButton";
 
 function GroupManagementPage() {
     const navigate = useNavigate()
-
-    const { setSidebarExpanded } = useAppContext()
 
     const [ createNew, setCreateNew ] = useState(false);
     const [ editGroup, setEditGroup ] = useState()
     const [ groupData, setGroupData ] = useState([]);
 
     const handleAdminClick = () => {
-        setSidebarExpanded(false)
         navigate("/admin/branch-units")
     }
 

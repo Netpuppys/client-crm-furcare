@@ -3,14 +3,11 @@ import axiosInstance from "../../../utils/AxiosInstance";
 import CreateNewRole from "./components/CreateNewRole";
 import EditNewRoles from "./components/EditNewRoles";
 import { useNavigate } from "react-router-dom";
-import { useAppContext } from "../../../utils/AppContext";
 import BlueButton from "../../../ui/BlueButton";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 
 const RolesAndPermissionsPage = () => {
   const navigate = useNavigate()
-
-  const { setSidebarExpanded } = useAppContext()
   
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
@@ -19,7 +16,6 @@ const RolesAndPermissionsPage = () => {
   const [ selectedRole, setSelectedRole ] = useState()
 
   const handleAdminClick = () => {
-    setSidebarExpanded(false)
     navigate("/admin/branch-units")
   }
 
