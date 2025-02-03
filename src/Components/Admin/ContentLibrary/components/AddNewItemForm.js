@@ -60,6 +60,9 @@ const AddNewItemForm = ({ content }) => {
       setDisabled(true);
       return;
     }
+
+    console.log(additionalNotes)
+    console.log(content.content)
   
     setDisabled(false);
   }, [formData, initialData, additionalNotes, content]);
