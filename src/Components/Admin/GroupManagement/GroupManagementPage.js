@@ -35,7 +35,7 @@ function GroupManagementPage() {
     }
 
     return (
-    <div className="w-full min-h-full px-8 py-4">
+    <div className="w-full min-h-full px-[36px] py-4">
         <div className="flex items-start justify-between">
             <div className="text-[#0263E0] text-xs">
                 <button

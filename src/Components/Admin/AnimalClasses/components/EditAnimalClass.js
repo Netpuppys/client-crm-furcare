@@ -53,7 +53,7 @@ const EditAnimalClass = ({ editAnimalClass, refreshList, setEditAnimalClass }) =
             </div>
 
             <div className='w-full h-[calc(100%-4.75rem)] overflow-y-auto no-scrollbar'>
-                <div className='w-full mt-10 px-10 flex items-center justify-start gap-16'>
+                <div className='w-full mt-10 px-10 flex items-center justify-start gap-[50px]'>
                     <div className=''>
                         <p className='text-sm font-semibold text-[#121C2D]'>
                             <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
@@ -97,7 +97,7 @@ const EditAnimalClass = ({ editAnimalClass, refreshList, setEditAnimalClass }) =
                 </div>
 
                 <div className='w-full mt-14 px-12'>
-                    <p className='text-[#3C3C43] font-semibold text-opacity-60 text-[17px] pb-2 border-b border-[#54545657] w-full mb-5'>
+                    <p className='text-[#3C3C43] font-semibold text-opacity-60 text-[17px] pb-2 border-b border-[#545456] border-opacity-30 w-full mb-5'>
                         Breeds
                     </p>
                     <ul className='list-disc flex ml-4 flex-col gap-4 text-base'>

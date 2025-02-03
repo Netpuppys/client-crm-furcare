@@ -1,20 +1,43 @@
 import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 import ReactQuill from "react-quill";
-import anesthesiaPatientMonitoringData from "./data";
 import axiosInstance from "../../../../utils/AxiosInstance";
+import BlueButton from "../../../../ui/BlueButton";
+import _ from 'lodash';
 
-const AddNewItemForm = () => {
-  const [formData, setFormData] = useState({
-    category: "Anesthesia and Surgery",
+const AddNewItemForm = ({ content }) => {
+  const [ initialData, setInitialData ] = useState({
+    category: content.topic,
     gender: "Female",
-    animalType: "Canine",
+    animalType: content.animalType,
     ageRange: 12,
     healthConcerns: "",
     sterilizationStatus: "",
-    additionalNotes: anesthesiaPatientMonitoringData,
+  })
+
+  const [formData, setFormData] = useState({
+    category: content.topic,
+    gender: "Female",
+    animalType: content.animalType,
+    ageRange: 12,
+    healthConcerns: "",
+    sterilizationStatus: "",
   });
+  
+  const [ additionalNotes, setAdditionalNotes ] = useState(content.content)
   const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
+  const [ disabled, setDisabled ] = useState(true)
+
+  useEffect(() => {
+    setInitialData({
+      category: content.topic,
+      gender: "Female",
+      animalType: content.animalType,
+      ageRange: 12,
+      healthConcerns: "",
+      sterilizationStatus: "",
+    })
+  }, [content])
 
   useEffect(() => {
     axiosInstance
@@ -31,6 +54,15 @@ const AddNewItemForm = () => {
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+
+  useEffect(() => {
+    if (_.isEqual(initialData, formData) && additionalNotes===content.content) {
+      setDisabled(true);
+      return;
+    }
+  
+    setDisabled(false);
+  }, [formData, initialData, additionalNotes, content]);
 
   const handleSubmit = () => {
     // Validation logic
@@ -100,13 +132,6 @@ const AddNewItemForm = () => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Animal Type{" "}
           </label>
-          {/* <input
-            type="text"
-            className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Animal Class - Breed"
-            value={formData.animalType}
-            onChange={(e) => handleInputChange("animalType", e.target.value)}
-          /> */}
           <select
             className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
             value={formData.animalType}
@@ -216,19 +241,18 @@ const AddNewItemForm = () => {
         <ReactQuill
           className="mt-2 h-[400px] mb-12"
           theme="snow"
-          value={formData.additionalNotes}
-          onChange={(value) => handleInputChange("additionalNotes", value)}
+          value={additionalNotes}
+          onChange={(value) => setAdditionalNotes(value)}
           placeholder="Write additional notes here..."
         />
       </div>
 
       {/* Submit Button */}
-      <button
-        className="py-2 px-4 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-        onClick={handleSubmit}
-      >
-        Save
-      </button>
+      <BlueButton
+        onClickHandler={handleSubmit}
+        text={"Save"}
+        disabled={disabled}
+      />
     </div>
   );
 };

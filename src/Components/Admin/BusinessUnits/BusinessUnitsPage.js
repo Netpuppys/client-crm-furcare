@@ -93,7 +93,7 @@ const BusinessUnitsPage = () => {
   };
 
   return (
-    <div className="w-full min-h-full px-8 py-4 overflow-y-auto">
+    <div className="w-full min-h-full px-[36px] py-4 overflow-y-auto">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
           <button
@@ -115,7 +115,7 @@ const BusinessUnitsPage = () => {
 
       <div className="flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         {businessBranchesData?.map((item, index) => (
-          <div className="max-w-[calc(33%-4rem)]" onClick={() => { setSelectedBusiness(index); setSelectedBranch(item) }} key={index}>
+          <div className="max-w-[calc(33.333%-4.16666rem)]" onClick={() => { setSelectedBusiness(index); setSelectedBranch(item) }} key={index}>
             <Card
               active={item.active}
               branch={item.name}

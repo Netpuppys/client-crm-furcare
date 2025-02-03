@@ -208,7 +208,12 @@ const CreateNewForm = ({ fetchStaffData }) => {
               className="w-full focus:outline-none p-2"
               placeholder="jdoe@oases"
               value={formData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
+              onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z0-9@.]*$/.test(value)) { // Allows letters, numbers, @, and .
+                      handleInputChange("email", value);
+                  }
+              }}
             />
             <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
               .com
@@ -338,7 +343,7 @@ function StaffManagementPage() {
   }
 
   return (
-    <div className="w-full min-h-full px-8 py-4">
+    <div className="w-full min-h-full px-[36px] py-4">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
           <button

@@ -124,7 +124,7 @@ const AnimalClassesPage = () => {
     };
 
   return (
-    <div className='w-full min-h-full px-8 py-4 overflow-y-auto'>
+    <div className='w-full min-h-full px-[36px] py-4 overflow-y-auto'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
                 <button
@@ -141,12 +141,12 @@ const AnimalClassesPage = () => {
                     Animal Classes
                 </p>
             </div>
-            <div className='flex items-center gap-6'>
+            <div className='flex items-center gap-5'>
                 {addClasses &&
                 <button
                     onClick={handleAddAnimalClasses}
                     disabled={selectedValue? false : true}
-                    className='bg-[#006DFA] px-3 disabled:border border-[#E1E3EA] disabled:bg-transparent disabled:text-[#AEB2C1] h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center' 
+                    className='bg-transparent px-3 border disabled:border-opacity-50 border-[#CACDD8] disabled:text-[#AEB2C1] disabled:bg-transparent h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center' 
                 >
                     <p className=''>
                         Save
@@ -155,7 +155,7 @@ const AnimalClassesPage = () => {
                 <button
                     disabled={disabled}
                     onClick={() => setAddClasses(prev => !prev)}
-                    className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent hover:text-accent-blue border border-accent-blue text-white text-nowrap bg-accent-blue rounded-lg font-medium leading-[1.25rem] text-sm' 
+                    className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent hover:text-accent-blue border border-accent-blue text-white text-nowrap bg-accent-blue rounded-md font-semibold leading-[1.25rem] text-sm' 
                 >
                     <p className=''>
                         {addClasses? "Close" : "Add"}
@@ -165,7 +165,7 @@ const AnimalClassesPage = () => {
         </div>
 
         {branchAnimalClasses &&
-        <div className='mt-6 w-full p-4'>
+        <div className='mt-6 w-full'>
             <table className="w-full">
                 <thead>
                 <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">

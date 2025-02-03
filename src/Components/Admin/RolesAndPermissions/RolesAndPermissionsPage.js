@@ -56,7 +56,7 @@ const RolesAndPermissionsPage = () => {
   }
 
   return (
-    <div className="w-full min-h-full px-8 py-4">
+    <div className="w-full min-h-full px-[36px] py-4">
         <div
             className={`${
             addNewModal ? "block" : "hidden"
@@ -102,7 +102,7 @@ const RolesAndPermissionsPage = () => {
         />
       </div>
 
-      <div className="mt-6 w-full p-4">
+      <div className="mt-6 w-full">
         <table className="w-full">
           <thead>
             <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
@@ -111,31 +111,31 @@ const RolesAndPermissionsPage = () => {
               <th className="p-2">Staff</th>
               <th className="p-2">Permissions</th>
               <th className="p-2">Status</th> */}
-              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Name</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
-              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Access Level</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
-              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Staff</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
-              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Permissions</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
-              <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+              <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Status</p>
                   <img src={informationIcon} className="w-5" alt="" />
@@ -150,27 +150,27 @@ const RolesAndPermissionsPage = () => {
                 onClick={() => { setEditRole(true); setSelectedRole(item) }}
                 className="hover:bg-gray-50 text-sm text-gray-700 last:border-b-0 border-b border-gray-200"
               >
-                <td className="p-2 w-[20%]">
+                <td className="px-4 py-3 w-[20%]">
                   <p className="text-[#121C2D] hover:underline capitalize">
                     {item.name}
                   </p>
                 </td>
-                <td className="p-2 w-[20%] relative">
+                <td className="px-4 py-3 w-[20%] relative">
                   <p className="text-[#121C2D] hover:underline capitalize">
                     {item.accessLevel}
                   </p>
                 </td>
-                <td className="p-2 w-[20%] relative">
+                <td className="px-4 py-3 w-[20%] relative">
                   <p className="text-[#121C2D] hover:underline capitalize">
                     {item.isStaff? "Yes" : "No"}
                   </p>
                 </td>
-                <td className="p-2 w-[20%] relative">
+                <td className="px-4 py-3 w-[20%] relative">
                   <div className="text-[#0263E0] group relative cursor-pointer underline">
                     List
                   </div>
                 </td>
-                <td className="p-2 flex items-center w-[20%] gap-1">
+                <td className="px-4 py-3 flex items-center w-[20%] gap-1">
                 <div
                   className={`min-w-3 aspect-square ${
                     item.active? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rotate-45 rounded-sm"

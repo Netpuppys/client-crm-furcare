@@ -14,6 +14,8 @@ import RolesAndPermissionsPage from "../Components/Admin/RolesAndPermissions/Rol
 import ReportManagementPage from "../Components/Admin/ReportManagement/ReportManagementPage";
 import GroupManagementPage from "../Components/Admin/GroupManagement/GroupManagementPage";
 import OnboardingPage from "../Components/Onboarding/OnboardingPage";
+import ClientPatientPage from "../Components/ClientPatient/ClientPatientPage";
+import CreateNew from "../Components/ClientPatient/components/CreateNew";
 
 
 const AllRoutes = () => {
@@ -22,6 +24,8 @@ const AllRoutes = () => {
       <Route path="/" element={<LoginPage />} />
       <Route path="/dashboard" element={<DashBoardPage />} />
       <Route path="/onboarding" element={<OnboardingPage />} />
+      <Route path="/client-patient" element={<ClientPatientPage />} />
+      <Route path="/client-patient/create" element={<CreateNew />} />
       <Route path="/admin/branch-units" element={<BusinessUnitsPage />} />
       <Route path="/admin/animal-classes" element={<AnimalClassesPage />} />
       <Route path="/admin/content-library" element={<ContentLibraryPage />} />

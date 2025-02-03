@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 const AlertContext = createContext();
 
 export const AlertProvider = ({ children }) => {
-  const [ alert, setAlert ] = useState()
+  const [ alert, setAlert ] = useState('')
   
   useEffect(() => {
     const timer = setTimeout(() => {

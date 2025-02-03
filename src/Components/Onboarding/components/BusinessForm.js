@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
+import { FaSearch } from "react-icons/fa";
+import axiosInstance from "../../../utils/AxiosInstance";
 
 export default function BusinessForm() {
     const [formData, setFormData] = useState({
@@ -16,6 +19,7 @@ export default function BusinessForm() {
         postalCode: "400000",
         animalClasses: "",
     });
+    const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +29,17 @@ export default function BusinessForm() {
         e.preventDefault();
         console.log("Form Data Submitted:", formData);
     };
+
+    useEffect(() => {
+        axiosInstance
+            .get("/api/v1/animal-classes")
+            .then(res => {
+                setAllAnimalClasses(res.data.data.data)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }, [])
 
   return (
     <div className="w-full py-4">
@@ -43,8 +58,8 @@ export default function BusinessForm() {
                         value={formData.businessUnitType}
                     >
                         <option value="">Select</option>
-                        <option value="Type1">Type 1</option>
-                        <option value="Type2">Type 2</option>
+                        <option value="Type1">Clinic</option>
+                        <option value="Type2">Hospital</option>
                     </select>
                 </div>
 
@@ -141,14 +156,41 @@ export default function BusinessForm() {
                         <div className="w-1 h-1 aspect-square rounded-full bg-[#EB5656]"></div>
                         Address line 1
                     </label>
-                    <input 
+                    {/* <input 
                         name="addressLine1" 
                         type="text" 
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]" 
                         placeholder="M.G Road B-106 Sector" 
                         value={formData.addressLine1} 
                         onChange={handleChange}
-                    />
+                    /> */}
+                    <GoogleMapsLoader>
+                        <div className="flex relative border rounded-md focus:outline-none text-sm border-[#8891AA]">
+                            <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
+                                <FaSearch className="text-[#606B85] h-full" />
+                            </div>
+                            <input
+                                type="search"
+                                className="w-full capitalize rounded-r-lg focus:outline-none p-2"
+                                placeholder="Address line 1"
+                                value={formData.address1}
+                                onChange={handleChange}
+                            />
+                        {/* {suggestions.length > 0 && (
+                            <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
+                            {suggestions.map((suggestion) => (
+                                <li
+                                key={suggestion.place_id}
+                                className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
+                                onClick={() => handleSuggestionClick(suggestion)}
+                                >
+                                {suggestion.description}
+                                </li>
+                            ))}
+                            </ul>
+                        )} */}
+                        </div>
+                    </GoogleMapsLoader>
                 </div>
 
                 {/* Address Line 2 */}
@@ -253,6 +295,14 @@ export default function BusinessForm() {
                     <option value="">Select</option>
                     <option value="Mammals">Mammals</option>
                     <option value="Birds">Birds</option>
+                    {allAnimalClasses.map((item, index) => (
+                        <option
+                            value={item.name}
+                            key={index}
+                        >
+                            {item.name}
+                        </option>
+                    ))}
                 </select>
             </div>
         </form>

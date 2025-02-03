@@ -5,16 +5,17 @@ import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
 import BlueButton from "../../../ui/BlueButton"
 import { useNavigate } from "react-router-dom";
+import { anesthesiaPatientMonitoringData, canineCastration, canineSpay, dentalProphylaxis, felineCastration } from "./components/data";
 
 const data = [
   {
     category: "Anaesthesia & Surgery",
     items: [
-      { topic: "Anaesthesia Patient Monitoring", status: "Active", click: true },
-      { topic: "Canine Castration", status: "Active" },
-      { topic: "Canine Spay", status: "Active" },
-      { topic: "Dental Prophy", status: "Active" },
-      { topic: "Feline Castration", status: "Active" },
+      { topic: "Anaesthesia Patient Monitoring", status: "Active", click: true, content: anesthesiaPatientMonitoringData, animalType: "Canine", },
+      { topic: "Canine Castration", status: "Active", click: true, content: canineCastration, animalType: "Canine", },
+      { topic: "Canine Spay", status: "Active", click: true, content: canineSpay, animalType: "Canine", },
+      { topic: "Dental Prophy", status: "Active", click: true, content: dentalProphylaxis, animalType: "", },
+      { topic: "Feline Castration", status: "Active", click: true, content: felineCastration, animalType: "Feline" },
     ],
   },
   {
@@ -29,8 +30,12 @@ const data = [
   },
   {
     category: "Client Instructions",
-    items: [{ topic: "In House Dx", status: "Active" }],
+    items: [],
   },
+  {
+    category: "In House Dx", status: "Active",
+    items: [],
+  }
 ];
 
 const TableComponent = ({ handleCreateNew }) => {
@@ -46,7 +51,7 @@ const TableComponent = ({ handleCreateNew }) => {
 
   const handleClick = (item) => {
     if (item.click) {
-      handleCreateNew()
+      handleCreateNew(item)
     }
   }
 
@@ -124,10 +129,12 @@ const TableComponent = ({ handleCreateNew }) => {
 
 const ContentLibraryPage = () => {
   const [ createNew, setCreateNew ] = useState(false)
+  const [ content, setContent ] = useState()
 
   const navigate = useNavigate()
 
-  const handleCreateNew = () => {
+  const handleCreateNew = (item) => {
+    setContent(item)
     setCreateNew(true)
   }
 
@@ -136,7 +143,7 @@ const ContentLibraryPage = () => {
   }
 
   return (
-    <div className='w-full min-h-full px-8 py-4 relative'>
+    <div className='w-full min-h-full px-[36px] py-4 relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
                 <button
@@ -162,13 +169,16 @@ const ContentLibraryPage = () => {
         </div>
         
         <div className="mt-6">
-          <TableComponent handleCreateNew={handleCreateNew} />
+          <TableComponent 
+            handleCreateNew={handleCreateNew}
+          />
         </div>
 
+        {createNew &&
         <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
             <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
               <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-                Anesthesia Patient Monitoring
+                {content && content.topic}
               </p>
               <button
                 onClick={() => setCreateNew(false)}
@@ -179,9 +189,11 @@ const ContentLibraryPage = () => {
             </div>
 
             <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-              <AddNewItemForm />
+              <AddNewItemForm 
+                content={content && content}
+              />
             </div>
-        </div>
+        </div>}
     </div>
   )
 }
