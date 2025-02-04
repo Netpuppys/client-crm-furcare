@@ -7,19 +7,19 @@ import _ from 'lodash';
 
 const AddNewItemForm = ({ content }) => {
   const [ initialData, setInitialData ] = useState({
-    category: content.topic,
-    gender: "Female",
-    animalType: content.animalType,
-    ageRange: 12,
+    category: "",
+    gender: "",
+    animalType: "",
+    ageRange: "",
     healthConcerns: "",
     sterilizationStatus: "",
   })
 
   const [formData, setFormData] = useState({
-    category: content.topic,
-    gender: "Female",
-    animalType: content.animalType,
-    ageRange: 12,
+    category: "",
+    gender: "",
+    animalType: "",
+    ageRange: "",
     healthConcerns: "",
     sterilizationStatus: "",
   });
@@ -30,10 +30,10 @@ const AddNewItemForm = ({ content }) => {
 
   useEffect(() => {
     setInitialData({
-      category: content.topic,
-      gender: "Female",
-      animalType: content.animalType,
-      ageRange: 12,
+      category: "",
+      gender: "",
+      animalType: "",
+      ageRange: "",
       healthConcerns: "",
       sterilizationStatus: "",
     })
@@ -89,10 +89,10 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="Anesthesia and Surgery"
+            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-lg"
             value={formData.category}
             onChange={(e) => handleInputChange("category", e.target.value)}
+            disabled
           />
         </div>
 
@@ -104,10 +104,11 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <div className="flex mt-1">
             <button
-              className={`py-2 px-4 border border-r-[0.5px] ${
+              disabled
+              className={`py-2 px-4 border border-r-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Male"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
+                  : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
               }`}
               onClick={() => handleInputChange("gender", "Male")}
             >
@@ -115,10 +116,11 @@ const AddNewItemForm = ({ content }) => {
             </button>
 
             <button
-              className={`py-2 px-4 border border-l-[0.5px] ${
+              disabled
+              className={`py-2 px-4 border border-l-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Female"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
+                  : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
               }`}
               onClick={() => handleInputChange("gender", "Female")}
             >
@@ -136,11 +138,12 @@ const AddNewItemForm = ({ content }) => {
             Animal Type{" "}
           </label>
           <select
-            className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
+            disabled
+            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-lg classic"
             value={formData.animalType}
             onChange={(e) => handleInputChange("animalType", e.target.value)}
           >
-            <option value={""}>Animal Type</option>
+            {/* <option value={""}>Animal Type</option>
             {allAnimalClasses?.map((item, index) => (
               <option
                 key={index}
@@ -148,7 +151,7 @@ const AddNewItemForm = ({ content }) => {
               >
                 {item.name}
               </option>
-            ))}
+            ))} */}
           </select>
         </div>
 
@@ -158,11 +161,11 @@ const AddNewItemForm = ({ content }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Age Range{" "}
           </label>
-          <div className="flex mt-1 items-center rounded-lg border border-gray-300 overflow-hidden">
+          <div className="flex mt-1 items-center rounded-lg border border-[#8891AA] overflow-hidden">
             <input
+              disabled
               type="number"
-              className=" p-2 w-20 focus:outline-none"
-              placeholder="12"
+              className=" p-2 w-20 disabled:opacity-100 focus:outline-none"
               min={0}
               value={formData.ageRange}
               onChange={(e) => handleInputChange("ageRange", e.target.value)}
@@ -182,16 +185,17 @@ const AddNewItemForm = ({ content }) => {
             Health Concerns{" "}
           </label>
           <select
-            className="classic mt-1 p-2 border border-gray-300 rounded-lg focus:outline-none"
+            disabled
+            className="classic mt-1 p-2 disabled:opacity-100 border border-[#8891AA] rounded-lg focus:outline-none"
             value={formData.healthConcerns}
             onChange={(e) =>
               handleInputChange("healthConcerns", e.target.value)
             }
           >
-            <option value="">Select</option>
+            {/* <option value="">Select</option>
             <option value="None">None</option>
             <option value="Minor Issues">Minor Issues</option>
-            <option value="Severe">Severe</option>
+            <option value="Severe">Severe</option> */}
           </select>
         </div>
 
@@ -203,20 +207,22 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <div className="flex mt-1">
             <button
-              className={`py-2 px-4 border border-r-[0.5px] ${
+              disabled
+              className={`py-2 px-4 disabled:opacity-100 border border-r-[0.5px] ${
                 formData.sterilizationStatus === "Intact"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
+                  : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
               }`}
               onClick={() => handleInputChange("sterilizationStatus", "Intact")}
             >
               Intact
             </button>
             <button
-              className={`py-2 px-4 ${
+              disabled
+              className={`py-2 px-4 disabled:opacity-100 ${
                 formData.sterilizationStatus === "Sterilized"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-y text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] border"
+                  : "border-[#8891AA] text-[#121C2D] border"
               }`}
               onClick={() =>
                 handleInputChange("sterilizationStatus", "Sterilized")
@@ -225,10 +231,11 @@ const AddNewItemForm = ({ content }) => {
               Sterilized
             </button>
             <button
-              className={`py-2 px-4 border border-l-[0.5px] ${
+              disabled
+              className={`py-2 px-4 disabled:opacity-100 border border-l-[0.5px] ${
                 formData.sterilizationStatus === "Unsure"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
+                  : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
               }`}
               onClick={() => handleInputChange("sterilizationStatus", "Unsure")}
             >

@@ -10,11 +10,12 @@ const ClientPatientPage = () => {
     <div className='w-full h-[calc(100vh-4.75rem)] px-[36px] py-4 overflow-y-auto relative'>
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
-                <p
+                <Link
+                    to={"/client-patient"}
                     className='underline inline cursor-default'
                 >
                     Client & Patient
-                </p>
+                </Link>
             </div>
             <div className='flex items-center gap-6'>
                 <Link

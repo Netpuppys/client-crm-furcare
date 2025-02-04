@@ -52,11 +52,12 @@ export default function CreateNew() {
     <div className="px-[36px] pt-6 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto">
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] flex items-center text-xs'>
-                <p
+                <Link
+                    to={"/client-patient"}
                     className='underline inline cursor-pointer'
                 >
                     Client & Patient
-                </p>
+                </Link>
                 <p className='px-[1px]'>/</p>
                 <p className='underline inline cursor-default'>
                     Create Account
@@ -64,7 +65,7 @@ export default function CreateNew() {
             </div>
             <div className='flex items-center gap-6'>
                 <Link
-                  to={"/client-patient/create"}
+                  to={"/client-patient"}
                     className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent border border-[#CACDD8] text-[#121C2D] text-nowrap bg-transparent rounded-md font-medium leading-[1.25rem] text-sm' 
                 >
                     <p className=''>
