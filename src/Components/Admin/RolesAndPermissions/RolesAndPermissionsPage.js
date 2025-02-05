@@ -5,9 +5,12 @@ import EditNewRoles from "./components/EditNewRoles";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
+import { useAppContext } from "../../../utils/AppContext";
 
 const RolesAndPermissionsPage = () => {
   const navigate = useNavigate()
+
+  const { sidebarExpanded } = useAppContext()
   
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
@@ -57,30 +60,50 @@ const RolesAndPermissionsPage = () => {
 
   return (
     <div className="w-full min-h-full px-[36px] py-4">
-        <div
-            className={`${
-            addNewModal ? "block" : "hidden"
-            } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
-        >
-            <CreateNewRole
-                addNewModal={addNewModal}
-                setAddNewModal={setAddNewModal}
-                fetchRolesList={fetchRolesList}
-            />
-        </div>
+        {addNewModal &&
+        <div className={`fixed
+          ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+          top-0 h-screen right-0 flex z-50`}>
+
+          <div 
+            onClick={() => setAddNewModal(false)}
+            className="w-[calc(100%-45rem)] h-full"
+          ></div>
+          <div
+              className={`${
+              addNewModal ? "block" : "hidden"
+              } w-[50rem] h-full bg-white z-50 shadow-xl`}
+          >
+              <CreateNewRole
+                  addNewModal={addNewModal}
+                  setAddNewModal={setAddNewModal}
+                  fetchRolesList={fetchRolesList}
+              />
+          </div>
+        </div>}
 
         {editRole && 
-        <div
-            className={`${
-            editRole ? "block" : "hidden"
-            } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
-        >
-            <EditNewRoles
-                setEditRole={setEditRole}
-                selectedRole={selectedRole}
-                setSelectedRole={setSelectedRole}
-                fetchRolesList={fetchRolesList}
-            />
+        <div className={`fixed
+          ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+          top-0 h-screen right-0 flex z-50`}>
+
+          <div 
+            onClick={() => setEditRole(false)}
+            className="w-[calc(100%-45rem)] h-full"
+          ></div>
+
+          <div
+              className={`${
+              editRole ? "block" : "hidden"
+              } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
+          >
+              <EditNewRoles
+                  setEditRole={setEditRole}
+                  selectedRole={selectedRole}
+                  setSelectedRole={setSelectedRole}
+                  fetchRolesList={fetchRolesList}
+              />
+          </div>
         </div>}
 
       <div className="flex items-start justify-between">
@@ -148,7 +171,7 @@ const RolesAndPermissionsPage = () => {
               <tr
                 key={index}
                 onClick={() => { setEditRole(true); setSelectedRole(item) }}
-                className="hover:bg-gray-50 text-sm text-gray-700 last:border-b-0 border-b border-gray-200"
+                className={`text-sm text-gray-700 last:border-b-0 border-b border-gray-200 ${(selectedRole && selectedRole.id===item.id)? "bg-gray-50" : "hover:bg-gray-50"}`}
               >
                 <td className="px-4 py-3 w-[20%]">
                   <p className="text-[#121C2D] hover:underline capitalize">

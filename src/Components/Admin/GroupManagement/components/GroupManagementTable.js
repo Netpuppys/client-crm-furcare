@@ -43,8 +43,8 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                 </thead>
                 <tbody className="divide-y divide-[#E1E3EA]">
                 {groupData?.map((item, index) => (
-                <tr key={index} className="hover:bg-gray-50 border-b last:border-b-0 border-[#E1E3EA]">
-                    <td className="px-4 py-2 text-sm text-[#0263E0] capitalize font-semibold">
+                <tr key={index} className={`hover:bg-gray-50 border-b last:border-b-0 border-[#E1E3EA] `}>
+                    <td className="px-4 py-2 text-sm text-[#121C2D] capitalize ">
                         {item.name}
                     </td>
                     <td className="px-4 py-2 text-sm text-[#121C2D]">

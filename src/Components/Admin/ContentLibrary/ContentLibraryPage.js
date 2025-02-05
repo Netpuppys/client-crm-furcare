@@ -5,90 +5,8 @@ import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
 import BlueButton from "../../../ui/BlueButton"
 import { useNavigate } from "react-router-dom";
-import { anesthesiaPatientMonitoringData, canineCastration, canineSpay, dentalProphylaxis, felineCastration } from "./components/data";
+import { contentLibraryData } from "./components/data";
 import { useAppContext } from "../../../utils/AppContext";
-
-const data = [
-  {
-    category: "Anaesthesia & Surgery",
-    items: [
-      { topic: "Anaesthesia Patient Monitoring", status: "Active", click: true, content: anesthesiaPatientMonitoringData, animalType: "Canine" },
-      { topic: "Canine Castration", status: "Active", click: true, content: canineCastration, animalType: "Canine" },
-      { topic: "Canine Spay", status: "Active", click: true, content: canineSpay, animalType: "Canine" },
-      { topic: "Dental Prophy", status: "Active", click: true, content: dentalProphylaxis, animalType: "" },
-      { topic: "Feline Castration", status: "Active", click: true, content: felineCastration, animalType: "Feline" },
-    ],
-  },
-  {
-    category: "Client & Communications",
-    items: [
-      { topic: "Anaesthesia Risk/Benefit", status: "Active" },
-      { topic: "Client Connections Call", status: "Active" },
-      { topic: "Follow-up Call", status: "Active" },
-      { topic: "No Exam Performed", status: "Active" },
-      { topic: "Referral for Immediate Critical Care", status: "Active" },
-      { topic: "Referral to Specialist", status: "Active" },
-      { topic: "Vaccine Risk/Benefit", status: "Active" },
-    ],
-  },
-  {
-    category: "Client Instructions - Medical",
-    items: [
-      // 
-      // { topic: "Neuter Discharge Instructions", status: "Active" },
-      // 
-      { topic: "Abscess", status: "Active" },
-      { topic: "Allergic Reaction", status: "Active" },
-      { topic: "Anal Sac (Gland) Disease", status: "Active" },
-      { topic: "Atopy / Food Related Allergic Skin Disease", status: "Active" },
-      { topic: "Canine Influenza Vaccine", status: "Active" },
-      { topic: "Canine Parvo Virus", status: "Active" },
-      { topic: "Cataracts", status: "Active" },
-      { topic: "Corneal Ulcer, Abrasion, and Laceration", status: "Active" },
-      { topic: "Demodectic Mange", status: "Active" },
-      { topic: "Dental Prophylaxis Discharge Instructions", status: "Active" },
-      { topic: "Dental Tartar, Gingivitis, Periodontal Disease", status: "Active" },
-      { topic: "Diabetes Mellitus", status: "Active" },
-      { topic: "Ear Cleaning & Medicating", status: "Active" },
-      { topic: "Ear Mites", status: "Active" },
-      { topic: "Ectropion, Entropion", status: "Active" },
-      { topic: "Epilepsy & Seizures", status: "Active" },
-      { topic: "Euthanasia", status: "Active" },
-      { topic: "Feline Immunodeficiency Virus (FIV)", status: "Active" },
-      { topic: "Feline Upper Respiratory Virus", status: "Active" },
-      { topic: "Fleas & Flea Allergy Dermatitis", status: "Active" },
-      { topic: "Giardia", status: "Active" },
-      { topic: "Heartworm Disease & Prevention", status: "Active" },
-      { topic: "Heartworm Testing (4DX)", status: "Active" },
-      { topic: "Hip Dysplasia", status: "Active" },
-      { topic: "Hyperthyroidism", status: "Active" },
-      { topic: "Hypothyroidism", status: "Active" },
-      { topic: "Insulin", status: "Active" },
-      { topic: "Kennel Cough, Bordetella", status: "Active" },
-      { topic: "Lick Granuloma (Acral Lick Dermatitis)", status: "Active" },
-      { topic: "Meloxicam", status: "Active" },
-      { topic: "NoSorb", status: "Active" },
-      { topic: "NSAIDS", status: "Active" },
-      { topic: "Otitis Externa", status: "Active" },
-      { topic: "Otitis Interna, Otitis Media", status: "Active" },
-      { topic: "Ovariohysterectomy Discharge Instructions", status: "Active" },
-      { topic: "Overweight, Obesity", status: "Active" },
-      { topic: "Pyometra", status: "Active" },
-      { topic: "Pyrantel", status: "Active" },
-      { topic: "Ringworms (Dermatophytosis)", status: "Active" },
-      { topic: "Sarcoptic Mange", status: "Active" },
-      { topic: "Skin Masses", status: "Active" },
-      { topic: "Umbilical Hernia", status: "Active" },
-      { topic: "Vaccine Reaction", status: "Active" },
-    ],
-  },
-  {
-    category: "In House Dx",
-    items: [
-      
-    ],
-  },
-];
 
 const TableComponent = ({ handleCreateNew }) => {
   const [ openIndex, setOpenIndex ] = useState([])
@@ -131,7 +49,7 @@ const TableComponent = ({ handleCreateNew }) => {
           </tr>
         </thead>
         <tbody>
-          {data.map((category, index) => (
+          {contentLibraryData.map((category, index) => (
             <React.Fragment key={index} className={``}>
               <tr
                 onClick={() => handleOpenSubItems(index)}
@@ -228,15 +146,15 @@ const ContentLibraryPage = () => {
           />
         </div>
 
-        {createNew &&
-        <div className={`fixed
-          ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
-          top-0 h-screen right-0 flex z-50`}>
+    {createNew &&
+    <div className={`fixed
+      ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+      top-0 h-screen right-0 flex z-50`}>
 
-          <div 
-            onClick={() => setCreateNew(false)}
-            className="w-[calc(100%-45rem)] h-full"
-          ></div>
+      <div 
+        onClick={() => setCreateNew(false)}
+        className="w-[calc(100%-45rem)] h-full"
+      ></div>
 
         <div className={`fixed top-0 shadow-2xl overflow-y-auto h-full bg-white w-[45rem] right-0`}>
             <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">

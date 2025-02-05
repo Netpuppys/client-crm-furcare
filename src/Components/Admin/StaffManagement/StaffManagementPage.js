@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import BlueButton from "../../../ui/BlueButton";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
+import { useAppContext } from "../../../utils/AppContext";
 
 const DiagnosticTable = ({ staffData }) => {
 
@@ -206,7 +207,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
             <input
               type="email"
               className="w-full focus:outline-none p-2"
-              placeholder="jdoe@oases"
+              placeholder="jdoe@oases.com"
               value={formData.email}
               onChange={(e) => {
                   const value = e.target.value;
@@ -215,9 +216,9 @@ const CreateNewForm = ({ fetchStaffData }) => {
                   }
               }}
             />
-            <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
+            {/* <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
               .com
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="w-[47.5%]">
@@ -305,6 +306,8 @@ const CreateNewForm = ({ fetchStaffData }) => {
 function StaffManagementPage() {
   const navigate = useNavigate()
 
+  const { sidebarExpanded } = useAppContext()
+
   const [ createNew, setCreateNew] = useState(false);
   const [ staffData, setStaffData ] = useState([])
 
@@ -370,26 +373,37 @@ function StaffManagementPage() {
         />
       </div>
 
-      <div
-        className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
-          createNew ? "right-0 block" : "right-full hidden z-50"
-        } `}
-      >
-        <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
-          <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-            Add Staff
-          </p>
-          <button onClick={() => setCreateNew(false)} className="">
-            <img src={closeIcon} className="w-7 " alt="" />
-          </button>
-        </div>
+      {createNew &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
 
-        <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <CreateNewForm 
-            fetchStaffData={fetchStaffData}
-          />
+        <div 
+          onClick={() => setCreateNew(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
+
+        <div
+          className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+            createNew ? "right-0 block" : "right-full hidden z-50"
+          } `}
+        >
+          <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+            <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+              Add Staff
+            </p>
+            <button onClick={() => setCreateNew(false)} className="">
+              <img src={closeIcon} className="w-7 " alt="" />
+            </button>
+          </div>
+
+          <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+            <CreateNewForm 
+              fetchStaffData={fetchStaffData}
+            />
+          </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 import ReactQuill from "react-quill";
-import axiosInstance from "../../../../utils/AxiosInstance";
+// import axiosInstance from "../../../../utils/AxiosInstance";
 import BlueButton from "../../../../ui/BlueButton";
 import _ from 'lodash';
 
@@ -25,7 +25,7 @@ const AddNewItemForm = ({ content }) => {
   });
   
   const [ additionalNotes, setAdditionalNotes ] = useState(content.content)
-  const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
+  // const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
   const [ disabled, setDisabled ] = useState(true)
 
   useEffect(() => {
@@ -39,17 +39,17 @@ const AddNewItemForm = ({ content }) => {
     })
   }, [content])
 
-  useEffect(() => {
-    axiosInstance
-      .get('/api/v1/animal-classes')
-      .then(res => {
-        console.log(res)
-        setAllAnimalClasses(res.data.data.data)
-      })
-      .then(err => {
-        console.error(err)
-      })
-  }, [])
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get('/api/v1/animal-classes')
+  //     .then(res => {
+  //       console.log(res)
+  //       setAllAnimalClasses(res.data.data.data)
+  //     })
+  //     .then(err => {
+  //       console.error(err)
+  //     })
+  // }, [])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -62,7 +62,6 @@ const AddNewItemForm = ({ content }) => {
     }
 
     console.log(additionalNotes)
-    console.log(content.content)
   
     setDisabled(false);
   }, [formData, initialData, additionalNotes, content]);

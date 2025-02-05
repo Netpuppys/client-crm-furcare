@@ -6,9 +6,12 @@ import CreateNewGroup from "./components/CreateNewGroup";
 import EditGroup from "./components/EditGroup";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
+import { useAppContext } from "../../../utils/AppContext";
 
 function GroupManagementPage() {
     const navigate = useNavigate()
+
+    const { sidebarExpanded } = useAppContext()
 
     const [ createNew, setCreateNew ] = useState(false);
     const [ editGroup, setEditGroup ] = useState()
@@ -84,29 +87,73 @@ function GroupManagementPage() {
             </div>
         </div>
 
-        {/* edit group */}
-        <div
-            className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
-                editGroup ? "right-0 block" : "right-full hidden z-50"
-            } `}
-        >
-            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
-                <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-                    Edit Group
-                </p>
-                <button onClick={() => setEditGroup(false)} className="">
-                    <img src={closeIcon} className="w-7 " alt="" />
-                </button>
-            </div>
+        {/* create new group form */}
+        {createNew &&
+        <div className={`fixed
+            ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+            top-0 h-screen right-0 flex z-50`}>
 
-            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-                {editGroup &&
-                <EditGroup
-                    editGroup={editGroup}
-                    setEditGroup={setEditGroup}
-                />}
+            <div 
+                onClick={() => setCreateNew(false)}
+                className="w-[calc(100%-45rem)] h-full"
+            ></div>
+
+            <div
+                className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+                    createNew ? "right-0 block" : "right-full hidden z-50"
+                } `}
+            >
+                <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+                    <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                        Create Group
+                    </p>
+                    <button onClick={() => setCreateNew(false)} className="">
+                        <img src={closeIcon} className="w-7 " alt="" />
+                    </button>
+                </div>
+
+                <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+                    <CreateNewGroup
+                        setGroupData={setGroupData}
+                    />
+                </div>
             </div>
-        </div>
+        </div>}
+
+        {/* edit group */}
+        {editGroup &&
+        <div className={`fixed
+            ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+            top-0 h-screen right-0 flex z-50`}>
+
+            <div 
+                onClick={() => setEditGroup(false)}
+                className="w-[calc(100%-45rem)] h-full"
+            ></div>
+
+            <div
+                className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+                    editGroup ? "right-0 block" : "right-full hidden z-50"
+                } `}
+            >
+                <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+                    <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                        Edit Group
+                    </p>
+                    <button onClick={() => setEditGroup(false)} className="">
+                        <img src={closeIcon} className="w-7 " alt="" />
+                    </button>
+                </div>
+
+                <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+                    {editGroup &&
+                    <EditGroup
+                        editGroup={editGroup}
+                        setEditGroup={setEditGroup}
+                    />}
+                </div>
+            </div>
+        </div>}
     </div>
     );
 }

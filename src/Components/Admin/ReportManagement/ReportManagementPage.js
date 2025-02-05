@@ -7,6 +7,7 @@ import EditReport from "./component/EditReport";
 import CreateNewReport from "./component/CreateNewReport";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
+import { useAppContext } from "../../../utils/AppContext";
 
 const ReportTable = ({ reportData, setEditGroup }) => {
   const [ showLabelsList, setShowLabelsList ] = useState()
@@ -119,6 +120,8 @@ const ReportTable = ({ reportData, setEditGroup }) => {
 function ReportManagementPage() {
   const navigate = useNavigate()
 
+  const { sidebarExpanded } = useAppContext()
+
   const [ createNew, setCreateNew] = useState(false);
   const [ reportData, setReportData ] = useState([]);
   const [ editGroup, setEditGroup ] = useState()
@@ -170,12 +173,6 @@ function ReportManagementPage() {
             Report Management
           </p>
         </div>
-        {/* <button
-          onClick={() => setCreateNew(true)}
-          className="bg-[#006DFA] px-3 h-[2.375rem] rounded-md flex text-white font-semibold text-sm items-center justify-center"
-        >
-          Create
-        </button> */}
           <BlueButton
             onClickHandler={handleCreateNew}
             text={"Create"}
@@ -190,47 +187,69 @@ function ReportManagementPage() {
         />
       </div>
 
-      <div
-        className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
-          createNew ? "right-0 block" : "right-full hidden z-50"
-        } `}
-      >
-        <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
-          <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-            Create Report
-          </p>
-          <button onClick={() => setCreateNew(false)} className="">
-            <img src={closeIcon} className="w-7 " alt="" />
-          </button>
-        </div>
+      {createNew &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
 
-        <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <CreateNewReport 
-            fetchAllReports={fetchAllReports}
-          />
-        </div>
-      </div>
+        <div 
+          onClick={() => setCreateNew(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
 
-      <div
-        className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
-          editGroup ? "right-0 block" : "right-full hidden z-50"
-        } `}
-      >
-        <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
-          <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-            Edit Report
-          </p>
-          <button onClick={() => setEditGroup(false)} className="">
-            <img src={closeIcon} className="w-7 " alt="" />
-          </button>
-        </div>
+        <div
+          className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+            createNew ? "right-0 block" : "right-full hidden z-50"
+          } `}
+        >
+          <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+            <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+              Create Report
+            </p>
+            <button onClick={() => setCreateNew(false)} className="">
+              <img src={closeIcon} className="w-7 " alt="" />
+            </button>
+          </div>
 
-        <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-          <EditReport 
-            selectedReport={editGroup}
-          />
+          <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+            <CreateNewReport 
+              fetchAllReports={fetchAllReports}
+            />
+          </div>
         </div>
-      </div>
+      </div>}
+
+      {editGroup &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
+
+        <div 
+          onClick={() => setEditGroup(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
+
+        <div
+          className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+            editGroup ? "right-0 block" : "right-full hidden z-50"
+          } `}
+        >
+          <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+            <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+              Edit Report
+            </p>
+            <button onClick={() => setEditGroup(false)} className="">
+              <img src={closeIcon} className="w-7 " alt="" />
+            </button>
+          </div>
+
+          <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+            <EditReport 
+              selectedReport={editGroup}
+            />
+          </div>
+        </div>
+      </div>}
     </div>
   );
 }

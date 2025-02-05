@@ -35,7 +35,7 @@ const types = [
   }
 ];
   
-const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
+const AppointmentsTable = ({ tableData, openEditModule, setOpenEditModule }) => {
     return (
       <div className="overflow-x-auto">
         <table className="min-w-full">
@@ -64,7 +64,7 @@ const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
           </thead>
           <tbody className="divide-y divide-[#E1E3EA]">
             {tableData.map((item, index) => (
-              <tr key={index} onClick={() => setOpenEditModule(item)} className="hover:bg-gray-50 cursor-pointer">
+              <tr key={index} onClick={() => setOpenEditModule(item)} className={`cursor-pointer ${openEditModule && openEditModule.id === item.id? "bg-gray-50" : "hover:bg-gray-50"}`}>
                 <td className="px-4 py-2 capitalize text-sm text-[#121C2D]">{item.name}</td>
                 <td className="px-4 py-2 text-sm">
                   <p className='capitalize'>
@@ -97,7 +97,7 @@ const AppointmentsTable = ({ tableData, setOpenEditModule }) => {
 const DocumentTemplatePage = () => {
   const navigate = useNavigate()
 
-  const { selectedBranch } = useAppContext()
+  const { selectedBranch, sidebarExpanded } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false)
   const [ activeButton, setActiveButton ] = useState(types[0].serverName)
@@ -185,12 +185,23 @@ const DocumentTemplatePage = () => {
             <div className='w-full'>
                 <AppointmentsTable 
                   tableData={tableData}
+                  openEditModule={openEditModule}
                   setOpenEditModule={setOpenEditModule}
                 />
             </div>
         </div>
 
-        <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${createNew? "right-0 block" : "right-full hidden z-50"} `}>
+        {createNew &&
+        <div className={`fixed
+          ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+          top-0 h-screen right-0 flex z-50`}>
+
+          <div 
+            onClick={() => setCreateNew(false)}
+            className="w-[calc(100%-45rem)] h-full"
+          ></div>
+
+          <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] right-0 block `}>
             <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
               <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
                 Add Document Template
@@ -209,29 +220,40 @@ const DocumentTemplatePage = () => {
                 fetchData={fetchData}
               />
             </div>
-        </div>
+          </div>
+        </div>}
 
         {openEditModule &&
-        <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${openEditModule? "right-0 block" : "right-full hidden z-50"} `}>
-            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
-              <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-                Edit Document Template
-              </p>
-              <button
-                onClick={() => setOpenEditModule(false)}
-                className=""
-              >
-                <img src={closeIcon} className="w-7 " alt="" />
-              </button>
-            </div>
+        <div className={`fixed
+          ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+          top-0 h-screen right-0 flex z-50`}>
 
-            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-              <EditDocumentTemplate 
-                types={types}
-                openEditModule={openEditModule}
-                fetchData={fetchData}
-              />
-            </div>
+          <div 
+            onClick={() => setOpenEditModule(false)}
+            className="w-[calc(100%-45rem)] h-full"
+          ></div>
+
+          <div className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] right-0 block`}>
+              <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+                <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                  Edit Document Template
+                </p>
+                <button
+                  onClick={() => setOpenEditModule(false)}
+                  className=""
+                >
+                  <img src={closeIcon} className="w-7 " alt="" />
+                </button>
+              </div>
+
+              <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+                <EditDocumentTemplate 
+                  types={types}
+                  openEditModule={openEditModule}
+                  fetchData={fetchData}
+                />
+              </div>
+          </div>
         </div>}
     </div>
   )
