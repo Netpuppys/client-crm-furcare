@@ -243,12 +243,6 @@ const AnimalClassesPage = () => {
         </div>}
 
         {editAnimalClass &&
-        <EditAnimalClass
-            editAnimalClass={editAnimalClass}
-            refreshList={refreshList}
-            setEditAnimalClass={setEditAnimalClass}
-        />}
-        {editAnimalClass &&
         <div className={`fixed
           ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
           top-0 h-screen right-0 flex z-50`}>

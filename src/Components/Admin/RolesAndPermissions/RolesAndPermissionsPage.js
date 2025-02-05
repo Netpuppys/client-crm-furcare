@@ -129,11 +129,6 @@ const RolesAndPermissionsPage = () => {
         <table className="w-full">
           <thead>
             <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
-              {/* <th className="p-2">Name</th>
-              <th className="p-2">Access Level</th>
-              <th className="p-2">Staff</th>
-              <th className="p-2">Permissions</th>
-              <th className="p-2">Status</th> */}
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                 <div className="flex items-center gap-2">
                   <p className="">Name</p>
