@@ -91,10 +91,10 @@ const EditBusinessUnit = () => {
   };
 
   const handleCheckboxChange = (option) => {
-    if (selectedOptions.some(obj => obj.service === option)) {
+    if (selectedOptions.some(obj => obj.service === option.name)) {
       setSelectedOptions(selectedOptions.filter((item) => item.service !== option));
     } else {
-      setSelectedOptions([...selectedOptions, { service: option, basePrice: "" }]);
+      setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
     }
   };
 
@@ -167,6 +167,10 @@ const EditBusinessUnit = () => {
         console.error("Error:", error);
       });
   };
+
+  const filteredOptions = options?.filter(obj => 
+    !selectedOptions.some(selected => selected.service === obj.name)
+  );
 
   return (
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
@@ -443,7 +447,7 @@ const EditBusinessUnit = () => {
                   <div>
                     <p className="text-sm">Select</p>
                   </div>)}
-
+                    {console.log(selectedOptions)}
                   <div className="flex w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
@@ -468,7 +472,7 @@ const EditBusinessUnit = () => {
                     className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-gray-300 z-10 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {options.map((option) => (
+                      {filteredOptions?.map((option) => (
                         <li className="p-2" key={option}>
                           <label className="flex w-full items-center cursor-pointer">
                             <input
@@ -477,7 +481,7 @@ const EditBusinessUnit = () => {
                               checked={selectedOptions.some(obj => obj.service === option)}
                               onChange={() => handleCheckboxChange(option)}
                             />
-                            {option}
+                            {option.name}
                           </label>
                         </li>
                       ))}

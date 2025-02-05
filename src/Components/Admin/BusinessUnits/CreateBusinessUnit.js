@@ -613,7 +613,9 @@ const CreateBusinessUnit = () => {
                               checked={selectedOptions.some(obj => obj.service === option.name)}
                               onChange={() => handleCheckboxChange(option)}
                             />
+                            <span className="capitalize">
                             {option.name}
+                            </span>
                           </label>
                         </li>
                       ))}
