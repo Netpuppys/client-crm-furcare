@@ -344,9 +344,9 @@ const CreateBusinessUnit = () => {
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
         <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-lg space-y-6">
           {/* Status Change */}
-          <div className="flex w-full items-center justify-between gap-10">
+          <div className="flex w-full items-center justify-between gap-[50px]">
             {/* branch name change */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Branch Unit Name
@@ -361,7 +361,7 @@ const CreateBusinessUnit = () => {
             </div>
 
             {/* type input */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Branch Type
@@ -382,8 +382,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* Practice Type Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Practice Type
@@ -402,7 +402,7 @@ const CreateBusinessUnit = () => {
               </select>
             </div>
             {/* currency selection */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Currency
@@ -419,8 +419,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* Address Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 1
@@ -454,7 +454,7 @@ const CreateBusinessUnit = () => {
               </GoogleMapsLoader>
             </div>
             {/* Address Selection 2 */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 2
@@ -470,8 +470,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* City and State Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 City
@@ -489,7 +489,7 @@ const CreateBusinessUnit = () => {
               />
             </div>
             {/* state selection */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 State
@@ -520,8 +520,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* Country Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Country
@@ -536,7 +536,7 @@ const CreateBusinessUnit = () => {
               />
             </div>
             {/* postal code selection */}
-            <div className="w-[47.5%]">
+            <div className="w-1/2">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Postal Code
@@ -561,8 +561,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* Service Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-[calc(50%-25px)]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
@@ -666,8 +666,8 @@ const CreateBusinessUnit = () => {
           </div>)}
 
           {/* Department Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-[calc(50%-25px)]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Department(s)
@@ -688,8 +688,8 @@ const CreateBusinessUnit = () => {
           </div>
 
           {/* Appointment Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-[calc(50%-25px)]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)

@@ -24,36 +24,36 @@ const ReportTable = ({ reportData, setEditGroup }) => {
         <thead className="bg-[#F9F9FA]">
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Name</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Type</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Label Fields</p>
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Frequency</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Location</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">Status</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>

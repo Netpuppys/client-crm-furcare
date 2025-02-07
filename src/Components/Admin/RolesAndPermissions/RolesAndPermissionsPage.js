@@ -130,31 +130,31 @@ const RolesAndPermissionsPage = () => {
           <thead>
             <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Name</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Access Level</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Staff</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Permissions</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Status</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>

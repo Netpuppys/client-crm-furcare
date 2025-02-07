@@ -42,20 +42,20 @@ const AppointmentsTable = ({ tableData, openEditModule, setOpenEditModule }) => 
           <thead className="bg-[#F9F9FA]">
             <tr>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Name</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Language</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>
               </th>
   
               <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1">
                   <p className="">Status</p>
                   <img src={informationIcon} className="w-5" alt="" />
                 </div>

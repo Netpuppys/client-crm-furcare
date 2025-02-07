@@ -81,7 +81,12 @@ const LoginForm = () => {
     <div className='w-full min-h-[50vh] h-full md:min-h-full md:w-full my-auto md:mx-w-1/2 py-10 md:py-0 flex flex-col items-center justify-center'>
         {/* login form */}
         {!forgotPassword &&
-        <div className='max-w-80 w-full flex flex-col items-center justify-start'>
+        <form 
+            onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmit();
+            }}
+            className='max-w-80 w-full flex flex-col items-center justify-start'>
             <div className='w-[7.125rem] h-[9.9375rem] mb-6 md:mb-[2.8rem]'>
                 <img
                     src={placeholderLogo}
@@ -132,6 +137,7 @@ const LoginForm = () => {
             </div>}
             <div className='w-full mb-4 md:mb-6'>
                 <button 
+                    type='button'
                     onClick={() => setForgotPassword(true)}
                     className='text-accent-blue font-semibold text-[14px] text-left'
                 >
@@ -140,11 +146,13 @@ const LoginForm = () => {
             </div>
 
             {/* submit button */}
-            <BlueButton
-                text={"Log In"}
+            <button
+                onClick={handleSubmit}
                 disabled={isButtonDisabled}
-                onClickHandler={handleSubmit}
-            />
+                className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent hover:text-accent-blue border border-accent-blue text-white text-nowrap bg-accent-blue rounded-lg font-medium leading-[1.25rem] text-sm'
+            >
+                Log In
+            </button>
 
             <div className='w-full flex flex-nowrap mt-4 md:mt-6 items-center justify-center gap-[0.5rem]'>
                 <div className='w-full h-[0.0625rem] bg-black'></div>
@@ -155,6 +163,7 @@ const LoginForm = () => {
             </div>
             {!loginViaOtp && 
             <button
+                type='button'
                 onClick={() => setLoginViaOtp(true)}
                 className='px-4 mt-4 md:mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
             >
@@ -162,12 +171,13 @@ const LoginForm = () => {
             </button>}
             {loginViaOtp && 
             <button
+                type='button'
                 onClick={() => setLoginViaOtp(true)}
                 className='px-4 mt-4 md:mt-6 py-2 text-text-black bg-transparent border-2 border-[#CACDD8] rounded-lg font-semibold leading-[1.25rem] text-sm'
             >
                 Resend Code
             </button>}
-        </div>}
+        </form>}
 
         {/* forgot password form */}
         {forgotPassword &&

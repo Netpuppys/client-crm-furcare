@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import informationIcon from "../../../Assets/icons/informationIcon.png"
 
 const buttons = [
   "Branch Details",
@@ -10,130 +11,130 @@ const buttons = [
 const AddressForm = ({ branchData }) => {
 
   return (
-    <div className="w-full flex flex-wrap items-start justify-start gap-4 p-4 mx-auto bg-white rounded-md">
+    <div className="w-full flex flex-wrap items-start justify-start gap-4 gap-x-[50px] p-4 mx-auto bg-white rounded-md">
       {/* Business Unit Type */}
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="businessUnitType"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
-          Business Unit Name 
+          Branch Unit Name 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.name}
         </div>
       </div>
 
       {/* Business type */}
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="businessUnitType"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
-          Business Type 
+          Branch Type 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.type}
         </div>
       </div>
 
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="practiceType"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Practice Type 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.practice}
         </div>
       </div>
 
       {/* currency */}
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="businessUnitType"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Currency 
         </label>
-        <div className="border uppercase border-gray-300 bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border uppercase border-[#8891AA] bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.currency}
         </div>
       </div>
 
       {/* Address Line 1 */}
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="addressLine1"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Address Line 1 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.addressLine1}
         </div>
       </div>
 
       {/* Address Line 2 */}
-      <div className="w-[45%] flex flex-col">
+      <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="addressLine2"
-          className="text-gray-700 font-medium mb-1 flex items-center gap-1"
+          className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1"
         >
           <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Address Line 2
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.addressLine2}
         </div>
       </div>
 
       {/* City */}
-      <div className="w-[45%] flex flex-col">
-        <label htmlFor="city" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+      <div className="w-[40%] min-w-40 flex flex-col">
+        <label htmlFor="city" className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1">
         <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           City 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.city}
         </div>
       </div>
 
       {/* State */}
-      <div className="w-[45%] flex flex-col">
-        <label htmlFor="state" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+      <div className="w-[40%] min-w-40 flex flex-col">
+        <label htmlFor="state" className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1">
         <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           State 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.state}
         </div>
       </div>
 
       {/* Country */}
-      <div className="w-[45%] flex flex-col">
-        <label htmlFor="country" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+      <div className="w-[40%] min-w-40 flex flex-col">
+        <label htmlFor="country" className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1">
         <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Country 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.country}
         </div>
       </div>
 
       {/* Postal Code */}
-      <div className="w-[45%] flex flex-col">
-        <label htmlFor="postalCode" className="text-gray-700 font-medium mb-1 flex items-center gap-1">
+      <div className="w-[40%] min-w-40 flex flex-col">
+        <label htmlFor="postalCode" className="text-gray-700 font-medium mb-1 flex items-center gap-2 ml-1">
         <div className="bg-[#EB5656] w-1 h-1 aspect-square rounded-full"></div>
           Postal Code 
         </label>
-        <div className="border border-gray-300 capitalize bg-[#EFEFEF4D] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
+        <div className="border border-[#8891AA] capitalize bg-[#F4F4F6] rounded-md h-[2.625rem] p-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
           {branchData?.postalCode}
         </div>
       </div>
@@ -149,17 +150,32 @@ const ServiceTable = ({ branchData }) => {
       <table className="table-auto border-collapse w-full text-left bg-white shadow-md rounded-md">
         <thead className="bg-[#F9F9FA]">
           <tr>
-            <th className="px-6 py-3 text-gray-600 font-medium">Name</th>
-            <th className="px-6 py-3 text-gray-600 font-medium">Base Price</th>
-            <th className="px-6 py-3 text-gray-600 font-medium">Status</th>
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Name</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
+            </th>
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Base Price</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
+            </th>
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Status</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
           {services.map((service, index) => (
             <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50">
-              <td className="px-6 capitalize text-sm py-4">{service.serviceDetails.name}</td>
-              <td className="px-6 py-4 text-sm">{service.basePrice}</td>
-              <td className="px-6 py-4 text-sm">
+              <td className="px-4 capitalize text-sm py-4">{service.serviceDetails.name}</td>
+              <td className="px-4 py-4 text-sm">INR {service.basePrice}</td>
+              <td className="px-4 py-4 text-sm">
                 <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
                     className={`h-3 w-3 ${
@@ -185,15 +201,25 @@ const SpecialtiesTable = ({ branchData }) => {
       <table className="table-auto border-collapse w-full text-left bg-white shadow-md rounded-md">
         <thead className="bg-[#F9F9FA]">
           <tr>
-            <th className="px-6 py-3 text-gray-600 font-medium">Name</th>
-            <th className="px-6 py-3 text-gray-600 font-medium">Status</th>
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Name</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
+            </th>
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Status</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
+            </th>
           </tr>
         </thead>
         <tbody>
           {departments.map((specialty, index) => (
             <tr key={index} className="border-b last:border-b-0 hover:bg-gray-50">
-              <td className="px-6 py-4 text-sm capitalize">{specialty.departmentDetails.name}</td>
-              <td className="px-6 py-4 text-sm">
+              <td className="px-4 py-4 text-sm capitalize">{specialty.departmentDetails.name}</td>
+              <td className="px-4 py-4 text-sm">
                 <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
                     className={`h-3 w-3 ${
@@ -216,36 +242,48 @@ const Appointments = ({ branchData }) => {
 
   return (
     <div className="overflow-x-auto mt-6">
-      <table className="min-w-full border-collapse border-gray-200 text-left">
+      <table className="min-w-full border-collapse text-left">
         <thead>
           <tr className="bg-[#F9F9FA]">
-            <th className="px-6 py-3 border-b border-gray-300 text-sm font-semibold text-gray-700">
-              Name
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Name</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-sm font-semibold text-gray-700">
-              Department
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Department</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-sm font-semibold text-gray-700">
-              Reasons
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Reasons</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
             </th>
-            <th className="px-6 py-3 border-b border-gray-300 text-sm font-semibold text-gray-700">
-              Status
+            <th className="px-4 py-3 text-[#606B85] font-medium">
+              <div className="flex items-center justify-start gap-2">
+                <span className="">Status</span>
+                <img src={informationIcon} className="h-4" alt="" />
+              </div>
             </th>
           </tr>
         </thead>
         <tbody>
           {appointments.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
-              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
+              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900">
                 {item.name}
               </td>
-              <td className="px-6 py-4 border-b border-gray-200 text-sm capitalize text-gray-900">
+              <td className="px-4 py-4 border-b border-gray-200 text-sm capitalize text-gray-900">
                 {item.department.name}
               </td>
-              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900 flex items-center justify-start gap-1">
+              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900 flex items-center justify-start gap-1">
                 {item.reasons?.map((reason, id) => <span key={id} className="">{reason}{item.reasons.length-1===id? "" : ","}</span>)}
               </td>
-              <td className="px-6 py-4 border-b border-gray-200 text-sm text-gray-900">
+              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900">
                 <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
                     className={`h-3 w-3 ${

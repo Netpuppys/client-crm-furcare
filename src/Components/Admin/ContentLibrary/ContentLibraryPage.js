@@ -31,7 +31,7 @@ const TableComponent = ({ handleCreateNew }) => {
         <thead>
           <tr className="bg-gray-100">
             <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-gray-200">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">
                   Topic
                 </p>
@@ -39,7 +39,7 @@ const TableComponent = ({ handleCreateNew }) => {
               </div>
             </th>
             <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-gray-200">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1">
                 <p className="">
                   Status
                 </p>
@@ -56,8 +56,8 @@ const TableComponent = ({ handleCreateNew }) => {
                 className="bg-[#F9F9FA] cursor-pointer"
               >
                 <td className="px-4 py-3 border-b border-gray-200 text-sm text-[#121C2D]">
-                  <div className="flex gap-5 items-center">
-                    <p className="w-5 text-xs text-[#606B85]">
+                  <div className="flex gap-4 items-center">
+                    <p className="w-4 text-xs text-[#606B85]">
                       {!openIndex.includes(index)? <FaChevronDown /> : <FaChevronUp />}
                     </p>
                     <p className="">
