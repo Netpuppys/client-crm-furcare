@@ -216,6 +216,7 @@ const DocumentTemplatePage = () => {
 
             <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
               <CreateNewDocumentTemplate 
+                selectedType={activeButton}
                 types={types}
                 fetchData={fetchData}
               />

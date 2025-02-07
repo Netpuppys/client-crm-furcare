@@ -7,20 +7,20 @@ import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-const CreateNewDocumentTemplate = ({ types, fetchData }) => {
+const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
     const { selectedBranch } = useAppContext()
 
     const { setAlert } = useAlertContext()
 
   const [formData, setFormData] = useState({
-    type: "",
+    type: selectedType,
     name: "",
     additionalNotes: "",
   });
 
   const dropDownList = ["English", "Hindi"]
 
-  const [ roles, setRoles] = useState([]); // Initial roles
+  const [ roles, setRoles] = useState(["English"]); // Initial roles
   const [ inputValue, setInputValue] = useState("");
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ disabled, setDisabled ] = useState(true)
@@ -90,7 +90,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
 
   return (
     <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6 h-full relative">
-      <div className="flex w-full items-center justify-between gap-12">
+      <div className="flex w-full items-center justify-between gap-[50px]">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
@@ -163,7 +163,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData }) => {
 
           {inputFocus &&
           <div className="w-full h-fit bg-white flex flex-col items-start px-2">
-            {dropDownList.map((item, index) => (
+            {dropDownList.filter(lang => !roles.includes(lang)).map((item, index) => (
               <button key={index} onClick={() => handleDropDownClick(item)} className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0">
                 <p className="capitalize text-sm">
                   {item}
