@@ -9,9 +9,11 @@ const frequencyArray = [ "Every Day", "Every Week", "Every Month" ]
 const appointmentTypes = [ "Appointments", "Finance", "Inventory", "Client & Patient" ]
 
 const EditReport = ({ selectedReport }) => {
-
     const { branchDetails } = useAppContext()
 
+    const [ showLabelOptions, setShowLabelOptions ] = useState(false)
+    const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
+    const [ disabled, setDisabled ] = useState(true)
     const [ formData, setFormData] = useState({
         name: selectedReport?.name,
         type: selectedReport?.type,
@@ -20,9 +22,6 @@ const EditReport = ({ selectedReport }) => {
         location: "",
         backgroundReport: selectedReport?.generateInBackground,
     });
-    const [ showLabelOptions, setShowLabelOptions ] = useState(false)
-    const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
-    const [ disabled, setDisabled ] = useState(true)
 
     useEffect(() => {
         if (formData.name === "" || formData.type === "" || formData.frequency === "" || formData.location === "" ) {

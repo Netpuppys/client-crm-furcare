@@ -143,7 +143,7 @@ const AddressForm = ({ branchData }) => {
 };
 
 const ServiceTable = ({ branchData }) => {
-  const services = branchData.services
+  const services = branchData.services;
 
   return (
     <div className="overflow-x-auto max-w-[50rem] mt-6">

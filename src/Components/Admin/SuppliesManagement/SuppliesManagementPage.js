@@ -83,16 +83,14 @@ const SuppliesTable = ({ suppliesData }) => {
 };
 
 const CreateNewForm = ({ fetchSuppliesData }) => {
-  const { setAlert } = useAlertContext()
 
+  const { setAlert } = useAlertContext()
   const { selectedBranch } = useAppContext()
 
   const [ vendorList, setVendorList ] = useState([])
-  const [formData, setFormData] = useState({
+  const [ formData, setFormData] = useState({
     name: "",
-    item: [
-      { name: "", vendor: {} }
-    ]
+    item: [ { name: "", vendor: {} } ]
   });
 
   useEffect(() => {
@@ -240,13 +238,6 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
                 Vendor
               </label>
             </div>
-            {/* <input
-              type="search"
-              className="w-full mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
-              placeholder="Placeholder"
-              value={field.vendor.name}
-              onChange={(e) => handleFieldChange(index, "vendor", e.target.value)}
-            /> */}
             <select
               value={JSON.stringify(field.vendor) || ""}
               onChange={(e) => handleVendorFieldChange(index, "vendor", e.target.value)}
@@ -263,7 +254,6 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
               ))}
             </select>
           </div>
-          {/* {index!==0 && */}
           <button
             onClick={() => handleDelete(index)}
             className="h-[2.625rem] min-w-4 flex items-center justify-center"
@@ -294,9 +284,17 @@ function SuppliesManagementPage() {
   const [ createNew, setCreateNew ] = useState(false);
   const [ suppliesData, setSuppliesData ] = useState([]);
 
-  const handleAdminClick = () => {
-    navigate("/admin/branch-units")
-  }
+  useEffect(() => {
+    axiosInstance
+      .get("/api/v1/supplies")
+      .then(res => {
+        const response = res.data.data.data
+        setSuppliesData(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
 
   const fetchSuppliesData = () => {
     axiosInstance
@@ -310,17 +308,9 @@ function SuppliesManagementPage() {
       })
   }
 
-  useEffect(() => {
-    axiosInstance
-      .get("/api/v1/supplies")
-      .then(res => {
-        const response = res.data.data.data
-        setSuppliesData(response)
-      })
-      .catch(err => {
-        console.error(err)
-      })
-  }, [])
+  const handleAdminClick = () => {
+    navigate("/admin/branch-units")
+  }
 
   const handleCreateNew = () => {
     setCreateNew(true)

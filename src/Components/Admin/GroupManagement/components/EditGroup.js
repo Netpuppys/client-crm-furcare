@@ -5,7 +5,7 @@ import axiosInstance from "../../../../utils/AxiosInstance";
 const resourceArray = [ "Resource 1", "Resource 2", "Resource 3", "Resource 4" ]
 
 const EditGroup = ({ editGroup, setGroupData }) => {
-    const { selectedBranch } = useAppContext();
+    const { selectedBranch } = useAppContext()
 
     const [ disabled, setDisabled ] = useState(true);
     const [ formData, setFormData ] = useState({

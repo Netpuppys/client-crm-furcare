@@ -17,10 +17,6 @@ function GroupManagementPage() {
     const [ editGroup, setEditGroup ] = useState()
     const [ groupData, setGroupData ] = useState([]);
 
-    const handleAdminClick = () => {
-        navigate("/admin/branch-units")
-    }
-
     useEffect(() => {
         axiosInstance
             .get("/api/v1/groups")
@@ -32,6 +28,10 @@ function GroupManagementPage() {
                 console.error(err)
             })
     }, [])
+
+    const handleAdminClick = () => {
+        navigate("/admin/branch-units")
+    }
 
     const handleCreateNew = () => {
         setCreateNew(true)

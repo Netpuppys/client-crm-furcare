@@ -32,11 +32,12 @@ const departments = [
 
 const EditBusinessUnit = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+
+  const businessUnitData = location.state?.businessUnitData;
+
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
-
-  const location = useLocation();
-  const businessUnitData = location.state?.businessUnitData;
 
   const { setAlert } = useAlertContext()
 
@@ -130,31 +131,12 @@ const EditBusinessUnit = () => {
   }, []);
 
   const handleSubmit = () => {
-    // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
-
-    // const services = selectedOptions.map((item) => ({
-    //   serviceId: "675b03becef11a5735b8c16f",
-    //   basePrice: Number(item.basePrice),
-    // }))
-
+    
     const sendData = {
       name: formData.unitName,
       type: formData.branchType,
       practice: formData.practiceType,
       active: formData.active
-      // services: services,
-      // departments: [
-      //   {
-      //     departmentId: formData.department,
-      //   },
-      // ],
-      // appointmentSlots: [
-      //   {
-      //     name: appointment.name,
-      //     departmentId: formData.department,
-      //     reasons: appointment.reasons,
-      //   },
-      // ],
     };
     
     axiosInstance.patch(`/api/v1/business-branches/${businessUnitData.id}`, sendData)

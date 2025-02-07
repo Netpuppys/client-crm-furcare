@@ -9,20 +9,19 @@ import { useNavigate } from 'react-router-dom';
 
 
 const AnimalClassesPage = () => {
-    const { setAlert } = useAlertContext()
-
     const navigate = useNavigate()
-
+    
+    const { setAlert } = useAlertContext()
     const { selectedBranch, sidebarExpanded } = useAppContext()
 
+    const [ disabled, setDisabled ] = useState()
+    const [ loaded, setLoaded ] = useState(false)
     const [ addClasses, setAddClasses ] = useState(false)
-    const [ branchAnimalClasses, setBranchAnimalClasses ] = useState([])
     const [ selectedValue, setSelectedValue ] = useState("")
     const [ editAnimalClass, setEditAnimalClass ] = useState()
     const [ filterredSamples, setFilterredSamples ] = useState()
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [ loaded, setLoaded ] = useState(false)
-    const [ disabled, setDisabled ] = useState()
+    const [ branchAnimalClasses, setBranchAnimalClasses ] = useState([])
 
     const handleAdminClick = () => {
         navigate("/admin/branch-units")

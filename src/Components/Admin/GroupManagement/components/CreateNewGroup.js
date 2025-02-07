@@ -7,15 +7,13 @@ const resourceArray = [ "Resource 1", "Resource 2", "Resource 3", "Resource 4" ]
 const CreateNewGroup = ({ setGroupData }) => {
     const { selectedBranch } = useAppContext()
 
-    const [formData, setFormData] = useState({
+    const [ disabled, setDisabled ] = useState(true)
+    const [ formData, setFormData ] = useState({
         name: "",
         description: "",
         resourses: ["676bf1041923dfac96de330b"]
     });
-    // const [ showLabelOptions, setShowLabelOptions ] = useState(false)
-    // const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
-    const [ disabled, setDisabled ] = useState(true)
-
+    
     useEffect(() => {
         if (formData.name === "" || formData.description === "" || !formData.resourses || !formData.resourses.length>0 ) {
             setDisabled(true)

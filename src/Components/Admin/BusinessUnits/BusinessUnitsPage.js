@@ -86,7 +86,7 @@ const BusinessUnitsPage = () => {
 
   const handleAdminClick = () => {
     navigate("/admin/branch-units")
-}
+  }
 
   const navigateToCreate = () => {
     navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css"; // React Quill styles
-import ReactQuill from "react-quill";
-// import axiosInstance from "../../../../utils/AxiosInstance";
-import BlueButton from "../../../../ui/BlueButton";
 import _ from 'lodash';
+import ReactQuill from "react-quill";
+import BlueButton from "../../../../ui/BlueButton";
+import "react-quill/dist/quill.snow.css"; // React Quill styles
 
 const AddNewItemForm = ({ content }) => {
   const [ initialData, setInitialData ] = useState({
@@ -25,7 +24,6 @@ const AddNewItemForm = ({ content }) => {
   });
   
   const [ additionalNotes, setAdditionalNotes ] = useState(content.content)
-  // const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
   const [ disabled, setDisabled ] = useState(true)
 
   useEffect(() => {

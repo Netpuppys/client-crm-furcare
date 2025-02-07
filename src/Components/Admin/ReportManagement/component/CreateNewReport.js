@@ -12,10 +12,13 @@ const frequencyArray = [ 'day', 'week', 'month' ]
 const appointmentTypes = [ 'appointments', 'admin', 'client_and_patient', 'inventory', 'communication', 'visits', 'leads' ]
 
 const CreateNewReport = ({ fetchAllReports }) => {
-    const { setAlert } = useAlertContext() 
     
+    const { setAlert } = useAlertContext()
     const { branchDetails, selectedBranch } = useAppContext()
 
+    const [ showLabelOptions, setShowLabelOptions ] = useState(false)
+    const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
+    const [ disabled, setDisabled ] = useState(true)
     const [ formData, setFormData] = useState({
         name: "",
         type: "",
@@ -24,9 +27,6 @@ const CreateNewReport = ({ fetchAllReports }) => {
         location: "",
         generateInBackground: false,
     });
-    const [ showLabelOptions, setShowLabelOptions ] = useState(false)
-    const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
-    const [ disabled, setDisabled ] = useState(true)
 
     useEffect(() => {
         if (formData.name === "" || formData.type === "" || formData.frequency === "" || formData.location === "" ) {
@@ -42,9 +42,7 @@ const CreateNewReport = ({ fetchAllReports }) => {
     };
 
     const handleSubmit = () => {
-        // Log the form data
-        console.log("Submitted Form Data: ", formData);
-
+        
         const sendData = {
             name: formData.name,
             type: formData.type,

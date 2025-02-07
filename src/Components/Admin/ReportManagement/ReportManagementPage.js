@@ -130,33 +130,33 @@ function ReportManagementPage() {
     navigate("/admin/branch-units")
   }
 
-    const fetchAllReports = () => {
-      axiosInstance
-            .get("/api/v1/reports")
-            .then(res => {
-                const response = res.data.data.data
-                setReportData(response)
-            })
-            .catch(err => {
-                console.error(err)
-            })
-    }
+  useEffect(() => {
+    axiosInstance
+        .get("/api/v1/reports")
+        .then(res => {
+            const response = res.data.data.data
+            setReportData(response)
+        })
+        .catch(err => {
+            console.error(err)
+        })
+  }, [])
 
-    useEffect(() => {
-      axiosInstance
-          .get("/api/v1/reports")
-          .then(res => {
-              const response = res.data.data.data
-              setReportData(response)
-          })
-          .catch(err => {
-              console.error(err)
-          })
-    }, [])
+  const fetchAllReports = () => {
+    axiosInstance
+      .get("/api/v1/reports")
+      .then(res => {
+          const response = res.data.data.data
+          setReportData(response)
+      })
+      .catch(err => {
+          console.error(err)
+      })
+  }
 
-    const handleCreateNew = () => {
-      setCreateNew(true)
-    }
+  const handleCreateNew = () => {
+    setCreateNew(true)
+  }
 
   return (
     <div className="w-full min-h-full px-[36px] py-4">

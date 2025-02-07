@@ -98,12 +98,12 @@ const TableComponent = ({ handleCreateNew }) => {
 
 
 const ContentLibraryPage = () => {
-  const [ createNew, setCreateNew ] = useState(false)
-  const [ content, setContent ] = useState()
+  const navigate = useNavigate()
 
   const { sidebarExpanded } = useAppContext()
 
-  const navigate = useNavigate()
+  const [ createNew, setCreateNew ] = useState(false)
+  const [ content, setContent ] = useState()
 
   const handleCreateNew = (item) => {
     setContent(item)

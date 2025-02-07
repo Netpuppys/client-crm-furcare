@@ -129,20 +129,13 @@ const CreateNewForm = ({ fetchStaffData }) => {
   };
 
   const handleSubmit = () => {
-
     const rolesArr = roles.map(({id}) => id)
-    console.log(rolesArr)
-    console.log("Submitted Form Data: ", formData);
-
 
     // Validation logic
     if (!formData.name || !formData.phone || !formData.email || !rolesArr.length===0) {
       toast.error("Please fill all required fields.");
       return;
     }
-
-    // Log the form data
-    console.log("Submitted Form Data: ", formData);
 
     const sendData = {
       name: formData.name,

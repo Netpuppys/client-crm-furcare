@@ -44,16 +44,15 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
     const inputRef = useRef(null);
 
     const { setAlert } = useAlertContext()
-
     const { selectedBranch } = useAppContext();
 
+    const [ disabled, setDisabled ] = useState(true)
     const [ newRoleData, setNewRoleData ] = useState({
         name: "",
         permissions: [],
         accessLevel: "",
         staff: ""
     })
-    const [ disabled, setDisabled ] = useState(true)
 
     useEffect(() => {
         if (newRoleData.name === "" || newRoleData.permissions.length===0 || newRoleData.accessLevel === "" || newRoleData.staff === "") {

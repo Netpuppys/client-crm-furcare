@@ -12,6 +12,7 @@ import BlueButton from "../../../ui/BlueButton";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
 const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
+
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
@@ -83,7 +84,6 @@ const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
 
 const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
   const { setAlert } = useAlertContext()
-
   const { selectedBranch } = useAppContext()
 
   const autocompleteServiceRef = useRef(null);
@@ -288,13 +288,6 @@ const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             State
           </label>
-          {/* <input
-            type="text"
-            className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
-            placeholder="State"
-            value={formData.state}
-            onChange={(e) => handleInputChange("state", e.target.value)}
-          /> */}
           <select
             className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
             value={formData.state}

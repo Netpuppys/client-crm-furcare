@@ -93,15 +93,15 @@ const RolesAndPermissionsPage = () => {
           ></div>
 
           <div
-              className={`${
-              editRole ? "block" : "hidden"
-              } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
+            className={`${
+            editRole ? "block" : "hidden"
+            } w-[50rem] fixed right-0 top-0 h-screen bg-white z-50 shadow-xl`}
           >
               <EditNewRoles
-                  setEditRole={setEditRole}
-                  selectedRole={selectedRole}
-                  setSelectedRole={setSelectedRole}
-                  fetchRolesList={fetchRolesList}
+                setEditRole={setEditRole}
+                selectedRole={selectedRole}
+                setSelectedRole={setSelectedRole}
+                fetchRolesList={fetchRolesList}
               />
           </div>
         </div>}
@@ -120,8 +120,8 @@ const RolesAndPermissionsPage = () => {
           </p>
         </div>
         <BlueButton
-            onClickHandler={handleCreateNew}
-            text={"Add"}
+          onClickHandler={handleCreateNew}
+          text={"Add"}
         />
       </div>
 

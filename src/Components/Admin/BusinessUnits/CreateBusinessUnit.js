@@ -8,14 +8,6 @@ import { toast } from "react-toastify";
 import statesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
-// const options = [
-//   "Service A",
-//   "Service B",
-//   "Service C", 
-//   "Service D",
-//   "Service E",
-// ]
-
 const appointmentSlots = [
   {
     id: "675b049dc90ac3a44472a525",
@@ -42,15 +34,15 @@ const departments = [
 ];
 
 const CreateBusinessUnit = () => {
-  const navigate = useNavigate()
-  const dropdownRef = useRef(null);
-  const toggleRef = useRef(null);
-
   const location = useLocation();
+  const navigate = useNavigate()
+
   const businessUnitId = location.state?.businessUnitId;
 
+  const dropdownRef = useRef(null);
+  const toggleRef = useRef(null);
   const autocompleteServiceRef = useRef(null);
-
+  
   const { setAlert } = useAlertContext()
   
   const [ suggestions, setSuggestions ] = useState([]);

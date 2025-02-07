@@ -54,17 +54,16 @@ const permissions = [
 
 
 const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesList }) => {
+    const { setAlert } = useAlertContext()
     const { selectedBranch } = useAppContext()
 
-    const  { setAlert } = useAlertContext()
-
+    const [ disabled, setDisabled ] = useState(true)
     const [ newRoleData, setNewRoleData ] = useState({
         name: selectedRole?.name,
         permissions: selectedRole?.permissions,
         accessLevel: selectedRole?.accessLevel,
         staff: selectedRole?.isStaff
     })
-    const [ disabled, setDisabled ] = useState(true)
     
     useEffect(() => {
         const initialData = {

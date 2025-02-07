@@ -8,8 +8,6 @@ import { useAlertContext } from '../../../../utils/AlertContext'
 const EditAnimalClass = ({ editAnimalClass, refreshList, setEditAnimalClass }) => {
     const { selectedBranch } = useAppContext()
 
-    console.log(selectedBranch.id, editAnimalClass.id)
-
     const { setAlert } = useAlertContext()
 
     const [ active, setActive ] = useState(editAnimalClass.availableAt[0].active)

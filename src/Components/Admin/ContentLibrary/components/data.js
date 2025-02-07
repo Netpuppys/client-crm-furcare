@@ -415,8 +415,6 @@ export const contentLibraryData = [
     },
     {
       category: "In House Dx",
-      items: [
-        
-      ],
+      items: [],
     },
   ];

@@ -1,27 +1,26 @@
 import React, { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css"; // React Quill styles
 import ReactQuill from "react-quill";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import "react-quill/dist/quill.snow.css"; // React Quill styles
 
 const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
-    const { selectedBranch } = useAppContext()
+  const dropDownList = [ "English", "Hindi" ]
 
-    const { setAlert } = useAlertContext()
+  const { setAlert } = useAlertContext()
+  const { selectedBranch } = useAppContext()
 
-  const [formData, setFormData] = useState({
+  const [ formData, setFormData ] = useState({
     type: selectedType,
     name: "",
     additionalNotes: "",
   });
 
-  const dropDownList = ["English", "Hindi"]
-
-  const [ roles, setRoles] = useState(["English"]); // Initial roles
-  const [ inputValue, setInputValue] = useState("");
+  const [ roles, setRoles ] = useState(["English"]); // Initial roles
+  const [ inputValue, setInputValue ] = useState("");
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ disabled, setDisabled ] = useState(true)
 
@@ -56,36 +55,33 @@ const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
       return;
     }
 
-    // Log the form data
-    console.log("Submitted Form Data: ", formData);
-
     const sendData = {
-        type: formData.type,
-        name: formData.name,
-        body: [
-            {
-                language: "english",
-                body: formData.additionalNotes
-            },
-            {
-                language: "hindi",
-                body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
-            }
-        ],
-        businessBranchId: selectedBranch.id
+      type: formData.type,
+      name: formData.name,
+      body: [
+          {
+              language: "english",
+              body: formData.additionalNotes
+          },
+          {
+              language: "hindi",
+              body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
+          }
+      ],
+      businessBranchId: selectedBranch.id
     }
 
     axiosInstance
-        .post("/api/v1/document-templates", sendData)
-        .then(res => {
-            console.log(res)
-            setAlert("Added Successfully")
-            fetchData()
-        })
-        .catch(err => {
-            console.error(err)
-            toast.error("Something Went Wrong")
-        })
+      .post("/api/v1/document-templates", sendData)
+      .then(res => {
+          console.log(res)
+          setAlert("Added Successfully")
+          fetchData()
+      })
+      .catch(err => {
+          console.error(err)
+          toast.error("Something Went Wrong")
+      })
   };
 
   return (
@@ -116,17 +112,17 @@ const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
             Name{" "}
           </label>
             <input
-                type="text"
-                value={formData.name}
-                placeholder="Placeholder"
-                onChange={e => handleInputChange("name", e.target.value)}
-                className="mt-1 p-2 border capitalize border-gray-300 placeholder:italic focus:outline-none rounded-lg classic"
+              type="text"
+              value={formData.name}
+              placeholder="Placeholder"
+              onChange={e => handleInputChange("name", e.target.value)}
+              className="mt-1 p-2 border capitalize border-gray-300 placeholder:italic focus:outline-none rounded-lg classic"
             />
         </div>
 
       </div>
 
-      {/* Health Concerns Dropdown */}
+      {/* languages */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col w-full">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
@@ -179,20 +175,20 @@ const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
       <div className="w-full flex flex-col">
         {/* <label className="font-medium text-[#121C2D] flex items-center gap-2"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
         <ReactQuill
-          className="mt-2 h-[400px] mb-12"
           theme="snow"
+          placeholder="Placeholder"
+          className="mt-2 h-[400px] mb-12"
           value={formData.additionalNotes}
           onChange={(value) => handleInputChange("additionalNotes", value)}
-          placeholder="Placeholder"
         />
       </div>
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">
         <BlueButton 
-            text={"Save"}
-            onClickHandler={handleSubmit}
-            disabled={disabled}
+          text={"Save"}
+          onClickHandler={handleSubmit}
+          disabled={disabled}
         />
       </div>
     </div>
