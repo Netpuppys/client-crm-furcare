@@ -21,7 +21,7 @@ const Alert = () => {
       <div className="w-full h-[3.75rem] bg-[#F4F9FF] flex items-center justify-between px-6">
         <div className="flex gap-4">
           <img src={alertIcon} className="w-6" alt="" />
-          <p className="text-[#030B5D] text-sm font-semibold ">{alert}</p>
+          <p className="text-[#030B5D] text-sm font-semibold text-nowrap">{alert}</p>
         </div>
 
         <button onClick={() => setAlert(null)} className="">

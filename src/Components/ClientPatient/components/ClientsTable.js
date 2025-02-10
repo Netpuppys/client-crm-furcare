@@ -1,7 +1,8 @@
 import React from "react";
 import informationIcon from '../../../Assets/icons/informationIcon.png'
+import { format } from "date-fns";
 
-const clients = [
+// const clients = [
 //   { account: "AFT12", name: "Anne Hathaway", pets: 1, lastVisit: "22 Jan 2024" },
 //   { account: "AFT13", name: "Abhilash Thiyagi", pets: 2, lastVisit: "22 Dec 2023" },
 //   { account: "AFT14", name: "Buna Birm", pets: 2, lastVisit: "12 Nov 2023" },
@@ -34,9 +35,9 @@ const clients = [
 //   { account: "AFT25", name: "Manny Ral", pets: 1, lastVisit: "22 Jan 2023" },
 //   { account: "AFT26", name: "Neena Gupta", pets: 1, lastVisit: "22 Jan 2023" },
 //   { account: "AFT27", name: "Owen Wilson", pets: 1, lastVisit: "22 Jan 2023" },
-];
+// ];
 
-const ClientsTable = ({ setSelectedClient }) => {
+const ClientsTable = ({ allClients, selectedClient, setSelectedClient }) => {
 
   return (
     <div className="w-full">
@@ -73,26 +74,33 @@ const ClientsTable = ({ setSelectedClient }) => {
             </tr>
             </thead>
             <tbody className="text-gray-700 text-sm">
-            {clients.length > 0 && clients.map((client, index) => (
+            {allClients.length > 0 && allClients.map((client, index) => (
                 <tr 
                     key={index} 
-                    onClick={() => setSelectedClient(true)}
+                    onClick={() => setSelectedClient(client.id)}
                     className="border-t even:bg-[#F9F9FA] cursor-pointer"
                 >
                     <td className="px-4 py-3">
-                        <input type="checkbox" className="w-4 h-4" />
+                        <input 
+                            type="checkbox"
+                            checked={selectedClient===client.id}
+                            className="w-4 h-4"
+                        />
                     </td>
                     <td className="px-4 py-3 text-[#0263E0] font-medium">
-                        <p className="underline underline-offset-2">{client.account}</p>
+                        <p className="underline underline-offset-2">{client.clientId}</p>
                     </td>
-                    <td className="px-4 py-3 text-[#121C2D]">{client.name}</td>
-                    <td className="px-4 py-3 font-semibold text-[#0263E0]">{client.pets}</td>
-                    <td className="px-4 py-3 text-[#0263E0] font-semibold">{client.lastVisit}</td>
+                    <td className="px-4 py-3 text-[#121C2D] capitalize">{client.firstName}{" "}{client.lastName}</td>
+                    <td className="px-4 py-3 font-semibold text-[#0263E0]">{client._count.pets}</td>
+                    <td className="px-4 py-3 text-[#0263E0] font-semibold">
+                        {/* {client.updatedAt.toLocaleDateString("en-GB").replace(/\//g, "-")} */}
+                        {format(new Date(client.updatedAt), "dd MMM yyyy")}
+                    </td>
                 </tr>
             ))}
             </tbody>
         </table>
-        {clients.length === 0 &&
+        {allClients.length === 0 &&
         <div className='w-full h-10 flex items-center justify-center'>
             No Clients and Patients Found
         </div>}

@@ -2,9 +2,23 @@ import React, { useState } from 'react'
 import ClientsTable from './components/ClientsTable'
 import ClientProfile from './components/ClientProfile'
 import { Link } from 'react-router-dom'
+import axiosInstance from '../../utils/AxiosInstance'
 
 const ClientPatientPage = () => {
   const [ selectedClient, setSelectedClient ] = useState(false)
+  const [ allClients, setAllClients ] = useState([])
+
+  useState(() => {
+    axiosInstance
+      .get('/api/v1/clients')
+      .then(res => {
+        const response = res.data.data.data
+        setAllClients(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  }, [])
 
   return (
     <div className='w-full h-[calc(100vh-4.75rem)] px-[36px] py-4 overflow-y-auto relative'>
@@ -32,6 +46,8 @@ const ClientPatientPage = () => {
 
       <div className='mt-4 max-w-[800px]'>
         <ClientsTable 
+          allClients={allClients}
+          selectedClient={selectedClient}
           setSelectedClient={setSelectedClient}
         />
       </div>
@@ -43,7 +59,9 @@ const ClientPatientPage = () => {
           className='w-[calc(100%-816px)] h-full'
         ></div>
         <div className='w-[816px] shadow-2xl bg-white h-full  bottom-0 right-0'>
-          <ClientProfile />
+          <ClientProfile
+            selectedClient={selectedClient}
+          />
         </div>
       </div>}
     </div>
