@@ -253,7 +253,7 @@ export default function CreateNew() {
     }
 
   return (
-    <div className="px-[36px] pt-6 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto">
+    <div className="px-[36px] pt-4 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto">
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] flex items-center text-xs'>
                 <Link
