@@ -129,45 +129,45 @@ const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             {"Language(s)"}{" "}
           </label>
-          <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
-          <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
+            <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
+            <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
 
-            {roles?.map((role, index) => (
-              <div
-                key={index}
-                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
-              >
-                {role}
-                <button
-                  onClick={() => removeRole(role)}
-                  className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+              {roles?.map((role, index) => (
+                <div
+                  key={index}
+                  className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                 >
-                  ✕
+                  {role}
+                  <button
+                    onClick={() => removeRole(role)}
+                    className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+                  >
+                    ✕
+                  </button>
+                </div>
+              ))}
+
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onFocus={() => setInputFocus(true)}
+                onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
+                className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
+              />
+            </div>
+
+            {inputFocus &&
+            <div className="w-full h-fit bg-white flex flex-col items-start px-2">
+              {dropDownList.filter(lang => !roles.includes(lang)).map((item, index) => (
+                <button key={index} onClick={() => handleDropDownClick(item)} className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0">
+                  <p className="capitalize text-sm">
+                    {item}
+                  </p>
                 </button>
-              </div>
-            ))}
-
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onFocus={() => setInputFocus(true)}
-              onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
-              className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
-            />
+              ))}
+            </div>}
           </div>
-
-          {inputFocus &&
-          <div className="w-full h-fit bg-white flex flex-col items-start px-2">
-            {dropDownList.filter(lang => !roles.includes(lang)).map((item, index) => (
-              <button key={index} onClick={() => handleDropDownClick(item)} className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0">
-                <p className="capitalize text-sm">
-                  {item}
-                </p>
-              </button>
-            ))}
-          </div>}
-        </div>
         </div>
       </div>
 

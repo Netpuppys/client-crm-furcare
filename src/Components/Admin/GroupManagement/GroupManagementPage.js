@@ -81,7 +81,7 @@ function GroupManagementPage() {
                     createNew ? "right-0 block" : "right-full hidden z-50"
                 } `}
             >
-                <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+                <div className="flex items-center justify-between shadow-sm bg-white z-20 relative h-[4.75rem] px-8">
                     <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
                         Create Group
                     </p>
@@ -92,7 +92,9 @@ function GroupManagementPage() {
 
                 <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
                     <CreateNewGroup
+                        groupData={groupData}
                         setGroupData={setGroupData}
+                        setCreateNew={setCreateNew}
                     />
                 </div>
             </div>
@@ -111,7 +113,7 @@ function GroupManagementPage() {
 
             <div
                 className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
-                    editGroup ? "right-0 block" : "right-full hidden z-50"
+                    editGroup? "right-0 block" : "right-full hidden z-50"
                 } `}
             >
                 <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
@@ -127,6 +129,8 @@ function GroupManagementPage() {
                     {editGroup &&
                     <EditGroup
                         editGroup={editGroup}
+                        groupData={groupData}
+                        setGroupData={setGroupData}
                         setEditGroup={setEditGroup}
                     />}
                 </div>

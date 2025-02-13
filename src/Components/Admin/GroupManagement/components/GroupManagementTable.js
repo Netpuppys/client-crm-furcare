@@ -10,6 +10,12 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
         setShowResourceList(index)
         setSelectedResources(data)
     }
+
+    const handleEdit = (item) => {
+        setEditGroup(item)
+        setSelectedResources(null)
+        setShowResourceList(null)
+    }
     
     return (
         <div className="">
@@ -31,6 +37,7 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                         <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                             <div className="flex items-center gap-1">
                                 <p className="">Resources</p>
+                                <img src={informationIcon} className="w-5" alt="" />
                             </div>
                         </th>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
@@ -44,8 +51,13 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                 <tbody className="divide-y divide-[#E1E3EA]">
                 {groupData?.map((item, index) => (
                 <tr key={index} className={`hover:bg-gray-50 border-b last:border-b-0 border-[#E1E3EA] `}>
-                    <td className="px-4 py-2 text-sm text-[#121C2D] capitalize ">
-                        {item.name}
+                    <td className="px-4 py-2 text-sm cursor-pointer hover:underline text-[#0263E0]">
+                        <button
+                            onClick={() => handleEdit(item)}
+                            className="capitalize hover:underline text-[#0263E0]"
+                        >
+                            {item.name}
+                        </button>
                     </td>
                     <td className="px-4 py-2 text-sm text-[#121C2D]">
                         {item.description}
@@ -53,7 +65,7 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                     <td className="px-4 py-2 text-sm relative">
                         <button
                             onClick={() => handleListClick(item.resources, index)}
-                            className="text-blue-600 underline"
+                            className="text-[#0263E0] underline"
                         >
                             list
                         </button>
@@ -65,6 +77,7 @@ const GroupManagementTable = ({ groupData, setEditGroup }) => {
                                 setShowResourceList={setShowResourceList}
                                 setSelectedResources={setSelectedResources}
                                 setEditGroup={setEditGroup}
+                                handleEdit={handleEdit}
                             />
                         </div>}
                     </td>

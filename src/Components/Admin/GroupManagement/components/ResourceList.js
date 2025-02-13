@@ -2,15 +2,9 @@ import { IoClose } from "react-icons/io5"
 import BlueButton from "../../../../ui/BlueButton"
 import popoverBeak from "../../../../Assets/icons/popoverBeak.png"
 
-const ResourceList = ({ selectedResources, setShowResourceList, setSelectedResources, selectedGroupData, setEditGroup }) => {
+const ResourceList = ({ selectedResources, selectedGroupData, setShowResourceList, setSelectedResources, handleEdit }) => {
     
     const handleClose = () => {
-        setSelectedResources(null)
-        setShowResourceList(null)
-    }
-
-    const handleEdit = () => {
-        setEditGroup(selectedGroupData)
         setSelectedResources(null)
         setShowResourceList(null)
     }
@@ -41,10 +35,12 @@ const ResourceList = ({ selectedResources, setShowResourceList, setSelectedResou
                 </p>
             ))}
         </div>
-        <BlueButton
-            text={"Edit"}
-            onClickHandler={handleEdit}
-        />
+        <button
+            onClick={() => handleEdit(selectedGroupData)}
+            className='px-4 py-2 disabled:bg-[#E1E3EA] disabled:border-[#E1E3EA] disabled:text-white hover:bg-transparent hover:text-accent-blue border border-accent-blue text-white text-nowrap bg-accent-blue rounded-lg font-medium leading-[1.25rem] text-sm'
+        >
+            Edit
+        </button>
     </div>
     )
 }

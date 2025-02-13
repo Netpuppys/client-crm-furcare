@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { z } from 'zod';
 import { Link, useNavigate } from 'react-router-dom';
 import BlueButton from '../../../ui/BlueButton';
-import { IoSearchOutline } from "react-icons/io5";
 import axiosInstance from "../../../utils/AxiosInstance"
-import { z } from 'zod';
 import { useAlertContext } from '../../../utils/AlertContext';
+import ClientDetailsForm from './ClientDetailsForm';
+import PetDetailsForm from './PetDetailsForm';
 
 const patientType = [ 'regular' ]
 
@@ -22,25 +23,25 @@ const clientSchema = z.object({
     referredBy: z.string().optional(),
 });
   
-  const petSchema = z.object({
+const petSchema = z.array(z.object({
     name: z.string().min(2, 'Pet name must be at least 2 characters'),
-    dob: z.string('Date of birth is required'),
+    dob: z.string().min(1, 'Date of birth is required'),
     gender: z.enum(['Male', 'Female']),
-    age: z.number('Age must be a number'),
-    weight: z.string('Weight is required'),
-    animalType: z.string('Animal Type is required'),
-    color: z.string('Color is required'),
+    age: z.number({ required_error: 'Age must be a number' }),
+    weight: z.string().min(1, 'Weight is required'),
+    animalType: z.string().min(1, 'Animal Type is required'),
+    color: z.string().min(1, 'Color is required'),
     sterilizationStatus: z.enum(['Intact', 'Sterilized']),
-    patientType: z.string('Patient type is required'),
-});
+    patientType: z.string().min(1, 'Patient type is required'),
+}));
 
 export default function CreateNew() {
     const navigate = useNavigate()
 
     const { setAlert } = useAlertContext()
 
-    const dropdownRef = useRef(null);
-    const toggleRef = useRef(null);
+    // const dropdownRef = useRef(null);
+    // const toggleRef = useRef(null);
 
     const [ clientDetails, setClientDetails ] = useState({
         firstName: '',
@@ -55,7 +56,7 @@ export default function CreateNew() {
         discounts: '',
         referredBy: '',
     });
-    const [ petDetails, setPetDetails ] = useState({
+    const [ petDetails, setPetDetails ] = useState([{
         name: '',
         dob: '',
         gender: '',
@@ -67,18 +68,90 @@ export default function CreateNew() {
         color: '',
         sterilizationStatus: '',
         patientType: '',
-    });
+    }]);
 
-    const [ formErrors, setFormErrors ] = useState({});
+    const [ formErrors, setFormErrors ] = useState({})
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [ formattedAnimals, setFormattedAnimals ] = useState([])
-    const [ showDropDown, setShowDropDown ] = useState(false)
+    // const [ formattedAnimals, setFormattedAnimals ] = useState([])
+    // const [ showDropDown, setShowDropDown ] = useState(false)
     const [ disabled, setDisabled ] = useState(true)
 
-    const handlePetDobChange = (e) => {
+    const handleClientChange = (e) => {
         const { name, value } = e.target;
-        console.log(value)
-        setPetDetails((prev) => ({ ...prev, [name]: value }));
+        setClientDetails({ ...clientDetails, [name]: value });
+    };
+
+    useEffect(() => { 
+        console.log(formErrors)
+    }, [formErrors])
+
+    useEffect(() => {
+        const validationClient = clientSchema.safeParse(clientDetails);
+        const validationPet = petSchema.safeParse(petDetails);
+    
+        if (!validationClient.success || !validationPet.success) {
+            setDisabled(true)
+            return;
+        }
+
+        setDisabled(false)
+    }, [clientDetails, petDetails])
+
+    useEffect(() => {
+        axiosInstance
+            .get("/api/v1/animal-classes")
+            .then(res => {
+                const response = res.data.data.data
+                const formattedArr = response.flatMap(item =>
+                    item.breeds.map(breed => ({ value: `${item.name} - ${breed}`, id: item.id, breed: breed }))
+                );
+                setAllAnimalClasses(formattedArr)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }, []);
+
+    // useEffect(() => {
+    //     const handleClickOutside = (event) => {
+    //       if (
+    //         dropdownRef.current &&
+    //         !dropdownRef.current.contains(event.target) &&
+    //         toggleRef.current &&
+    //         !toggleRef.current.contains(event.target)
+    //       ) {
+    //         setShowDropDown(false);
+    //       }
+    //     };
+    
+    //     document.addEventListener("mousedown", handleClickOutside);
+    //     return () => {
+    //       document.removeEventListener("mousedown", handleClickOutside);
+    //     };
+    // }, []);
+
+    // const toggleDropdown = () => {
+    //     setShowDropDown(true);
+    // };
+
+    const handlePetChange = (e, index) => {
+        const { name, value } = e.target;
+        // setPetDetails({ ...petDetails, [name]: value });
+        setPetDetails(prevDetails =>
+            prevDetails.map((pet, i) =>
+                i === index ? { ...pet, [name]: value } : pet
+            )
+        );
+    };
+
+    const handlePetDobChange = (e, index) => {
+        const { name, value } = e.target;
+        // setPetDetails((prev) => ({ ...prev, [name]: value }));
+        setPetDetails(prevDetails =>
+            prevDetails.map((pet, i) =>
+                i === index ? { ...pet, [name]: value } : pet
+            )
+        );
         
         // Calculate age when the date changes
         if (value) {
@@ -100,96 +173,77 @@ export default function CreateNew() {
 
             const totalMonths = years * 12 + months;
 
-            setPetDetails((prev) => ({ ...prev, age: totalMonths }));
+            // setPetDetails((prev) => ({ ...prev, age: totalMonths }));
+
+            setPetDetails(prevDetails =>
+                prevDetails.map((pet, i) =>
+                    i === index ? { ...pet, age: totalMonths } : pet
+                )
+            );
         }
     };
 
-    useEffect(() => {
-        const validationClient = clientSchema.safeParse(clientDetails);
-        const validationPet = petSchema.safeParse(petDetails);
-    
-        if (!validationClient.success || !validationPet.success) {
-            setDisabled(true)
-            return;
-        }
-
-        setDisabled(false)
-    }, [clientDetails, petDetails])
-
-    useEffect(() => {
-        if (petDetails.animalType !== "") {
-            const filterred = allAnimalClasses.filter((item) => 
-                item.value.toLowerCase().includes(petDetails.animalType.toLowerCase()
-            ))
-
-            setFormattedAnimals(filterred)
-            return
-        }
-
-        setFormattedAnimals(allAnimalClasses)
-    }, [petDetails.animalType, allAnimalClasses])
-
-    useEffect(() => {
-        axiosInstance
-            .get("/api/v1/animal-classes")
-            .then(res => {
-                const response = res.data.data.data
-                
-                // setFormattedAnimals(response)
-                
-                const formattedArr = response.flatMap(item =>
-                    item.breeds.map(breed => ({ value: `${item.name} - ${breed}`, id: item.id, breed: breed }))
-                );
-                setAllAnimalClasses(formattedArr)
-                setFormattedAnimals(formattedArr);
-            })
-            .catch(err => {
-                console.error(err)
-            })
-    }, []);
-
-    useEffect(() => {
-        const handleClickOutside = (event) => {
-          if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target) &&
-            toggleRef.current &&
-            !toggleRef.current.contains(event.target)
-          ) {
-            setShowDropDown(false);
-          }
-        };
-    
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => {
-          document.removeEventListener("mousedown", handleClickOutside);
-        };
-    }, []);
-
-    const toggleDropdown = () => {
-        setShowDropDown(true);
+    const handlePetGenderChange = (value, index) => {
+        // setPetDetails({ ...petDetails, gender: value });
+        setPetDetails(prevDetails =>
+            prevDetails.map((pet, i) =>
+                i === index ? { ...pet, gender: value } : pet
+            )
+        );
     };
 
-    const handleClientChange = (e) => {
-        const { name, value } = e.target;
-        setClientDetails({ ...clientDetails, [name]: value });
+    const handlePetSterilizationChange = (value, index) => {
+        // setPetDetails({ ...petDetails, sterilizationStatus: value });
+        setPetDetails(prevDetails =>
+            prevDetails.map((pet, i) =>
+                i === index ? { ...pet, sterilizationStatus: value } : pet
+            )
+        );
     };
 
-    const handlePetChange = (e) => {
-        const { name, value } = e.target;
-        setPetDetails({ ...petDetails, [name]: value });
+    const handleAddAnimalClass = (item, index) => {
+        // setPetDetails({ 
+        //     ...petDetails, 
+        //     animalClassId: item.id, 
+        //     breed: item.breed, 
+        //     animalType: item.value
+        // });
+        setPetDetails(prevDetails =>
+            prevDetails.map((pet, i) =>
+                i === index ? { 
+                    ...pet, 
+                    animalClassId: item.id, 
+                    breed: item.breed, 
+                    animalType: item.value
+                } : pet
+            )
+        );
     };
 
-    const handlePetGenderChange = (value) => {
-        setPetDetails({ ...petDetails, gender: value });
+    const handlePetAdd = () => {
+        setPetDetails(prevDetails => [
+            ...prevDetails,
+            {
+                name: '',
+                dob: '',
+                gender: '',
+                age: '',
+                weight: '',
+                breed: '',
+                animalType: "",
+                animalClassId: "",
+                color: '',
+                sterilizationStatus: '',
+                patientType: '',
+            }
+        ]);
     };
 
-    const handlePetSterilizationChange = (value) => {
-        setPetDetails({ ...petDetails, sterilizationStatus: value });
-    };
+    // const handlePetDelete = (index) => {
+    //     setPetDetails(prevDetails => prevDetails.filter((_, i) => i !== index));
+    // };
 
     const onSubmit = () => {
-        console.log(clientDetails, petDetails);
         
         const validationClient = clientSchema.safeParse(clientDetails);
         const validationPet = petSchema.safeParse(petDetails);
@@ -204,7 +258,7 @@ export default function CreateNew() {
     
         setFormErrors({}); // Clear errors on success
 
-        const dob = new Date(petDetails.dob).toISOString(); 
+        // const dob = new Date(petDetails.dob).toISOString(); 
 
         const sendData = {
             firstName: clientDetails.firstName,
@@ -217,19 +271,23 @@ export default function CreateNew() {
             city: clientDetails.city,
             postalCode: clientDetails.postalCode,
             referredBy: clientDetails.referredBy,
-            pets: [
-                {
-                    name: petDetails.name,
-                    gender: petDetails.gender.toLowerCase(),
+            pets: petDetails.map(pet => {
+                const dob = new Date(pet.dob).toISOString(); 
+
+                const petObj = {
+                    name: pet.name,
+                    gender: pet.gender.toLowerCase(),
                     dob: dob,
-                    weight: Number(petDetails.weight),
-                    animalClassId: petDetails.animalClassId,
-                    breed: petDetails.breed.toLowerCase(),
-                    color: petDetails.color.toLowerCase(),
-                    sterilizationStatus: petDetails.sterilizationStatus.toLowerCase(),
-                    patientType: petDetails.patientType.toLowerCase()
-                },
-            ]
+                    weight: Number(pet.weight),
+                    animalClassId: pet.animalClassId,
+                    breed: pet.breed.toLowerCase(),
+                    color: pet.color.toLowerCase(),
+                    sterilizationStatus: pet.sterilizationStatus.toLowerCase(),
+                    patientType: pet.patientType.toLowerCase()
+                };
+
+                return petObj;
+            })
         }
 
         axiosInstance
@@ -237,20 +295,12 @@ export default function CreateNew() {
             .then(res => {
                 console.log(res)
                 navigate("/client-patient")
-                setAlert(<><p className='font-semibold'>Account Created {res.data.data.clientId}.</p> You can now schedule an appointment.</>)
+                setAlert(<><p className='font-semibold'>Account Created {res.data.data.clientId}.</p></>)
             })
             .catch(err => {
                 console.error(err)
             })
-        
-        console.log("Client Details:", clientDetails);
-        console.log("Pet Details:", petDetails);
     };
-
-    const handleDropDownClick = (item) => {
-        setPetDetails({ ...petDetails, animalClassId: item.id, breed: item.breed, animalType: item.value });
-        setShowDropDown(false)
-    }
 
   return (
     <div className="px-[36px] pt-4 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto">
@@ -276,6 +326,7 @@ export default function CreateNew() {
                       Cancel
                     </p>
                 </Link>
+
                 <BlueButton
                     text={"Create"}
                     onClickHandler={onSubmit}
@@ -283,195 +334,19 @@ export default function CreateNew() {
                 />
             </div>
         </div>
-        {console.log(formErrors)}
 
         <div className="w-[1000px]">
             <h1 className="text-2xl font-bold mb-6">Client Details</h1>
-            <div className="grid grid-cols-2 gap-4 gap-x-[50px] mb-6">
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        First Name
-                    </label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="firstName"
-                        value={clientDetails.firstName || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Last Name</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="lastName"
-                        value={clientDetails.lastName || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Mobile Number</label>
-                    <input
-                        type="tel"
-                        placeholder='Field Text'
-                        name="mobile"
-                        value={clientDetails.mobile || ''}
-                        onChange={handleClientChange}
-                        maxLength={10}
-                        pattern="[0-9]{10}"
-                        inputMode="numeric"
-                        onInput={(e) => (e.target.value = e.target.value.replace(/\D/g, ''))}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Email Address</label>
-                    <input
-                        type="email"
-                        placeholder='Field Text'
-                        name="email"
-                        value={clientDetails.email || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Postal Code</label>
-                    <div className='w-full flex overflow-hidden border border-[#8891AA] rounded-md'>
-                        <div className='px-2 flex text-[#606B85] items-center justify-center bg-[#F9F9FA] border-r border-[#E1E3EA]'>
-                            <IoSearchOutline />
-                        </div>
-                        <input
-                            type="tel"
-                            placeholder="Field Text"
-                            name="postalCode"
-                            value={clientDetails.postalCode || ''}
-                            onChange={(e) => {
-                                const value = e.target.value.replace(/\D/g, ''); // Remove non-numeric characters
-                                if (value.length <= 6) {
-                                    handleClientChange(e); // Only update state if within 6 digits
-                                }
-                            }}
-                            className="w-full px-2 capitalize placeholder:italic text-sm py-2 h-[36px] focus:outline-none"
-                        />
-                    </div>
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Address</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="address"
-                        value={clientDetails.address || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        City</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="city"
-                        value={clientDetails.city || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        State</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="state"
-                        value={clientDetails.state || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Country</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="country"
-                        value={clientDetails.country}
-                        disabled
-                        className="w-full px-2 capitalize border-[#8891AA] placeholder:italic text-sm  py-2 border rounded-md bg-[#F4F4F6] focus:outline-none"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Discounts</label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="discounts"
-                        value={clientDetails.discounts || ''}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
-                    />
-                </div>
-
-                <div>
-                    <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
-                        <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
-                        Referred By
-                    </label>
-                    <input
-                        type="text"
-                        placeholder='Field Text'
-                        name="referredBy"
-                        value={clientDetails.referredBy}
-                        onChange={handleClientChange}
-                        className="w-full px-2 capitalize border-[#8891AA] placeholder:italic text-sm  py-2 border rounded-md focus:outline-none"
-                    />
-                </div>
-
-                <div className='flex items-center justify-center'>
-                    <button
-                        className='text-[#0263E0] text-sm font-semibold'
-                    >
-                        Add Additional Owner(s)/Caretaker(s)
-                    </button>
-                </div>
-            </div>
-
+            
+            <ClientDetailsForm
+                clientDetails={clientDetails}
+                handleClientChange={handleClientChange}
+            />
 
             {/* pet details */}
             <h1 className="text-2xl font-bold mb-6">Pet Details</h1>
 
-            <div className="grid grid-cols-2 gap-x-[50px] gap-4">
+            {/* <div className="grid grid-cols-2 gap-x-[50px] gap-4">
                 <div>
                     <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
                         <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
@@ -503,7 +378,6 @@ export default function CreateNew() {
                             >
                                 Male
                             </button>
-
                             <button
                                 className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
                                     petDetails.gender==='Female'
@@ -625,39 +499,37 @@ export default function CreateNew() {
                         Sterilization Status
                     </label>
                     <div className="flex mt-1 h-[2.25rem]">
-                            <button
-                                className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
-                                    petDetails.sterilizationStatus==='Intact'
-                                    ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                                    : "border-gray-300 text-[#121C2D] rounded-l-lg"
-                                }`}
-                                onClick={() => handlePetSterilizationChange('Intact')}
-                            >
-                                Intact
-                            </button>
-
-                            <button
-                                className={`h-full flex items-center justify-center px-4 border ${
-                                    petDetails.sterilizationStatus==='Sterilized'
-                                    ? "bg-[#F4F9FF] border-[#006DFA] border-x-gray-300 text-[#006DFA]"
-                                    : "border-gray-300 text-[#121C2D]"
-                                }`}
-                                onClick={() => handlePetSterilizationChange('Sterilized')}
-                            >
-                                Sterilized
-                            </button>
-
-                            <button
-                                className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
-                                    petDetails.sterilizationStatus==='Unsure'
-                                    ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                                    : "border-gray-300 text-[#121C2D] rounded-r-lg"
-                                }`}
-                                onClick={() => handlePetSterilizationChange('Unsure')}
-                            >
-                                Unsure
-                            </button>
-                        </div>
+                        <button
+                            className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
+                                petDetails.sterilizationStatus==='Intact'
+                                ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
+                                : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                            }`}
+                            onClick={() => handlePetSterilizationChange('Intact')}
+                        >
+                            Intact
+                        </button>
+                        <button
+                            className={`h-full flex items-center justify-center px-4 border ${
+                                petDetails.sterilizationStatus==='Sterilized'
+                                ? "bg-[#F4F9FF] border-[#006DFA] border-x-gray-300 text-[#006DFA]"
+                                : "border-gray-300 text-[#121C2D]"
+                            }`}
+                            onClick={() => handlePetSterilizationChange('Sterilized')}
+                        >
+                            Sterilized
+                        </button>
+                        <button
+                            className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
+                                petDetails.sterilizationStatus==='Unsure'
+                                ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
+                                : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                            }`}
+                            onClick={() => handlePetSterilizationChange('Unsure')}
+                        >
+                            Unsure
+                        </button>
+                    </div>
                 </div>
                 <div>
                     <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
@@ -688,7 +560,26 @@ export default function CreateNew() {
                         Add Another Pet
                     </button>
                 </div>
-            </div>
+            </div> */}
+
+            {petDetails.map((pet, index) => (
+            <PetDetailsForm
+                index={index}
+                petDetails={pet}
+                handlePetChange={handlePetChange}
+                handlePetDobChange={handlePetDobChange}
+                handlePetGenderChange={handlePetGenderChange}
+                // toggleRef={toggleRef}
+                // toggleDropdown={toggleDropdown}
+                // showDropDown={showDropDown}
+                // dropdownRef={dropdownRef}
+                // formattedAnimals={formattedAnimals}
+                handlePetAdd={handlePetAdd}
+                allAnimalClasses={allAnimalClasses}
+                handleAddAnimalClass={handleAddAnimalClass}
+                handlePetSterilizationChange={handlePetSterilizationChange}
+                patientType={patientType}
+            />))}
         </div>
     </div>
   );

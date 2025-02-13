@@ -37,7 +37,7 @@ import { format } from "date-fns";
 //   { account: "AFT27", name: "Owen Wilson", pets: 1, lastVisit: "22 Jan 2023" },
 // ];
 
-const ClientsTable = ({ allClients, selectedClient, setSelectedClient }) => {
+const ClientsTable = ({ allClients, loaded, selectedClient, setSelectedClient }) => {
 
   return (
     <div className="w-full">
@@ -100,7 +100,7 @@ const ClientsTable = ({ allClients, selectedClient, setSelectedClient }) => {
             ))}
             </tbody>
         </table>
-        {allClients.length === 0 &&
+        {allClients.length === 0 && loaded &&
         <div className='w-full h-10 flex items-center justify-center'>
             No Clients and Patients Found
         </div>}
