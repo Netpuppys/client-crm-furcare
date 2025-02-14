@@ -27,14 +27,14 @@ const ServiceForm = () => {
 
   useEffect(() => {
     axiosInstance
-        .get("/api/v1/services")
-        .then(res => {
-            console.log(res.data.data.data)
-            setOptions(res.data.data.data)
-        })
-        .catch(err => {
-            console.error(err)
-        })
+      .get("/api/v1/services")
+      .then(res => {
+          console.log(res.data.data.data)
+          setOptions(res.data.data.data)
+      })
+      .catch(err => {
+          console.error(err)
+      })
   }, [])
 
   const toggleDropdown = () => {
@@ -66,6 +66,7 @@ const ServiceForm = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
+    
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };

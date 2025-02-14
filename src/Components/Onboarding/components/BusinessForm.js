@@ -4,6 +4,8 @@ import { FaSearch } from "react-icons/fa";
 import axiosInstance from "../../../utils/AxiosInstance";
 
 export default function BusinessForm() {
+    
+    const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
     const [formData, setFormData] = useState({
         businessUnitType: "",
         businessUnitName: "Branch 400003",
@@ -19,7 +21,6 @@ export default function BusinessForm() {
         postalCode: "400000",
         animalClasses: "",
     });
-    const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

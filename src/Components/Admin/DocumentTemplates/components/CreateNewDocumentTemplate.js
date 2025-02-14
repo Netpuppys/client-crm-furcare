@@ -7,7 +7,11 @@ import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 
-const CreateNewDocumentTemplate = ({ selectedType, types, fetchData }) => {
+const CreateNewDocumentTemplate = ({ 
+  types, 
+  fetchData,
+  selectedType, 
+}) => {
   const dropDownList = [ "English", "Hindi" ]
 
   const { setAlert } = useAlertContext()

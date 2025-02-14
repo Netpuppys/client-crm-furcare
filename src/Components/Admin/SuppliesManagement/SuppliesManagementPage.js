@@ -9,7 +9,9 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 
-const SuppliesTable = ({ suppliesData }) => {
+const SuppliesTable = ({
+  suppliesData
+}) => {
 
   return (
     <div className="overflow-x-auto">

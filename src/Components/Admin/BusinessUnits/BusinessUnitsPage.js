@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
-import editIcon from "../../../Assets/icons/editIcon.png"
-import axiosInstance from "../../../utils/AxiosInstance";
-import { useAppContext } from "../../../utils/AppContext";
 import BlueButton from "../../../ui/BlueButton";
+import axiosInstance from "../../../utils/AxiosInstance";
+import editIcon from "../../../Assets/icons/editIcon.png";
+import { useAppContext } from "../../../utils/AppContext";
 
-const Card = ({ branch, active, selected, address, type, practice, currency, businessUnitData }) => {
+const Card = ({
+  type,
+  branch,
+  active,
+  address,
+  selected,
+  practice,
+  currency,
+  businessUnitData
+}) => {
   const navigate = useNavigate()
 
   const handleEdit = () => {

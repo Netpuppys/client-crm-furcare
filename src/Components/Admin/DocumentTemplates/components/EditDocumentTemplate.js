@@ -7,7 +7,11 @@ import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
 
-const EditDocumentTemplate = ({ types, openEditModule, fetchData }) => {
+const EditDocumentTemplate = ({ 
+  types,
+  fetchData,
+  openEditModule,
+}) => {
   const { setAlert } = useAlertContext()
 
   const [formData, setFormData] = useState({

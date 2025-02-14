@@ -3,14 +3,12 @@ import { useAlertContext } from '../../../utils/AlertContext';
 import axiosInstance from "../../../utils/AxiosInstance";
 import EditAnimalClass from './components/EditAnimalClass';
 import informationIcon from "../../../Assets/icons/informationIcon.png";
-// import { toast } from 'react-toastify';
 import { useAppContext } from '../../../utils/AppContext';
 import { useNavigate } from 'react-router-dom';
 
-
 const AnimalClassesPage = () => {
     const navigate = useNavigate()
-    
+
     const { setAlert } = useAlertContext()
     const { selectedBranch, sidebarExpanded } = useAppContext()
 
@@ -127,7 +125,6 @@ const AnimalClassesPage = () => {
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] text-xs'>
                 <button
-                    // to={"/admin/branch-units"}
                     onClick={handleAdminClick}
                     className='underline inline cursor-pointer'
                 >
@@ -167,26 +164,26 @@ const AnimalClassesPage = () => {
         <div className='mt-6 w-full'>
             <table className="w-full">
                 <thead>
-                <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
-                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
-                        <div className="flex items-center gap-2">
-                            <p className="">Name</p>
-                            <img src={informationIcon} className="w-5" alt="" />
-                        </div>
-                    </th>
-                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
-                        <div className="flex items-center gap-2">
-                            <p className="">Breeds</p>
-                            <img src={informationIcon} className="w-5" alt="" />
-                        </div>
-                    </th>
-                    <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
-                        <div className="flex items-center gap-2">
-                            <p className="">Status</p>
-                            <img src={informationIcon} className="w-5" alt="" />
-                        </div>
-                    </th>
-                </tr>
+                    <tr className="bg-gray-100 text-left text-sm font-medium text-gray-600 border-b border-gray-200">
+                        <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                            <div className="flex items-center gap-2">
+                                <p className="">Name</p>
+                                <img src={informationIcon} className="w-5" alt="" />
+                            </div>
+                        </th>
+                        <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                            <div className="flex items-center gap-2">
+                                <p className="">Breeds</p>
+                                <img src={informationIcon} className="w-5" alt="" />
+                            </div>
+                        </th>
+                        <th className="px-2 py-3 text-left text-sm font-semibold text-[#606B85]">
+                            <div className="flex items-center gap-2">
+                                <p className="">Status</p>
+                                <img src={informationIcon} className="w-5" alt="" />
+                            </div>
+                        </th>
+                    </tr>
                 </thead>
                 <tbody>
                     <tr className={`${addClasses? "black" : "hidden" } hover:bg-gray-50 hidde text-sm text-gray-700 border-b border-gray-200`}>
@@ -246,10 +243,10 @@ const AnimalClassesPage = () => {
           ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
           top-0 h-screen right-0 flex z-50`}>
 
-          <div 
-            onClick={() => setEditAnimalClass(false)}
-            className="w-[calc(100%-45rem)] h-full"
-          ></div>
+            <div 
+                onClick={() => setEditAnimalClass(false)}
+                className="w-[calc(100%-45rem)] h-full"
+            ></div>
 
             <EditAnimalClass
                 editAnimalClass={editAnimalClass}

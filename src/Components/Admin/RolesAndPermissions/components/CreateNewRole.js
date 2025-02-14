@@ -40,7 +40,11 @@ const permissions = [
     },
 ];
 
-const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
+const CreateNewRole = ({ 
+    setAddNewModal,
+    fetchRolesList
+}) => {
+
     const inputRef = useRef(null);
 
     const { setAlert } = useAlertContext()
@@ -55,7 +59,11 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
     })
 
     useEffect(() => {
-        if (newRoleData.name === "" || newRoleData.permissions.length===0 || newRoleData.accessLevel === "" || newRoleData.staff === "") {
+        if (newRoleData.name === "" || 
+            newRoleData.accessLevel === "" || 
+            newRoleData.permissions.length===0 || 
+            newRoleData.staff === ""
+        ) {
             setDisabled(true)
             return
         }
@@ -94,7 +102,6 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
     }
     
     const handleSubmit = () => {
-
         const updatedPermissions = newRoleData.permissions?.map(({ name, ...rest }) => rest);
 
         const data = {

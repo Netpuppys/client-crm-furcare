@@ -8,7 +8,10 @@ const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-
 const frequencyArray = [ "Every Day", "Every Week", "Every Month" ]
 const appointmentTypes = [ "Appointments", "Finance", "Inventory", "Client & Patient" ]
 
-const EditReport = ({ selectedReport }) => {
+const EditReport = ({
+    selectedReport
+}) => {
+    
     const { branchDetails } = useAppContext()
 
     const [ showLabelOptions, setShowLabelOptions ] = useState(false)

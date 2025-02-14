@@ -7,7 +7,11 @@ import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import { toast } from "react-toastify";
 
-const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
+const CreateNewGroup = ({ 
+    groupData, 
+    setGroupData, 
+    setCreateNew,
+}) => {
 
     const { setAlert } = useAlertContext()
     const { selectedBranch } = useAppContext()

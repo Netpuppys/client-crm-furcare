@@ -2,7 +2,11 @@ import { useState } from "react";
 import ResourceList from "./ResourceList";
 import informationIcon from "../../../../Assets/icons/informationIcon.png";
 
-const GroupManagementTable = ({ groupData, setEditGroup }) => {
+const GroupManagementTable = ({ 
+    groupData,
+    setEditGroup
+}) => {
+
     const [ showResourceList, setShowResourceList ] = useState()
     const [ selectedResources, setSelectedResources ] = useState()
 

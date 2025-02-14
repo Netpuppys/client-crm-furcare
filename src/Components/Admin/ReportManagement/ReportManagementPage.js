@@ -9,7 +9,11 @@ import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
 import { useAppContext } from "../../../utils/AppContext";
 
-const ReportTable = ({ reportData, setEditGroup }) => {
+const ReportTable = ({ 
+  reportData,
+  setEditGroup
+}) => {
+
   const [ showLabelsList, setShowLabelsList ] = useState()
   const [ selectedGroup, setSelectedGroup ] = useState()
 

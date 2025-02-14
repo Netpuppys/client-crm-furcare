@@ -3,7 +3,10 @@ import axiosInstance from './AxiosInstance';
 
 const AppContext = createContext();
 
-export const AppProvider = ({ children }) => {
+export const AppProvider = ({ 
+  children
+}) => {
+
   const [ branchDetails, setBranchDetails ] = useState()
   const [ selectedBranch, setSelectedBranch ] = useState()
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true);

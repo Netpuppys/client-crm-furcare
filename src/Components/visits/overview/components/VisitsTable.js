@@ -7,6 +7,7 @@ import informationIcon from '../../../../Assets/icons/informationIcon.png'
 // ]
 
 const VisitsTable = () => {
+    
   return (
     <table className="w-full border-collapse">
         <thead className="bg-[#F9F9FA] text-[#606B85] text-left text-sm font-semibold">

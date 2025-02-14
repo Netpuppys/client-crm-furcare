@@ -7,7 +7,10 @@ import { SlPencil } from "react-icons/sl";
 import { HiPlus } from "react-icons/hi";
 
 
-const ClientProfile = ({ selectedClient }) => {
+const ClientProfile = ({ 
+    selectedClient
+}) => {
+    
     const [ clientData, setClientData ] = useState()
 
     useEffect(() => {

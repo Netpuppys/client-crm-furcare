@@ -5,7 +5,11 @@ import axiosInstance from '../../../../utils/AxiosInstance'
 import { useAppContext } from '../../../../utils/AppContext'
 import { useAlertContext } from '../../../../utils/AlertContext'
 
-const EditAnimalClass = ({ editAnimalClass, refreshList, setEditAnimalClass }) => {
+const EditAnimalClass = ({ 
+    refreshList, 
+    editAnimalClass, 
+    setEditAnimalClass 
+}) => {
     const { selectedBranch } = useAppContext()
 
     const { setAlert } = useAlertContext()

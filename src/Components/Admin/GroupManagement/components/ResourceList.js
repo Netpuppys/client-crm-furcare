@@ -1,8 +1,14 @@
 import { IoClose } from "react-icons/io5"
-import BlueButton from "../../../../ui/BlueButton"
+// import BlueButton from "../../../../ui/BlueButton"
 import popoverBeak from "../../../../Assets/icons/popoverBeak.png"
 
-const ResourceList = ({ selectedResources, selectedGroupData, setShowResourceList, setSelectedResources, handleEdit }) => {
+const ResourceList = ({ 
+    handleEdit,
+    selectedResources, 
+    selectedGroupData, 
+    setShowResourceList, 
+    setSelectedResources, 
+}) => {
     
     const handleClose = () => {
         setSelectedResources(null)

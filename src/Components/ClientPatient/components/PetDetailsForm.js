@@ -1,29 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { IoSearchOutline } from 'react-icons/io5'
+import React, { useEffect, useRef, useState } from 'react';
+import { IoSearchOutline } from 'react-icons/io5';
 
 const PetDetailsForm = ({
-    // toggleRef,
     index,
     petDetails,
-    handlePetChange,
-    handlePetDobChange,
-    handlePetGenderChange,
-    // toggleDropdown,
-    // showDropDown,
-    // dropdownRef,
-    // formattedAnimals,
+    patientType,
     handlePetAdd,
+    handlePetChange,
     allAnimalClasses,
+    handlePetDobChange,
     handleAddAnimalClass,
+    handlePetGenderChange,
     handlePetSterilizationChange,
-    patientType
 }) => {
 
-    const dropdownRef = useRef(null);
     const toggleRef = useRef(null);
+    const dropdownRef = useRef(null);
 
-    const [ formattedAnimals, setFormattedAnimals ] = useState([])
     const [ showDropDown, setShowDropDown ] = useState(false)
+    const [ formattedAnimals, setFormattedAnimals ] = useState([])
 
     useEffect(() => {
         setFormattedAnimals(allAnimalClasses)

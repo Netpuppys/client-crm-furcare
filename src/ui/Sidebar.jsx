@@ -6,7 +6,11 @@ import closeIcon from "../Assets/icons/sidebar/close.png";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../utils/AppContext";
 
-const NestedComponents = ({ subItems, currentPath }) => {
+const NestedComponents = ({ 
+  subItems, 
+  currentPath
+}) => {
+
   const navigate = useNavigate();
 
   const [activeItem, setActiveItem] = useState();
@@ -64,7 +68,10 @@ const NestedComponents = ({ subItems, currentPath }) => {
   );
 };
 
-const SidebarComp = ({ currentPath }) => {
+const SidebarComp = ({ 
+  currentPath
+}) => {
+  
   const navigate = useNavigate();
 
   const {  sidebarExpanded, setSidebarExpanded } = useAppContext()

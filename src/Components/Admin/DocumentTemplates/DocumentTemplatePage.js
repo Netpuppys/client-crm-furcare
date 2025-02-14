@@ -35,7 +35,12 @@ const types = [
   }
 ];
   
-const AppointmentsTable = ({ tableData, openEditModule, setOpenEditModule }) => {
+const AppointmentsTable = ({ 
+  tableData,
+  openEditModule,
+  setOpenEditModule
+}) => {
+
     return (
       <div className="overflow-x-auto">
         <table className="min-w-full">

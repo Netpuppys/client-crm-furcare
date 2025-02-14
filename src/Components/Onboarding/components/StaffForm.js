@@ -21,13 +21,13 @@ const StaffForm = () => {
         setDragActive(false);
 
         if (event.dataTransfer.files.length) {
-        setFile(event.dataTransfer.files[0]);
+            setFile(event.dataTransfer.files[0]);
         }
     };
 
     const handleChange = (event) => {
         if (event.target.files.length) {
-        setFile(event.target.files[0]);
+            setFile(event.target.files[0]);
         }
     };
 

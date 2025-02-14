@@ -5,6 +5,7 @@ const ClientDetailsForm = ({
     clientDetails,
     handleClientChange,
 }) => {
+    
   return (
     <div className="grid grid-cols-2 gap-4 gap-x-[50px] mb-6">
         <div>

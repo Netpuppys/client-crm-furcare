@@ -8,7 +8,9 @@ const buttons = [
   "Appointment Slots",
 ];
 
-const AddressForm = ({ branchData }) => {
+const AddressForm = ({ 
+  branchData 
+}) => {
 
   return (
     <div className="w-full flex flex-wrap items-start justify-start gap-4 gap-x-[50px] p-4 mx-auto bg-white rounded-md">

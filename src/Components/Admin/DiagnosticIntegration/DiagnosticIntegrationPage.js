@@ -11,7 +11,9 @@ import statesInIndia from "../../../data/StatesIndia";
 import BlueButton from "../../../ui/BlueButton";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
-const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
+const DiagnosticTable = ({ 
+  diagnosticIntegrationsData 
+}) => {
 
   return (
     <div className="overflow-x-auto">
@@ -82,7 +84,10 @@ const DiagnosticTable = ({ diagnosticIntegrationsData }) => {
   );
 };
 
-const CreateNewForm = ({ fetchDiagnosticsDetails }) => {
+const CreateNewForm = ({ 
+  fetchDiagnosticsDetails 
+}) => {
+  
   const { setAlert } = useAlertContext()
   const { selectedBranch } = useAppContext()
 

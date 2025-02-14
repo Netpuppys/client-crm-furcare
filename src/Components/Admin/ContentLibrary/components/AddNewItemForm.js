@@ -37,18 +37,6 @@ const AddNewItemForm = ({ content }) => {
     })
   }, [content])
 
-  // useEffect(() => {
-  //   axiosInstance
-  //     .get('/api/v1/animal-classes')
-  //     .then(res => {
-  //       console.log(res)
-  //       setAllAnimalClasses(res.data.data.data)
-  //     })
-  //     .then(err => {
-  //       console.error(err)
-  //     })
-  // }, [])
-
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
@@ -65,12 +53,6 @@ const AddNewItemForm = ({ content }) => {
   }, [formData, initialData, additionalNotes, content]);
 
   const handleSubmit = () => {
-    // Validation logic
-    // if (!formData.category || !formData.gender || !formData.animalType) {
-    //   alert("Please fill all required fields.");
-    //   return;
-    // }
-
     // Log the form data
     console.log("Submitted Form Data: ", formData);
   };

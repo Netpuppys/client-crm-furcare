@@ -5,59 +5,61 @@ import { HiPlusSm } from "react-icons/hi";
 import deleteIcon from "../../../Assets/icons/deleteIcon.png"
 
 const DepartmentForm = () => {
-  const dropdownRef = useRef(null);
-  const toggleRef = useRef(null);
 
-  const [ selectedOptions, setSelectedOptions ] = useState([]);
-  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-  const [ options, setOptions ] = useState([])
-  const [ appointmentSlots, setAppointmentSlots ] = useState([])
+    const dropdownRef = useRef(null);
+    const toggleRef = useRef(null);
 
-  useEffect(() => {
-    axiosInstance
-        .get("/api/v1/departments")
-        .then(res => {
-            console.log(res.data.data.data)
-            setOptions(res.data.data.data)
-        })
-        .catch(err => {
-            console.error(err)
-        })
-  }, [])
+    const [ selectedOptions, setSelectedOptions ] = useState([]);
+    const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
+    const [ options, setOptions ] = useState([])
+    const [ appointmentSlots, setAppointmentSlots ] = useState([])
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState);
-  };
+    useEffect(() => {
+        axiosInstance
+            .get("/api/v1/departments")
+            .then(res => {
+                console.log(res.data.data.data)
+                setOptions(res.data.data.data)
+            })
+            .catch(err => {
+                console.error(err)
+            })
+    }, [])
 
-  const handleCheckboxChange = (option) => {
-    if (selectedOptions.some(obj => obj.service === option.name)) {
-      setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
-    } else {
-      setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
+    const toggleDropdown = () => {
+        setIsDropdownOpen((prevState) => !prevState);
+    };
+
+    const handleCheckboxChange = (option) => {
+        if (selectedOptions.some(obj => obj.service === option.name)) {
+            setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
+        } else {
+            setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
+        }
+    };
+
+    const handleDeleteService = (option) => {
+        setSelectedOptions(prev => prev.filter((item) => item.service !== option));
     }
-  };
 
-  const handleDeleteService = (option) => {
-    setSelectedOptions(prev => prev.filter((item) => item.service !== option));
-  }
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (
+                dropdownRef.current &&
+                !dropdownRef.current.contains(event.target) &&
+                toggleRef.current &&
+                !toggleRef.current.contains(event.target)
+            ) {
+                setIsDropdownOpen(false);
+            }
+        };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
+        document.addEventListener("mousedown", handleClickOutside);
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, []);
 
     const handleAddAppointmentSlots = () => {
         setAppointmentSlots(prev => [...prev, { name: "", description: "" }]);

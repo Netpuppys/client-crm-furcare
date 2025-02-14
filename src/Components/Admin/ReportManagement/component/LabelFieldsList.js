@@ -2,7 +2,13 @@ import { IoClose } from "react-icons/io5"
 import BlueButton from "../../../../ui/BlueButton"
 import popoverBeak from "../../../../Assets/icons/popoverBeak.png"
 
-const LabelFieldsList = ({ selectedGroup, setShowLabelsList, setSelectedGroup, selectedGroupData, setEditGroup }) => {
+const LabelFieldsList = ({ 
+    setEditGroup,
+    selectedGroup,
+    setSelectedGroup,
+    setShowLabelsList,
+    selectedGroupData,
+}) => {
     
     const handleClose = () => {
         setSelectedGroup(null)

@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import { useAppContext } from "../../../utils/AppContext";
 
-const DiagnosticTable = ({ staffData }) => {
+const DiagnosticTable = ({ 
+  staffData
+}) => {
 
   return (
     <div className="overflow-x-auto">

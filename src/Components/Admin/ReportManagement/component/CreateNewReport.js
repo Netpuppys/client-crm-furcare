@@ -11,7 +11,9 @@ const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-
 const frequencyArray = [ 'day', 'week', 'month' ]
 const appointmentTypes = [ 'appointments', 'admin', 'client_and_patient', 'inventory', 'communication', 'visits', 'leads' ]
 
-const CreateNewReport = ({ fetchAllReports }) => {
+const CreateNewReport = ({
+    fetchAllReports
+}) => {
     
     const { setAlert } = useAlertContext()
     const { branchDetails, selectedBranch } = useAppContext()
@@ -42,7 +44,6 @@ const CreateNewReport = ({ fetchAllReports }) => {
     };
 
     const handleSubmit = () => {
-        
         const sendData = {
             name: formData.name,
             type: formData.type,

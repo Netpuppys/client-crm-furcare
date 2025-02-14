@@ -6,7 +6,12 @@ import BlueButton from "../../../../ui/BlueButton";
 import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
+const EditGroup = ({ 
+    editGroup,
+    groupData,
+    setGroupData,
+    setEditGroup,
+}) => {
     
     const { setAlert } = useAlertContext()
     const { selectedBranch } = useAppContext()

@@ -53,7 +53,12 @@ const permissions = [
 ];
 
 
-const EditNewRoles = ({ setEditRole, selectedRole, setSelectedRole, fetchRolesList }) => {
+const EditNewRoles = ({ 
+    setEditRole, 
+    selectedRole, 
+    fetchRolesList,
+    setSelectedRole,
+}) => {
     const { setAlert } = useAlertContext()
     const { selectedBranch } = useAppContext()
 

@@ -8,7 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { contentLibraryData } from "./components/data";
 import { useAppContext } from "../../../utils/AppContext";
 
-const TableComponent = ({ handleCreateNew }) => {
+const TableComponent = ({ 
+  handleCreateNew 
+}) => {
+
   const [ openIndex, setOpenIndex ] = useState([])
 
   const handleOpenSubItems = (index) => {
@@ -116,35 +119,35 @@ const ContentLibraryPage = () => {
 
   return (
     <div className='w-full min-h-full px-[36px] py-4 relative'>
-        <div className='flex items-start justify-between'>
-            <div className='text-[#0263E0] text-xs'>
-                <button
-                    onClick={handleAdminClick}
-                    className='underline inline'
-                >
-                    Admin
-                </button>
-                <span>{" "}/{" "}</span>
-                <p
-                    className='underline inline cursor-default'
-                >
-                    Content Library
-                </p>
-            </div>
-            <div className='flex items-center gap-6'>
-                <BlueButton
-                  text={"Create"}
-                  onClickHandler={handleCreateNew}
-                  disabled={true}
-                />
-            </div>
+      <div className='flex items-start justify-between'>
+        <div className='text-[#0263E0] text-xs'>
+            <button
+                onClick={handleAdminClick}
+                className='underline inline'
+            >
+                Admin
+            </button>
+            <span>{" "}/{" "}</span>
+            <p
+                className='underline inline cursor-default'
+            >
+                Content Library
+            </p>
         </div>
+        <div className='flex items-center gap-6'>
+            <BlueButton
+              text={"Create"}
+              onClickHandler={handleCreateNew}
+              disabled={true}
+            />
+        </div>
+    </div>
         
-        <div className="mt-6">
-          <TableComponent 
-            handleCreateNew={handleCreateNew}
-          />
-        </div>
+    <div className="mt-6">
+      <TableComponent 
+        handleCreateNew={handleCreateNew}
+      />
+    </div>
 
     {createNew &&
     <div className={`fixed

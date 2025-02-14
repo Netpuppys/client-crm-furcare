@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 import axiosInstance from '../../utils/AxiosInstance'
 
 const ClientPatientPage = () => {
+  
   const [ selectedClient, setSelectedClient ] = useState(false)
   const [ allClients, setAllClients ] = useState([])
   const [ loaded, setLoaded ] = useState(false)

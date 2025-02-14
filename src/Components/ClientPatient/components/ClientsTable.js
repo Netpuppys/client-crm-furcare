@@ -37,7 +37,12 @@ import { format } from "date-fns";
 //   { account: "AFT27", name: "Owen Wilson", pets: 1, lastVisit: "22 Jan 2023" },
 // ];
 
-const ClientsTable = ({ allClients, loaded, selectedClient, setSelectedClient }) => {
+const ClientsTable = ({ 
+    loaded,
+    allClients,
+    selectedClient,
+    setSelectedClient,
+}) => {
 
   return (
     <div className="w-full">
