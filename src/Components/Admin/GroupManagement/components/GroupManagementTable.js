@@ -64,7 +64,7 @@ const GroupManagementTable = ({
                         </button>
                     </td>
                     <td className="px-4 py-2 text-sm text-[#121C2D]">
-                        {item.description}
+                        {item.description===""? "--" : item.description}
                     </td>
                     <td className="px-4 py-2 text-sm relative">
                         <button

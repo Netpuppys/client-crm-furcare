@@ -1,13 +1,59 @@
 import React from 'react'
 import informationIcon from '../../../../Assets/icons/informationIcon.png'
 
-// const clients = [
-//     { petName: "Bruno", doctorName: "Roja patil", location: "", status: "visit - Completed", summary: "" },
-//     { petName: "Casper", doctorName: "Jasleen Kaur", location: "", status: "visit - Completed", summary: "Available" },
+// const data = [
+//     {
+//       pet: "Casper",
+//       owner: "Jasleen Kaur",
+//       room: "",
+//       status: "Check In - In Progress",
+//       availability: "Not available",
+//       image: "",
+//     },
+//     {
+//       pet: "Mikasa",
+//       owner: "Roja Patil",
+//       room: "",
+//       status: "Check In - In Progress",
+//       availability: "Not available",
+//       image: "",
+//     },
+//     {
+//       pet: "Sherni",
+//       owner: "Akash Bhatt",
+//       room: "Exam Room A",
+//       status: "Visit - In Progress",
+//       availability: "Not available",
+//       image: "",
+//     },
+//     {
+//       pet: "Bruno",
+//       owner: "Jasleen Kaur",
+//       room: "Exam Room B",
+//       status: "Visit - Completed",
+//       availability: "Available",
+//       image: "",
+//     },
+//     {
+//       pet: "Ralph",
+//       owner: "Amina Begum",
+//       room: "Exam Room C",
+//       status: "Visit - Completed",
+//       availability: "Available",
+//       image: "",
+//     },
+//     {
+//       pet: "Broski",
+//       owner: "Gaurav Paul",
+//       room: "Surgery Room A",
+//       status: "Visit - Completed",
+//       availability: "Available",
+//       image: "",
+//     }
 // ]
 
 const VisitsTable = () => {
-    
+
   return (
     <table className="w-full border-collapse">
         <thead className="bg-[#F9F9FA] text-[#606B85] text-left text-sm font-semibold">
@@ -44,7 +90,8 @@ const VisitsTable = () => {
                 </th>
             </tr>
         </thead>
-
+        <tbody>
+        </tbody>
     </table>
   )
 }

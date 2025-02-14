@@ -5,6 +5,7 @@ import ServiceForm from './components/ServiceForm';
 import DepartmentForm from './components/DepartmentForm';
 import StaffForm from './components/StaffForm';
 import ThirdPartyForm from './components/ThirdPartyForm';
+import BlueButton from '../../ui/BlueButton';
 
 const ProgressBar = ({ progress=0 }) => {
     return (
@@ -43,9 +44,15 @@ const OnboardingPage = () => {
 
   return (
     <div className='w-full min-h-[calc(100vh-4.75rem)] px-8 py-4 overflow-y-auto'>
-        <ProgressBar
-            progress={progressPercentage}
-        />
+        <div className='w-full flex items-center justify-between'>
+            <ProgressBar
+                progress={progressPercentage}
+            />
+            <BlueButton
+                text={'Submit'}
+                disabled={true}
+            />
+        </div>
         <div className='w-full flex flex-col items-center justify-start gap-[1.25rem] transition-all mt-6'>
             {/* business unit form */}
             <div className={`w-full transition-all duration-200 border border-[#D9D9D9] rounded-lg overflow-hidden ${openModalIndex===0? "bg-white" : "bg-[#F5F5F5]"}`}>
