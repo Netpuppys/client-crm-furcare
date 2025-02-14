@@ -133,7 +133,7 @@ const CreateNewGroup = ({
         const data = {
             name: formData.name,
             description: formData.description,
-            businessBranchId: selectedBranch.id,
+            businessBranchId: selectedBranch?.id,
             resources: sendResources
         }
 

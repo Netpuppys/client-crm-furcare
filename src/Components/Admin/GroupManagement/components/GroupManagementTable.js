@@ -3,8 +3,9 @@ import ResourceList from "./ResourceList";
 import informationIcon from "../../../../Assets/icons/informationIcon.png";
 
 const GroupManagementTable = ({ 
+    loaded,
     groupData,
-    setEditGroup
+    setEditGroup,
 }) => {
 
     const [ showResourceList, setShowResourceList ] = useState()
@@ -100,6 +101,12 @@ const GroupManagementTable = ({
                 </tr>))}
                 </tbody>
             </table>
+            {groupData.length === 0 && loaded &&
+            <div className={`border-b last:border-b-0 border-[#E1E3EA] flex items-center justify-center h-10`}>
+                    <p className="">
+                        No Groups Found
+                    </p>
+            </div>}
         </div>
     );
 };

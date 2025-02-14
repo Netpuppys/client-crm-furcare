@@ -11,23 +11,25 @@ import { useAppContext } from "../../../utils/AppContext";
 function GroupManagementPage() {
     const navigate = useNavigate()
 
-    const { sidebarExpanded } = useAppContext()
+    const { sidebarExpanded, selectedBranch } = useAppContext()
 
     const [ createNew, setCreateNew ] = useState(false);
     const [ editGroup, setEditGroup ] = useState()
     const [ groupData, setGroupData ] = useState([]);
+    const [ loaded, setLoaded ] = useState(false)
 
     useEffect(() => {
         axiosInstance
-            .get("/api/v1/groups")
+            .get(`/api/v1/groups?businessBranchId=${selectedBranch?.id}`)
             .then(res => {
                 const response = res.data.data.data;
                 setGroupData(response)
+                setLoaded(true)
             })
             .catch(err => {
                 console.error(err)
             })
-    }, [])
+    }, [selectedBranch])
 
     const handleAdminClick = () => {
         navigate("/admin/branch-units")
@@ -60,6 +62,7 @@ function GroupManagementPage() {
 
         <div className="w-full mt-6">
             <GroupManagementTable
+                loaded={loaded}
                 groupData={groupData}
                 setEditGroup={setEditGroup}
             />
