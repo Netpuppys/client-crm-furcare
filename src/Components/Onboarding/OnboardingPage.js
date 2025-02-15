@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
-import BusinessForm from './components/BusinessForm';
-import ServiceForm from './components/ServiceForm';
-import DepartmentForm from './components/DepartmentForm';
-import StaffForm from './components/StaffForm';
-import ThirdPartyForm from './components/ThirdPartyForm';
 import BlueButton from '../../ui/BlueButton';
+import StaffForm from './components/StaffForm';
+import ServiceForm from './components/ServiceForm';
+import BusinessForm from './components/BusinessForm';
+import DepartmentForm from './components/DepartmentForm';
+import ThirdPartyForm from './components/ThirdPartyForm';
+import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 
 const ProgressBar = ({ progress=0 }) => {
     return (
@@ -31,6 +31,63 @@ const ProgressBar = ({ progress=0 }) => {
 const OnboardingPage = () => {
     const [ openModalIndex, setOpenModalIndex ] = useState(0);
     const [ progressPercentage, setProgressPercentage ] = useState(0)
+    // const [ sendData, setSendData ] = useState({
+    //     name: "",
+    //     type: "",
+    //     businessBranches: [
+    //         {
+    //             name: "",
+    //             type: "",
+    //             practice: "",
+    //             currency: "",
+    //             addressLine1: "",
+    //             addressLine2: "",
+    //             country: "",
+    //             state: "",
+    //             city: "",
+    //             postalCode: ""
+    //         },
+    //         {
+    //             name: "",
+    //             type: "",
+    //             practice: "",
+    //             currency: "",
+    //             addressLine1: "",
+    //             addressLine2: "",
+    //             country: "",
+    //             state: "",
+    //             city: "",
+    //             postalCode: ""
+    //         }
+    //     ],
+    //     services: [""],
+    //     departments: [""],
+    //     appointmentSlots: [
+    //         {
+    //             name: "",
+    //             description: "",
+    //             departmentId: ""
+    //         }
+    //     ],
+    //     staffs: [
+    //         {
+    //             name: "",
+    //             phone: "",
+    //             email: "",
+    //             password: ""
+    //         }
+    //     ],
+    //     vendors: [
+    //         {
+    //             name: ""
+    //         }
+    //     ],
+    //     diagnosticIntegrations: [
+    //         {
+    //             name: ""
+    //         }
+    //     ]
+    // })
 
     const handleOpenModal = (index, progress) => {
         if (openModalIndex===index) {

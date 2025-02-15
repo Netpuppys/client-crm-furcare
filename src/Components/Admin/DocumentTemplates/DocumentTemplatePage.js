@@ -144,7 +144,7 @@ const DocumentTemplatePage = () => {
   const handleCreateNew = () => {
     setCreateNew(true)
   }
- 
+
   return (
     <div className='w-full min-h-full px-[36px] py-4 relative'>
         <div className='flex items-start justify-between'>
@@ -186,7 +186,6 @@ const DocumentTemplatePage = () => {
         </div>
 
         <div className='mt-6 w-full'>
-            {/* {activeButton === 0 && */}
             <div className='w-full'>
                 <AppointmentsTable 
                   tableData={tableData}

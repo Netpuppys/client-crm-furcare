@@ -206,7 +206,7 @@ const EditGroup = ({
             <div className="flex flex-col w-full">
                 <label className="font-semibold text-[#121C2D] flex items-center gap-2">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
-                    Resourses{" "}
+                    Resources{" "}
                 </label>
 
                 <div className="mt-1 w-full relative gap-2 h-fit border border-[#8891AA] focus:outline-none rounded-lg overflow-hidden">

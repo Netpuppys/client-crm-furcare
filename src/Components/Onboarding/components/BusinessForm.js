@@ -6,9 +6,9 @@ import axiosInstance from "../../../utils/AxiosInstance";
 export default function BusinessForm() {
     
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [formData, setFormData] = useState({
+    const [ formData, setFormData ] = useState({
         businessUnitType: "",
-        businessUnitName: "Branch 400003",
+        businessUnitName: "",
         numberOfBranchUnits: "1",
         branchType: "",
         practiceType: "",
@@ -18,7 +18,7 @@ export default function BusinessForm() {
         city: "",
         state: "",
         country: "India",
-        postalCode: "400000",
+        postalCode: "",
         animalClasses: "",
     });
 
@@ -73,6 +73,7 @@ export default function BusinessForm() {
                     <input
                         name="businessUnitName" 
                         type="text" 
+                        placeholder="Business Unit Name"
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]"
                         value={formData.businessUnitName} 
                         onChange={handleChange} 
@@ -157,14 +158,6 @@ export default function BusinessForm() {
                         <div className="w-1 h-1 aspect-square rounded-full bg-[#EB5656]"></div>
                         Address line 1
                     </label>
-                    {/* <input 
-                        name="addressLine1" 
-                        type="text" 
-                        className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]" 
-                        placeholder="M.G Road B-106 Sector" 
-                        value={formData.addressLine1} 
-                        onChange={handleChange}
-                    /> */}
                     <GoogleMapsLoader>
                         <div className="flex relative border rounded-md focus:outline-none text-sm border-[#8891AA]">
                             <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
@@ -271,8 +264,9 @@ export default function BusinessForm() {
                         Postal Code
                     </label>
                     <input 
-                        name="postalCode" 
-                        type="text" 
+                        name="postalCode"
+                        type="text"
+                        placeholder="Postal Code"
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]" 
                         value={formData.postalCode} 
                         readOnly 
