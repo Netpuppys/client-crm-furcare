@@ -5,6 +5,7 @@ import errorIcon from "../../../../Assets/icons/errorIcon.svg";
 import BlueButton from "../../../../ui/BlueButton";
 import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import chevronDown from "../../../../Assets/icons/chevronDown.png"
 
 const EditGroup = ({ 
     editGroup,
@@ -52,7 +53,7 @@ const EditGroup = ({
     // fetch all the staff
     useEffect(() => {
         axiosInstance
-            .get('/api/v1/staff')
+            .get(`/api/v1/staff?businessBranchId=${selectedBranch.id}`)
             .then(res => {
                 const response = res.data.data.data;
 
@@ -62,18 +63,18 @@ const EditGroup = ({
             .catch(err => {
                 console.error(err)
             })
-    }, [])
+    }, [selectedBranch])
 
     // filter out selected staff members from dropdown
     useEffect(() => {
-        if (selectedResources.length>0) {
+        // if (selectedResources.length>0) {
             const filtered = resources.filter(item => 
                 selectedResources.every(staff => staff.id !== item.id)
             );            
 
             setDropDownList(filtered)
             return
-        }
+        // }
     }, [selectedResources, resources])
 
     // filter out staff memebers according to input value
@@ -101,7 +102,7 @@ const EditGroup = ({
 
     // remove staff member from selected resources
     const removeRole = (roleToRemove) => {
-        setSelectedResources(selectedResources.filter((role) => role !== roleToRemove));
+        setSelectedResources(prev => prev.filter((role) => role.id !== roleToRemove));
     };
     
     // check the inputs for enabling or disabling the button
@@ -201,8 +202,7 @@ const EditGroup = ({
             </div>
         </div>
 
-        <div className="flex gap-10 w-full">
-            {/* Name Input */}
+        {/* <div className="flex gap-10 w-full">
             <div className="flex flex-col w-full">
                 <label className="font-semibold text-[#121C2D] flex items-center gap-2">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
@@ -245,6 +245,82 @@ const EditGroup = ({
                             key={index} 
                             onClick={() => handleDropDownClick(item)} 
                             className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0"
+                        >
+                            <p className="capitalize text-sm">
+                                {item.name}
+                            </p>
+                        </button>
+                    ))}
+                    </div>}
+                </div>
+
+            </div>
+        </div> */}
+
+        <div className="flex gap-10 w-full">
+            {/* Name Input */}
+            <div className="flex flex-col w-full">
+                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+                    <div className="w-1 aspect-square rounded-full bg-red-500"></div>
+                    Resources{" "}
+                </label>
+
+                <div
+                    className="mt-1 w-full relative gap-2 h-fit min-h-10 border border-[#8891AA] focus:outline-none rounded-lg overflow-"
+                >
+                    <div 
+                        className={`w-full min-h-10 relative gap-2 flex px-2 py-1 focus:outline-none`}
+                    >
+
+                        {selectedResources?.map((staff, index) => (
+                            <div
+                                key={index}
+                                className="flex items-center text-nowrap gap-2 px-3 h-8 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                            >
+                                {staff.name}
+                                <button
+                                    onClick={() => removeRole(staff.id)}
+                                    className="text-[#606B85] text-lg"
+                                >
+                                    <IoClose />
+                                </button>
+                            </div>
+                        ))}
+
+                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-4">
+                            
+                            <p className="text-sm text-[#121C2D] font-medium">
+                                {selectedResources.length===0 && "Select"}
+                            </p>
+
+                            <img src={chevronDown} className="h-5" alt="" />
+                        </div>
+
+                        {/* <input
+                            type="text"
+                            value={inputValue}
+                            placeholder={selectedResources.length===0? "Resources" : ""}
+                            onChange={(e) => setInputValue(e.target.value)}
+                            onFocus={() => setInputFocus(true)}
+                            onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
+                            className="flex-grow w-full placeholder:italic border-none focus:ring-0 capitalize focus:outline-none text-sm"
+                        /> */}
+                        <select
+                            type="text"
+                            onFocus={() => setInputFocus(true)}
+                            onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
+                            className="flex-grow w-full placeholder:italic border-none opacity-0 focus:ring-0 capitalize focus:outline-none text-sm"
+                        >
+                        </select>
+                    </div>
+
+                    {inputFocus &&
+                    <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-lg bg-white flex flex-col items-start px-2">
+                    {dropDownList.map((item, index) => (
+                        <button 
+                            key={index} 
+                            onClick={() => handleDropDownClick(item)} 
+                            className="h-10 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0"
                         >
                             <p className="capitalize text-sm">
                                 {item.name}

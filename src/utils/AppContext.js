@@ -8,15 +8,21 @@ export const AppProvider = ({
 }) => {
 
   const [ branchDetails, setBranchDetails ] = useState()
-  const [ selectedBranch, setSelectedBranch ] = useState()
+  const [ selectedBranch, setSelectedBranch ] = useState(JSON.parse(sessionStorage.getItem('selectedBranch')))
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true);
+
+  useEffect(() => {
+    if (!selectedBranch && branchDetails) {
+      setSelectedBranch(branchDetails[0])
+      sessionStorage.setItem('selectedBranch', JSON.stringify(branchDetails[0]))
+    }
+  }, [branchDetails, selectedBranch])
 
   const fetchBranchDetails = useCallback(() => {
     axiosInstance
       .get("/api/v1/business-branches")
       .then(res => {
         setBranchDetails(res.data.data.data)
-        setSelectedBranch(res.data.data.data[0])
       })
       .catch(err => {
         console.error(err)

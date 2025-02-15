@@ -101,6 +101,12 @@ const BusinessUnitsPage = () => {
     navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });
   };
 
+  const handleCardClick = (item, index) => {
+    setSelectedBusiness(index);
+    setSelectedBranch(item);
+    sessionStorage.setItem('selectedBranch', JSON.stringify(item))
+  }
+
   return (
     <div className="w-full min-h-full px-[36px] py-4 overflow-y-auto">
       <div className="flex items-start justify-between">
@@ -124,7 +130,7 @@ const BusinessUnitsPage = () => {
 
       <div className="flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         {businessBranchesData?.map((item, index) => (
-          <div className="max-w-[calc(33.333%-4.16666rem)]" onClick={() => { setSelectedBusiness(index); setSelectedBranch(item) }} key={index}>
+          <div className="max-w-[calc(33.333%-4.16666rem)]" onClick={() => handleCardClick(item, index)} key={index}>
             <Card
               active={item.active}
               branch={item.name}

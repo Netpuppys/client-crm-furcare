@@ -85,6 +85,8 @@ const DiagnosticTable = ({
 const CreateNewForm = ({ fetchStaffData }) => {
   const { setAlert } = useAlertContext()
 
+  const { selectedBranch } = useAppContext()
+
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -144,7 +146,9 @@ const CreateNewForm = ({ fetchStaffData }) => {
       phone: formData.phone,
       email: formData.email,
       password: formData.password,
-      roles: rolesArr
+      roles: rolesArr,
+      businessUnitId: selectedBranch?.businessUnitId,
+      businessBranchId: selectedBranch?.id
     }
 
     axiosInstance
@@ -267,7 +271,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onFocus={() => setInputFocus(true)}
-              onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
+              onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
               className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
             />
           </div>

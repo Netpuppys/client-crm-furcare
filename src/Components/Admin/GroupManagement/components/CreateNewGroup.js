@@ -5,6 +5,7 @@ import errorIcon from "../../../../Assets/icons/errorIcon.svg";
 import BlueButton from "../../../../ui/BlueButton";
 import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import chevronDown from "../../../../Assets/icons/chevronDown.png"
 import { toast } from "react-toastify";
 
 const CreateNewGroup = ({ 
@@ -19,7 +20,6 @@ const CreateNewGroup = ({
     const [ selectedResources, setSelectedResources ] = useState([]);
     const [ resources, setResources ] = useState([])
     const [ dropDownList, setDropDownList ] = useState([])
-    const [ inputValue, setInputValue ] = useState("");
     const [ inputFocus, setInputFocus ] = useState(false)
     const [ disabled, setDisabled ] = useState(true)
     const [ showError, setShowError ] = useState(false)
@@ -55,42 +55,38 @@ const CreateNewGroup = ({
 
     // filter out selected staff members from dropdown
     useEffect(() => {
-        if (selectedResources.length>0) {
-            const filtered = resources.filter(item => 
-                selectedResources.every(staff => staff.id !== item.id)
-            );            
+        const filtered = resources.filter(item => 
+            selectedResources.every(staff => staff.id !== item.id)
+        );            
 
-            setDropDownList(filtered)
-            return
-        }
+        setDropDownList(filtered)
+        return
     }, [selectedResources, resources])
 
     // filter out staff memebers according to input value
-    useEffect(() => {
-        if (inputValue !== "") {
-            const filterred = resources.filter((item) => 
-                item.name.toLowerCase().includes(inputValue.toLowerCase())
-            )
+    // useEffect(() => {
+    //     if (inputValue !== "") {
+    //         const filterred = resources.filter((item) => 
+    //             item.name.toLowerCase().includes(inputValue.toLowerCase())
+    //         )
 
-            setDropDownList(filterred)
-            return
-        }
+    //         setDropDownList(filterred)
+    //         return
+    //     }
 
-        setDropDownList(resources)
-    }, [inputValue, resources])
+    //     setDropDownList(resources)
+    // }, [inputValue, resources])
 
     // drop down click function
     const handleDropDownClick = (value) => {
         setSelectedResources(prev => ([
           ...prev, value
         ]))
-
-        setInputValue("")
     }
 
     // remove staff member from selected resources
     const removeRole = (roleToRemove) => {
-        setSelectedResources(selectedResources.filter((role) => role !== roleToRemove));
+        setSelectedResources(prev => prev.filter((role) => role.id !== roleToRemove));
     };
     
     // check the inputs for enabling or disabling the button
@@ -184,17 +180,21 @@ const CreateNewGroup = ({
                     Resources{" "}
                 </label>
 
-                <div className="mt-1 w-full relative gap-2 h-fit border border-[#8891AA] focus:outline-none rounded-lg overflow-hidden">
-                    <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
+                <div
+                    className="mt-1 w-full relative gap-2 h-fit min-h-10 border border-[#8891AA] focus:outline-none rounded-lg overflow-"
+                >
+                    <div 
+                        className={`w-full min-h-10 relative gap-2 flex px-2 py-1 focus:outline-none`}
+                    >
 
                         {selectedResources?.map((staff, index) => (
                             <div
                                 key={index}
-                                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                                className="flex items-center text-nowrap gap-2 px-3 h-8 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                             >
                                 {staff.name}
                                 <button
-                                    onClick={() => removeRole(staff)}
+                                    onClick={() => removeRole(staff.id)}
                                     className="text-[#606B85] text-lg"
                                 >
                                     <IoClose />
@@ -202,7 +202,16 @@ const CreateNewGroup = ({
                             </div>
                         ))}
 
-                        <input
+                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-4">
+                            
+                            <p className="text-sm text-[#121C2D] font-medium">
+                                {selectedResources.length===0 && "Select"}
+                            </p>
+
+                            <img src={chevronDown} className="h-5" alt="" />
+                        </div>
+
+                        {/* <input
                             type="text"
                             value={inputValue}
                             placeholder={selectedResources.length===0? "Resources" : ""}
@@ -210,16 +219,23 @@ const CreateNewGroup = ({
                             onFocus={() => setInputFocus(true)}
                             onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
                             className="flex-grow w-full placeholder:italic border-none focus:ring-0 capitalize focus:outline-none text-sm"
-                        />
+                        /> */}
+                        <select
+                            type="text"
+                            onFocus={() => setInputFocus(true)}
+                            onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
+                            className="flex-grow w-full placeholder:italic border-none opacity-0 focus:ring-0 capitalize focus:outline-none text-sm"
+                        >
+                        </select>
                     </div>
 
                     {inputFocus &&
-                    <div className="w-full h-fit bg-white flex flex-col items-start px-2">
+                    <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-lg bg-white flex flex-col items-start justify-start px-2">
                     {dropDownList.map((item, index) => (
                         <button 
                             key={index} 
                             onClick={() => handleDropDownClick(item)} 
-                            className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0"
+                            className="h-10 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0"
                         >
                             <p className="capitalize text-sm">
                                 {item.name}
