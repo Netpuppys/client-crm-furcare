@@ -140,7 +140,7 @@ const EditGroup = ({
     // function fetch table data when a new group is created
     const refreshList = ()  => {
         axiosInstance
-            .get("/api/v1/groups")
+            .get(`/api/v1/groups?businessBranchId=${selectedBranch.id}`)
             .then(res => {
                 const response = res.data.data.data;
                 setGroupData(response)
@@ -153,7 +153,18 @@ const EditGroup = ({
 
     // handle submit function
     const handleSubmit = () => {
-        // const sendResources = selectedResources.map(resource => resource.id)
+        let removeResources = [];
+        let addResources = [];
+
+        const sendResources = selectedResources.map(resource => resource.id)
+        const initialResourcesId = initialResources.map(resource => resource.id)
+
+        removeResources = initialResourcesId.filter(id => !sendResources.includes(id));
+
+        // Find resources to add (present in sendResources but not in initialResources)
+        addResources = sendResources.filter(id => !initialResourcesId.includes(id)); 
+        
+        console.log(removeResources, addResources)
 
         const data = {
             name: formData.name,
@@ -163,16 +174,52 @@ const EditGroup = ({
             active: active
         }
 
-        axiosInstance
-            .patch(`/api/v1/groups/${editGroup.id}`, data)
-            .then(res => {
-                console.log(res)
-                setAlert('Group Updated Successfully')
-                refreshList()
-            })
-            .catch(err => {
-                console.error(err)
-            })
+        if (formData.name!==editGroup.name || formData.description!==editGroup.description || active!==editGroup.active) {
+            axiosInstance
+                .patch(`/api/v1/groups/${editGroup.id}`, data)
+                .then(res => {
+                    console.log(res)
+                    setAlert('Group Updated Successfully')
+                    refreshList()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+
+        if (addResources.length>0) {
+            const sendData = {
+                staffId: addResources[0]
+            }
+
+            axiosInstance
+                .post(`/api/v1/groups/${editGroup.id}/resources`, sendData)
+                .then(res => {
+                    console.log(res)
+                    setAlert('Group Updated Successfully')
+                    refreshList()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
+
+        if (removeResources.length>0) {
+            const sendData = {
+                staffId: removeResources[0]
+            }
+
+            axiosInstance
+                .delete(`/api/v1/groups/${editGroup.id}/resources`, { data: sendData })
+                .then(res => {
+                    console.log(res)
+                    setAlert('Group Updated Successfully')
+                    refreshList()
+                })
+                .catch(err => {
+                    console.error(err)
+                })
+        }
     };
 
     return (

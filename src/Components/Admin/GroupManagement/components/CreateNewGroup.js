@@ -28,7 +28,7 @@ const CreateNewGroup = ({
         description: "",
     });
 
-    // show error if name is already present 
+    // show error if name is already present
     useEffect(() => {
         if (groupData.some(item => item.name.toLowerCase().replace(/\s/g, "") === formData.name.toLowerCase().replace(/\s/g, ""))) {
             setShowError(true)
@@ -111,7 +111,7 @@ const CreateNewGroup = ({
     // function fetch table data when a new group is created
     const refreshList = ()  => {
         axiosInstance
-            .get("/api/v1/groups")
+            .get(`/api/v1/groups?businessBranchId=${selectedBranch.id}`)
             .then(res => {
                 const response = res.data.data.data;
                 setGroupData(response)
