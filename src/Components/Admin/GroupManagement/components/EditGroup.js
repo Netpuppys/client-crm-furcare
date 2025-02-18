@@ -7,13 +7,13 @@ import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import chevronDown from "../../../../Assets/icons/chevronDown.png"
 
-const EditGroup = ({ 
+const EditGroup = ({
     editGroup,
     groupData,
     setGroupData,
     setEditGroup,
 }) => {
-    
+
     const { setAlert } = useAlertContext()
     const { selectedBranch } = useAppContext()
 
@@ -56,7 +56,6 @@ const EditGroup = ({
             .get(`/api/v1/staff?businessBranchId=${selectedBranch.id}`)
             .then(res => {
                 const response = res.data.data.data;
-
                 setResources(response)
                 setDropDownList(response)
             })
@@ -76,7 +75,7 @@ const EditGroup = ({
             return
         // }
     }, [selectedResources, resources])
-
+    
     // filter out staff memebers according to input value
     useEffect(() => {
         if (inputValue !== "") {

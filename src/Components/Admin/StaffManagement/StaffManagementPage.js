@@ -69,9 +69,9 @@ const DiagnosticTable = ({
                   }`}
                 ></div>
                 <span
-                  className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
+                  className={`inline-block px-2 py-1 text-[#121C2D] capitalize text-sm`}
                 >
-                  Inactive
+                  {item.active? "active" : "Inactive"}
                 </span>
               </td>
             </tr>
