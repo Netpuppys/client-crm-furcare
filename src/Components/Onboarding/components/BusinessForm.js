@@ -3,33 +3,28 @@ import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import { FaSearch } from "react-icons/fa";
 import axiosInstance from "../../../utils/AxiosInstance";
 
-export default function BusinessForm() {
+export default function BusinessForm({
+    sendData,
+    setSendData
+}) {
     
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [ formData, setFormData ] = useState({
-        businessUnitType: "",
-        businessUnitName: "",
-        numberOfBranchUnits: 1,
-        branchType: "",
-        practiceType: "",
-        currency: "INR",
-        addressLine1: "",
-        addressLine2: "",
-        city: "",
-        state: "",
-        country: "India",
-        postalCode: "",
-        animalClasses: "",
-    });
-
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form Data Submitted:", formData);
-    };
+    const [ noOfBranches, setNoOfbranches ] = useState(1)
+    // const [ formData, setFormData ] = useState({
+    //     businessUnitType: "",
+    //     businessUnitName: "",
+    //     numberOfBranchUnits: 1,
+    //     branchType: "",
+    //     practiceType: "",
+    //     currency: "INR",
+    //     addressLine1: "",
+    //     addressLine2: "",
+    //     city: "",
+    //     state: "",
+    //     country: "India",
+    //     postalCode: "",
+    //     animalClasses: "",
+    // });
 
     useEffect(() => {
         axiosInstance
@@ -42,9 +37,44 @@ export default function BusinessForm() {
             })
     }, [])
 
+    const handleAddBranches = (e) => {
+        setNoOfbranches(Number(e.target.value))
+
+        setSendData(prev => {
+            let arr = Array.from({ length: Number(e.target.value) }, (_, i) => ({
+                name: `Branch ${i+1}`,
+                type: "",
+                practice: "",
+                currency: "INR",
+                addressLine1: "",
+                addressLine2: "",
+                country: "India",
+                state: "",
+                city: "",
+                postalCode: ""
+            }));
+
+            return { ...prev, businessBranches: arr};
+        })
+    }
+
+    const handleChange = (e) => {
+        setSendData({ ...sendData, [e.target.name]: e.target.value });
+    };
+
+    const updateBusinessBranch = (index, field, value) => {
+        setSendData((prevData) => {
+            const updatedBranches = prevData.businessBranches.map((branch, i) => 
+                i === index ? { ...branch, [field]: value } : branch
+            );
+    
+            return { ...prevData, businessBranches: updatedBranches };
+        });
+    };
+
   return (
     <div className="w-full py-4">
-        <form className="w-full flex flex-col gap-6" onSubmit={handleSubmit}>
+        <form className="w-full flex flex-col gap-6">
             <div className="flex gap-12">
                 {/* Business Unit Type */}
                 <div className="flex w-[calc(40%-3rem)] flex-col gap-1">
@@ -53,10 +83,10 @@ export default function BusinessForm() {
                         Business Unit Type
                     </label>
                     <select
-                        name="businessUnitType"
+                        name="type"
                         className="border rounded-md p-2 focus:outline-none text-sm border-[#8891AA] classic"
                         onChange={handleChange}
-                        value={formData.businessUnitType}
+                        value={sendData.type}
                     >
                         <option value="">Select</option>
                         <option value="Type1">Clinic</option>
@@ -71,11 +101,11 @@ export default function BusinessForm() {
                         Business Unit Name
                     </label>
                     <input
-                        name="businessUnitName"
+                        name="name"
                         type="text"
                         placeholder="Business Unit Name"
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]"
-                        value={formData.businessUnitName}
+                        value={sendData.name}
                         onChange={handleChange}
                     />
                 </div>
@@ -89,10 +119,10 @@ export default function BusinessForm() {
                     <select
                         name="numberOfBranchUnits"
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic"
-                        onChange={handleChange}
-                        value={formData.numberOfBranchUnits}
+                        onChange={handleAddBranches}
+                        value={noOfBranches}
                     >
-                        {[1,2,3,4].map((item, index) => (
+                        {[1,2,3,4,5].map((item, index) => (
                             <option key={index} value={item}>{item}</option>
                         ))}
                     </select>
@@ -101,7 +131,7 @@ export default function BusinessForm() {
 
             <div className="w-full h-[1px] border-t -mt-2 -mb-1 border-black border-dashed border-opacity-30"></div>
 
-            {Array.from({ length: Number(formData.numberOfBranchUnits) }, (_, index) => (
+            {sendData.businessBranches.map((branch, index) => (
                 <div key={index} className="w-full flex flex-col gap-6">
                     <div className="flex gap-12" >
                         {/* Branch Type */}
@@ -113,8 +143,8 @@ export default function BusinessForm() {
                             <select 
                                 name="branchType" 
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                                onChange={handleChange} 
-                                value={formData.branchType}
+                                onChange={e => updateBusinessBranch(index, "type", e.target.value)} 
+                                value={branch.type}
                             >
                                 <option value="">Select</option>
                                 <option value="Main">Main</option>
@@ -131,8 +161,8 @@ export default function BusinessForm() {
                             <select 
                                 name="practiceType" 
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                                onChange={handleChange} 
-                                value={formData.practiceType}
+                                onChange={e => updateBusinessBranch(index, "practice", e.target.value)} 
+                                value={branch.practice}
                             >
                                 <option value="">Select</option>
                                 <option value="General">General</option>
@@ -151,7 +181,7 @@ export default function BusinessForm() {
                                 type="text" 
                                 disabled
                                 className="border rounded-md focus:outline-none p-2 text-sm disabled:bg-[#F4F4F6] border-[#8891AA]" 
-                                value={formData.currency} 
+                                value={branch.currency} 
                             />
                         </div>
                     </div>
@@ -172,8 +202,8 @@ export default function BusinessForm() {
                                         type="search"
                                         className="w-full capitalize rounded-r-lg focus:outline-none p-2"
                                         placeholder="Address line 1"
-                                        value={formData.address1}
-                                        onChange={handleChange}
+                                        value={branch.addressLine1}
+                                        onChange={e => updateBusinessBranch(index, "addressLine1", e.target.value)} 
                                     />
                                 {/* {suggestions.length > 0 && (
                                     <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
@@ -201,10 +231,10 @@ export default function BusinessForm() {
                             <input 
                                 name="addressLine2" 
                                 type="text" 
-                                className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] italic" 
+                                className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] placeholder:italic" 
                                 placeholder="Building A-101" 
-                                value={formData.addressLine2} 
-                                onChange={handleChange} 
+                                value={branch.addressLine2} 
+                                onChange={e => updateBusinessBranch(index, "addressLine2", e.target.value)} 
                             />
                         </div>
 
@@ -217,8 +247,8 @@ export default function BusinessForm() {
                             <select 
                                 name="city" 
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                                onChange={handleChange} 
-                                value={formData.city}
+                                onChange={e => updateBusinessBranch(index, "city", e.target.value)} 
+                                value={branch.city}
                             >
                                 <option value="">Select</option>
                                 <option value="Mumbai">Mumbai</option>
@@ -237,8 +267,8 @@ export default function BusinessForm() {
                             <select 
                                 name="state" 
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                                onChange={handleChange} 
-                                value={formData.state}
+                                onChange={e => updateBusinessBranch(index, "state", e.target.value)} 
+                                value={branch.state}
                             >
                                 <option value="">Select</option>
                                 <option value="Maharashtra">Maharashtra</option>
@@ -258,7 +288,7 @@ export default function BusinessForm() {
                                 disabled
                                 type="text" 
                                 className="border rounded-md focus:outline-none p-2 text-sm disabled:bg-[#F4F4F6] border-[#8891AA]" 
-                                value={formData.country} 
+                                value={branch.country} 
                             />
                         </div>
 
@@ -273,14 +303,13 @@ export default function BusinessForm() {
                                 type="number"
                                 placeholder="Postal Code"
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]" 
-                                value={formData.postalCode} 
-                                onChange={handleChange} 
-                                // readOnly 
+                                value={branch.postalCode} 
+                                onChange={e => updateBusinessBranch(index, "postalCode", e.target.value)} 
                             />
                         </div>
                         </div>
                     </div>
-                    {Number(formData.numberOfBranchUnits)!==1 && <div className="w-full h-[1px] border-t -mt-2 -mb-1 border-black border-dashed border-opacity-30"></div>}
+                    {sendData.businessBranches.length>1 && <div className="w-full h-[1px] border-t -mt-2 -mb-1 border-black border-dashed border-opacity-30"></div>}
                 </div>
             ))}
 
@@ -293,12 +322,10 @@ export default function BusinessForm() {
                 <select 
                     name="animalClasses" 
                     className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                    onChange={handleChange} 
-                    value={formData.animalClasses}
+                    // onChange={handleChange} 
+                    // value={formData.animalClasses}
                 >
                     <option value="">Select</option>
-                    <option value="Mammals">Mammals</option>
-                    <option value="Birds">Birds</option>
                     {allAnimalClasses.map((item, index) => (
                         <option
                             value={item.name}

@@ -4,7 +4,10 @@ import axiosInstance from '../../../utils/AxiosInstance';
 import { HiPlusSm } from "react-icons/hi";
 import deleteIcon from "../../../Assets/icons/deleteIcon.png"
 
-const DepartmentForm = () => {
+const DepartmentForm = ({
+    sendData,
+    setSendData
+}) => {
 
     const dropdownRef = useRef(null);
     const toggleRef = useRef(null);
@@ -30,16 +33,71 @@ const DepartmentForm = () => {
         setIsDropdownOpen((prevState) => !prevState);
     };
 
-    const handleCheckboxChange = (option) => {
-        if (selectedOptions.some(obj => obj.service === option.name)) {
-            setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
+    const handleServiceTag = (option) => {
+        if (selectedOptions.some(obj => obj.department === option.name)) {
+            setSelectedOptions(selectedOptions.filter((item) => item.department !== option.name));
+
+            setAppointmentSlots(prev => prev.filter(item => item.title !== option.name))
+
+            setSendData((prevData) => {
+                const arr = [...prevData.appointmentSlots].filter(item => item.departmentId !== option.id);
+                console.log("new", arr)
+                return {...prevData, appointmentSlots: arr}
+            });
         } else {
-            setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
+            setSelectedOptions([...selectedOptions, { department: option.name, basePrice: "" }]);
+
+            setAppointmentSlots(prev => [...prev, { 
+                title: option.name, 
+                id: option.id, 
+                value: [
+                    {
+                        name: "", 
+                        description: ""
+                    }
+                ]
+            }])
+
+            setSendData((prevData) => {
+                const arr = [...prevData.appointmentSlots];
+                const newArr = [...arr, {
+                    name: "",
+                    description: "",
+                    departmentId: option.id
+                }]
+                
+                console.log("new", newArr)
+
+                return { ...prevData, appointmentSlots: newArr }
+            });
         }
     };
 
-    const handleDeleteService = (option) => {
-        setSelectedOptions(prev => prev.filter((item) => item.service !== option));
+    const handleCheckboxChange = (department) => {
+        setSendData((prevData) => {
+            const updatedDepartment = prevData.departments.includes(department.id)
+                ? prevData.departments.filter((id) => id !== department.id) // Remove if already selected
+                : [...prevData.departments, department.id]; // Add if not selected
+    
+            return { ...prevData, departments: updatedDepartment };
+        });
+
+        handleServiceTag(department)
+    };
+
+    const handleDeleteDepartment = (dept) => {
+        setSelectedOptions(prev => prev.filter((item) => item.department !== dept));
+    
+        const filterredDept = options.filter(item => item.name === dept)
+    
+        setSendData((prevData) => {
+          const updatedServices = prevData.departments.filter((id) => id !== filterredDept[0].id)
+          const updatedSlots = prevData.appointmentSlots.filter(item => item.departmentId !== filterredDept[0].id)
+    
+          return { ...prevData, departments: updatedServices, appointmentSlots: updatedSlots };
+        });
+
+        setAppointmentSlots(prev => prev.filter(item => item.title !== dept))
     }
 
     useEffect(() => {
@@ -61,12 +119,67 @@ const DepartmentForm = () => {
         };
     }, []);
 
-    const handleAddAppointmentSlots = () => {
-        setAppointmentSlots(prev => [...prev, { name: "", description: "" }]);
-    };
+    // const handleAddAppointmentSlots = (id, index) => {
+    //     setAppointmentSlots(prev => {
+    //         return prev.map((slot, i) => 
+    //             i === index 
+    //                 ? { ...slot, value: [...(slot.value || []), { name: "", description: "" }] } 
+    //                 : slot
+    //         );
+    //     });        
 
-    const handleDeleteAppointmentSlot = (index) => {
-        setAppointmentSlots(prev => prev.filter((_, i) => i !== index));
+    //     setSendData((prevData) => {
+    //         const arr = [...prevData.appointmentSlots];
+    //         const newArr = [...arr, {
+    //             name: "",
+    //             description: "",
+    //             departmentId: id
+    //         }]
+
+    //         return { ...prevData, appointmentSlots: newArr }
+    //     });
+    // };
+
+    const handleDeleteAppointmentSlot = (id, index) => {
+        // setAppointmentSlots(prev => prev.filter((_, i) => i !== index));
+        setAppointmentSlots(prev => 
+            prev.map((slot, i) => 
+                i === index 
+                    ? { ...slot, value: slot.value.filter((_, idx) => idx !== index) } 
+                    : slot
+            )
+        );
+        
+        setSendData((prevData) => {
+            const arr = [...prevData.appointmentSlots];
+            const newArr = arr.filter(item => item.departmentId !== id)
+
+            return { ...prevData, appointmentSlots: newArr }
+        });
+    }
+
+    const handleChangeAppointmentSlot = (index, id, field, newValue, departmentId) => {
+        setAppointmentSlots(prev => 
+            prev.map((slot, i) => 
+                i === index 
+                    ? { 
+                        ...slot, 
+                        value: slot.value.map((v, idx) => 
+                            idx === id ? { ...v, [field]: newValue } : v
+                        ) 
+                      } 
+                    : slot
+            )
+        );
+
+        // setSendData(prevData => ({
+        //     ...prevData,
+        //     appointmentSlots: prevData.appointmentSlots.map((slot, i) =>
+        //         slot.departmentId === departmentId
+        //             ? { ...slot, [field]: newValue }
+        //             : slot
+        //     )
+        // }));
     };
 
   return (
@@ -75,7 +188,7 @@ const DepartmentForm = () => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Department(s)
         </label>
-
+        {/* {console.log(appointmentSlots)}, */}
         <div className="relative w-full">
             <div
                 ref={toggleRef}
@@ -92,11 +205,11 @@ const DepartmentForm = () => {
                         className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
                         key={index}
                     >
-                        {option.service}
+                        {option.department}
 
                         <button
                         className="ml-2 text-[#606B85]"
-                        onClick={() => handleDeleteService(option.service)}
+                        onClick={() => handleDeleteDepartment(option.department)}
                         >
                         <IoClose />
                         </button>
@@ -137,7 +250,7 @@ const DepartmentForm = () => {
                             <input
                             type="checkbox"
                             className="mr-2 h-4 placeholder:italic text-sm"
-                            checked={selectedOptions.some(obj => obj.service === option.name)}
+                            checked={sendData.departments.includes(option.id)}
                             onChange={() => handleCheckboxChange(option)}
                             />
 
@@ -151,25 +264,24 @@ const DepartmentForm = () => {
         </div>
 
         {/* Service Value Currency Input */}
-        {selectedOptions.length > 0 && (
+        {sendData.departments.length > 0 && (
         <div className='mt-6'>
             <div className='flex items-center gap-3'>
                 <p className='text-[#121C2D] font-semibold'>
                     Appointment Slots
                 </p>
-                <button
-                    onClick={handleAddAppointmentSlots}
-                    className='w-[2.25rem] h-[2.25rem] aspect-square flex items-center justify-center bg-[#121C2D] text-white rounded-md text-2xl border border-[#394762]'
-                >
-                    <HiPlusSm />
-                </button>
             </div>
         </div>
         )}
 
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-3 mt-6'>
             {appointmentSlots.map((slot, index) => (
-                <div key={index} className='flex gap-12 items-center'>
+                <div key={index} className=''>
+                <p className='capitalize text-[#5A5A5A] text-sm '>
+                    {slot.title}
+                </p>
+                {slot.value.map((value, id) => (
+                <div key={id} className='flex mt-4 gap-12 items-center'>
                     <div className='flex flex-col w-[35%] gap-1'>
                         <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
                             <div className="w-1 h-1 aspect-square rounded-full bg-[#EB5656]"></div>
@@ -179,43 +291,43 @@ const DepartmentForm = () => {
                             type='text'
                             placeholder='Placeholder'
                             className='w-full border focus:outline-none rounded-md p-2 text-sm border-[#8891AA]'
-                            value={slot.name}
-                            onChange={e =>
-                                setAppointmentSlots(prev => 
-                                    prev.map((s, i) => i === index ? { ...s, name: e.target.value } : s)
-                                )
-                            }
+                            value={value.name}
+                            onChange={e => handleChangeAppointmentSlot(index, id, "name", e.target.value, slot.id)}
                         />
                     </div>
                     <div className='flex flex-col w-[65%] gap-1'>
                         <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
-                            <div className="w-1 h-1 aspect-square rounded-full bg-[#EB5656]"></div>
                             Description
                         </label>
                         <div className='w-full flex items-center gap-4'>
-                        <input
-                            type='text'
-                            placeholder='Placeholder'
-                            className='w-full border focus:outline-none rounded-md p-2 text-sm border-[#8891AA]'
-                            value={slot.description}
-                            onChange={e =>
-                                setAppointmentSlots(prev => 
-                                    prev.map((s, i) => i === index ? { ...s, description: e.target.value } : s)
-                                )
-                            }
-                        />
+                            <input
+                                type='text'
+                                placeholder='Placeholder'
+                                className='w-full border focus:outline-none rounded-md p-2 text-sm border-[#8891AA]'
+                                value={value.description}
+                                onChange={e => handleChangeAppointmentSlot(index, id, "description", e.target.value, slot.id)}
+                            />
+
+                            {id===0?
+                            <button
+                                // onClick={() => handleAddAppointmentSlots(slot.id, index)}
+                                className='w-[2.25rem] h-[2.25rem] aspect-square flex items-center justify-center bg-[#121C2D] text-white rounded-md text-2xl border border-[#394762]'
+                            >
+                                <HiPlusSm />
+                            </button> : 
                             <button 
-                                onClick={() => handleDeleteAppointmentSlot(index)}
-                                className='w-fit h-fit flex items-center justify-center'
+                                onClick={() => handleDeleteAppointmentSlot(slot.id, index)}
+                                className='w-[2.25rem] h-[2.25rem] flex items-center justify-center'
                             >
                                 <img
                                     src={deleteIcon}
                                     className='h-[1.25rem]'
                                     alt=''
                                 />
-                            </button>
+                            </button>}
                         </div>
                     </div>
+                </div>))}
                 </div>
             ))}
         </div>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { IoSearchOutline } from 'react-icons/io5';
+import deleteIcon from "../../../Assets/icons/deleteIcon.png"
 
 const PetDetailsForm = ({
     index,
@@ -7,6 +8,7 @@ const PetDetailsForm = ({
     patientType,
     handlePetAdd,
     handlePetChange,
+    handleDeletePet,
     allAnimalClasses,
     handlePetDobChange,
     handleAddAnimalClass,
@@ -65,7 +67,14 @@ const PetDetailsForm = ({
     };
 
   return (
-    <div className="grid border-b last:border-b-0 border-b-[#606B85] border-opacity-20 pb-6 last:pb-0 pt-4 first:pt-0 grid-cols-2 gap-x-[50px] gap-4">
+    <div className="grid relative border-b last:border-b-0 border-b-[#606B85] border-opacity-20 pb-6 last:pb-0 pt-4 first:pt-0 grid-cols-2 gap-x-[50px] gap-4">
+        {index!==0 &&
+        <button 
+            onClick={() => handleDeletePet(index)}
+            className='absolute top-[40px] h-[2.25rem] flex items-center justify-center left-[-1.7rem]'
+        >
+            <img src={deleteIcon} className='h-4 object-contain' alt='' />
+        </button>}
         <div>
             <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
                 <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>

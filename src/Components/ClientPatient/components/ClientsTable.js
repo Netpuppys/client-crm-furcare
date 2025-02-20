@@ -82,22 +82,26 @@ const ClientsTable = ({
             {allClients.length > 0 && allClients.map((client, index) => (
                 <tr 
                     key={index} 
-                    onClick={() => setSelectedClient(client.id)}
                     className="border-t even:bg-[#F9F9FA] cursor-pointer"
                 >
                     <td className="px-4 py-3">
                         <input 
                             type="checkbox"
-                            checked={selectedClient===client.id}
+                            // checked={selectedClient===client.id}
                             className="w-4 h-4"
                         />
                     </td>
                     <td className="px-4 py-3 text-[#0263E0] font-medium">
-                        <p className="underline underline-offset-2">{client.clientId}</p>
+                        <button 
+                            onClick={() => setSelectedClient(client.id)}
+                            className=""
+                        >
+                            <p className="underline underline-offset-2">{client.clientId}</p>
+                        </button>
                     </td>
                     <td className="px-4 py-3 text-[#121C2D] capitalize">{client.firstName}{" "}{client.lastName}</td>
-                    <td className="px-4 py-3 font-semibold text-[#0263E0]">{client._count.pets}</td>
-                    <td className="px-4 py-3 text-[#0263E0] font-semibold">
+                    <td className="px-4 py-3 text-[#121C2D] capitalize">{client._count.pets}</td>
+                    <td className="px-4 py-3 text-[#121C2D] capitalize">
                         {/* {client.updatedAt.toLocaleDateString("en-GB").replace(/\//g, "-")} */}
                         {format(new Date(client.updatedAt), "dd MMM yyyy")}
                     </td>

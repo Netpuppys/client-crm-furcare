@@ -6,6 +6,7 @@ import axiosInstance from "../../../utils/AxiosInstance"
 import { useAlertContext } from '../../../utils/AlertContext';
 import ClientDetailsForm from './ClientDetailsForm';
 import PetDetailsForm from './PetDetailsForm';
+import { IoClose } from "react-icons/io5";
 
 const patientType = [ 'regular' ]
 
@@ -40,6 +41,7 @@ export default function CreateNew() {
 
     const { setAlert } = useAlertContext()
 
+    const [ showPopUp, setShowPopUp ] = useState(false)
     const [ clientDetails, setClientDetails ] = useState({
         firstName: '',
         lastName: '',
@@ -154,6 +156,10 @@ export default function CreateNew() {
         }
     };
 
+    const handleDeletePet = (index) => {
+        setPetDetails(prev => prev.filter((_, i) => i !== index) )
+    }
+
     const handlePetGenderChange = (value, index) => {
         setPetDetails(prevDetails =>
             prevDetails.map((pet, i) =>
@@ -260,7 +266,7 @@ export default function CreateNew() {
     };
 
   return (
-    <div className="px-[36px] pt-4 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto">
+    <div className="px-[36px] pt-4 h-[calc(100vh-4.75rem)] pb-20 overflow-y-auto relative">
         <div className='flex items-start justify-between'>
             <div className='text-[#0263E0] flex items-center text-xs'>
                 <Link
@@ -296,6 +302,7 @@ export default function CreateNew() {
             <h1 className="text-2xl font-bold mb-6">Client Details</h1>
             
             <ClientDetailsForm
+                setShowPopUp={setShowPopUp}
                 clientDetails={clientDetails}
                 handleClientChange={handleClientChange}
             />
@@ -310,6 +317,7 @@ export default function CreateNew() {
                     patientType={patientType}
                     handlePetAdd={handlePetAdd}
                     handlePetChange={handlePetChange}
+                    handleDeletePet={handleDeletePet}
                     allAnimalClasses={allAnimalClasses}
                     handlePetDobChange={handlePetDobChange}
                     handleAddAnimalClass={handleAddAnimalClass}
@@ -318,6 +326,151 @@ export default function CreateNew() {
                 />
             ))}
         </div>
+
+        {showPopUp &&
+        <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50 bg-[#606B85] bg-opacity-50'>
+            <div className='w-[35rem] p-8 bg-white rounded-[0.5rem] shadow-[0px_4px_16px_0px_rgba(18,_28,_45,_0.20)]'>
+                <div className='w-full flex items-center justify-between'>
+                    <p className='text-xl font-semibold text-[#121C2D] tracking-[-0.025rem] '>
+                        Additional Owner(s)/Caretaker(s)
+                    </p>
+                    <button 
+                        onClick={() => setShowPopUp(false)}
+                        className='w-[1.75rem] aspect-square flex items-center text-3xl text-[#606B85]'>
+                        <IoClose />
+                    </button>
+                </div>
+
+                <div className='mt-8'>
+                    <div className='w-full flex gap-5'>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
+                                First Name
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="firstName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
+                                Last Name
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="lastName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                    </div>
+                    <div className='w-full mt-8 flex gap-5'>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
+                                Mobile Number
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="mobile"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                <div className='w-1 h-1 rounded-full bg-[#EB5656] '></div>
+                                Email Address
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="lastName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div className='w-full h-[1px] bg-black bg-opacity-30 mt-8 rounded-full'></div>
+                <div className='mt-8'>
+                    <div className='w-full flex gap-5'>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                First Name
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="firstName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                Last Name
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="lastName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                    </div>
+                    <div className='w-full mt-8 flex gap-5'>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                Mobile Number
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="mobile"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                        <div className='w-full'>
+                            <label className="flex items-center gap-2 text-sm text-[#121C2D] font-semibold mb-1 ">
+                                Email Address
+                            </label>
+                            <input
+                                type="text"
+                                placeholder='Field Text'
+                                name="lastName"
+                                // value={clientDetails.firstName || ''}
+                                // onChange={handleClientChange}
+                                className="w-full px-2 capitalize placeholder:italic text-sm  py-2 border rounded-md h-[36px] focus:outline-none border-[#8891AA]"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div className='w-full flex mt-8 justify-end'>
+                    <BlueButton
+                        disabled={true}
+                        text={"Save"}
+                    />
+                </div>
+            </div>
+        </div>}
     </div>
   );
 }

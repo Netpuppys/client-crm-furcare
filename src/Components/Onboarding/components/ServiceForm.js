@@ -2,7 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import { IoClose, IoSearchOutline } from 'react-icons/io5'
 import axiosInstance from '../../../utils/AxiosInstance';
 
-const ServiceForm = () => {
+const ServiceForm = ({
+  sendData,
+  setSendData
+}) => {
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
 
@@ -41,7 +44,7 @@ const ServiceForm = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
-  const handleCheckboxChange = (option) => {
+  const handleServiceTag = (option) => {
     if (selectedOptions.some(obj => obj.service === option.name)) {
       setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
     } else {
@@ -49,8 +52,28 @@ const ServiceForm = () => {
     }
   };
 
-  const handleDeleteService = (option) => {
-    setSelectedOptions(prev => prev.filter((item) => item.service !== option));
+  const handleCheckboxChange = (service) => {
+    setSendData((prevData) => {
+        const updatedServices = prevData.services.includes(service.id)
+            ? prevData.services.filter((id) => id !== service.id) // Remove if already selected
+            : [...prevData.services, service.id]; // Add if not selected
+
+        return { ...prevData, services: updatedServices };
+    });
+
+    handleServiceTag(service)
+  };
+
+  const handleDeleteService = (service) => {
+    setSelectedOptions(prev => prev.filter((item) => item.service !== service));
+
+    const filterredService = options.filter(item => item.name === service)
+
+    setSendData((prevData) => {
+      const updatedServices = prevData.services.filter((id) => id !== filterredService[0].id)
+
+      return { ...prevData, services: updatedServices };
+    });
   }
 
   useEffect(() => {
@@ -148,7 +171,7 @@ const ServiceForm = () => {
                             <input
                             type="checkbox"
                             className="mr-2 h-4 placeholder:italic text-sm"
-                            checked={selectedOptions.some(obj => obj.service === option.name)}
+                            checked={sendData.services.includes(option.id)}
                             onChange={() => handleCheckboxChange(option)}
                             />
 

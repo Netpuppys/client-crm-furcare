@@ -2,6 +2,7 @@ import React from 'react'
 import { IoSearchOutline } from 'react-icons/io5';
 
 const ClientDetailsForm = ({
+    setShowPopUp,
     clientDetails,
     handleClientChange,
 }) => {
@@ -178,6 +179,7 @@ const ClientDetailsForm = ({
 
         <div className='flex items-center justify-center'>
             <button
+                onClick={() => setShowPopUp(true)}
                 className='text-[#0263E0] text-sm font-semibold'
             >
                 Add Additional Owner(s)/Caretaker(s)
