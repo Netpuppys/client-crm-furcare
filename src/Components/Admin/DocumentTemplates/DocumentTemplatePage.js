@@ -34,8 +34,8 @@ const types = [
     serverName: "Marketing"
   }
 ];
-  
-const AppointmentsTable = ({ 
+
+const AppointmentsTable = ({
   tableData,
   openEditModule,
   setOpenEditModule

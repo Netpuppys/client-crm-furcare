@@ -17,6 +17,8 @@ import OnboardingPage from "../Components/Onboarding/OnboardingPage";
 import ClientPatientPage from "../Components/ClientPatient/ClientPatientPage";
 import CreateNew from "../Components/ClientPatient/components/CreateNew";
 import OverViewPage from "../Components/visits/overview/OverViewPage";
+import SettingsPage from "../Components/Admin/Settings/SettingsPage";
+import LeadTypesPage from "../Components/Admin/LeadTypes/LeadTypesPage";
 
 
 const AllRoutes = () => {
@@ -36,10 +38,12 @@ const AllRoutes = () => {
       <Route path="/admin/diagnostic-integrations" element={<DiagnosticIntegrationPage />} />
       <Route path="/admin/supplies-management" element={<SuppliesManagementPage />} />
       <Route path="/admin/groups-management" element={<GroupManagementPage />} />
+      <Route path="/admin/lead-types" element={<LeadTypesPage />} />
       <Route path="/admin/report-management" element={<ReportManagementPage />} />
       <Route path="/admin/roles-and-permissions" element={<RolesAndPermissionsPage />} />
       <Route path="/admin/staff-management" element={<StaffManagementPage />} />
       <Route path="/admin/document-templates" element={<DocumentTemplatePage />} />
+      <Route path="/admin/settings" element={<SettingsPage />} />
       <Route path="/admin/branch-units/create-business-unit" element={<CreateBusinessUnit/>}/>
       <Route path="/admin/branch-units/edit-business-unit" element={<EditBusinessUnit/>}/>
 

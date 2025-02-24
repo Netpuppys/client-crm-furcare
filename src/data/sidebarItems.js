@@ -22,7 +22,7 @@ const sidebarItems = [
       subItems: [
         { name: "Animal Classes", linkTo: "/admin/animal-classes" },
         { name: "Business Units", linkTo: "/admin/branch-units" },
-        { name: "Config Management", linkTo: "/admin/config-management" },
+        // { name: "Config Management", linkTo: "/admin/config-management" },
         { name: "Content Library", linkTo: "/admin/content-library" },
         { name: "Diagnostic Integrations", linkTo: "/admin/diagnostic-integrations" },
         { name: "Document Templates", linkTo: "/admin/document-templates" },
@@ -32,7 +32,8 @@ const sidebarItems = [
         { name: "Roles & Permissions", linkTo: "/admin/roles-and-permissions" },
         { name: "Staff Management", linkTo: "/admin/staff-management" },
         { name: "Staff Scheduler", linkTo: "/admin/staff-scheduler" },
-        { name: "Supplies Management", linkTo: "/admin/supplies-management" }
+        { name: "Supplies Management", linkTo: "/admin/supplies-management" },
+        { name: "Settings", linkTo: "/admin/settings" },
       ]
     },
     { 

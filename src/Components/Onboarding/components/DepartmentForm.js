@@ -9,13 +9,13 @@ const DepartmentForm = ({
     setSendData
 }) => {
 
-    const dropdownRef = useRef(null);
     const toggleRef = useRef(null);
+    const dropdownRef = useRef(null);
 
+    const [ options, setOptions ] = useState([]);
     const [ selectedOptions, setSelectedOptions ] = useState([]);
     const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-    const [ options, setOptions ] = useState([])
-    const [ appointmentSlots, setAppointmentSlots ] = useState([])
+    const [ appointmentSlots, setAppointmentSlots ] = useState([]);
 
     useEffect(() => {
         axiosInstance
@@ -41,18 +41,17 @@ const DepartmentForm = ({
 
             setSendData((prevData) => {
                 const arr = [...prevData.appointmentSlots].filter(item => item.departmentId !== option.id);
-                console.log("new", arr)
                 return {...prevData, appointmentSlots: arr}
             });
         } else {
             setSelectedOptions([...selectedOptions, { department: option.name, basePrice: "" }]);
 
-            setAppointmentSlots(prev => [...prev, { 
-                title: option.name, 
-                id: option.id, 
+            setAppointmentSlots(prev => [...prev, {
+                title: option.name,
+                id: option.id,
                 value: [
                     {
-                        name: "", 
+                        name: "",
                         description: ""
                     }
                 ]
@@ -65,7 +64,7 @@ const DepartmentForm = ({
                     description: "",
                     departmentId: option.id
                 }]
-                
+
                 console.log("new", newArr)
 
                 return { ...prevData, appointmentSlots: newArr }
@@ -87,9 +86,9 @@ const DepartmentForm = ({
 
     const handleDeleteDepartment = (dept) => {
         setSelectedOptions(prev => prev.filter((item) => item.department !== dept));
-    
+
         const filterredDept = options.filter(item => item.name === dept)
-    
+
         setSendData((prevData) => {
           const updatedServices = prevData.departments.filter((id) => id !== filterredDept[0].id)
           const updatedSlots = prevData.appointmentSlots.filter(item => item.departmentId !== filterredDept[0].id)
@@ -119,26 +118,26 @@ const DepartmentForm = ({
         };
     }, []);
 
-    // const handleAddAppointmentSlots = (id, index) => {
-    //     setAppointmentSlots(prev => {
-    //         return prev.map((slot, i) => 
-    //             i === index 
-    //                 ? { ...slot, value: [...(slot.value || []), { name: "", description: "" }] } 
-    //                 : slot
-    //         );
-    //     });        
+    const handleAddAppointmentSlots = (id, index) => {
+        setAppointmentSlots(prev => {
+            return prev.map((slot, i) => 
+                i === index 
+                    ? { ...slot, value: [...(slot.value || []), { name: "", description: "" }] } 
+                    : slot
+            );
+        });        
 
-    //     setSendData((prevData) => {
-    //         const arr = [...prevData.appointmentSlots];
-    //         const newArr = [...arr, {
-    //             name: "",
-    //             description: "",
-    //             departmentId: id
-    //         }]
+        setSendData((prevData) => {
+            const arr = [...prevData.appointmentSlots];
+            const newArr = [...arr, {
+                name: "",
+                description: "",
+                departmentId: id
+            }]
 
-    //         return { ...prevData, appointmentSlots: newArr }
-    //     });
-    // };
+            return { ...prevData, appointmentSlots: newArr }
+        });
+    };
 
     const handleDeleteAppointmentSlot = (id, index) => {
         // setAppointmentSlots(prev => prev.filter((_, i) => i !== index));
@@ -172,14 +171,14 @@ const DepartmentForm = ({
             )
         );
 
-        // setSendData(prevData => ({
-        //     ...prevData,
-        //     appointmentSlots: prevData.appointmentSlots.map((slot, i) =>
-        //         slot.departmentId === departmentId
-        //             ? { ...slot, [field]: newValue }
-        //             : slot
-        //     )
-        // }));
+        setSendData(prevData => ({
+            ...prevData,
+            appointmentSlots: prevData.appointmentSlots.map((slot, i) =>
+                slot.departmentId === departmentId
+                    ? { ...slot, [field]: newValue }
+                    : slot
+            )
+        }));
     };
 
   return (
@@ -310,7 +309,7 @@ const DepartmentForm = ({
 
                             {id===0?
                             <button
-                                // onClick={() => handleAddAppointmentSlots(slot.id, index)}
+                                onClick={() => handleAddAppointmentSlots(slot.id, index)}
                                 className='w-[2.25rem] h-[2.25rem] aspect-square flex items-center justify-center bg-[#121C2D] text-white rounded-md text-2xl border border-[#394762]'
                             >
                                 <HiPlusSm />
@@ -335,4 +334,4 @@ const DepartmentForm = ({
   )
 }
 
-export default DepartmentForm
+export default DepartmentForm;

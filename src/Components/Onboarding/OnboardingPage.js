@@ -63,7 +63,7 @@ const OnboardingSchema = z.object({
         departmentId: z.string().min(1, "id is required")
     })).min(1, "At least one slot is required")
 });
-  
+
 
 const OnboardingPage = () => {
     const [ openModalIndex, setOpenModalIndex ] = useState(0);
