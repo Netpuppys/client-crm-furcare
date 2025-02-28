@@ -1,18 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
-import informationIcon from "../../../Assets/icons/informationIcon.png";
-import closeIcon from "../../../Assets/icons/alert/close.png";
-import { FaSearch } from "react-icons/fa";
-import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
-import { useAppContext } from "../../../utils/AppContext";
+import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useAlertContext } from "../../../utils/AlertContext";
-import statesInIndia from "../../../data/StatesIndia";
 import BlueButton from "../../../ui/BlueButton";
+import statesInIndia from "../../../data/StatesIndia";
+import EditDiagnostic from "./Components/EditDiagnostic";
+import axiosInstance from "../../../utils/AxiosInstance";
+import { useAppContext } from "../../../utils/AppContext";
+import closeIcon from "../../../Assets/icons/alert/close.png";
+import { useAlertContext } from "../../../utils/AlertContext";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
+import informationIcon from "../../../Assets/icons/informationIcon.png";
 
 const DiagnosticTable = ({ 
-  diagnosticIntegrationsData 
+  setEditDiagnostic,
+  diagnosticIntegrationsData,
 }) => {
 
   return (
@@ -51,8 +53,18 @@ const DiagnosticTable = ({
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
           {diagnosticIntegrationsData.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">{item.name}</td>
+            <tr
+              key={index}
+              className="hover:bg-gray-50"
+            >
+              <td className="px-4 py-2 text-sm">
+                <button
+                  onClick={() => setEditDiagnostic(item)}
+                  className="text-sm text-[#0263E0] capitalize hover:underline"
+                >
+                  {item.name}
+                </button>
+              </td>
               <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
                 {item.city}{", "}{item.state}
               </td>
@@ -85,7 +97,7 @@ const DiagnosticTable = ({
 };
 
 const CreateNewForm = ({ 
-  fetchDiagnosticsDetails 
+  fetchDiagnosticsDetails
 }) => {
   
   const { setAlert } = useAlertContext()
@@ -106,16 +118,31 @@ const CreateNewForm = ({
   });
 
   useEffect(() => {
-    setFormData({
-      name: "",
-      address1: "",
-      address2: "",
-      city: "",
-      state: "",
-      country: "India",
-      postalCode: ""
-    })
-  }, [])
+    // console.log(formData, editDiagnostic)
+
+    // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
+    // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
+    // console.log(formData.address2.replace(/\s/g, "") === editDiagnostic.addressLine2.replace(/\s/g, ""))
+    // console.log(formData.city.replace(/\s/g, "") === editDiagnostic.city.replace(/\s/g, ""))
+    // console.log(formData.state.replace(/\s/g, "") === editDiagnostic.state.replace(/\s/g, ""))
+    // console.log(formData.country.replace(/\s/g, "") === editDiagnostic.country.replace(/\s/g, ""))
+    // console.log(Number(formData.postalCode) === Number(editDiagnostic.postalCode))
+
+    if (
+        (formData.name?.replace(/\s/g, "") === "") &&
+        (formData.address1?.replace(/\s/g, "") === "") &&
+        (formData.address2?.replace(/\s/g, "") === "") &&
+        (formData.city?.replace(/\s/g, "") === "") &&
+        (formData.state?.replace(/\s/g, "") === "") &&
+        (formData.country?.replace(/\s/g, "") === "") &&
+        (Number(formData.postalCode) === "")
+    ) {
+        setDisabled(true)
+        return
+    }
+
+    setDisabled(false)
+}, [formData])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -351,13 +378,11 @@ const CreateNewForm = ({
 
       {/* Submit Button */}
       <div className="h-full w-full items-end flex justify-end ">
-        <button
+        <BlueButton
           disabled={disabled}
-          className="py-2 px-4 disabled:bg-gray-400 bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
+          text={"Save"}
+          onClickHandler={handleSubmit}
+        />
       </div>
     </div>
   );
@@ -369,6 +394,7 @@ const DiagnosticIntegrationPage = () => {
 
   const [ createNew, setCreateNew] = useState(false);
   const [ diagnosticIntegrationsData, setDiagnosticIntegrationsData ] = useState([])
+  const [ editDiagnostic, setEditDiagnostic ] = useState(false)
 
   const navigate = useNavigate()
 
@@ -432,9 +458,9 @@ const DiagnosticIntegrationPage = () => {
       <div className="w-full mt-6">
         <DiagnosticTable 
           diagnosticIntegrationsData={diagnosticIntegrationsData}
+          setEditDiagnostic={setEditDiagnostic}
         />
       </div>
-
 
       {createNew &&
       <div className={`fixed
@@ -465,6 +491,39 @@ const DiagnosticIntegrationPage = () => {
             <CreateNewForm
               fetchDiagnosticsDetails={fetchDiagnosticsDetails}
             />}
+          </div>
+        </div>
+      </div>}
+
+      {editDiagnostic &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
+
+        <div 
+          onClick={() => setEditDiagnostic(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
+
+        <div
+          className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+            editDiagnostic ? "right-0 block" : "right-full hidden z-50"
+          } `}
+        >
+          <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+            <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+              Edit Diagnostic Integration
+            </p>
+            <button onClick={() => setEditDiagnostic(false)} className="">
+              <img src={closeIcon} className="w-7 " alt="" />
+            </button>
+          </div>
+
+          <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+            <EditDiagnostic
+              fetchDiagnosticsDetails={fetchDiagnosticsDetails}
+              editDiagnostic={editDiagnostic}
+            />
           </div>
         </div>
       </div>}

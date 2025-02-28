@@ -7,9 +7,12 @@ import BlueButton from "../../../ui/BlueButton";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import { useAppContext } from "../../../utils/AppContext";
+import EditStaff from "./component/EditStaff";
 
 const DiagnosticTable = ({ 
-  staffData
+  loaded,
+  staffData,
+  setEditStaff,
 }) => {
 
   return (
@@ -51,7 +54,11 @@ const DiagnosticTable = ({
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
           {staffData?.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
+            <tr 
+              key={index} 
+              className="hover:bg-gray-50"
+              onClick={() => setEditStaff(item)}
+            >
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.id}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.email}</td>
@@ -78,6 +85,10 @@ const DiagnosticTable = ({
           ))}
         </tbody>
       </table>
+      {staffData.length===0 && loaded &&
+      <div className="w-full h-10 flex items-center justify-center">
+        No Staff Members Found
+      </div>}
     </div>
   );
 };
@@ -305,10 +316,12 @@ const CreateNewForm = ({ fetchStaffData }) => {
 function StaffManagementPage() {
   const navigate = useNavigate()
 
-  const { sidebarExpanded } = useAppContext()
+  const { sidebarExpanded, selectedBranch } = useAppContext()
 
   const [ createNew, setCreateNew] = useState(false);
   const [ staffData, setStaffData ] = useState([])
+  const [ loaded, setLoaded ] = useState(false)
+  const [ editStaff, setEditStaff ] = useState(false)
 
   const handleAdminClick = () => {
     navigate("/admin/branch-units")
@@ -316,16 +329,17 @@ function StaffManagementPage() {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/v1/staff`)
+      .get(`/api/v1/staff?businessBranchId=${selectedBranch.id}`)
       .then(res => {
         const response = res.data.data.data
         console.log(response)
         setStaffData(response)
+        setLoaded(true)
       })
       .catch(err => {
         console.error(err)
       })
-  }, [])
+  }, [selectedBranch])
 
   const fetchStaffData = () => {
     axiosInstance
@@ -369,6 +383,8 @@ function StaffManagementPage() {
       <div className="w-full mt-6">
         <DiagnosticTable 
           staffData={staffData}
+          loaded={loaded}
+          setEditStaff={setEditStaff}
         />
       </div>
 
@@ -397,8 +413,41 @@ function StaffManagementPage() {
           </div>
 
           <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
-            <CreateNewForm 
+            <CreateNewForm
               fetchStaffData={fetchStaffData}
+            />
+          </div>
+        </div>
+      </div>}
+
+      {editStaff &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
+
+        <div 
+          onClick={() => setEditStaff(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
+
+        <div
+          className={`fixed top-0 shadow-2xl h-screen bg-white w-[45rem] ${
+            editStaff ? "right-0 block" : "right-full hidden z-50"
+          } `}
+        >
+          <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+            <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+              Edit Staff
+            </p>
+            <button onClick={() => setEditStaff(false)} className="">
+              <img src={closeIcon} className="w-7 " alt="" />
+            </button>
+          </div>
+
+          <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+            <EditStaff
+              fetchStaffData={fetchStaffData}
+              editStaff={editStaff}
             />
           </div>
         </div>

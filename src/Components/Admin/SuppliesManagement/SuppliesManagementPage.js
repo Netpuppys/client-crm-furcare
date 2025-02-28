@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import BlueButton from "../../../ui/BlueButton";
-import deleteIcon from "../../../Assets/icons/deleteIcon.png"
+import deleteIcon from "../../../Assets/icons/deleteIcon.png";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
+import EditSupplyForm from "./components/EditSupplyForm";
 
 const SuppliesTable = ({
-  suppliesData
+  loaded,
+  suppliesData,
+  setEditSupply,
 }) => {
 
   return (
@@ -49,7 +52,12 @@ const SuppliesTable = ({
           {suppliesData?.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
-                {item.name}
+                <button
+                  onClick={() => setEditSupply(item)}
+                  className="text-sm hover:underline text-[#0263E0] capitalize"
+                >
+                  {item.name}
+                </button>
               </td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">
                 {item.items.map((obj, id) => (
@@ -59,7 +67,7 @@ const SuppliesTable = ({
                 ))}
               </td>
               <td className="px-4 py-2 text-sm">
-                <a href={item.url} className="text-blue-600 underline">
+                <a href={item.url} className="text-blue-600 cursor-pointer underline">
                   List
                 </a>
               </td>
@@ -80,6 +88,10 @@ const SuppliesTable = ({
           ))}
         </tbody>
       </table>
+      {suppliesData.length===0 && loaded &&
+      <div className="w-full h-10 text-sm flex items-center justify-center">
+        Supplies not found
+      </div>}
     </div>
   );
 };
@@ -90,11 +102,42 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
   const { selectedBranch } = useAppContext()
 
   const [ vendorList, setVendorList ] = useState([])
+  const [ disabled, setDisabled ] = useState(true)
   const [ formData, setFormData] = useState({
     name: "",
     item: [ { name: "", vendor: {} } ]
   });
 
+  useEffect(() => {
+    if (formData.name.replace(/\s/g, "") === "") {
+      setDisabled(true)
+      return
+    }
+    
+    if (formData.item.length>0) {
+      formData.item.forEach((item) => {
+        if (item.name.replace(/\s/g, "") === "") {
+          setDisabled(true)
+          return
+        }
+
+        setDisabled(false)
+
+        if (JSON.stringify(item.vendor) === JSON.stringify({})) {
+          setDisabled(true)
+          return
+        }
+
+        setDisabled(false)
+      });
+
+      return
+    }
+
+    setDisabled(false)
+  }, [formData])
+
+  // fetch vendor list
   useEffect(() => {
     if (!selectedBranch?.id) {
       return
@@ -118,7 +161,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
   const addField = () => {
     setFormData((prev) => ({
       ...prev,
-      item: [...prev.item, { name: "", vendor: "" }]
+      item: [...prev.item, { name: "", vendor: {} }]
     }));
   };
 
@@ -185,7 +228,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
     }
 
     axiosInstance
-      .post(`/api/v1/supplies`, sendData)
+      .post(`/api/v1/supplies?businessBranchId=${selectedBranch.id}`, sendData)
       .then(res => {
         console.log(res)
         setAlert("Created Successfully")
@@ -206,7 +249,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
         </label>
         <input
           type="text"
-          className="mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
+          className="mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Placeholder"
           value={formData.name}
           onChange={(e) => handleInputChange("name", e.target.value)}
@@ -227,7 +270,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
             </label>
             <input
               type="text"
-              className="w-full mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
               placeholder="Placeholder"
               value={field.name}
               onChange={(e) => handleFieldChange(index, "name", e.target.value)}
@@ -243,7 +286,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
             <select
               value={JSON.stringify(field.vendor) || ""}
               onChange={(e) => handleVendorFieldChange(index, "vendor", e.target.value)}
-              className="w-full classic mt-1 p-2 capitalize border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full classic mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
             >
               <option value={JSON.stringify({})}>Select Vendor</option>
               {vendorList.map((vendor, vendorId) => (
@@ -267,12 +310,11 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
 
       {/* Submit Button */}
       <div className="h-full w-full items-end flex justify-end ">
-        <button
-          className="py-2 px-4 bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-          onClick={handleSubmit}
-        >
-          Save
-        </button>
+        <BlueButton
+          text={'Save'}
+          disabled={disabled}
+          onClickHandler={handleSubmit}
+        />
       </div>
     </div>
   );
@@ -281,32 +323,39 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
 function SuppliesManagementPage() {
   const navigate = useNavigate()
 
-  const { sidebarExpanded } = useAppContext()
+  const { sidebarExpanded, selectedBranch } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false);
   const [ suppliesData, setSuppliesData ] = useState([]);
+  const [ loaded, setLoaded ] = useState(false)
+  const [ editSupply, setEditSupply ] = useState(false)
 
   useEffect(() => {
     axiosInstance
-      .get("/api/v1/supplies")
+      .get(`/api/v1/supplies?businessBranchId=${selectedBranch.id}`)
       .then(res => {
         const response = res.data.data.data
         setSuppliesData(response)
+        setLoaded(true)
       })
       .catch(err => {
         console.error(err)
       })
-  }, [])
+  }, [selectedBranch])
 
   const fetchSuppliesData = () => {
+    setLoaded(false)
+
     axiosInstance
-      .get("/api/v1/supplies")
+      .get(`/api/v1/supplies?businessBranchId=${selectedBranch.id}`)
       .then(res => {
-        const response = res.data.data.data
+        const response = res.data.data.data;
         setSuppliesData(response)
+        setSuppliesData(true)
       })
       .catch(err => {
         console.error(err)
+        toast.error('Something went wrong')
       })
   }
 
@@ -342,7 +391,9 @@ function SuppliesManagementPage() {
 
       <div className="w-full mt-6">
         <SuppliesTable 
+          loaded={loaded}
           suppliesData={suppliesData}
+          setEditSupply={setEditSupply}
         />
       </div>
 
@@ -365,12 +416,44 @@ function SuppliesManagementPage() {
                 onClick={() => setCreateNew(false)}
                 className=""
               >
-                <img src={closeIcon} className="w-7 " alt="" />
+                <img src={closeIcon} className="w-7" alt="" />
               </button>
             </div>
 
             <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
               <CreateNewForm 
+                fetchSuppliesData={fetchSuppliesData}
+              />
+            </div>
+        </div>
+      </div>}
+
+      {editSupply &&
+      <div className={`fixed
+        ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
+        top-0 h-screen right-0 flex z-50`}>
+
+        <div 
+          onClick={() => setEditSupply(false)}
+          className="w-[calc(100%-45rem)] h-full"
+        ></div>
+
+        <div className={`fixed top-0 shadow-2xl overflow-y-auto h-full bg-white w-[45rem] right-0`}>
+            <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
+              <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
+                Create Supply
+              </p>
+              <button
+                onClick={() => setEditSupply(false)}
+                className=""
+              >
+                <img src={closeIcon} className="w-7 " alt="" />
+              </button>
+            </div>
+
+            <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
+              <EditSupplyForm 
+                editSupply={editSupply}
                 fetchSuppliesData={fetchSuppliesData}
               />
             </div>

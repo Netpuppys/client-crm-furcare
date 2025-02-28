@@ -22,6 +22,12 @@ const ReportTable = ({
       setSelectedGroup(data)
   }
 
+  const handleEdit = (item) => {
+    setEditGroup(item)
+    setSelectedGroup(null)
+    setShowLabelsList(null)
+  }
+
   return (
     <div className="">
       <table className="min-w-full">
@@ -67,29 +73,34 @@ const ReportTable = ({
         <tbody className="divide-y divide-[#E1E3EA]">
           {reportData && reportData.length>0 && reportData?.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50 border-b last:border-b-0 border-[#E1E3EA]">
-                <td className="px-4 py-2 text-sm text-[#0263E0] capitalize font-semibold">
+                <td className="px-4 py-2">
+                  <button
+                    onClick={() => handleEdit(item)}
+                    className="text-sm hover:underline text-[#0263E0] capitalize"
+                  >
                     {item.name}
+                  </button>
                 </td>
                 <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
                     {item.type}
                 </td>
                 <td className="px-4 py-2 text-sm relative">
-                    <button
-                      onClick={() => handleListClick(item.fields, index)}
-                      className="text-blue-600 underline"
-                    >
-                      List
-                    </button>
-                    {showLabelsList===index &&
-                        <div className="absolute top-[calc(100%+0.3rem)] z-50 left-1">
-                            <LabelFieldsList
-                                selectedGroup={selectedGroup}
-                                selectedGroupData={item}
-                                setShowLabelsList={setShowLabelsList}
-                                setSelectedGroup={setSelectedGroup}
-                                setEditGroup={setEditGroup}
-                            />
-                        </div>}
+                  <button
+                    onClick={() => handleListClick(item.fields, index)}
+                    className="text-blue-600 underline"
+                  >
+                    List
+                  </button>
+                  {showLabelsList===index &&
+                  <div className="absolute top-[calc(100%+0.3rem)] z-50 left-1">
+                    <LabelFieldsList
+                        selectedGroup={selectedGroup}
+                        selectedGroupData={item}
+                        setShowLabelsList={setShowLabelsList}
+                        setSelectedGroup={setSelectedGroup}
+                        setEditGroup={setEditGroup}
+                    />
+                  </div>}
                 </td>
                 <td className="px-4 py-2 text-sm text-[#121C2D]">
                     <p className="">
@@ -181,11 +192,10 @@ function ReportManagementPage() {
             onClickHandler={handleCreateNew}
             text={"Create"}
           />
-
       </div>
 
       <div className="w-full mt-6">
-        <ReportTable 
+        <ReportTable
             reportData={reportData}
             setEditGroup={setEditGroup}
         />

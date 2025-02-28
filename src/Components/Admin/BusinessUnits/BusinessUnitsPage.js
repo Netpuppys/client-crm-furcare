@@ -32,7 +32,9 @@ const Card = ({
         <div className="w-4 rounded-full aspect-square bg-transparent border border-[#8891AA] flex items-center justify-center">
         </div>}
 
-        <p className="capitalize">{branch}</p>
+        <p className="capitalize">
+          {branch}
+        </p>
         <button
           onClick={handleEdit}
           className=""
@@ -147,7 +149,7 @@ const BusinessUnitsPage = () => {
       </div>
 
       {selectedBranch &&
-      <div className="mt-10">
+      <div className="mt-10 min-h-[32rem]">
         <OtherInfo 
           branchData={selectedBranch}
         />

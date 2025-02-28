@@ -45,8 +45,10 @@ const CreateNewGroup = ({
             .then(res => {
                 const response = res.data.data.data;
 
-                setResources(response)
-                setDropDownList(response)
+                const filtered = response.filter(item => item.active === true)
+
+                setResources(filtered)
+                setDropDownList(filtered)
             })
             .catch(err => {
                 console.error(err)
@@ -242,6 +244,13 @@ const CreateNewGroup = ({
                             </p>
                         </button>
                     ))}
+                    {dropDownList.length===0 &&
+                        <div className="h-10 w-full flex items-center justify-center border-b border-gray-300 last:border-b-0">
+                            <p className="capitalize text-sm font-medium">
+                                No Active Staff Found
+                            </p>
+                        </div>
+                    }
                     </div>}
                 </div>
 

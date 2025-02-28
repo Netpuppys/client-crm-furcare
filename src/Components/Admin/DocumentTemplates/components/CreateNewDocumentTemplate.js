@@ -7,10 +7,10 @@ import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 
-const CreateNewDocumentTemplate = ({ 
-  types, 
+const CreateNewDocumentTemplate = ({
+  types,
   fetchData,
-  selectedType, 
+  selectedType,
 }) => {
   const dropDownList = [ "English", "Hindi" ]
 
@@ -18,8 +18,8 @@ const CreateNewDocumentTemplate = ({
   const { selectedBranch } = useAppContext()
 
   const [ formData, setFormData ] = useState({
-    type: selectedType,
     name: "",
+    type: selectedType,
     additionalNotes: "",
   });
 
@@ -104,7 +104,12 @@ const CreateNewDocumentTemplate = ({
             >
                 <option value={""}>Select</option>
                 {types.map((type, id) => (
-                    <option value={type.serverName} key={id}>{type.name}</option>
+                    <option 
+                      key={id}
+                      value={type.serverName} 
+                    >
+                      {type.name}
+                    </option>
                 ))}
             </select>
         </div>

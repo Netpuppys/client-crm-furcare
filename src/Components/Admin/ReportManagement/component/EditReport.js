@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { useAppContext } from "../../../../utils/AppContext";
 import { FaSearch } from "react-icons/fa";
-import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 import { FiCheck, FiPlus } from "react-icons/fi";
+import { useAppContext } from "../../../../utils/AppContext";
+import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 
 const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-In Appointments", "Appointment Slots", "Doctors" ]
-const frequencyArray = [ "Every Day", "Every Week", "Every Month" ]
-const appointmentTypes = [ "Appointments", "Finance", "Inventory", "Client & Patient" ]
+const frequencyArray = [ 'day', 'week', 'month' ]
+const appointmentTypes = [ 'appointments', 'admin', 'client_and_patient', 'inventory', 'communication', 'visits', 'leads' ]
 
 const EditReport = ({
     selectedReport
@@ -17,23 +17,35 @@ const EditReport = ({
     const [ showLabelOptions, setShowLabelOptions ] = useState(false)
     const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([])
     const [ disabled, setDisabled ] = useState(true)
+    const [ active, setActive ] = useState(selectedReport.active)
     const [ formData, setFormData] = useState({
-        name: selectedReport?.name,
-        type: selectedReport?.type,
-        labelFields: selectedReport?.fields,
-        frequency: selectedReport?.frequency,
+        name: selectedReport.name,
+        type: selectedReport.type,
+        labelFields: selectedReport.fields,
+        frequency: selectedReport.frequency,
         location: "",
-        backgroundReport: selectedReport?.generateInBackground,
+        backgroundReport: selectedReport.generateInBackground,
     });
 
     useEffect(() => {
-        if (formData.name === "" || formData.type === "" || formData.frequency === "" || formData.location === "" ) {
+        console.log(selectedReport)
+        console.log(formData)
+
+        if (
+            (selectedReport.name.replace(/\s/g, "") === formData.name.replace(/\s/g, "") || formData.name.replace(/\s/g, "") === "") &&
+            selectedReport.type === formData.type &&
+            // selectedReport.fields === formData.labelFields &&
+            selectedReport.frequency === formData.frequency &&
+            formData.location === "" &&
+            selectedReport.generateInBackground === formData.backgroundReport &&
+            active === selectedReport.active
+        ) {
             setDisabled(true)
             return
         }
-  
+
         setDisabled(false)
-    }, [formData])
+    }, [selectedReport, formData, active])
 
     const handleInputChange = (key, value) => {
         setFormData((prev) => ({ ...prev, [key]: value }));
@@ -145,40 +157,40 @@ const EditReport = ({
           </div>
   
           <div className="flex gap-10 w-full">
-              {/* Name Input */}
-              <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
-                      <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
-                      Frequency{" "}
-                  </label>
-                  <select
-                      value={formData.frequency}
-                      onChange={e => handleInputChange("frequency", e.target.value)}
-                      className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
-                  >
-                      <option value={""}>Select</option>
-                      {frequencyArray.map((item, index) => (
-                          <option key={index} value={item}>{item}</option>
-                      ))}
-                  </select>
-              </div>
-              <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
-                      <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
-                      Locations{" "}
-                  </label>
-                  <select
-                      value={formData.location}
-                      onChange={e => handleInputChange("location", e.target.value)}
-                      className="mt-1 p-2 border capitalize border-gray-300 focus:outline-none rounded-lg classic"
-                  >
-                      <option value={""}>Select</option>
-                      <option value={"All"}>All</option>
-                      {branchDetails?.map((item, index) => (
-                          <option key={index} value={item.name}>{item.name}</option>
-                      ))}
-                  </select>
-              </div>
+                {/* Name Input */}
+                <div className="flex flex-col w-full">
+                    <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                        <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
+                        Frequency{" "}
+                    </label>
+                    <select
+                        value={formData.frequency}
+                        onChange={e => handleInputChange("frequency", e.target.value)}
+                        className="mt-1 p-2 border border-gray-300 capitalize focus:outline-none rounded-lg classic"
+                    >
+                        <option value={""}>Select</option>
+                        {frequencyArray.map((item, index) => (
+                            <option key={index} value={item}>{item}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="flex flex-col w-full">
+                    <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                        <div className="w-1 aspect-square rounded-full bg-red-500"></div>
+                        Locations{" "}
+                    </label>
+                    <select
+                        value={formData.location}
+                        onChange={e => handleInputChange("location", e.target.value)}
+                        className="mt-1 p-2 border capitalize border-gray-300 focus:outline-none rounded-lg classic"
+                    >
+                        <option value={""}>Select</option>
+                        <option value={"All"}>All</option>
+                        {branchDetails?.map((item, index) => (
+                            <option key={index} value={item.name}>{item.name}</option>
+                        ))}
+                    </select>
+                </div>
           </div>
   
           <div className="">
@@ -200,17 +212,47 @@ const EditReport = ({
                   </p>
               </div>
           </div>
+
+          <div className=''>
+            <p className='text-sm font-semibold text-[#121C2D] flex items-center justify-start gap-1'>
+                <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
+                Status
+            </p>
+            <div className="flex mt-1 h-[2.25rem]">
+                <button
+                    className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
+                        active===true
+                        ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
+                        : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                    }`}
+                    onClick={() => setActive(true)}
+                >
+                    Active
+                </button>
+
+                <button
+                    className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
+                        active===false
+                        ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
+                        : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                    }`}
+                    onClick={() => setActive(false)}
+                >
+                    Inactive 
+                </button>
+            </div>
+        </div>
   
-          {/* Submit Button */}
-          <div className="h-full w-full items-end flex justify-end ">
-              <button
-                  disabled={disabled}
-                  className="py-2 px-4 disabled:bg-[#E1E3EA] bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-                  onClick={handleSubmit}
-              >
-                  Save
-              </button>
-          </div>
+        {/* Submit Button */}
+        <div className="h-full w-full items-end flex justify-end ">
+            <button
+                disabled={disabled}
+                className="py-2 px-4 disabled:bg-[#E1E3EA] bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
+                onClick={handleSubmit}
+            >
+                Save
+            </button>
+        </div>
       </div>
     );
 };

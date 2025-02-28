@@ -59,7 +59,7 @@ const GroupManagementTable = ({
                     <td className="px-4 py-2 text-sm cursor-pointer hover:underline text-[#0263E0]">
                         <button
                             onClick={() => handleEdit(item)}
-                            className="capitalize hover:underline text-[#0263E0]"
+                            className="capitalize hover:underline text-sm text-[#0263E0]"
                         >
                             {item.name}
                         </button>

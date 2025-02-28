@@ -121,6 +121,7 @@ const DocumentTemplatePage = () => {
       .then(res => {
         console.log(res)
         setTableData(res.data.data.data)
+        setOpenEditModule(false)
       })
       .catch(err => {
         console.error(err)
@@ -187,7 +188,7 @@ const DocumentTemplatePage = () => {
 
         <div className='mt-6 w-full'>
             <div className='w-full'>
-                <AppointmentsTable 
+                <AppointmentsTable
                   tableData={tableData}
                   openEditModule={openEditModule}
                   setOpenEditModule={setOpenEditModule}
@@ -256,6 +257,7 @@ const DocumentTemplatePage = () => {
                   types={types}
                   openEditModule={openEditModule}
                   fetchData={fetchData}
+                  setOpenEditModule={setOpenEditModule}
                 />
               </div>
           </div>

@@ -42,6 +42,7 @@ const AddressForm = ({
         </div>
       </div>
 
+      {/* practice type */}
       <div className="w-[40%] min-w-40 flex flex-col">
         <label
           htmlFor="practiceType"
@@ -275,17 +276,17 @@ const Appointments = ({ branchData }) => {
         </thead>
         <tbody>
           {appointments.map((item, index) => (
-            <tr key={index} className="hover:bg-gray-50">
-              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900">
+            <tr key={index} className="hover:bg-gray-50 h-[3.28rem]">
+              <td className="px-4 py-4 h-[3.35rem] border-b border-gray-200 text-sm text-gray-900">
                 {item.name}
               </td>
-              <td className="px-4 py-4 border-b border-gray-200 text-sm capitalize text-gray-900">
+              <td className="px-4 py-4 h-[3.35rem] border-b border-gray-200 text-sm capitalize text-gray-900">
                 {item.department.name}
               </td>
-              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900 flex items-center justify-start gap-1">
+              <td className="px-4 py-4 h-[3.35rem] border-b border-gray-200 text-sm text-gray-900 flex items-center justify-start gap-1">
                 {item.reasons?.map((reason, id) => <span key={id} className="">{reason}{item.reasons.length-1===id? "" : ","}</span>)}
               </td>
-              <td className="px-4 py-4 border-b border-gray-200 text-sm text-gray-900">
+              <td className="px-4 py-4 h-[3.35rem] border-b border-gray-200 text-sm text-gray-900">
                 <div className={`text-[#121C2D] flex items-center gap-2`}>
                   <span
                     className={`h-3 w-3 ${

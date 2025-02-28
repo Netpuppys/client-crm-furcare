@@ -58,12 +58,21 @@ const EditDocumentTemplate = ({
   };
 
   useEffect(() => {
+    const newArr = openEditModule.body.map(item => item.language)
+
+    const languagesChange = newArr.every((value, index) => value === roles[index])
+
     if (!formData.type || !formData.name || !formData.additionalNotes || roles.length===0) {
         setDisabled(true)
       return;
     }
 
-    if (formData.name === openEditModule.name && formData.type === openEditModule.type && formData.additionalNotes === openEditModule.body[selectedLanguageIndex].body) {
+    if (
+      formData.name === openEditModule.name &&
+      formData.type === openEditModule.type &&
+      formData.additionalNotes === openEditModule.body[selectedLanguageIndex].body &&
+      languagesChange
+      ) {
         setDisabled(true)
       return;
     }
@@ -89,19 +98,15 @@ const EditDocumentTemplate = ({
       return;
     }
 
+    const bodyContent = roles.map((item) => ({
+      language: item,
+      body: formData.additionalNotes
+    }))
+
     const sendData = {
         type: formData.type,
         name: formData.name,
-        body: [
-            {
-                language: "english",
-                body: formData.additionalNotes
-            },
-            {
-                language: "hindi",
-                body: "<p>प्रिय {patientName}, आपकी नियुक्ति {appointment…बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।</p>"
-            }
-        ],
+        body: bodyContent,
     }
 
     axiosInstance

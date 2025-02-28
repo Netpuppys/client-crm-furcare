@@ -1,23 +1,18 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import BlueButton from '../../../ui/BlueButton'
 
 const buttonsArray = [
     {
-        name: "Home",
-        serverName: "Home"
+        name: "Business Settings",
+        serverName: "Business Settings"
     },
     {
-        name: "Appointment Configurations",
-        serverName: "Appointment Configurations"
+        name: "Notifications",
+        serverName: "Notifications"
     },
     {
-        name: "Pricing",
-        serverName: "Pricing"
-    },
-    {
-        name: "Payment",
-        serverName: "Payment"
+        name: "Billing",
+        serverName: "Billing"
     },
     {
         name: "Security",
@@ -51,14 +46,9 @@ const SettingsPage = () => {
                     Settings
                 </p>
             </div>
-            <div className='flex items-center gap-5'>
-                <BlueButton
-                    text={'Create'}
-                />
-            </div>
         </div>
 
-        <div className='mt-4 w-full'>
+        <div className='mt-8 w-full'>
             <div className='w-full border-b border-[#CACDD8]'>
                 {buttonsArray.map((item, index) => (
                 <button
