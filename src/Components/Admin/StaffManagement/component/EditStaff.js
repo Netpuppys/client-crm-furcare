@@ -34,8 +34,6 @@ const EditStaff = ({
       const filtered = editStaff.roles.map(item => ({ name: item.roleDetails.name }));
 
       const roleChange = roles.every((value, index) => value === filtered[index])
-      
-      console.log(roleChange, roles, filtered)
 
       if (
         (formData.name === "" || formData.name===editStaff.name) &&
@@ -93,17 +91,16 @@ const EditStaff = ({
         name: formData.name,
         phone: formData.phone,
         email: formData.email,
-        password: formData.password,
-        roles: rolesArr,
         businessUnitId: selectedBranch?.businessUnitId,
-        businessBranchId: selectedBranch?.id
+        businessBranchId: selectedBranch?.id,
+        active: active
       }
   
       axiosInstance
-        .post(`/api/v1/staff`, sendData)
+        .patch(`/api/v1/staff/${editStaff.id}`, sendData)
         .then(res => {
           console.log(res)
-          setAlert("Staff member added successfully")
+          setAlert("Staff member updated successfully")
           fetchStaffData()
         })
         .catch(err => {
@@ -198,7 +195,7 @@ const EditStaff = ({
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>
             Role(s)
           </label>
-          <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
+          <div className="mt-1 w-full relative gap-2 opacity-70 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
             <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
               {roles?.map((role, index) => (
                 <div
@@ -207,6 +204,7 @@ const EditStaff = ({
                 >
                   {role.name}
                   <button
+                    disabled
                     onClick={() => removeRole(role)}
                     className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                   >
@@ -216,11 +214,12 @@ const EditStaff = ({
               ))}
               <input
                 type="text"
+                disabled
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onFocus={() => setInputFocus(true)}
                 onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
-                className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
+                className="flex-grow disabled:bg-white w-full border-none focus:ring-0 focus:outline-none text-sm"
               />
             </div>
   

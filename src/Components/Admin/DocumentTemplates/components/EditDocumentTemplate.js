@@ -6,7 +6,6 @@ import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-
 const EditDocumentTemplate = ({ 
   types,
   fetchData,
@@ -17,10 +16,10 @@ const EditDocumentTemplate = ({
   const [formData, setFormData] = useState({
     type: openEditModule?.type,
     name: openEditModule?.name,
-    additionalNotes: openEditModule?.body[0].body,
   });
 
-  const [ roles, setRoles] = useState([]); // Initial roles
+  const [ language, setLanguage] = useState([]); // Initial language
+  const [ documents, setDocuments ] = useState(openEditModule.body)
   const [ inputValue, setInputValue] = useState("");
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ dropDownListStatic, setDropDownListStatic ] = useState()
@@ -28,7 +27,9 @@ const EditDocumentTemplate = ({
   const [ dropDownList, setDropDownList ] = useState(dropDownListStatic)
   const [ selectedLanguage, setSelectedLanguage ] = useState()
   const [ selectedLanguageIndex, setSelectedLanguageIndex ] = useState(0)
+  const [ langIndex, setLangIndex ] = useState(0)
 
+  // set static languages
   useEffect(() => {
     const langArr = openEditModule.body.map((item) => item.language)
 
@@ -36,33 +37,39 @@ const EditDocumentTemplate = ({
     setSelectedLanguage(langArr[0])
   }, [openEditModule])
 
+  // filter dropdown list
   useEffect(() => {
     if (inputValue) {
         const data = dropDownListStatic.filter(item => item.toLowerCase().startsWith(inputValue.toLowerCase()));
-        const finalData = data.filter(item => !roles.includes(item))
+        const finalData = data.filter(item => !language.includes(item))
         setDropDownList(finalData);
     } else {
         setDropDownList([]);
     }
-  }, [inputValue, roles, dropDownListStatic])
+  }, [inputValue, language, dropDownListStatic])
 
+  // set languages
   useEffect(() => {
     if (openEditModule.body) {
         const newArr = openEditModule.body.map(item => item.language)
-        setRoles(newArr)
+        setLanguage(newArr)
     }
   }, [openEditModule])
 
-  const removeRole = (roleToRemove) => {
-    setRoles(roles.filter((role) => role !== roleToRemove));
+  // remove language
+  const removeLanguage = (langToRemove) => {
+    setLanguage(language.filter((lang) => lang !== langToRemove));
+
+    setDocuments(prev => prev.filter(item => item.language !== langToRemove))
   };
 
+  // change disabled state
   useEffect(() => {
     const newArr = openEditModule.body.map(item => item.language)
 
-    const languagesChange = newArr.every((value, index) => value === roles[index])
+    const languagesChange = newArr.every((value, index) => value === language[index])
 
-    if (!formData.type || !formData.name || !formData.additionalNotes || roles.length===0) {
+    if (formData.type==="" || formData.name==="" || documents[langIndex].body==="" || language.length===0) {
         setDisabled(true)
       return;
     }
@@ -70,7 +77,7 @@ const EditDocumentTemplate = ({
     if (
       formData.name === openEditModule.name &&
       formData.type === openEditModule.type &&
-      formData.additionalNotes === openEditModule.body[selectedLanguageIndex].body &&
+      documents[langIndex].body === openEditModule.body[langIndex].body &&
       languagesChange
       ) {
         setDisabled(true)
@@ -78,11 +85,18 @@ const EditDocumentTemplate = ({
     }
 
     setDisabled(false)
-  }, [formData, roles, openEditModule, selectedLanguageIndex])
+  }, [formData, language, openEditModule, selectedLanguageIndex, langIndex, documents])
 
   const handleDropDownClick = (value) => {
-    setRoles(prev => ([
+    setLanguage(prev => ([
       ...prev, value
+    ]))
+    setDocuments(prev => ([
+      ...prev,
+      {
+        language: value,
+        body: ""
+      }
     ]))
     setInputValue("")
   }
@@ -93,20 +107,20 @@ const EditDocumentTemplate = ({
 
   const handleSubmit = () => {
     // Validation logic
-    if (!formData.type || !formData.name || !formData.additionalNotes || roles.length===0) {
+    if (!formData.type || !formData.name || !formData.additionalNotes || language.length===0) {
         toast.error("Please fill all required fields.");
       return;
     }
 
-    const bodyContent = roles.map((item) => ({
-      language: item,
-      body: formData.additionalNotes
-    }))
+    // const bodyContent = language.map((item) => ({
+    //   language: item,
+    //   body: formData.additionalNotes
+    // }))
 
     const sendData = {
         type: formData.type,
         name: formData.name,
-        body: bodyContent,
+        body: documents,
     }
 
     axiosInstance
@@ -122,8 +136,17 @@ const EditDocumentTemplate = ({
         })
   };
 
+  const handleQuillChange = (value) => {
+    setDocuments(prev => {
+      return prev.map((doc, index) => 
+        index === langIndex ? { ...doc, body: value } : doc
+      );
+    });
+  };
+
   const handleLanguageChange = (lang, index) => {
     setSelectedLanguage(lang)
+    setLangIndex(index)
     setSelectedLanguageIndex(index)
     setFormData((prev) => ({ ...prev, additionalNotes: openEditModule?.body[index].body }));
   }
@@ -164,7 +187,7 @@ const EditDocumentTemplate = ({
             />
         </div>
 
-      </div>
+      </div>{console.log(documents)}
 
       {/* Languages Dropdown */}
       <div className="w-full flex items-center justify-between">
@@ -176,14 +199,14 @@ const EditDocumentTemplate = ({
           <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
           <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
 
-            {roles?.map((role, index) => (
+            {language?.map((role, index) => (
               <div
                 key={index}
                 className="flex items-center text-nowrap gap-2 capitalize px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
               >
                 {role}
                 <button
-                  onClick={() => removeRole(role)}
+                  onClick={() => removeLanguage(role)}
                   className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                 >
                   ✕
@@ -223,28 +246,6 @@ const EditDocumentTemplate = ({
             Select language to view{" "}
           </label>
           <div className="flex mt-1">
-            {/* <button
-              className={`py-2 px-4 border border-r-[0.5px] ${
-                formData.gender === "Male"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-l-lg"
-              }`}
-              onClick={() => handleInputChange("gender", "Male")}
-            >
-              English
-            </button>
-
-            <button
-              className={`py-2 px-4 border border-l-[0.5px] ${
-                formData.gender === "Female"
-                  ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                  : "border-gray-300 text-[#121C2D] rounded-r-lg"
-              }`}
-              onClick={() => handleInputChange("gender", "Female")}
-            >
-              Hindi
-            </button> */}
-
             {dropDownListStatic?.map((lang, id) => (
               <button
                 key={id}
@@ -264,12 +265,11 @@ const EditDocumentTemplate = ({
 
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">
-        {/* <label className="font-medium text-[#121C2D] flex items-center gap-2"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
         <ReactQuill
           className="mt-2 h-[400px] mb-12"
           theme="snow"
-          value={formData.additionalNotes}
-          onChange={(value) => handleInputChange("additionalNotes", value)}
+          value={documents[langIndex]?.body}
+          onChange={(value) => handleQuillChange(value)}
           placeholder="Placeholder"
         />
       </div>

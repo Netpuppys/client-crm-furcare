@@ -117,11 +117,12 @@ const DocumentTemplatePage = () => {
     setTableData([])
 
     axiosInstance
-      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch}&type=${activeButton}`)
+      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch.id}&type=${activeButton}`)
       .then(res => {
         console.log(res)
         setTableData(res.data.data.data)
         setOpenEditModule(false)
+        setCreateNew(false)
       })
       .catch(err => {
         console.error(err)
@@ -132,7 +133,7 @@ const DocumentTemplatePage = () => {
     setTableData([])
 
     axiosInstance
-      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch}&type=${activeButton}`)
+      .get(`/api/v1/document-templates?businessBranchId=${selectedBranch.id}&type=${activeButton}`)
       .then(res => {
         console.log(res)
         setTableData(res.data.data.data)

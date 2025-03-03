@@ -12,7 +12,7 @@ const CreateNewDocumentTemplate = ({
   fetchData,
   selectedType,
 }) => {
-  const dropDownList = [ "English", "Hindi" ]
+  const dropDownList = [ "english", "hindi" ]
 
   const { setAlert } = useAlertContext()
   const { selectedBranch } = useAppContext()
@@ -23,27 +23,42 @@ const CreateNewDocumentTemplate = ({
     additionalNotes: "",
   });
 
-  const [ roles, setRoles ] = useState(["English"]); // Initial roles
+  const [ languages, setLanguages ] = useState(["english"]); // Initial languages
+  const [ documents, setDocuments ] = useState([{
+    language: "english",
+    body: ""
+  }])
   const [ inputValue, setInputValue ] = useState("");
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ disabled, setDisabled ] = useState(true)
 
-  const removeRole = (roleToRemove) => {
-    setRoles(roles.filter((role) => role !== roleToRemove));
+  const removeLanguage = (langToRemove) => {
+    setLanguages(languages.filter((lang) => lang !== langToRemove));
+
+    setDocuments(prev => prev.filter(item => item.language !== langToRemove))
   };
 
   useEffect(() => {
-    if (!formData.type || !formData.name || !formData.additionalNotes || roles.length===0) {
+    if (formData.type==="" || formData.name==="" || documents[0].body==="" || languages.length===0) {
         setDisabled(true)
       return;
     }
 
     setDisabled(false)
-  }, [formData, roles])
+  }, [formData, languages, documents])
+
+
 
   const handleDropDownClick = (value) => {
-    setRoles(prev => ([
+    setLanguages(prev => ([
       ...prev, value
+    ]))
+    setDocuments(prev => ([
+      ...prev,
+      {
+        language: value,
+        body: ""
+      }
     ]))
     setInputValue("")
   }
@@ -53,25 +68,21 @@ const CreateNewDocumentTemplate = ({
   };
 
   const handleSubmit = () => {
-    // Validation logic
-    if (!formData.type || !formData.name || !formData.additionalNotes || roles.length===0) {
-        toast.error("Please fill all required fields.");
-      return;
-    }
 
     const sendData = {
       type: formData.type,
       name: formData.name,
-      body: [
-          {
-              language: "english",
-              body: formData.additionalNotes
-          },
-          {
-              language: "hindi",
-              body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
-          }
-      ],
+      body: documents,
+      // [
+      //     {
+      //         language: "english",
+      //         body: documents[0].body
+      //     },
+      //     {
+      //         language: "hindi",
+      //         body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
+      //     }
+      // ],
       businessBranchId: selectedBranch.id
     }
 
@@ -88,11 +99,19 @@ const CreateNewDocumentTemplate = ({
       })
   };
 
+  const handleQuillChange = (value) => {
+    setDocuments(prev => {
+      return prev.map((doc, index) => 
+        index === 0 ? { ...doc, body: value } : doc
+      );
+    });
+  };
+
   return (
     <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6 h-full relative">
       <div className="flex w-full items-center justify-between gap-[50px]">
         {/* Category Input */}
-        <div className="flex flex-col w-1/2">
+        <div className="flex flex-col w-1/2">{console.log(documents)}
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Type{" "}
@@ -141,14 +160,14 @@ const CreateNewDocumentTemplate = ({
             <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
             <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
 
-              {roles?.map((role, index) => (
+              {languages?.map((lang, index) => (
                 <div
                   key={index}
-                  className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                  className="flex items-center capitalize text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                 >
-                  {role}
+                  {lang}
                   <button
-                    onClick={() => removeRole(role)}
+                    onClick={() => removeLanguage(lang)}
                     className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                   >
                     ✕
@@ -161,14 +180,14 @@ const CreateNewDocumentTemplate = ({
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onFocus={() => setInputFocus(true)}
-                onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
+                onBlur={() => setTimeout(() => { setInputFocus(false) }, 250)}
                 className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
               />
             </div>
 
-            {inputFocus &&
+            {inputFocus && dropDownList.length>0 &&
             <div className="w-full h-fit bg-white flex flex-col items-start px-2">
-              {dropDownList.filter(lang => !roles.includes(lang)).map((item, index) => (
+              {dropDownList.filter(lang => !languages.includes(lang)).map((item, index) => (
                 <button key={index} onClick={() => handleDropDownClick(item)} className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0">
                   <p className="capitalize text-sm">
                     {item}
@@ -187,8 +206,8 @@ const CreateNewDocumentTemplate = ({
           theme="snow"
           placeholder="Placeholder"
           className="mt-2 h-[400px] mb-12"
-          value={formData.additionalNotes}
-          onChange={(value) => handleInputChange("additionalNotes", value)}
+          value={documents[0].body}
+          onChange={(value) => handleQuillChange(value)}
         />
       </div>
 

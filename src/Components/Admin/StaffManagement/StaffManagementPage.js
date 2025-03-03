@@ -112,6 +112,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
   const [ inputFocus, setInputFocus ] = useState(false)
   const [ dropDownList, setDropDownList ] = useState([])
   const [ disabled, setDisabled ] = useState(true)
+  const [ loader, setLoader ] = useState(false)
 
   useEffect(() => {
     if (formData.name === "" || formData.phone === "" || formData.email === "" || roles.length===0 ) {
@@ -145,6 +146,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
 
   const handleSubmit = () => {
     const rolesArr = roles.map(({id}) => id)
+    setLoader(true)
 
     // Validation logic
     if (!formData.name || !formData.phone || !formData.email || !rolesArr.length===0) {
@@ -172,6 +174,9 @@ const CreateNewForm = ({ fetchStaffData }) => {
       .catch(err => {
         console.error(err)
       })
+      .finally(() => {
+        setLoader(false)
+      })
   };
 
   useEffect(() => {
@@ -180,7 +185,9 @@ const CreateNewForm = ({ fetchStaffData }) => {
       const finalData = data.filter(item => !roles.includes(item.name))
       setDropDownList(finalData);
     } else {
-      setDropDownList([]);
+      setDropDownList(rolesList.filter(item => 
+          roles.every(role => role.id !== item?.id)
+        ));
     }
   }, [roles, rolesList, inputValue]);
 
@@ -266,7 +273,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
             {roles?.map((role, index) => (
               <div
                 key={index}
-                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full capitalize"
               >
                 {role.name}
                 <button
@@ -282,7 +289,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onFocus={() => setInputFocus(true)}
-              onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
+              onBlur={() => setTimeout(() => { setInputFocus(false) }, 250)}
               className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
             />
           </div>
@@ -306,7 +313,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
         <BlueButton
           onClickHandler={handleSubmit}
           text={"Save"}
-          disabled={disabled}
+          disabled={disabled || loader}
         />
       </div>
     </div>
@@ -348,6 +355,8 @@ function StaffManagementPage() {
         const response = res.data.data.data
         console.log(response)
         setStaffData(response)
+        setEditStaff(false)
+        setCreateNew(false)
       })
       .catch(err => {
         console.error(err)

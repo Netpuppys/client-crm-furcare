@@ -56,6 +56,9 @@ const EditGroup = ({
             .get(`/api/v1/staff?businessBranchId=${selectedBranch.id}`)
             .then(res => {
                 const response = res.data.data.data;
+
+                // const filtered = response.filter(item => item.active===true)
+
                 setResources(response)
                 setDropDownList(response)
             })
@@ -69,9 +72,9 @@ const EditGroup = ({
         // if (selectedResources.length>0) {
             const filtered = resources.filter(item => 
                 selectedResources.every(staff => staff.id !== item.id)
-            );            
+            );
 
-            setDropDownList(filtered)
+            setDropDownList(filtered.filter(item => item.active===true))
             return
         // }
     }, [selectedResources, resources])
