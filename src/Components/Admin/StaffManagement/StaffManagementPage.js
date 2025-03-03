@@ -9,7 +9,7 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import { useAppContext } from "../../../utils/AppContext";
 import EditStaff from "./component/EditStaff";
 
-const DiagnosticTable = ({ 
+const DiagnosticTable = ({
   loaded,
   staffData,
   setEditStaff,

@@ -14,7 +14,7 @@ const EditStaff = ({
   
     const { selectedBranch } = useAppContext()
   
-    const [formData, setFormData] = useState({
+    const [ formData, setFormData ] = useState({
       name: editStaff.name,
       phone: editStaff.phone,
       email: editStaff.email,
@@ -31,13 +31,33 @@ const EditStaff = ({
     const [ active, setActive ] = useState(editStaff.active)
   
     useEffect(() => {
-      if (formData.name === "" || formData.phone === "" || formData.email === "" || roles.length===0 ) {
+      const filtered = editStaff.roles.map(item => ({ name: item.roleDetails.name }));
+
+      const roleChange = roles.every((value, index) => value === filtered[index])
+      
+      console.log(roleChange, roles, filtered)
+
+      if (
+        (formData.name === "" || formData.name===editStaff.name) &&
+        (formData.phone === "" || formData.phone===editStaff.phone) &&
+        (formData.email === "" || formData.email===editStaff.email) &&
+        active===editStaff.active && !roleChange && roles.length===editStaff.roles.length
+
+      ) {
         setDisabled(true)
         return
       }
   
       setDisabled(false)
-    }, [formData, roles])
+    }, [formData, roles, active, editStaff])
+
+    useEffect(() => {
+      if (formData.roles.length>0) {
+        const filtered = formData.roles.map(item => ({ name: item.roleDetails.name }));
+
+        setRoles(filtered)
+      }
+    }, [formData])
   
     useEffect(() => {
       axiosInstance
