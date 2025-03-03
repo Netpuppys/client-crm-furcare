@@ -45,10 +45,10 @@ const CreateNewGroup = ({
             .then(res => {
                 const response = res.data.data.data;
 
-                // const filtered = response.filter(item => item?.active === true)
+                const filtered = response.filter(item => item?.active === true)
 
-                setResources(response)
-                setDropDownList(response)
+                setResources(filtered)
+                setDropDownList(filtered)
             })
             .catch(err => {
                 console.error(err)

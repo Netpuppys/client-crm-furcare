@@ -238,8 +238,8 @@ const EditDocumentTemplate = ({
         </div>
       </div>
 
+      {documents.length>1 && 
       <div className="flex w-full items-center justify-between gap-12">
-        {/* Category Input */}
         <div className="flex flex-col w-1/2">
           <label className="font-medium text-[#121C2D] flex items-center gap-2">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
@@ -261,7 +261,7 @@ const EditDocumentTemplate = ({
             ))}
           </div>
         </div>
-      </div>
+      </div>}
 
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">
