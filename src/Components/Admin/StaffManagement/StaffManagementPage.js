@@ -343,7 +343,7 @@ function StaffManagementPage() {
 
   const fetchStaffData = () => {
     axiosInstance
-      .get(`/api/v1/staff`)
+      .get(`/api/v1/staff?businessBranchId=${selectedBranch.id}`)
       .then(res => {
         const response = res.data.data.data
         console.log(response)

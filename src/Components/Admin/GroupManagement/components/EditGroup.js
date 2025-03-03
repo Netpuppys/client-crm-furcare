@@ -188,7 +188,7 @@ const EditGroup = ({
 
         if (addResources.length>0) {
             const sendData = {
-                staffId: addResources[0]
+                staffIds: addResources
             }
 
             axiosInstance
@@ -205,7 +205,7 @@ const EditGroup = ({
 
         if (removeResources.length>0) {
             const sendData = {
-                staffId: removeResources[0]
+                staffIds: removeResources
             }
 
             axiosInstance
@@ -248,61 +248,6 @@ const EditGroup = ({
             </div>
         </div>
 
-        {/* <div className="flex gap-10 w-full">
-            <div className="flex flex-col w-full">
-                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
-                    <div className="w-1 aspect-square rounded-full bg-red-500"></div>
-                    Resources{" "}
-                </label>
-
-                <div className="mt-1 w-full relative gap-2 h-fit border border-[#8891AA] focus:outline-none rounded-lg overflow-hidden">
-                    <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
-
-                        {selectedResources?.map((staff, index) => (
-                            <div
-                                key={index}
-                                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
-                            >
-                                {staff.name}
-                                <button
-                                    onClick={() => removeRole(staff)}
-                                    className="text-[#606B85] text-lg"
-                                >
-                                    <IoClose />
-                                </button>
-                            </div>
-                        ))}
-
-                        <input
-                            type="text"
-                            value={inputValue}
-                            placeholder={selectedResources.length===0? "Resources" : ""}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onFocus={() => setInputFocus(true)}
-                            onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
-                            className="flex-grow w-full placeholder:italic border-none focus:ring-0 capitalize focus:outline-none text-sm"
-                        />
-                    </div>
-
-                    {inputFocus &&
-                    <div className="w-full h-fit bg-white flex flex-col items-start px-2">
-                    {dropDownList.map((item, index) => (
-                        <button 
-                            key={index} 
-                            onClick={() => handleDropDownClick(item)} 
-                            className="py-2 w-full flex items-center justify-start border-b border-gray-300 last:border-b-0"
-                        >
-                            <p className="capitalize text-sm">
-                                {item.name}
-                            </p>
-                        </button>
-                    ))}
-                    </div>}
-                </div>
-
-            </div>
-        </div> */}
-
         <div className="flex gap-10 w-full">
             {/* Name Input */}
             <div className="flex flex-col w-full">
@@ -342,15 +287,6 @@ const EditGroup = ({
                             <img src={chevronDown} className="h-5" alt="" />
                         </div>
 
-                        {/* <input
-                            type="text"
-                            value={inputValue}
-                            placeholder={selectedResources.length===0? "Resources" : ""}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            onFocus={() => setInputFocus(true)}
-                            onBlur={() => setTimeout(() => { setInputFocus(false) }, 100)}
-                            className="flex-grow w-full placeholder:italic border-none focus:ring-0 capitalize focus:outline-none text-sm"
-                        /> */}
                         <select
                             type="text"
                             onFocus={() => setInputFocus(true)}

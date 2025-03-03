@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import { FaSearch } from "react-icons/fa";
 import BlueButton from "../../../../ui/BlueButton";
 import statesInIndia from "../../../../data/StatesIndia";
