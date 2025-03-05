@@ -102,7 +102,7 @@ const GroupManagementTable = ({
                 </tbody>
             </table>
             {groupData.length === 0 && loaded &&
-            <div className={`border-b last:border-b-0 border-[#E1E3EA] flex items-center justify-center h-10`}>
+            <div className={`border-b last:border-b-0 border-[#E1E3EA] flex items-center justify-center text-sm h-10`}>
                     <p className="">
                         No Groups Found
                     </p>

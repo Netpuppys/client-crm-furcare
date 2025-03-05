@@ -3,6 +3,7 @@ import { FaSearch } from "react-icons/fa";
 import { FiCheck, FiPlus } from "react-icons/fi";
 import { useAppContext } from "../../../../utils/AppContext";
 import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
+import BlueButton from "../../../../ui/BlueButton";
 
 const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-In Appointments", "Appointment Slots", "Doctors" ]
 const frequencyArray = [ 'day', 'week', 'month' ]
@@ -245,13 +246,11 @@ const EditReport = ({
   
         {/* Submit Button */}
         <div className="h-full w-full items-end flex justify-end ">
-            <button
+            <BlueButton
+                text={"Save"}
+                onClickHandler={handleSubmit}
                 disabled={disabled}
-                className="py-2 px-4 disabled:bg-[#E1E3EA] bottom-0 bg-blue-500 text-white font-medium rounded-lg shadow-md hover:bg-blue-600"
-                onClick={handleSubmit}
-            >
-                Save
-            </button>
+            />
         </div>
       </div>
     );

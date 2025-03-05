@@ -65,20 +65,6 @@ const CreateNewGroup = ({
         return
     }, [selectedResources, resources])
 
-    // filter out staff memebers according to input value
-    // useEffect(() => {
-    //     if (inputValue !== "") {
-    //         const filterred = resources.filter((item) => 
-    //             item.name.toLowerCase().includes(inputValue.toLowerCase())
-    //         )
-
-    //         setDropDownList(filterred)
-    //         return
-    //     }
-
-    //     setDropDownList(resources)
-    // }, [inputValue, resources])
-
     // drop down click function
     const handleDropDownClick = (value) => {
         setSelectedResources(prev => ([

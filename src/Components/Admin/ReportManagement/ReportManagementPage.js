@@ -10,6 +10,7 @@ import BlueButton from "../../../ui/BlueButton";
 import { useAppContext } from "../../../utils/AppContext";
 
 const ReportTable = ({ 
+  loaded,
   reportData,
   setEditGroup
 }) => {
@@ -128,6 +129,12 @@ const ReportTable = ({
           ))}
         </tbody>
       </table>
+      {reportData.length === 0 && loaded &&
+      <div className={`border-b last:border-b-0 border-[#E1E3EA] text-sm flex items-center justify-center h-10`}>
+        <p className="">
+          No Reports Found
+        </p>
+      </div>}
     </div>
   );
 };
@@ -135,11 +142,12 @@ const ReportTable = ({
 function ReportManagementPage() {
   const navigate = useNavigate()
 
-  const { sidebarExpanded } = useAppContext()
+  const { selectedBranch, sidebarExpanded } = useAppContext()
 
   const [ createNew, setCreateNew] = useState(false);
   const [ reportData, setReportData ] = useState([]);
   const [ editGroup, setEditGroup ] = useState()
+  const [ loaded, setLoaded ] = useState(false)
 
   const handleAdminClick = () => {
     navigate("/admin/branch-units")
@@ -147,7 +155,7 @@ function ReportManagementPage() {
 
   useEffect(() => {
     axiosInstance
-        .get("/api/v1/reports")
+        .get(`/api/v1/reports?businessBranchId=${selectedBranch.id}`)
         .then(res => {
             const response = res.data.data.data
             setReportData(response)
@@ -155,18 +163,22 @@ function ReportManagementPage() {
         .catch(err => {
             console.error(err)
         })
-  }, [])
+        .finally(() => setLoaded(true))
+  }, [selectedBranch])
 
   const fetchAllReports = () => {
     axiosInstance
-      .get("/api/v1/reports")
+      .get(`/api/v1/reports?businessBranchId=${selectedBranch.id}`)
       .then(res => {
           const response = res.data.data.data
           setReportData(response)
+          setEditGroup(false)
+          setCreateNew(false)
       })
       .catch(err => {
           console.error(err)
       })
+      .finally(() => setLoaded(true))
   }
 
   const handleCreateNew = () => {
@@ -196,8 +208,9 @@ function ReportManagementPage() {
 
       <div className="w-full mt-6">
         <ReportTable
-            reportData={reportData}
-            setEditGroup={setEditGroup}
+          loaded={loaded}
+          reportData={reportData}
+          setEditGroup={setEditGroup}
         />
       </div>
 
@@ -253,7 +266,7 @@ function ReportManagementPage() {
               Edit Report
             </p>
             <button onClick={() => setEditGroup(false)} className="">
-              <img src={closeIcon} className="w-7 " alt="" />
+              <img src={closeIcon} className="w-7" alt="" />
             </button>
           </div>
 

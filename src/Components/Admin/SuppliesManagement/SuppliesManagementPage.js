@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import EditSupplyForm from "./components/EditSupplyForm";
+import VendorList from "./components/VendorList";
 
 const SuppliesTable = ({
   loaded,
@@ -16,8 +17,16 @@ const SuppliesTable = ({
   setEditSupply,
 }) => {
 
+  const [ showLabelsList, setShowLabelsList ] = useState()
+  const [ selectedGroup, setSelectedGroup ] = useState()
+
+  const handleListClick = (data, index) => {
+      setShowLabelsList(index)
+      setSelectedGroup(data)
+  }
+
   return (
-    <div className="overflow-x-auto">
+    <div className="">
       <table className="min-w-full">
         <thead className="bg-[#F9F9FA]">
           <tr>
@@ -59,17 +68,31 @@ const SuppliesTable = ({
                   {item.name}
                 </button>
               </td>
-              <td className="px-4 py-2 text-sm text-[#121C2D]">
+              <td className="px-4 py-2 text-sm text-[#121C2D] text-nowrap flex items-center">
                 {item.items.map((obj, id) => (
                   <p key={id} className="capitalize">
-                    {obj.name}{item.items.length>1? ", " : ""}
+                    {obj.name}{(item.items.length>1 && id+1!==item.items.length)? ", " : ""}
                   </p>
                 ))}
               </td>
-              <td className="px-4 py-2 text-sm">
-                <a href={item.url} className="text-blue-600 cursor-pointer underline">
+              <td className="px-4 py-2 text-sm relative">
+                <button 
+                  onClick={() => handleListClick(item, index)}
+                  className="text-blue-600 cursor-pointer underline"
+                >
                   List
-                </a>
+                </button>
+
+                {showLabelsList===index &&
+                  <div className="absolute top-[calc(100%+0.3rem)] z-50 left-1">
+                    <VendorList
+                        selectedGroup={selectedGroup.items}
+                        selectedGroupData={item}
+                        setShowLabelsList={setShowLabelsList}
+                        setSelectedGroup={setSelectedGroup}
+                        setEditGroup={setEditSupply}
+                    />
+                  </div>}
               </td>
 
               <td className="px-4 py-2 text-sm flex items-center">
@@ -228,7 +251,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
     }
 
     axiosInstance
-      .post(`/api/v1/supplies?businessBranchId=${selectedBranch.id}`, sendData)
+      .post(`/api/v1/supplies`, sendData)
       .then(res => {
         console.log(res)
         setAlert("Created Successfully")
@@ -243,7 +266,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
   return (
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
       {/* Name Input */}
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full">{console.log(formData)}
         <label className="font-medium text-[#121C2D] flex items-center gap-2">
           <div className="w-1 aspect-square rounded-full bg-red-500"></div> Name{" "}
         </label>

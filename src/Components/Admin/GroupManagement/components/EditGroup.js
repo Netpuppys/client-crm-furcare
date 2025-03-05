@@ -164,7 +164,7 @@ const EditGroup = ({
         removeResources = initialResourcesId.filter(id => !sendResources.includes(id));
 
         // Find resources to add (present in sendResources but not in initialResources)
-        addResources = sendResources.filter(id => !initialResourcesId.includes(id)); 
+        addResources = sendResources.filter(id => !initialResourcesId.includes(id));
         
         console.log(removeResources, addResources)
 
