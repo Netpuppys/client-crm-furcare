@@ -54,11 +54,11 @@ const EditDiagnostic = ({
 
         if (
             (formData.name?.replace(/\s/g, "") === "" || formData.name?.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, "")) &&
-            (formData.address1?.replace(/\s/g, "") === ""  || formData.address1?.replace(/\s/g, "") === editDiagnostic.addressLine1.replace(/\s/g, "")) &&
-            (formData.address2?.replace(/\s/g, "") === "" || formData.address2?.replace(/\s/g, "") === editDiagnostic.addressLine2.replace(/\s/g, "")) &&
-            (formData.city?.replace(/\s/g, "") === "" || formData.city?.replace(/\s/g, "") === editDiagnostic.city?.replace(/\s/g, "")) &&
-            (formData.state?.replace(/\s/g, "") === "" || formData.state?.replace(/\s/g, "") === editDiagnostic.state?.replace(/\s/g, "")) &&
-            (formData.country?.replace(/\s/g, "") === "" || formData.country?.replace(/\s/g, "") === editDiagnostic.country?.replace(/\s/g, "")) &&
+            (formData.address1 === ""  || formData.address1 === editDiagnostic.addressLine) &&
+            (formData.address2 === "" || formData.address2 === editDiagnostic.addressLine) &&
+            (formData.city === "" || formData.city === editDiagnostic.city) &&
+            (formData.state === "" || formData.state === editDiagnostic.state) &&
+            (formData.country === "" || formData.country === editDiagnostic.country) &&
             (Number(formData.postalCode) === "" || Number(formData.postalCode) === Number(editDiagnostic.postalCode))
         ) {
             setDisabled(true)
