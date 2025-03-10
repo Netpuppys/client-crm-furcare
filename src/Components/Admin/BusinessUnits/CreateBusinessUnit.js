@@ -339,7 +339,7 @@ const CreateBusinessUnit = () => {
           <div className="flex w-full items-center justify-between gap-[50px]">
             {/* branch name change */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Branch Unit Name
               </label>
@@ -354,7 +354,7 @@ const CreateBusinessUnit = () => {
 
             {/* type input */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Branch Type
               </label>
@@ -376,7 +376,7 @@ const CreateBusinessUnit = () => {
           {/* Practice Type Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Practice Type
               </label>
@@ -395,7 +395,7 @@ const CreateBusinessUnit = () => {
             </div>
             {/* currency selection */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Currency
               </label>
@@ -413,7 +413,7 @@ const CreateBusinessUnit = () => {
           {/* Address Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 1
               </label>
@@ -447,7 +447,7 @@ const CreateBusinessUnit = () => {
             </div>
             {/* Address Selection 2 */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 2
               </label>
@@ -464,7 +464,7 @@ const CreateBusinessUnit = () => {
           {/* City and State Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 City
               </label>
@@ -482,7 +482,7 @@ const CreateBusinessUnit = () => {
             </div>
             {/* state selection */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 State
               </label>
@@ -514,7 +514,7 @@ const CreateBusinessUnit = () => {
           {/* Country Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Country
               </label>
@@ -529,7 +529,7 @@ const CreateBusinessUnit = () => {
             </div>
             {/* postal code selection */}
             <div className="w-1/2">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Postal Code
               </label>
@@ -555,7 +555,7 @@ const CreateBusinessUnit = () => {
           {/* Service Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
               </label>
@@ -630,7 +630,7 @@ const CreateBusinessUnit = () => {
             >
               {selectedOptions.map((service, index) => (
                 <div key={index} className="w-[220px]">
-                  <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                     {service.service}
                   </label>
@@ -660,7 +660,7 @@ const CreateBusinessUnit = () => {
           {/* Department Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Department(s)
               </label>
@@ -682,7 +682,7 @@ const CreateBusinessUnit = () => {
           {/* Appointment Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
