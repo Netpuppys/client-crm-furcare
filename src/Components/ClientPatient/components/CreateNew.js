@@ -72,6 +72,7 @@ export default function CreateNew() {
     const [ formErrors, setFormErrors ] = useState({})
     const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
     const [ disabled, setDisabled ] = useState(true)
+    const [ disableAddPet, setDisableAddPet ] = useState(false)
 
     const handleClientChange = (e) => {
         const { name, value } = e.target;
@@ -190,6 +191,11 @@ export default function CreateNew() {
     };
 
     const handlePetAdd = () => {
+        if (petDetails.length===5) {
+            setDisableAddPet(true)
+            return
+        }
+
         setPetDetails(prevDetails => [
             ...prevDetails,
             {
@@ -316,6 +322,7 @@ export default function CreateNew() {
                     petDetails={pet}
                     patientType={patientType}
                     handlePetAdd={handlePetAdd}
+                    disableAddPet={disableAddPet}
                     handlePetChange={handlePetChange}
                     handleDeletePet={handleDeletePet}
                     allAnimalClasses={allAnimalClasses}

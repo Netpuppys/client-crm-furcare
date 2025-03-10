@@ -169,7 +169,7 @@ const EditNewRoles = ({
             <div className='w-full overflow-y-auto h-[calc(100vh-4.75rem)] pb-20'>
                 <div className="w-full mt-10 px-10 flex items-center justify-start gap-16">
                     <div className="w-full">
-                        <label className="text-sm font-semibold text-[#121C2D] flex items-center gap-1">
+                        <label className="text-sm font-medium text-[#121C2D] flex items-center gap-1">
                             <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                             Role
                         </label>
@@ -186,7 +186,7 @@ const EditNewRoles = ({
                 <div className="w-full flex items-center gap-10 px-10">
                     <div className="w-1/2 mt-10 flex items-center justify-start">
                         <div className="w-full">
-                            <label className="text-sm font-semibold text-[#121C2D] flex items-center gap-1">
+                            <label className="text-sm font-medium text-[#121C2D] flex items-center gap-1">
                                 <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                                 Access Level
                             </label>
@@ -204,7 +204,7 @@ const EditNewRoles = ({
                     </div>
                     <div className="w-1/2 mt-10 flex items-center justify-start">
                         <div className="w-full">
-                            <label className="text-sm font-semibold text-[#121C2D] flex items-center gap-1">
+                            <label className="text-sm font-medium text-[#121C2D] flex items-center gap-1">
                                 <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                                 Staff
                             </label>
@@ -223,7 +223,7 @@ const EditNewRoles = ({
                 </div>
 
                 <div className="w-full mt-14 px-12">
-                    <p className="text-[#3C3C43] font-semibold text-opacity-60 text-[17px] pb-2 border-b border-[#54545657] w-full mb-5">
+                    <p className="text-[#3C3C43] font-medium text-opacity-60 text-[17px] pb-2 border-b border-[#54545657] w-full mb-5">
                         Permissions
                     </p>
                 </div>
@@ -246,7 +246,7 @@ const EditNewRoles = ({
                         </label>
                         <div className='flex gap-2 items-center'>
                             <div className='bg-[#F4F4F6] text-xs capitalize text-[#8891AA] rounded-lg border border-[#8891AA] py-[0.125rem] w-[4rem] flex items-center justify-center'>
-                                {item.value.action}
+                                {item.value.action==="delete"? "Edit" : item.value.action}
                             </div>
                             <p className="text-[#121C2D] text-sm font-medium ">
                                 {item.name}

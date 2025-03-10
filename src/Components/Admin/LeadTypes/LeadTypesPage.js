@@ -57,7 +57,6 @@ const LeadTypesPage = () => {
             top-0 h-screen right-0 flex z-50`}>
 
             <div 
-                onClick={() => setCreateNew(false)}
                 className="w-[calc(100%-45rem)] h-full"
             ></div>
 
@@ -88,7 +87,6 @@ const LeadTypesPage = () => {
             top-0 h-screen right-0 flex z-50`}>
 
             <div 
-                onClick={() => setSelectedLead(false)}
                 className="w-[calc(100%-45rem)] h-full"
             ></div>
 

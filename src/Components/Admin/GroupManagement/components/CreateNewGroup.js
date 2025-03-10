@@ -138,7 +138,7 @@ const CreateNewGroup = ({
         <div className="flex gap-10 w-full">
             {/* Name Input */}
             <div className="flex flex-col w-3/5">
-                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Name{" "}
                 </label>
@@ -163,7 +163,7 @@ const CreateNewGroup = ({
         <div className="flex gap-10 w-full">
             {/* Name Input */}
             <div className="flex flex-col w-full">
-                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Resources{" "}
                 </label>
@@ -172,13 +172,13 @@ const CreateNewGroup = ({
                     className="mt-1 w-full relative gap-2 h-fit min-h-10 border border-[#8891AA] focus:outline-none rounded-lg overflow-"
                 >
                     <div 
-                        className={`w-full min-h-10 relative gap-2 flex px-2 py-1 focus:outline-none`}
+                        className={`w-full min-h-10 relative gap-2 flex px-1 py-1 focus:outline-none`}
                     >
 
                         {selectedResources?.map((staff, index) => (
                             <div
                                 key={index}
-                                className="flex items-center text-nowrap gap-2 px-3 h-8 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                                className="flex items-center text-nowrap gap-2 px-2 h-8 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                             >
                                 {staff.name}
                                 <button
@@ -190,7 +190,7 @@ const CreateNewGroup = ({
                             </div>
                         ))}
 
-                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-4">
+                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-2">
                             
                             <p className="text-sm text-[#121C2D] font-medium">
                                 {selectedResources.length===0 && "Select"}
@@ -212,7 +212,7 @@ const CreateNewGroup = ({
                             type="text"
                             onFocus={() => setInputFocus(true)}
                             onBlur={() => setTimeout(() => { setInputFocus(false) }, 150)}
-                            className="flex-grow w-full placeholder:italic border-none opacity-0 focus:ring-0 capitalize focus:outline-none text-sm"
+                            className="flex-grow w-full px-0 placeholder:italic border-none opacity-0 focus:ring-0 capitalize focus:outline-none text-sm"
                         >
                         </select>
                     </div>
@@ -244,7 +244,7 @@ const CreateNewGroup = ({
         </div>
 
         <div className="flex flex-col w-full">
-            <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                 Description{" "}
             </label>
             <textarea

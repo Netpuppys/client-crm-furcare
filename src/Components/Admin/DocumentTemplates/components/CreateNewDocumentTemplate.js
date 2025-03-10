@@ -112,7 +112,7 @@ const CreateNewDocumentTemplate = ({
       <div className="flex w-full items-center justify-between gap-[50px]">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">{console.log(documents)}
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Type{" "}
           </label>
@@ -135,7 +135,7 @@ const CreateNewDocumentTemplate = ({
 
         {/* name */}
         <div className="flex flex-col w-1/2">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Name{" "}
           </label>
@@ -153,7 +153,7 @@ const CreateNewDocumentTemplate = ({
       {/* languages */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col w-full">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             {"Language(s)"}{" "}
           </label>
@@ -201,7 +201,7 @@ const CreateNewDocumentTemplate = ({
 
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">
-        {/* <label className="font-medium text-[#121C2D] flex items-center gap-2"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
+        {/* <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
         <ReactQuill
           theme="snow"
           placeholder="Placeholder"

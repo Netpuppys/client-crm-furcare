@@ -60,7 +60,7 @@ const DiagnosticTable = ({
               <td className="px-4 py-2 text-sm">
                 <button
                   onClick={() => setEditDiagnostic(item)}
-                  className="text-sm text-[#0263E0] capitalize hover:underline"
+                  className="text-sm text-[#0263E0] capitalize"
                 >
                   {item.name}
                 </button>
@@ -233,7 +233,7 @@ const CreateNewForm = ({
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
       {/* Name Input */}
       <div className="flex flex-col w-full">
-        <label className="font-medium text-[#121C2D] flex items-center gap-2">
+        <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
           <div className="w-1 aspect-square rounded-full bg-red-500"></div> Name{" "}
         </label>
         <input
@@ -248,7 +248,7 @@ const CreateNewForm = ({
       {/* Address Selection */}
       <div className="flex w-full items-center justify-between">
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Address line 1
           </label>
@@ -282,7 +282,7 @@ const CreateNewForm = ({
         </div>
 
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Address line 2
           </label>
@@ -299,7 +299,7 @@ const CreateNewForm = ({
       {/* City and State Selection */}
       <div className="flex w-full items-center justify-between">
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             City
           </label>
@@ -316,7 +316,7 @@ const CreateNewForm = ({
           />
         </div>
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             State
           </label>
@@ -341,7 +341,7 @@ const CreateNewForm = ({
       {/* Country and Postal Code Selection */}
       <div className="flex w-full items-center justify-between">
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Country
           </label>
@@ -356,7 +356,7 @@ const CreateNewForm = ({
         </div>
 
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Postal Code
           </label>
@@ -468,7 +468,6 @@ const DiagnosticIntegrationPage = () => {
         top-0 h-screen right-0 flex z-50`}>
 
         <div 
-          onClick={() => setCreateNew(false)}
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 
@@ -501,7 +500,6 @@ const DiagnosticIntegrationPage = () => {
         top-0 h-screen right-0 flex z-50`}>
 
         <div 
-          onClick={() => setEditDiagnostic(false)}
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 

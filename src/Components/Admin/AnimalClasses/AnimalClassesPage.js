@@ -204,13 +204,15 @@ const AnimalClassesPage = () => {
                     {branchAnimalClasses?.map((item, index) => (
                     <tr
                         key={index}
-                        onClick={() => setEditAnimalClass(item)}
                         className="hover:bg-gray-50 text-sm text-gray-700 last:border-b-0 border-b border-gray-200"
                     >
                         <td className="p-2 w-[30%]">
-                            <p className="text-blue-600 hover:underline font-medium capitalize">
+                            <button
+                                onClick={() => setEditAnimalClass(item)} 
+                                className="text-blue-600 cursor-pointer font-medium capitalize"
+                            >
                                 {item.name}
-                            </p>
+                            </button>
                         </td>
                         <td className="p-2 w-[20%] relative">
                             <div className="text-blue-600 group relative cursor-pointer underline">
@@ -243,8 +245,7 @@ const AnimalClassesPage = () => {
           ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
           top-0 h-screen right-0 flex z-50`}>
 
-            <div 
-                onClick={() => setEditAnimalClass(false)}
+            <div
                 className="w-[calc(100%-45rem)] h-full"
             ></div>
 

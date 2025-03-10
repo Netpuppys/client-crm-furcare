@@ -154,8 +154,7 @@ const ContentLibraryPage = () => {
       ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
       top-0 h-screen right-0 flex z-50`}>
 
-      <div 
-        onClick={() => setCreateNew(false)}
+      <div
         className="w-[calc(100%-45rem)] h-full"
       ></div>
 

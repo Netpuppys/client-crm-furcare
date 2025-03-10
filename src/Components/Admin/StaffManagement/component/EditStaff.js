@@ -4,6 +4,14 @@ import { useAppContext } from "../../../../utils/AppContext";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
+import { z } from "zod";
+import ActiveButtons from "../../../../ui/ActiveButtons";
+
+const staffSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits"),
+  email: z.string().email("Invalid email format"),
+});
 
 const EditStaff = ({ 
     editStaff, 
@@ -44,6 +52,13 @@ const EditStaff = ({
       ) {
         setDisabled(true)
         return
+      }
+
+      const result = staffSchema.safeParse(formData);
+
+      if (!result.success) {
+        setDisabled(true)
+        return;
       }
   
       setDisabled(false)
@@ -129,7 +144,7 @@ const EditStaff = ({
       <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
         {/* Name Input */}
         <div className="flex flex-col w-full">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div> Name{" "}
           </label>
           <input
@@ -143,7 +158,7 @@ const EditStaff = ({
   
         <div className="flex items-center justify-between w-full">
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Email Address
             </label>
@@ -166,7 +181,7 @@ const EditStaff = ({
             </div>
           </div>
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Phone Number
             </label>
@@ -190,12 +205,12 @@ const EditStaff = ({
             </div>
           </div>
         </div>
-        <div className="w-full flex flex-col gap-2">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+        <div className="w-full flex flex-col gap-1">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>
             Role(s)
           </label>
-          <div className="mt-1 w-full relative gap-2 opacity-70 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
+          <div className="w-full relative gap-2 opacity-70 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
             <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
               {roles?.map((role, index) => (
                 <div
@@ -236,35 +251,10 @@ const EditStaff = ({
           </div>
         </div>
 
-        <div className='w-full'>
-            <p className='text-sm font-semibold text-[#121C2D] flex items-center justify-start gap-1'>
-                <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
-                Status
-            </p>
-            <div className="flex mt-1 h-[2.25rem]">
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
-                        active===true
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                        : "border-gray-300 text-[#121C2D] rounded-l-lg"
-                    }`}
-                    onClick={() => setActive(true)}
-                >
-                    Active
-                </button>
-
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
-                        active===false
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                        : "border-gray-300 text-[#121C2D] rounded-r-lg"
-                    }`}
-                    onClick={() => setActive(false)}
-                >
-                    Inactive 
-                </button>
-            </div>
-        </div>
+        <ActiveButtons
+          active={active}
+          setActive={setActive}
+        />
         
   
         {/* Submit Button */}

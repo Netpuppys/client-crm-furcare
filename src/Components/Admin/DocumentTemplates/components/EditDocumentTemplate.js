@@ -5,6 +5,7 @@ import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import ActiveButtons from "../../../../ui/ActiveButtons";
 
 const EditDocumentTemplate = ({ 
   types,
@@ -28,6 +29,7 @@ const EditDocumentTemplate = ({
   const [ selectedLanguage, setSelectedLanguage ] = useState()
   const [ selectedLanguageIndex, setSelectedLanguageIndex ] = useState(0)
   const [ langIndex, setLangIndex ] = useState(0)
+  const [ active, setActive ] = useState(openEditModule.active)
 
   // set static languages
   useEffect(() => {
@@ -78,14 +80,14 @@ const EditDocumentTemplate = ({
       formData.name === openEditModule.name &&
       formData.type === openEditModule.type &&
       documents[langIndex].body === openEditModule.body[langIndex].body &&
-      languagesChange
+      languagesChange && active===openEditModule.active
       ) {
         setDisabled(true)
       return;
     }
 
     setDisabled(false)
-  }, [formData, language, openEditModule, selectedLanguageIndex, langIndex, documents])
+  }, [formData, language, openEditModule, selectedLanguageIndex, langIndex, documents, active])
 
   const handleDropDownClick = (value) => {
     setLanguage(prev => ([
@@ -156,7 +158,7 @@ const EditDocumentTemplate = ({
       <div className="flex w-full items-center justify-between gap-12">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Type{" "}
           </label>
@@ -174,7 +176,7 @@ const EditDocumentTemplate = ({
 
         {/* name */}
         <div className="flex flex-col w-1/2">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Name{" "}
           </label>
@@ -192,7 +194,7 @@ const EditDocumentTemplate = ({
       {/* Languages Dropdown */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col w-full">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             {"Language(s)"}{" "}
           </label>
@@ -238,30 +240,37 @@ const EditDocumentTemplate = ({
         </div>
       </div>
 
-      {documents.length>1 && 
-      <div className="flex w-full items-center justify-between gap-12">
-        <div className="flex flex-col w-1/2">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
-            <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-            Select language to view{" "}
-          </label>
-          <div className="flex mt-1">
-            {dropDownListStatic?.map((lang, id) => (
-              <button
-                key={id}
-                className={`py-2 px-4 border first:border-r-[0.5px] last:border-l-[0.5px] capitalize ${
-                  selectedLanguage === lang
-                    ? "border-[#006DFA] last:border-l-gray-300 text-[#006DFA] bg-[#F4F9FF] first:border-r-gray-300"
-                    : "border-gray-300 text-[#121C2D] first:rounded-l-lg last:rounded-r-lg"
-                }`}
-                onClick={() => handleLanguageChange(lang, id)}
-              >
-                {lang}
-              </button>
-            ))}
+      <div className="w-full flex items-center justify-start gap-12">
+        {documents.length>1 && 
+        <div className="flex items-center justify-between gap-12">
+          <div className="flex flex-col">
+            <label className="font-medium text-nowrap text-[#121C2D] flex items-center gap-1 text-sm">
+              <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+              Select language to view{" "}
+            </label>
+            <div className="flex mt-1 h-[2.25rem]">
+              {dropDownListStatic?.map((lang, id) => (
+                <button
+                  key={id}
+                  className={`h-full px-4 border first:border-r-[0.5px] last:border-l-[0.5px] capitalize ${
+                    selectedLanguage === lang
+                      ? "bg-[#F4F9FF] border-[#006DFA] first:border-r-gray-300 last:border-l-gray-300 text-[#006DFA]"
+                      : "border-gray-300 text-[#121C2D] first:rounded-l-md last:rounded-r-md"
+                  }`}
+                  onClick={() => handleLanguageChange(lang, id)}
+                >
+                  {lang}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>}
+        </div>}
+
+        <ActiveButtons
+          active={active}
+          setActive={setActive}
+        />
+      </div>
 
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">

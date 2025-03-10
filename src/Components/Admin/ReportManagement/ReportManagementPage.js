@@ -59,7 +59,7 @@ const ReportTable = ({
             </th>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-1">
-                <p className="">Location</p>
+                <p className="">Locations</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
@@ -77,7 +77,7 @@ const ReportTable = ({
                 <td className="px-4 py-2">
                   <button
                     onClick={() => handleEdit(item)}
-                    className="text-sm hover:underline text-[#0263E0] capitalize"
+                    className="text-sm text-[#0263E0] capitalize"
                   >
                     {item.name}
                   </button>
@@ -220,7 +220,6 @@ function ReportManagementPage() {
         top-0 h-screen right-0 flex z-50`}>
 
         <div 
-          onClick={() => setCreateNew(false)}
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 
@@ -252,7 +251,6 @@ function ReportManagementPage() {
         top-0 h-screen right-0 flex z-50`}>
 
         <div 
-          onClick={() => setEditGroup(false)}
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 

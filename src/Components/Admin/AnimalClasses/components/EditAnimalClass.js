@@ -4,6 +4,7 @@ import closeIcon from "../../../../Assets/icons/alert/close.png"
 import axiosInstance from '../../../../utils/AxiosInstance'
 import { useAppContext } from '../../../../utils/AppContext'
 import { useAlertContext } from '../../../../utils/AlertContext'
+import ActiveButtons from '../../../../ui/ActiveButtons'
 
 const EditAnimalClass = ({ 
     refreshList, 
@@ -57,7 +58,7 @@ const EditAnimalClass = ({
             <div className='w-full h-[calc(100%-4.75rem)] overflow-y-auto no-scrollbar'>
                 <div className='w-full mt-10 px-10 flex items-center justify-start gap-[50px]'>
                     <div className=''>
-                        <p className='text-sm font-semibold text-[#121C2D]'>
+                        <p className='text-sm font-medium text-[#121C2D]'>
                             <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
                             Name
                         </p>
@@ -67,35 +68,11 @@ const EditAnimalClass = ({
                             </p>
                         </div>
                     </div>
-                    <div className=''>
-                        <p className='text-sm font-semibold text-[#121C2D]'>
-                            <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
-                            Status
-                        </p>
-                        <div className="flex mt-1 h-[2.25rem]">
-                            <button
-                            className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
-                                active===true
-                                ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                                : "border-gray-300 text-[#121C2D] rounded-l-lg"
-                            }`}
-                            onClick={() => setActive(true)}
-                            >
-                                Active
-                            </button>
 
-                            <button
-                            className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
-                                active===false
-                                ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                                : "border-gray-300 text-[#121C2D] rounded-r-lg"
-                            }`}
-                            onClick={() => setActive(false)}
-                            >
-                                Inactive 
-                            </button>
-                        </div>
-                    </div>
+                    <ActiveButtons
+                        active={active}
+                        setActive={setActive}
+                    />
                 </div>
 
                 <div className='w-full mt-14 px-12'>

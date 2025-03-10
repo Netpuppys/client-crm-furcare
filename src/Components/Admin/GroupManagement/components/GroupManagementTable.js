@@ -56,16 +56,16 @@ const GroupManagementTable = ({
                 <tbody className="divide-y divide-[#E1E3EA]">
                 {groupData?.map((item, index) => (
                 <tr key={index} className={`hover:bg-gray-50 border-b last:border-b-0 border-[#E1E3EA] `}>
-                    <td className="px-4 py-2 text-sm cursor-pointer hover:underline text-[#0263E0]">
+                    <td className="px-4 py-2 text-sm cursor-pointer text-[#0263E0]">
                         <button
                             onClick={() => handleEdit(item)}
-                            className="capitalize hover:underline text-sm text-[#0263E0]"
+                            className="capitalize text-sm text-[#0263E0]"
                         >
                             {item.name}
                         </button>
                     </td>
                     <td className="px-4 py-2 text-sm text-[#121C2D]">
-                        {item.description===""? "--" : item.description}
+                        {item.description}
                     </td>
                     <td className="px-4 py-2 text-sm relative">
                         <button
@@ -89,7 +89,7 @@ const GroupManagementTable = ({
                     <td className="px-4 py-2 text-sm flex items-center">
                         <div
                             className={`w-3 aspect-square ${
-                                item.active ? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rounded-md rotate-45"
+                                item.active ? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rounded-sm rotate-45"
                             }`}
                         ></div>
                         <span

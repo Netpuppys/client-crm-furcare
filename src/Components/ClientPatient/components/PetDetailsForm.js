@@ -7,6 +7,7 @@ const PetDetailsForm = ({
     petDetails,
     patientType,
     handlePetAdd,
+    disableAddPet,
     handlePetChange,
     handleDeletePet,
     allAnimalClasses,
@@ -283,7 +284,8 @@ const PetDetailsForm = ({
             {index===0 &&
             <button
                 onClick={handlePetAdd}
-                className='text-[#0263E0] text-sm font-semibold'
+                disabled={disableAddPet}
+                className='text-[#0263E0] disabled:text-[#98989b] text-sm font-semibold'
             >
                 Add Another Pet
             </button>}

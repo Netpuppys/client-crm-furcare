@@ -90,7 +90,7 @@ const CreateNewReport = ({
           <div className="flex gap-10 w-full">
               {/* Name Input */}
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Name{" "}
                   </label>
@@ -103,7 +103,7 @@ const CreateNewReport = ({
                   />
               </div>
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Type{" "}
                   </label>
@@ -170,7 +170,7 @@ const CreateNewReport = ({
           <div className="flex gap-10 w-full">
               {/* Name Input */}
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Frequency{" "}
                   </label>
@@ -186,7 +186,7 @@ const CreateNewReport = ({
                   </select>
               </div>
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Locations{" "}
                   </label>

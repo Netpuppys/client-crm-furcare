@@ -66,7 +66,6 @@ const RolesAndPermissionsPage = () => {
           top-0 h-screen right-0 flex z-50`}>
 
           <div 
-            onClick={() => setAddNewModal(false)}
             className="w-[calc(100%-45rem)] h-full"
           ></div>
           <div
@@ -88,7 +87,6 @@ const RolesAndPermissionsPage = () => {
           top-0 h-screen right-0 flex z-50`}>
 
           <div 
-            onClick={() => setEditRole(false)}
             className="w-[calc(100%-45rem)] h-full"
           ></div>
 
@@ -165,21 +163,23 @@ const RolesAndPermissionsPage = () => {
             {rolesList?.map((item, index) => (
               <tr
                 key={index}
-                onClick={() => { setEditRole(true); setSelectedRole(item) }}
                 className={`text-sm text-gray-700 last:border-b-0 border-b border-gray-200 ${(selectedRole && selectedRole.id===item.id)? "bg-gray-50" : "hover:bg-gray-50"}`}
               >
                 <td className="px-4 py-3 w-[20%]">
-                  <p className="text-[#121C2D] hover:underline capitalize">
+                  <button 
+                    onClick={() => { setEditRole(true); setSelectedRole(item) }}
+                    className="text-[#0263E0] cursor-pointer capitalize"
+                  >
                     {item.name}
-                  </p>
+                  </button>
                 </td>
                 <td className="px-4 py-3 w-[20%] relative">
-                  <p className="text-[#121C2D] hover:underline capitalize">
+                  <p className="text-[#121C2D] capitalize">
                     {item.accessLevel}
                   </p>
                 </td>
                 <td className="px-4 py-3 w-[20%] relative">
-                  <p className="text-[#121C2D] hover:underline capitalize">
+                  <p className="text-[#121C2D] capitalize">
                     {item.isStaff? "Yes" : "No"}
                   </p>
                 </td>

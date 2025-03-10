@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import { useAppContext } from "../../../utils/AppContext";
 import EditStaff from "./component/EditStaff";
+import { z } from "zod";
 
 const DiagnosticTable = ({
   loaded,
@@ -93,6 +94,12 @@ const DiagnosticTable = ({
   );
 };
 
+const staffSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  phone: z.string().regex(/^\d{10}$/, "Phone must be 10 digits"),
+  email: z.string().email("Invalid email format"),
+});
+
 const CreateNewForm = ({ fetchStaffData }) => {
   const { setAlert } = useAlertContext()
 
@@ -118,6 +125,13 @@ const CreateNewForm = ({ fetchStaffData }) => {
     if (formData.name === "" || formData.phone === "" || formData.email === "" || roles.length===0 ) {
       setDisabled(true)
       return
+    }
+
+    const result = staffSchema.safeParse(formData);
+
+    if (!result.success) {
+      setDisabled(true)
+      return;
     }
 
     setDisabled(false)
@@ -202,7 +216,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
     <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
       {/* Name Input */}
       <div className="flex flex-col w-full">
-        <label className="font-medium text-[#121C2D] flex items-center gap-2">
+        <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
           <div className="w-1 aspect-square rounded-full bg-red-500"></div> Name{" "}
         </label>
         <input
@@ -210,13 +224,18 @@ const CreateNewForm = ({ fetchStaffData }) => {
           className="mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
           placeholder="Placeholder"
           value={formData.name}
-          onChange={(e) => handleInputChange("name", e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^[a-zA-Z\s]*$/.test(value)) {
+              handleInputChange("name", value);
+            }
+          }}
         />
       </div>
 
       <div className="flex items-center justify-between w-full">
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Email Address
           </label>
@@ -233,13 +252,10 @@ const CreateNewForm = ({ fetchStaffData }) => {
                   }
               }}
             />
-            {/* <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
-              .com
-            </div> */}
           </div>
         </div>
         <div className="w-[47.5%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Phone Number
           </label>
@@ -263,12 +279,12 @@ const CreateNewForm = ({ fetchStaffData }) => {
           </div>
         </div>
       </div>
-      <div className="w-full flex flex-col gap-2">
-        <label className="font-medium text-[#121C2D] flex items-center gap-2">
+      <div className="w-full flex flex-col gap-1">
+        <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
           <div className="w-1 aspect-square rounded-full bg-red-500"></div>
           Role(s)
         </label>
-        <div className="mt-1 w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
+        <div className="w-full relative gap-2 h-fit border border-gray-300 focus:outline-none rounded-lg overflow-hidden">
           <div className={`w-full relative gap-2 flex p-2 ${(inputFocus && dropDownList.length>0)? "border-b" : ""} border-gray-300 focus:outline-none`}>
             {roles?.map((role, index) => (
               <div
@@ -402,8 +418,7 @@ function StaffManagementPage() {
         ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
         top-0 h-screen right-0 flex z-50`}>
 
-        <div 
-          onClick={() => setCreateNew(false)}
+        <div
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 
@@ -434,8 +449,7 @@ function StaffManagementPage() {
         ${sidebarExpanded? "w-[calc(100%-15rem)]" : "w-[calc(100%-5rem)]"}
         top-0 h-screen right-0 flex z-50`}>
 
-        <div 
-          onClick={() => setEditStaff(false)}
+        <div
           className="w-[calc(100%-45rem)] h-full"
         ></div>
 

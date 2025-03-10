@@ -160,7 +160,7 @@ const EditSupplyForm = ({
         <div className="w-full flex justify-between gap-6 pr-10">
             {/* Name Input */}
             <div className="flex flex-col w-full">
-                <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Name{" "}
                 </label>
@@ -173,7 +173,7 @@ const EditSupplyForm = ({
                 />
             </div>
             <div className=''>
-                <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Status
                 </label>
@@ -211,7 +211,7 @@ const EditSupplyForm = ({
         {formData.item.map((field, index) => (
           <div key={index} className="flex w-full h-20 items-end justify-between gap-6">
             <div className="w-full">
-              <label className="font-medium text-[#121C2D] flex items-center gap-2">
+              <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Item
               </label>
@@ -225,7 +225,7 @@ const EditSupplyForm = ({
             </div>
             <div className="w-full">
               <div className="w-[98%] items-center flex justify-between">
-                <label className="w-fit font-medium text-[#121C2D] flex items-center gap-2">
+                <label className="w-fit font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                   <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                   Vendor
                 </label>

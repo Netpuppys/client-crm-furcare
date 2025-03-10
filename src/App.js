@@ -46,7 +46,9 @@ function App() {
           }`}
         >
           {currentPath !== "/" && <Navbar />}
-          <AllRoutes />
+          <div className={`w-full overflow-y-auto ${currentPath!=="/"? "h-[calc(100vh-4.75rem)]" : "h-full"}`}>
+            <AllRoutes />
+          </div>
         </div>
       </div>
     );

@@ -46,10 +46,8 @@ const AddNewItemForm = ({ content }) => {
       setDisabled(true);
       return;
     }
-
-    console.log(additionalNotes)
   
-    setDisabled(false);
+    // setDisabled(false);
   }, [formData, initialData, additionalNotes, content]);
 
   const handleSubmit = () => {
@@ -62,7 +60,7 @@ const AddNewItemForm = ({ content }) => {
       <div className="flex w-full items-center justify-between">
         {/* Category Input */}
         <div className="flex flex-col w-[70%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Category{" "}
           </label>
@@ -77,7 +75,7 @@ const AddNewItemForm = ({ content }) => {
 
         {/* Gender Selection */}
         <div className="flex flex-col w-[25%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Gender{" "}
           </label>
@@ -112,7 +110,7 @@ const AddNewItemForm = ({ content }) => {
       <div className="w-full flex items-center justify-between">
         {/* Animal Type Input */}
         <div className="flex flex-col w-[70%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Animal Type{" "}
           </label>
@@ -136,7 +134,7 @@ const AddNewItemForm = ({ content }) => {
 
         {/* Age Range Input */}
         <div className="flex flex-col w-[25%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Age Range{" "}
           </label>
@@ -159,7 +157,7 @@ const AddNewItemForm = ({ content }) => {
       {/* Health Concerns Dropdown */}
       <div className="w-full flex items-center justify-between">
         <div className="flex flex-col w-[55%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Health Concerns{" "}
           </label>
@@ -180,7 +178,7 @@ const AddNewItemForm = ({ content }) => {
 
         {/* Sterilization Status */}
         <div className="flex flex-col w-[40%]">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Sterilization Status{" "}
           </label>
@@ -226,7 +224,7 @@ const AddNewItemForm = ({ content }) => {
 
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">
-        {/* <label className="font-medium text-[#121C2D] flex items-center gap-2"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
+        {/* <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
         <ReactQuill
           className="mt-2 h-[400px] mb-12"
           theme="snow"

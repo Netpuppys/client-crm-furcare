@@ -4,6 +4,7 @@ import { FiCheck, FiPlus } from "react-icons/fi";
 import { useAppContext } from "../../../../utils/AppContext";
 import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 import BlueButton from "../../../../ui/BlueButton";
+import ActiveButtons from "../../../../ui/ActiveButtons";
 
 const labelFields = [ "Scheduled Appointments", "Cancelled Appointments", "Walk-In Appointments", "Appointment Slots", "Doctors" ]
 const frequencyArray = [ 'day', 'week', 'month' ]
@@ -80,7 +81,7 @@ const EditReport = ({
           <div className="flex gap-10 w-full">
               {/* Name Input */}
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-2 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Name{" "}
                   </label>
@@ -93,7 +94,7 @@ const EditReport = ({
                   />
               </div>
               <div className="flex flex-col w-full">
-                  <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                  <label className="font-medium text-[#121C2D] flex items-center gap-2 text-sm">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                       Type{" "}
                   </label>
@@ -160,7 +161,7 @@ const EditReport = ({
           <div className="flex gap-10 w-full">
                 {/* Name Input */}
                 <div className="flex flex-col w-full">
-                    <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                    <label className="font-medium text-[#121C2D] flex items-center gap-2 text-sm">
                         <div className="w-1 aspect-square rounded-full bg-red-500"></div> 
                         Frequency{" "}
                     </label>
@@ -176,7 +177,7 @@ const EditReport = ({
                     </select>
                 </div>
                 <div className="flex flex-col w-full">
-                    <label className="font-medium text-[#121C2D] flex items-center gap-2">
+                    <label className="font-medium text-[#121C2D] flex items-center gap-2 text-sm">
                         <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                         Locations{" "}
                     </label>
@@ -214,7 +215,7 @@ const EditReport = ({
               </div>
           </div>
 
-          <div className=''>
+          {/* <div className=''>
             <p className='text-sm font-semibold text-[#121C2D] flex items-center justify-start gap-1'>
                 <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
                 Status
@@ -242,7 +243,12 @@ const EditReport = ({
                     Inactive 
                 </button>
             </div>
-        </div>
+        </div> */}
+
+        <ActiveButtons
+            active={active}
+            setActive={setActive}
+        />
   
         {/* Submit Button */}
         <div className="h-full w-full items-end flex justify-end ">

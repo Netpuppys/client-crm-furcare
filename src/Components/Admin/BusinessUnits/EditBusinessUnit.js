@@ -76,12 +76,28 @@ const EditBusinessUnit = () => {
     const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
     const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
 
-    if (checkFromdata) {
+    const valueChanged = formData.active===businessUnitData.active &&
+    formData.unitName===businessUnitData.name &&
+    formData.branchType===businessUnitData.type &&
+    formData.practiceType===businessUnitData.practice &&
+    formData.currency===businessUnitData.currency &&
+    formData.address1===businessUnitData.addressLine1 &&
+    formData.address2===businessUnitData.addressLine2 &&
+    formData.city===businessUnitData.city &&
+    formData.state===businessUnitData.state &&
+    formData.country===businessUnitData.country &&
+    formData.postalCode===businessUnitData.postalCode &&
+    formData.department===businessUnitData.departments[0].departmentDetails.id &&
+    formData.appointment==="675b049dc90ac3a44472a525"
+
+    console.log(valueChanged)
+
+    if (checkFromdata && !valueChanged) {
       setDisabled(false)
     } else {
       setDisabled(true);
     }
-  }, [formData, selectedOptions]);
+  }, [formData, selectedOptions, businessUnitData]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));

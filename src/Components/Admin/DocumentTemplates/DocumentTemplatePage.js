@@ -203,7 +203,6 @@ const DocumentTemplatePage = () => {
           top-0 h-screen right-0 flex z-50`}>
 
           <div 
-            onClick={() => setCreateNew(false)}
             className="w-[calc(100%-45rem)] h-full"
           ></div>
 
@@ -236,7 +235,6 @@ const DocumentTemplatePage = () => {
           top-0 h-screen right-0 flex z-50`}>
 
           <div 
-            onClick={() => setOpenEditModule(false)}
             className="w-[calc(100%-45rem)] h-full"
           ></div>
 

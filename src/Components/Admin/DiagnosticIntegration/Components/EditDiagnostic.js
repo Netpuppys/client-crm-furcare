@@ -6,6 +6,8 @@ import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import { GoogleMapsLoader } from "../../../../utils/GoogleLoaderContext";
+import { toast } from "react-toastify";
+import ActiveButtons from "../../../../ui/ActiveButtons";
 
 const EditDiagnostic = ({
     editDiagnostic,
@@ -19,6 +21,7 @@ const EditDiagnostic = ({
   
     const [ suggestions, setSuggestions ] = useState([]);
     const [ disabled, setDisabled ] = useState(true)
+    const [ active, setActive ] = useState(editDiagnostic.active)
     const [ formData, setFormData ] = useState({
       name: editDiagnostic.name,
       address1: editDiagnostic.addressLine1,
@@ -28,34 +31,12 @@ const EditDiagnostic = ({
       country: editDiagnostic.country,
       postalCode: editDiagnostic.postalCode
     });
-  
-    // useEffect(() => {
-    //   setFormData({
-    //     name: editDiagnostic.name,
-    //     address1: editDiagnostic.addressLine1,
-    //     address2: editDiagnostic.addressLine2,
-    //     city: editDiagnostic.city,
-    //     state: editDiagnostic.state,
-    //     country: editDiagnostic.country,
-    //     postalCode: editDiagnostic.postalCode
-    //   })
-    // }, [editDiagnostic])
 
     useEffect(() => {
-        // console.log(formData, editDiagnostic)
-
-        // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
-        // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
-        // console.log(formData.address2.replace(/\s/g, "") === editDiagnostic.addressLine2.replace(/\s/g, ""))
-        // console.log(formData.city.replace(/\s/g, "") === editDiagnostic.city.replace(/\s/g, ""))
-        // console.log(formData.state.replace(/\s/g, "") === editDiagnostic.state.replace(/\s/g, ""))
-        // console.log(formData.country.replace(/\s/g, "") === editDiagnostic.country.replace(/\s/g, ""))
-        // console.log(Number(formData.postalCode) === Number(editDiagnostic.postalCode))
-
         if (
             (formData.name?.replace(/\s/g, "") === "" || formData.name?.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, "")) &&
-            (formData.address1 === ""  || formData.address1 === editDiagnostic.addressLine) &&
-            (formData.address2 === "" || formData.address2 === editDiagnostic.addressLine) &&
+            (formData.address1 === ""  || formData.address1 === editDiagnostic.addressLine1) &&
+            (formData.address2 === "" || formData.address2 === editDiagnostic.addressLine2) &&
             (formData.city === "" || formData.city === editDiagnostic.city) &&
             (formData.state === "" || formData.state === editDiagnostic.state) &&
             (formData.country === "" || formData.country === editDiagnostic.country) &&
@@ -79,6 +60,7 @@ const EditDiagnostic = ({
         addressLine1: formData.address1,
         addressLine2: formData.address2,
         city: formData.city,
+        active: active,
         state: formData.state,
         country: formData.country,
         postalCode: formData.postalCode,
@@ -95,6 +77,7 @@ const EditDiagnostic = ({
         })
         .catch(err => {
           console.error(err)
+          toast.error('Something went wrong')
         })
     };
   
@@ -135,7 +118,7 @@ const EditDiagnostic = ({
       <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
         {/* Name Input */}
         <div className="flex flex-col w-full">
-          <label className="font-medium text-[#121C2D] flex items-center gap-2">
+          <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div> Name{" "}
           </label>
           <input
@@ -150,7 +133,7 @@ const EditDiagnostic = ({
         {/* Address Selection */}
         <div className="flex w-full items-center justify-between">
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Address line 1
             </label>
@@ -184,7 +167,7 @@ const EditDiagnostic = ({
           </div>
   
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Address line 2
             </label>
@@ -201,7 +184,7 @@ const EditDiagnostic = ({
         {/* City and State Selection */}
         <div className="flex w-full items-center justify-between">
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               City
             </label>
@@ -218,7 +201,7 @@ const EditDiagnostic = ({
             />
           </div>
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               State
             </label>
@@ -243,7 +226,7 @@ const EditDiagnostic = ({
         {/* Country and Postal Code Selection */}
         <div className="flex w-full items-center justify-between">
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Country
             </label>
@@ -258,7 +241,7 @@ const EditDiagnostic = ({
           </div>
   
           <div className="w-[47.5%]">
-            <label className="font-medium text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
               <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
               Postal Code
             </label>
@@ -277,6 +260,11 @@ const EditDiagnostic = ({
             />
           </div>
         </div>
+
+        <ActiveButtons
+          active={active}
+          setActive={setActive}
+        />
   
         {/* Submit Button */}
         <div className="h-full w-full items-end flex justify-end ">

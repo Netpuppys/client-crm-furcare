@@ -6,6 +6,7 @@ import BlueButton from "../../../../ui/BlueButton";
 import { IoClose } from "react-icons/io5";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import chevronDown from "../../../../Assets/icons/chevronDown.png"
+import ActiveButtons from "../../../../ui/ActiveButtons";
 
 const EditGroup = ({
     editGroup,
@@ -229,7 +230,7 @@ const EditGroup = ({
         <div className="flex gap-10 w-full">
             {/* Name Input */}
             <div className="flex flex-col w-3/5">
-                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Name{" "}
                 </label>
@@ -254,7 +255,7 @@ const EditGroup = ({
         <div className="flex gap-10 w-full">
             {/* Name Input */}
             <div className="flex flex-col w-full">
-                <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+                <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>
                     Resources{" "}
                 </label>
@@ -281,7 +282,7 @@ const EditGroup = ({
                             </div>
                         ))}
 
-                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-4">
+                        <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-2">
                             
                             <p className="text-sm text-[#121C2D] font-medium">
                                 {selectedResources.length===0 && "Select"}
@@ -319,7 +320,7 @@ const EditGroup = ({
         </div>
 
         <div className="flex flex-col w-full">
-            <label className="font-semibold text-[#121C2D] flex items-center gap-2">
+            <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
                 Description{" "}
             </label>
             <textarea
@@ -335,35 +336,10 @@ const EditGroup = ({
             </p>
         </div>
 
-        <div className=''>
-            <p className='text-sm font-semibold text-[#121C2D] flex items-center justify-start gap-1'>
-                <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
-                Status
-            </p>
-            <div className="flex mt-1 h-[2.25rem]">
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
-                        active===true
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                        : "border-gray-300 text-[#121C2D] rounded-l-lg"
-                    }`}
-                    onClick={() => setActive(true)}
-                >
-                    Active
-                </button>
-
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
-                        active===false
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                        : "border-gray-300 text-[#121C2D] rounded-r-lg"
-                    }`}
-                    onClick={() => setActive(false)}
-                >
-                    Inactive 
-                </button>
-            </div>
-        </div>
+        <ActiveButtons
+            active={active}
+            setActive={setActive}
+        />
 
         {/* Submit Button */}
         <div className="h-full w-full items-end flex justify-end ">
