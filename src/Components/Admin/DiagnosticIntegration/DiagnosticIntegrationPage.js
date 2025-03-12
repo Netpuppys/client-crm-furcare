@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
-import statesInIndia from "../../../data/StatesIndia";
+import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import EditDiagnostic from "./Components/EditDiagnostic";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
@@ -326,12 +326,12 @@ const CreateNewForm = ({
             onChange={(e) => handleInputChange("state", e.target.value)}
           >
             <option value={""}>State</option>
-            {statesInIndia.map((item, index) => (
+            {statesAndCitiesInIndia.map((item, index) => (
               <option
                 key={index}
-                value={item}
+                value={item.state}
               >
-                {item}
+                {item.state}
               </option>
             ))}
           </select>
@@ -390,7 +390,7 @@ const CreateNewForm = ({
 
 const DiagnosticIntegrationPage = () => {
 
-  const { sidebarExpanded } = useAppContext()
+  const { sidebarExpanded, selectedBranch } = useAppContext()
 
   const [ createNew, setCreateNew] = useState(false);
   const [ diagnosticIntegrationsData, setDiagnosticIntegrationsData ] = useState([])
@@ -404,7 +404,7 @@ const DiagnosticIntegrationPage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get("/api/v1/diagnostic-integrations")
+      .get(`/api/v1/diagnostic-integrations?businessBranchId=${selectedBranch?.id}`)
       .then(res => {
         const response = res.data.data.data
         console.log(response)
@@ -413,11 +413,11 @@ const DiagnosticIntegrationPage = () => {
       .catch(err => {
         console.error(err)
       })
-  }, [])
+  }, [selectedBranch])
 
   const fetchDiagnosticsDetails = () => {
     axiosInstance
-      .get("/api/v1/diagnostic-integrations")
+      .get(`/api/v1/diagnostic-integrations?businessBranchId=${selectedBranch?.id}`)
       .then(res => {
         const response = res.data.data.data
         console.log(response)

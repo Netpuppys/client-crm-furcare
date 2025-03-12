@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import BlueButton from "../../../../ui/BlueButton";
-import statesInIndia from "../../../../data/StatesIndia";
+import statesAndCitiesInIndia from "../../../../data/StatesIndia";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { useAlertContext } from "../../../../utils/AlertContext";
@@ -211,12 +211,12 @@ const EditDiagnostic = ({
               onChange={(e) => handleInputChange("state", e.target.value)}
             >
               <option value={""}>State</option>
-              {statesInIndia.map((item, index) => (
+              {statesAndCitiesInIndia.map((item, index) => (
                 <option
                   key={index}
-                  value={item}
+                  value={item.state}
                 >
-                  {item}
+                  {item.state}
                 </option>
               ))}
             </select>

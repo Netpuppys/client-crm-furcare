@@ -2,29 +2,17 @@ import { useEffect, useState } from "react";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import { FaSearch } from "react-icons/fa";
 import axiosInstance from "../../../utils/AxiosInstance";
+import statesAndCitiesInIndia from "../../../data/StatesIndia";
 
 export default function BusinessForm({
     sendData,
     setSendData
 }) {
     
-    const [ allAnimalClasses, setAllAnimalClasses ] = useState([])
-    const [ noOfBranches, setNoOfbranches ] = useState(1)
-    // const [ formData, setFormData ] = useState({
-    //     businessUnitType: "",
-    //     businessUnitName: "",
-    //     numberOfBranchUnits: 1,
-    //     branchType: "",
-    //     practiceType: "",
-    //     currency: "INR",
-    //     addressLine1: "",
-    //     addressLine2: "",
-    //     city: "",
-    //     state: "",
-    //     country: "India",
-    //     postalCode: "",
-    //     animalClasses: "",
-    // });
+    const [ suggestions, setSuggestions ] = useState([]);
+    const [ noOfBranches, setNoOfbranches ] = useState(1);
+    const [ allAnimalClasses, setAllAnimalClasses ] = useState([]);
+    const [ selectedAnimalClass, setSelectedAnimalClass ] = useState();
 
     useEffect(() => {
         axiosInstance
@@ -62,6 +50,14 @@ export default function BusinessForm({
         setSendData({ ...sendData, [e.target.name]: e.target.value });
     };
 
+    const handleAnimalClass = (item) => {
+        const animal = JSON.parse(item)
+
+        setSelectedAnimalClass(item)
+
+        setSendData({ ...sendData, animalClasses: [animal.id] });
+    }
+
     const updateBusinessBranch = (index, field, value) => {
         setSendData((prevData) => {
             const updatedBranches = prevData.businessBranches.map((branch, i) => 
@@ -71,6 +67,11 @@ export default function BusinessForm({
             return { ...prevData, businessBranches: updatedBranches };
         });
     };
+
+    const handleSuggestionClick = (place, index) => {
+        updateBusinessBranch(index, "address1", place.description);
+        setSuggestions([]);
+      };
 
   return (
     <div className="w-full py-4">
@@ -107,6 +108,7 @@ export default function BusinessForm({
                         className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]"
                         value={sendData.name}
                         onChange={handleChange}
+                        minLength={3}
                     />
                 </div>
 
@@ -203,21 +205,21 @@ export default function BusinessForm({
                                         className="w-full capitalize rounded-r-lg focus:outline-none p-2"
                                         placeholder="Address line 1"
                                         value={branch.addressLine1}
-                                        onChange={e => updateBusinessBranch(index, "addressLine1", e.target.value)} 
+                                        onChange={e => updateBusinessBranch(index, "addressLine1", e.target.value)}
                                     />
-                                {/* {suggestions.length > 0 && (
+                                {suggestions.length > 0 && (
                                     <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
                                     {suggestions.map((suggestion) => (
                                         <li
-                                        key={suggestion.place_id}
-                                        className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
-                                        onClick={() => handleSuggestionClick(suggestion)}
+                                            key={suggestion.place_id}
+                                            className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
+                                            onClick={() => handleSuggestionClick(suggestion, index)}
                                         >
-                                        {suggestion.description}
+                                            {suggestion.description}
                                         </li>
                                     ))}
                                     </ul>
-                                )} */}
+                                )}
                                 </div>
                             </GoogleMapsLoader>
                         </div>
@@ -246,13 +248,20 @@ export default function BusinessForm({
                             </label>
                             <select 
                                 name="city" 
+                                disabled={branch.state? false : true}
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
                                 onChange={e => updateBusinessBranch(index, "city", e.target.value)} 
                                 value={branch.city}
                             >
                                 <option value="">Select</option>
-                                <option value="Mumbai">Mumbai</option>
-                                <option value="Delhi">Delhi</option>
+                                {statesAndCitiesInIndia.find(item => item.state === branch.state)?.cities.map((city, index) => (
+                                    <option
+                                        key={index}
+                                        value={city}
+                                    >
+                                        {city}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                     </div>
@@ -271,8 +280,14 @@ export default function BusinessForm({
                                 value={branch.state}
                             >
                                 <option value="">Select</option>
-                                <option value="Maharashtra">Maharashtra</option>
-                                <option value="Delhi">Delhi</option>
+                                {statesAndCitiesInIndia.map((item, index) => (
+                                    <option
+                                        key={index}
+                                        value={item.state}
+                                    >
+                                        {item.state}
+                                    </option>
+                                ))}
                             </select>
                         </div>
 
@@ -300,11 +315,19 @@ export default function BusinessForm({
                             </label>
                             <input 
                                 name="postalCode"
-                                type="number"
+                                type="text"
                                 placeholder="Postal Code"
                                 className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA]" 
                                 value={branch.postalCode} 
-                                onChange={e => updateBusinessBranch(index, "postalCode", e.target.value)} 
+                                onChange={e => {
+                                    const value = e.target.value;
+                                    // Allow only numbers and a single decimal point
+                                    const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
+
+                                    if (/^\d*$/.test(formattedValue) && formattedValue.length <= 6) {
+                                        updateBusinessBranch(index, "postalCode", formattedValue)
+                                    }
+                                }}
                             />
                         </div>
                         </div>
@@ -322,13 +345,13 @@ export default function BusinessForm({
                 <select 
                     name="animalClasses" 
                     className="border rounded-md focus:outline-none p-2 text-sm border-[#8891AA] classic" 
-                    // onChange={handleChange} 
-                    // value={formData.animalClasses}
+                    onChange={e => handleAnimalClass(e.target.value)}
+                    value={selectedAnimalClass}
                 >
-                    <option value="">Select</option>
+                    <option value={JSON.stringify({})}>Select</option>
                     {allAnimalClasses.map((item, index) => (
                         <option
-                            value={item.name}
+                            value={JSON.stringify(item)}
                             key={index}
                         >
                             {item.name}

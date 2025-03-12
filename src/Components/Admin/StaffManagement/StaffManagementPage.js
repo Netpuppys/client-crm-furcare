@@ -87,7 +87,7 @@ const DiagnosticTable = ({
         </tbody>
       </table>
       {staffData.length===0 && loaded &&
-      <div className="w-full h-10 flex items-center justify-center">
+      <div className="w-full h-10 text-sm flex items-center justify-center">
         No Staff Members Found
       </div>}
     </div>
@@ -139,7 +139,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/v1/roles`)
+      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
       .then((res) => {
         const response = res.data.data.data;
         setRolesList(response);
@@ -147,7 +147,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
       .catch((err) => {
         console.error(err);
       });
-  }, [])
+  }, [selectedBranch])
 
   // Function to remove a role
   const removeRole = (roleToRemove) => {
@@ -319,6 +319,10 @@ const CreateNewForm = ({ fetchStaffData }) => {
                 </p>
               </button>
             ))}
+            {dropDownList.length===0 && 
+            <div className="border-t w-full last:border-b-0 border-[#E1E3EA] flex items-center justify-center text-sm h-10">
+              Roles Not Found
+            </div>}
           </div>}
         </div>
       </div>

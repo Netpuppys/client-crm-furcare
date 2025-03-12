@@ -16,12 +16,12 @@ const DepartmentForm = ({
     const [ selectedOptions, setSelectedOptions ] = useState([]);
     const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
     const [ appointmentSlots, setAppointmentSlots ] = useState([]);
+    const [ showCreateDepartment, setShowCreateDepartment ] = useState(false)
 
     useEffect(() => {
         axiosInstance
             .get("/api/v1/departments")
             .then(res => {
-                console.log(res.data.data.data)
                 setOptions(res.data.data.data)
             })
             .catch(err => {
@@ -65,7 +65,7 @@ const DepartmentForm = ({
                     departmentId: option.id
                 }]
 
-                console.log("new", newArr)
+                // console.log("new", newArr)
 
                 return { ...prevData, appointmentSlots: newArr }
             });
@@ -87,7 +87,7 @@ const DepartmentForm = ({
     const handleDeleteDepartment = (dept) => {
         setSelectedOptions(prev => prev.filter((item) => item.department !== dept));
 
-        const filterredDept = options.filter(item => item.name === dept)
+        const filterredDept = options.filter(item => item.name === dept);
 
         setSendData((prevData) => {
           const updatedServices = prevData.departments.filter((id) => id !== filterredDept[0].id)
@@ -181,6 +181,12 @@ const DepartmentForm = ({
         }));
     };
 
+    const handleCreateDepartment = () => {
+        toggleDropdown()
+
+        setShowCreateDepartment(true)
+    }
+
   return (
     <div className='w-full h-fit py-4'>
         <label className="font-medium text-[#121C2D] text-sm flex items-center gap-2">
@@ -192,8 +198,8 @@ const DepartmentForm = ({
             <div
                 ref={toggleRef}
                 className={`classic w-full mt-1 ${
-                    selectedOptions.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                } border border-gray-300 focus:outline-none rounded-lg`}
+                        selectedOptions.length===0 ? "p-2" : "p-1 min-h-[42px]"
+                    } border border-[#8891AA] focus:outline-none rounded-md`}
                 onClick={toggleDropdown}
             >
                 {selectedOptions.length===0 && (<p className="text-sm">Select</p>)}
@@ -207,10 +213,10 @@ const DepartmentForm = ({
                         {option.department}
 
                         <button
-                        className="ml-2 text-[#606B85]"
-                        onClick={() => handleDeleteDepartment(option.department)}
+                            className="ml-2 text-[#606B85]"
+                            onClick={() => handleDeleteDepartment(option.department)}
                         >
-                        <IoClose />
+                            <IoClose />
                         </button>
                     </span>
                     ))}
@@ -224,6 +230,7 @@ const DepartmentForm = ({
             >
                 <div className='h-[2.8rem] flex items-center justify-start px-3 border-b border-[#E1E3EA]'>
                     <button
+                        onClick={handleCreateDepartment}
                         className='text-sm flex items-center justify-center gap-2'
                     >
                         <span className='text-[#606B85] text-2xl'>+</span>
@@ -247,10 +254,10 @@ const DepartmentForm = ({
                     <li className="px-4 border-b last:border-b-0 border-[#E1E3EA] h-[2.8rem] flex items-center" key={option}>
                         <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
-                            type="checkbox"
-                            className="mr-2 h-4 placeholder:italic text-sm"
-                            checked={sendData.departments.includes(option.id)}
-                            onChange={() => handleCheckboxChange(option)}
+                                type="checkbox"
+                                className="mr-2 h-4 placeholder:italic text-sm"
+                                checked={sendData.departments.includes(option.id)}
+                                onChange={() => handleCheckboxChange(option)}
                             />
 
                             {option.name}
@@ -272,6 +279,21 @@ const DepartmentForm = ({
             </div>
         </div>
         )}
+
+        {showCreateDepartment && !isDropdownOpen && appointmentSlots.length<1 &&
+        <div className='w-full mt-6'>
+            <div className="w-1/2">
+                <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+                    <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                    Department Name
+                </label>
+                <input
+                    type='text'
+                    placeholder='placeholder'
+                    className='border rounded-md mt-1 w-[500px] focus:outline-none p-2 text-sm border-[#8891AA] placeholder:italic'
+                />
+            </div>
+        </div>}
 
         <div className='flex flex-col gap-3 mt-6'>
             {appointmentSlots.map((slot, index) => (

@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
-import statesInIndia from "../../../data/StatesIndia";
+import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
 const appointmentSlots = [
@@ -334,7 +334,7 @@ const CreateBusinessUnit = () => {
       {/* main form */}
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
-        <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-lg space-y-6">
+        <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-md space-y-6">
           {/* Status Change */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             {/* branch name change */}
@@ -345,7 +345,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 capitalize border placeholder:italic text-sm border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 capitalize border placeholder:italic text-sm border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Placeholder"
                 value={formData.unitName}
                 onChange={(e) => handleInputChange("unitName", e.target.value)}
@@ -359,7 +359,7 @@ const CreateBusinessUnit = () => {
                 Branch Type
               </label>
               <select
-                className="w-full classic mt-1 capitalize placeholder:italic text-sm p-2 border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 capitalize placeholder:italic text-sm p-2 border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.branchType}
                 onChange={(e) =>
                   handleInputChange("branchType", e.target.value)
@@ -381,7 +381,7 @@ const CreateBusinessUnit = () => {
                 Practice Type
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.practiceType}
                 onChange={(e) =>
                   handleInputChange("practiceType", e.target.value)
@@ -401,7 +401,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 uppercase placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 uppercase placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 disabled
                 placeholder="INR"
                 value={formData.currency}
@@ -418,7 +418,7 @@ const CreateBusinessUnit = () => {
                 Address line 1
               </label>
               <GoogleMapsLoader>
-                <div className="flex mt-1  border border-gray-300 rounded-lg relative">
+                <div className="flex mt-1  border border-[#8891AA] rounded-md relative">
                   <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
                     <FaSearch className="text-[#606B85] h-full" />
                   </div>
@@ -430,7 +430,7 @@ const CreateBusinessUnit = () => {
                     onChange={handleAddressInputChange}
                   />
                   {suggestions.length > 0 && (
-                    <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
+                    <ul className="absolute top-full mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
                       {suggestions.map((suggestion) => (
                         <li
                           key={suggestion.place_id}
@@ -453,7 +453,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full capitalize mt-1 p-2 placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                className="w-full capitalize mt-1 p-2 placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Placeholder"
                 value={formData.address2}
                 onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -470,7 +470,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="City"
                 value={formData.city}
                 onChange={(e) => {
@@ -486,25 +486,18 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 State
               </label>
-              {/* <input
-                type="text"
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
-                placeholder="Maharashtra"
-                value={formData.state}
-                onChange={(e) => handleInputChange("state", e.target.value)}
-              /> */}
               <select
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg classic"
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md classic"
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
               >
                 <option value={""}>State</option>
-                {statesInIndia.map((item, index) => (
+                {statesAndCitiesInIndia.map((item, index) => (
                   <option
                     key={index}
-                    value={item}
+                    value={item.state}
                   >
-                    {item}
+                    {item.state}
                   </option>
                 ))}
               </select>
@@ -521,7 +514,7 @@ const CreateBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6] disabled:opacity-70"
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6] disabled:opacity-70"
                 placeholder="Country"
                 value={formData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
@@ -535,7 +528,7 @@ const CreateBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Postal Code"
                 value={formData.postalCode}
                 // onChange={(e) =>
@@ -564,7 +557,7 @@ const CreateBusinessUnit = () => {
                   ref={toggleRef}
                   className={`classic w-full mt-1 ${
                     selectedOptions.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-gray-300 focus:outline-none rounded-lg`}
+                  } border border-[#8891AA] focus:outline-none rounded-md`}
                   onClick={toggleDropdown}
                 >
                   {selectedOptions.length===0 && (
@@ -593,7 +586,7 @@ const CreateBusinessUnit = () => {
                 {isDropdownOpen && (
                   <div
                     ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-gray-300 z-10 max-h-52 overflow-y-auto"
+                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
                       {options?.map((option) => (
@@ -634,7 +627,7 @@ const CreateBusinessUnit = () => {
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                     {service.service}
                   </label>
-                  <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
+                  <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
                     <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
                       <p className="text-[#606B85] text-sm h-full">{formData.currency? formData.currency : "INR"}</p>
                     </div>
@@ -665,7 +658,7 @@ const CreateBusinessUnit = () => {
                 Department(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.department}
                 onChange={(e) =>
                   handleInputChange("department", e.target.value)
@@ -687,7 +680,7 @@ const CreateBusinessUnit = () => {
                 Appointment Slot(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.appointment}
                 onChange={(e) =>
                   handleInputChange("appointment", e.target.value)

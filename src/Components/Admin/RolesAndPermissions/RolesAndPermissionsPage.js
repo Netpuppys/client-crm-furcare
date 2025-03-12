@@ -10,7 +10,7 @@ import { useAppContext } from "../../../utils/AppContext";
 const RolesAndPermissionsPage = () => {
   const navigate = useNavigate()
 
-  const { sidebarExpanded } = useAppContext()
+  const { sidebarExpanded, selectedBranch } = useAppContext()
   
   const [ rolesList, setRolesList ] = useState([]);
   const [ addNewModal, setAddNewModal ] = useState(false);
@@ -24,7 +24,7 @@ const RolesAndPermissionsPage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/v1/roles`)
+      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
       .then((res) => {
         const response = res.data.data.data;
         console.log(response);
@@ -36,11 +36,11 @@ const RolesAndPermissionsPage = () => {
       .finally(() => {
         setLoaded(true)
       })
-  }, []);
+  }, [selectedBranch]);
 
   const fetchRolesList = () => {
     axiosInstance
-      .get(`/api/v1/roles`)
+      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
       .then((res) => {
         const response = res.data.data.data;
         console.log(response);
@@ -203,7 +203,7 @@ const RolesAndPermissionsPage = () => {
           </tbody>
         </table>
         {rolesList.length === 0 && loaded && (
-          <div className="w-full h-10 flex items-center justify-center">
+          <div className="w-full h-10 text-sm flex items-center justify-center">
             Roles Not Found
           </div>
         )}

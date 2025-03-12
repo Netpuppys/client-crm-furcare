@@ -4,12 +4,14 @@ import axiosInstance from '../../../utils/AxiosInstance';
 
 const ServiceForm = ({
   sendData,
-  setSendData
+  setSendData,
+  selectedOptions,
+  setSelectedOptions
 }) => {
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
 
-  const [ selectedOptions, setSelectedOptions ] = useState([]);
+  // const [ selectedOptions, setSelectedOptions ] = useState([]);
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
   const [ options, setOptions ] = useState([])
   
@@ -32,7 +34,6 @@ const ServiceForm = ({
     axiosInstance
       .get("/api/v1/services")
       .then(res => {
-          console.log(res.data.data.data)
           setOptions(res.data.data.data)
       })
       .catch(err => {
@@ -129,10 +130,10 @@ const ServiceForm = ({
                     >
                         {option.service}
                         <button
-                        className="ml-2 text-[#606B85]"
-                        onClick={() => handleDeleteService(option.service)}
+                          className="ml-2 text-[#606B85]"
+                          onClick={() => handleDeleteService(option.service)}
                         >
-                        <IoClose />
+                          <IoClose />
                         </button>
                     </span>
                     ))}
@@ -169,12 +170,12 @@ const ServiceForm = ({
                     <li className="px-4 border-b last:border-b-0 border-[#E1E3EA] h-[2.8rem] flex items-center" key={option}>
                         <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
-                            type="checkbox"
-                            className="mr-2 h-4 placeholder:italic text-sm"
-                            checked={sendData.services.includes(option.id)}
-                            onChange={() => handleCheckboxChange(option)}
+                              type="checkbox"
+                              className="mr-2 h-4 placeholder:italic text-sm"
+                              checked={sendData.services.includes(option.id)}
+                              onChange={() => handleCheckboxChange(option)}
                             />
-
+                            
                             {option.name}
                         </label>
                     </li>
@@ -195,7 +196,7 @@ const ServiceForm = ({
               className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center mt-6`}
             >
               {selectedOptions.map((service, index) => (
-                <div key={index} className="w-[220px] ">
+                <div key={index} className="w-[220px]">
                   <label className="font-medium text-[#121C2D] capitalize text-sm flex items-center gap-2">
                     <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                     {service.service}
@@ -210,7 +211,10 @@ const ServiceForm = ({
                         const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
                         // Limit to 2 decimal places
                         const twoDecimalValue = formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || '';
-                        handleServicePrice(twoDecimalValue, index);
+
+                        if (twoDecimalValue.length<8) {
+                          handleServicePrice(twoDecimalValue, index);
+                        }
                       }}
                       type="text"
                     />

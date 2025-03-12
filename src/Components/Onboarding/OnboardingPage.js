@@ -7,6 +7,7 @@ import BusinessForm from './components/BusinessForm';
 import DepartmentForm from './components/DepartmentForm';
 import ThirdPartyForm from './components/ThirdPartyForm';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
+import axiosInstance from '../../utils/AxiosInstance';
 
 const ProgressBar = ({ progress=0 }) => {
     return (
@@ -64,11 +65,77 @@ const OnboardingSchema = z.object({
     })).min(1, "At least one slot is required")
 });
 
+// const dummy = {
+//     "name": "New Business Unit",
+//     "type": "Hospital",
+//     "businessBranches": [
+//         {
+//             "name": "Healthcare Clinic",
+//             "type": "Medical",
+//             "practice": "General Medicine",
+//             "currency": "USD",
+//             "addressLine1": "123 Main Street",
+//             "addressLine2": "Suite 400",
+//             "country": "United States",
+//             "state": "California",
+//             "city": "Los Angeles",
+//             "postalCode": "90001"
+//         },
+//         {
+//             "name": "Healthcare Clinic 2",
+//             "type": "Medical",
+//             "practice": "General Medicine",
+//             "currency": "USD",
+//             "addressLine1": "123 Main Street",
+//             "addressLine2": "Suite 400",
+//             "country": "United States",
+//             "state": "California",
+//             "city": "Los Angeles",
+//             "postalCode": "90001"
+//         }
+//     ],
+//     "animalClasses": [
+//         "6788a78433894cabdb5f998b"
+//     ],
+//     "services": [
+//         "675b03becef11a5735b8c16f"
+//     ],
+//     "appointmentSlots": [
+//         {
+//             "name": "ac",
+//             "description": "abc",
+//             "departmentId": "675b03cdcef11a5735b8c173"
+//         }
+//     ],
+//     "staffs": [
+//         {
+//             "name": "Test Staff",
+//             "phone": "12745679844",
+//             "email": "wepffecedt524@krbieh.com",
+//             "password": "1234563290"
+//             // "roles": [
+//             //     "676bf0ec1923dfac96de330a"
+//             // ]
+//         }
+//     ],
+//     "vendors": [
+//         {
+//             "name": "vin"
+//         }
+//     ],
+//     "diagnosticIntegrations": [
+//         {
+//             "name": "abc diagnostics"
+//         }
+//     ]
+// }
+
 
 const OnboardingPage = () => {
     const [ openModalIndex, setOpenModalIndex ] = useState(0);
     const [ progressPercentage, setProgressPercentage ] = useState(0)
     const [ disabled, setDisabled ] = useState(true)
+    const [ selectedOptions, setSelectedOptions ] = useState([]);
     const [ sendData, setSendData ] = useState({
         name: "",
         type: "",
@@ -86,33 +153,13 @@ const OnboardingPage = () => {
                 postalCode: ""
             },
         ],
+        animalClasses: [],
         services: [],
         departments: [],
-        appointmentSlots: [
-            // {
-            //     name: "",
-            //     description: "", //optional
-            //     departmentId: ""
-            // }
-        ],
-        staffs: [
-            {
-                name: "", // optional
-                phone: "",// optional
-                email: "",// optional
-                password: ""// optional
-            }
-        ],
-        vendors: [
-            // {
-            //     name: ""// optional
-            // }
-        ],
-        diagnosticIntegrations: [
-            // {
-            //     name: ""// optional
-            // }
-        ]
+        appointmentSlots: [],
+        staffs: [],
+        vendors: [],
+        diagnosticIntegrations: []
     })
 
     const calculateProgress = (data) => {
@@ -134,6 +181,9 @@ const OnboardingPage = () => {
                 if (branch[field].trim() !== "") filledFields++;
             });
         });
+
+        if (data.animalClasses.length>0 && data.animalClasses.every(item => item)) filledFields++
+        totalFields++
     
         // Services & Departments (Array fields)
         if (data.services.length > 0) filledFields++;
@@ -141,6 +191,19 @@ const OnboardingPage = () => {
         
         if (data.departments.length > 0) filledFields++;
         totalFields++
+
+        if (data.staffs.length > 0) filledFields++;
+        totalFields++
+        
+        data.diagnosticIntegrations.forEach(centre => {
+            if (centre.name !== "") filledFields++;
+            totalFields++
+        });
+
+        data.vendors.forEach(vendor => {
+            if (vendor.name !== "") filledFields++;
+            totalFields++
+        });
 
         // Appointment Slots
         totalFields++;
@@ -166,12 +229,17 @@ const OnboardingPage = () => {
 
     useEffect(() => {
         const result = OnboardingSchema.safeParse(sendData);
-        // console.log(result)
+        console.log(progressPercentage)
         // {console.log(sendData)}
-        setDisabled(!result.success);
-    }, [sendData]);
+        if (progressPercentage===100) {
+            setDisabled(!result.success);
+            return
+        } else {
+            setDisabled(true)
+        }
+    }, [sendData, progressPercentage]);
 
-    const handleOpenModal = (index, progress) => {
+    const handleOpenModal = (index) => {
         if (openModalIndex===index) {
             setOpenModalIndex(false)
             return
@@ -179,6 +247,29 @@ const OnboardingPage = () => {
 
         // setProgressPercentage(progress)
         setOpenModalIndex(index)
+    }
+
+    const handleSubmit = () => {
+        const postData = {
+            name: sendData.name,
+            type: sendData.type,
+            businessBranches: sendData.businessBranches,
+            animalClasses: sendData.animalClasses,
+            services: sendData.services,
+            appointmentSlots: sendData.appointmentSlots,
+            staffs: sendData.staffs,
+            vendors: sendData.vendors,
+            diagnosticIntegrations: sendData.vendors,
+        }
+
+        axiosInstance
+            .post('/api/v1/business-units', postData)
+            .then(res => {
+                console.log(res)
+            })
+            .catch(err => {
+                console.error(err)
+            })
     }
 
   return (
@@ -190,8 +281,9 @@ const OnboardingPage = () => {
             <BlueButton
                 text={'Submit'}
                 disabled={disabled}
+                onClickHandler={handleSubmit}
             />
-        </div>
+        </div>{console.log(sendData)}
         <div className='w-full flex flex-col items-center justify-start gap-[1.25rem] transition-all mt-6'>
             {/* business unit form */}
             <div className={`w-full transition-all duration-200 border border-[#D9D9D9] rounded-lg overflow-hidden ${openModalIndex===0? "bg-white" : "bg-[#F5F5F5]"}`}>
@@ -242,6 +334,8 @@ const OnboardingPage = () => {
                         <ServiceForm
                             sendData={sendData}
                             setSendData={setSendData}
+                            selectedOptions={selectedOptions}
+                            setSelectedOptions={setSelectedOptions}
                         />
                     </div>
                 </div>
