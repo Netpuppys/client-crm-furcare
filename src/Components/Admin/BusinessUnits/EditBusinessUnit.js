@@ -10,15 +10,12 @@ const appointmentSlots = [
     id: "675b049dc90ac3a44472a525",
     name: "Morning Slot",
     departmentId: "675b03cdcef11a5735b8c173",
-    reasons: [
-      "Check-up",
-      "Follow-up"
-    ],
+    reasons: ["Check-up", "Follow-up"],
     branchId: "675b049dc90ac3a44472a522",
     active: true,
     createdAt: new Date("2024-12-12T15:43:24.967Z"),
-    updatedAt: new Date("2024-12-12T15:43:24.967Z")
-  }
+    updatedAt: new Date("2024-12-12T15:43:24.967Z"),
+  },
 ];
 
 const departments = [
@@ -26,26 +23,31 @@ const departments = [
     id: "675b03cdcef11a5735b8c173",
     name: "department A",
     createdAt: new Date("2024-12-12T15:39:56.279Z"),
-    updatedAt: new Date("2024-12-12T15:39:51.502Z")
-  }
+    updatedAt: new Date("2024-12-12T15:39:51.502Z"),
+  },
 ];
 
 const EditBusinessUnit = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const businessUnitData = location.state?.businessUnitData;
 
   const dropdownRef = useRef(null);
   const toggleRef = useRef(null);
 
-  const { setAlert } = useAlertContext()
+  const { setAlert } = useAlertContext();
 
-  const [ selectedOptions, setSelectedOptions ] = useState(businessUnitData.services.map((item) => ({ service: item.serviceDetails.name , basePrice: item.basePrice })));
-  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-  const [ disabled, setDisabled ] = useState(false)
-  const [ options, setOptions ] = useState([])
-  const [ formData, setFormData ] = useState({
+  const [selectedOptions, setSelectedOptions] = useState(
+    businessUnitData.services.map((item) => ({
+      service: item.serviceDetails.name,
+      basePrice: item.basePrice,
+    }))
+  );
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [formData, setFormData] = useState({
     active: businessUnitData.active,
     unitName: businessUnitData.name,
     branchType: businessUnitData.type,
@@ -64,36 +66,52 @@ const EditBusinessUnit = () => {
   useEffect(() => {
     axiosInstance
       .get("/api/v1/services")
-      .then(res => {
-        setOptions(res.data.data.data)
+      .then((res) => {
+        setOptions(res.data.data.data);
       })
-      .catch(err => {
-        console.error(err)
-      })
-  }, [])
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   useEffect(() => {
-    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
-    const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
+    const requiredFields = [
+      "unitName",
+      "branchType",
+      "practiceType",
+      "currency",
+      "address1",
+      "city",
+      "state",
+      "country",
+      "postalCode",
+      "department",
+      "appointment",
+    ];
+    const checkFromdata = requiredFields.every(
+      (field) => formData[field].trim() !== ""
+    );
 
-    const valueChanged = formData.active===businessUnitData.active &&
-    formData.unitName===businessUnitData.name &&
-    formData.branchType===businessUnitData.type &&
-    formData.practiceType===businessUnitData.practice &&
-    formData.currency===businessUnitData.currency &&
-    formData.address1===businessUnitData.addressLine1 &&
-    formData.address2===businessUnitData.addressLine2 &&
-    formData.city===businessUnitData.city &&
-    formData.state===businessUnitData.state &&
-    formData.country===businessUnitData.country &&
-    formData.postalCode===businessUnitData.postalCode &&
-    formData.department===businessUnitData.departments[0].departmentDetails.id &&
-    formData.appointment==="675b049dc90ac3a44472a525"
+    const valueChanged =
+      formData.active === businessUnitData.active &&
+      formData.unitName === businessUnitData.name &&
+      formData.branchType === businessUnitData.type &&
+      formData.practiceType === businessUnitData.practice &&
+      formData.currency === businessUnitData.currency &&
+      formData.address1 === businessUnitData.addressLine1 &&
+      formData.address2 === businessUnitData.addressLine2 &&
+      formData.city === businessUnitData.city &&
+      formData.state === businessUnitData.state &&
+      formData.country === businessUnitData.country &&
+      formData.postalCode === businessUnitData.postalCode &&
+      formData.department ===
+        businessUnitData.departments[0].departmentDetails.id &&
+      formData.appointment === "675b049dc90ac3a44472a525";
 
-    console.log(valueChanged)
+    console.log(valueChanged);
 
     if (checkFromdata && !valueChanged) {
-      setDisabled(false)
+      setDisabled(false);
     } else {
       setDisabled(true);
     }
@@ -108,25 +126,32 @@ const EditBusinessUnit = () => {
   };
 
   const handleCheckboxChange = (option) => {
-    if (selectedOptions.some(obj => obj.service === option.name)) {
-      setSelectedOptions(selectedOptions.filter((item) => item.service !== option));
+    if (selectedOptions.some((obj) => obj.service === option.name)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item.service !== option)
+      );
     } else {
-      setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
+      setSelectedOptions([
+        ...selectedOptions,
+        { service: option.name, basePrice: "" },
+      ]);
     }
   };
 
   const handleDeleteService = (option) => {
-    setSelectedOptions(prev => prev.filter((item) => item.service !== option));
-  }
+    setSelectedOptions((prev) =>
+      prev.filter((item) => item.service !== option)
+    );
+  };
 
   const handleServicePrice = (value, index) => {
-    setSelectedOptions(prev => {
-      const arr = [...prev]
-      arr[index].basePrice = value
+    setSelectedOptions((prev) => {
+      const arr = [...prev];
+      arr[index].basePrice = value;
 
-      return arr
-    })
-  }
+      return arr;
+    });
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -147,48 +172,40 @@ const EditBusinessUnit = () => {
   }, []);
 
   const handleSubmit = () => {
-    
     const sendData = {
       name: formData.unitName,
       type: formData.branchType,
       practice: formData.practiceType,
-      active: formData.active
+      active: formData.active,
     };
-    
-    axiosInstance.patch(`/api/v1/business-branches/${businessUnitData.id}`, sendData)
-      .then(response => {
+
+    axiosInstance
+      .patch(`/api/v1/business-branches/${businessUnitData.id}`, sendData)
+      .then((response) => {
         console.log("Success:", response.data);
-        setAlert("Branch unit updated successfully")
-        navigate("/admin/branch-units")
+        setAlert("Branch unit updated successfully");
+        navigate("/admin/branch-units");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error:", error);
       });
   };
 
-  const filteredOptions = options?.filter(obj => 
-    !selectedOptions.some(selected => selected.service === obj.name)
+  const filteredOptions = options?.filter(
+    (obj) => !selectedOptions.some((selected) => selected.service === obj.name)
   );
 
   return (
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className="underline inline cursor-default"
-          >
-            Admin
-          </p>
+          <p className="underline inline cursor-default">Admin</p>
           <span> / </span>
           <Link to={"/admin/branch-units"} className="underline">
             Business Units
           </Link>
           <span> / </span>
-          <p
-            className="underline inline cursor-default"
-          >
-            Edit Business Unit
-          </p>
+          <p className="underline inline cursor-default">Edit Business Unit</p>
         </div>
         <div className="flex items-center justify-center gap-5">
           <Link to={"/admin/branch-units"}>
@@ -210,7 +227,7 @@ const EditBusinessUnit = () => {
       {/* main form */}
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
-        <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-lg space-y-6">
+        <div className="flex w-[80%] h-full flex-col justify-start items-end bg-white rounded-md space-y-6">
           <div className="flex w-full items-center justify-between gap-10">
             <div className="w-[9rem]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
@@ -221,23 +238,23 @@ const EditBusinessUnit = () => {
                 <button
                   className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
                     formData.active
-                      ? "bg-[#F4F9FF] border-[#006DFA] border-r-gray-300 text-[#006DFA]"
-                      : "border-gray-300 text-[#121C2D] rounded-l-lg"
+                      ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
+                      : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
                   }`}
                   onClick={() => handleInputChange("active", true)}
                 >
-                    Active
+                  Active
                 </button>
 
                 <button
                   className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
                     !formData.active
-                      ? "bg-[#F4F9FF] border-[#006DFA] border-l-gray-300 text-[#006DFA]"
-                      : "border-gray-300 text-[#121C2D] rounded-r-lg"
+                      ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
+                      : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
                   }`}
                   onClick={() => handleInputChange("active", false)}
                 >
-                    Inactive 
+                  Inactive
                 </button>
               </div>
             </div>
@@ -249,7 +266,7 @@ const EditBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 border capitalize placeholder:italic text-sm border-gray-300 focus:outline-none rounded-lg"
+                className="w-full mt-1 p-2 border capitalize placeholder:italic text-sm border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Placeholder"
                 value={formData.unitName}
                 onChange={(e) => handleInputChange("unitName", e.target.value)}
@@ -263,7 +280,7 @@ const EditBusinessUnit = () => {
                 Branch Type
               </label>
               <select
-                className="w-full classic mt-1 capitalize placeholder:italic text-sm p-2 border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 capitalize placeholder:italic text-sm p-2 border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.branchType}
                 onChange={(e) =>
                   handleInputChange("branchType", e.target.value)
@@ -285,7 +302,7 @@ const EditBusinessUnit = () => {
                 Practice Type
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.practiceType}
                 onChange={(e) =>
                   handleInputChange("practiceType", e.target.value)
@@ -305,7 +322,7 @@ const EditBusinessUnit = () => {
               </label>
               <input
                 type="text"
-                className="w-full mt-1 p-2 placeholder:italic uppercase text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic uppercase text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 disabled
                 placeholder="INR"
                 value={formData.currency}
@@ -321,7 +338,7 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Address line 1
               </label>
-              <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
+              <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
                 <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
                   <FaSearch className="text-[#606B85] h-full" />
                 </div>
@@ -346,7 +363,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Placeholder"
                 value={formData.address2}
                 onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -364,14 +381,14 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Malad"
                 value={formData.city}
                 onChange={(e) => {
                   // Remove numbers from the input value
                   const filteredValue = e.target.value.replace(/[0-9]/g, "");
                   handleInputChange("city", filteredValue);
-                }}          
+                }}
               />
             </div>
             {/* state selection */}
@@ -383,7 +400,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Maharashtra"
                 value={formData.state}
                 onChange={(e) => handleInputChange("state", e.target.value)}
@@ -401,7 +418,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="India"
                 value={formData.country}
                 onChange={(e) => handleInputChange("country", e.target.value)}
@@ -416,7 +433,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
-                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6]"
+                className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Postal Code"
                 value={formData.postalCode}
                 onChange={(e) =>
@@ -437,15 +454,16 @@ const EditBusinessUnit = () => {
                 <div
                   ref={toggleRef}
                   className={`classic w-full mt-1 ${
-                    selectedOptions.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-gray-300 focus:outline-none rounded-lg`}
+                    selectedOptions.length === 0 ? "p-2" : "p-1 min-h-[42px]"
+                  } border border-[#8891AA] focus:outline-none rounded-md`}
                   onClick={toggleDropdown}
                 >
-                  {selectedOptions.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
-                  </div>)}
-                    {console.log(selectedOptions)}
+                  {selectedOptions.length === 0 && (
+                    <div>
+                      <p className="text-sm">Select</p>
+                    </div>
+                  )}
+                  {console.log(selectedOptions)}
                   <div className="flex w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
@@ -467,7 +485,7 @@ const EditBusinessUnit = () => {
                 {isDropdownOpen && (
                   <div
                     ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-gray-300 z-10 max-h-52 overflow-y-auto"
+                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
                       {filteredOptions?.map((option) => (
@@ -476,7 +494,9 @@ const EditBusinessUnit = () => {
                             <input
                               type="checkbox"
                               className="mr-2 placeholder:italic  text-sm"
-                              checked={selectedOptions.some(obj => obj.service === option)}
+                              checked={selectedOptions.some(
+                                (obj) => obj.service === option
+                              )}
                               onChange={() => handleCheckboxChange(option)}
                             />
                             {option.name}
@@ -492,42 +512,48 @@ const EditBusinessUnit = () => {
 
           {/* Service Value Currency Input */}
           {selectedOptions.length > 0 && (
-          <div className="w-full">
-            <div className="w-full mb-6">
-              <p className="capitalize text-lg font-semibold">Base Price</p>
-            </div>
+            <div className="w-full">
+              <div className="w-full mb-6">
+                <p className="capitalize text-lg font-semibold">Base Price</p>
+              </div>
 
-            <div
-              className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
-            >
-              {selectedOptions.map((service, index) => (
-                <div key={index} className="w-[220px]">
-                  <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                    <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                    {service.service}
-                  </label>
-                  <div className="flex mt-1 overflow-hidden border border-gray-300 rounded-lg">
-                    <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
-                      <p className="text-[#606B85] text-sm h-full">{formData.currency? formData.currency : "INR"}</p>
+              <div
+                className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
+              >
+                {selectedOptions.map((service, index) => (
+                  <div key={index} className="w-[220px]">
+                    <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+                      <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                      {service.service}
+                    </label>
+                    <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
+                      <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
+                        <p className="text-[#606B85] text-sm h-full">
+                          {formData.currency ? formData.currency : "INR"}
+                        </p>
+                      </div>
+                      <input
+                        className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
+                        value={selectedOptions[index].basePrice}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only numbers and a single decimal point
+                          const formattedValue = value
+                            .replace(/[^0-9.]/g, "")
+                            .replace(/(\..*?)\..*/g, "$1");
+                          // Limit to 2 decimal places
+                          const twoDecimalValue =
+                            formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || "";
+                          handleServicePrice(twoDecimalValue, index);
+                        }}
+                        type="text"
+                      />
                     </div>
-                    <input
-                      className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
-                      value={selectedOptions[index].basePrice}
-                      onChange={e => {
-                        const value = e.target.value;
-                        // Allow only numbers and a single decimal point
-                        const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-                        // Limit to 2 decimal places
-                        const twoDecimalValue = formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || '';
-                        handleServicePrice(twoDecimalValue, index);
-                      }}
-                      type="text"
-                    />
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>)}
+          )}
 
           {/* Department Selection */}
           <div className="flex w-full items-center justify-between">
@@ -537,7 +563,7 @@ const EditBusinessUnit = () => {
                 Department(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.department}
                 onChange={(e) =>
                   handleInputChange("department", e.target.value)
@@ -545,7 +571,9 @@ const EditBusinessUnit = () => {
               >
                 <option value="">Select</option>
                 {departments.map((item, index) => (
-                  <option key={index} value={item.id}>{item.name}</option>
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
                 ))}
               </select>
             </div>
@@ -559,7 +587,7 @@ const EditBusinessUnit = () => {
                 Appointment Slot(s)
               </label>
               <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-gray-300 rounded-lg focus:outline-none"
+                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.appointment}
                 onChange={(e) =>
                   handleInputChange("appointment", e.target.value)
@@ -567,7 +595,9 @@ const EditBusinessUnit = () => {
               >
                 <option value="">Select</option>
                 {appointmentSlots.map((item, index) => (
-                  <option key={index} value={item.id}>{item.name}</option>
+                  <option key={index} value={item.id}>
+                    {item.name}
+                  </option>
                 ))}
               </select>
             </div>

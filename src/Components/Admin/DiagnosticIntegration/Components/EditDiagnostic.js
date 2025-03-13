@@ -117,7 +117,7 @@ const EditDiagnostic = ({
     };
   
     return (
-      <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-lg space-y-6">
+      <div className="p-6 flex h-full flex-col justify-start items-end mx-auto bg-white rounded-md space-y-6">
         {/* Name Input */}
         <div className="flex flex-col w-full">
           <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
@@ -125,7 +125,7 @@ const EditDiagnostic = ({
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border capitalize border-gray-300 focus:outline-none rounded-lg"
+            className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Name"
             value={formData.name}
             onChange={(e) => handleInputChange("name", e.target.value)}
@@ -140,7 +140,7 @@ const EditDiagnostic = ({
               Address line 1
             </label>
             <GoogleMapsLoader>
-              <div className="flex mt-1  border border-gray-300 rounded-lg relative">
+              <div className="flex mt-1  border border-[#8891AA] rounded-md relative">
                 <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
                   <FaSearch className="text-[#606B85] h-full" />
                 </div>
@@ -152,7 +152,7 @@ const EditDiagnostic = ({
                   onChange={handleAddressInputChange}
                 />
                 {suggestions.length > 0 && (
-                  <ul className="absolute top-full mt-2 z-50 bg-white border border-gray-300 rounded-lg shadow-md w-full">
+                  <ul className="absolute top-full mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
                     {suggestions.map((suggestion) => (
                       <li
                         key={suggestion.place_id}
@@ -175,7 +175,7 @@ const EditDiagnostic = ({
             </label>
             <input
               type="text"
-              className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
               placeholder="Address line 2"
               value={formData.address2}
               onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -192,7 +192,7 @@ const EditDiagnostic = ({
             </label>
             <input
               type="text"
-              className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
               placeholder="City"
               value={formData.city}
               onChange={(e) => {
@@ -208,7 +208,7 @@ const EditDiagnostic = ({
               State
             </label>
             <select
-              className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg classic"
+              className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
               value={formData.state}
               onChange={(e) => handleInputChange("state", e.target.value)}
             >
@@ -235,7 +235,7 @@ const EditDiagnostic = ({
             <input
               type="text"
               disabled
-              className="w-full capitalize mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg disabled:bg-[#F4F4F6] disabled:opacity-70"
+              className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6] disabled:opacity-70"
               placeholder="Country"
               value={formData.country}
               onChange={(e) => handleInputChange("country", e.target.value)}
@@ -249,7 +249,7 @@ const EditDiagnostic = ({
             </label>
             <input
               type="text"
-              className="w-full mt-1 p-2 border border-gray-300 focus:outline-none rounded-lg"
+              className="w-full mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
               placeholder="Postal Code"
               value={formData.postalCode}
                onChange={(e) => {

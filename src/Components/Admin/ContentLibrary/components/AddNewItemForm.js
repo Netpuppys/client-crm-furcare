@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import _ from 'lodash';
+import _ from "lodash";
 import ReactQuill from "react-quill";
 import BlueButton from "../../../../ui/BlueButton";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
 
 const AddNewItemForm = ({ content }) => {
-  const [ initialData, setInitialData ] = useState({
+  const [initialData, setInitialData] = useState({
     category: "",
     gender: "",
     animalType: "",
     ageRange: "",
     healthConcerns: "",
     sterilizationStatus: "",
-  })
+  });
 
   const [formData, setFormData] = useState({
     category: "",
@@ -22,9 +22,9 @@ const AddNewItemForm = ({ content }) => {
     healthConcerns: "",
     sterilizationStatus: "",
   });
-  
-  const [ additionalNotes, setAdditionalNotes ] = useState(content.content)
-  const [ disabled, setDisabled ] = useState(true)
+
+  const [additionalNotes, setAdditionalNotes] = useState(content.content);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     setInitialData({
@@ -34,19 +34,22 @@ const AddNewItemForm = ({ content }) => {
       ageRange: "",
       healthConcerns: "",
       sterilizationStatus: "",
-    })
-  }, [content])
+    });
+  }, [content]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
   useEffect(() => {
-    if (_.isEqual(initialData, formData) && additionalNotes===content.content) {
+    if (
+      _.isEqual(initialData, formData) &&
+      additionalNotes === content.content
+    ) {
       setDisabled(true);
       return;
     }
-  
+
     // setDisabled(false);
   }, [formData, initialData, additionalNotes, content]);
 
@@ -56,7 +59,7 @@ const AddNewItemForm = ({ content }) => {
   };
 
   return (
-    <div className="p-6 flex flex-col justify-center items-end mx-auto bg-white rounded-lg space-y-6">
+    <div className="p-6 flex flex-col justify-center items-end mx-auto bg-white rounded-md space-y-6">
       <div className="flex w-full items-center justify-between">
         {/* Category Input */}
         <div className="flex flex-col w-[70%]">
@@ -66,7 +69,7 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-lg"
+            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-md"
             value={formData.category}
             onChange={(e) => handleInputChange("category", e.target.value)}
             disabled
@@ -116,7 +119,7 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <select
             disabled
-            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-lg classic"
+            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-md classic"
             value={formData.animalType}
             onChange={(e) => handleInputChange("animalType", e.target.value)}
           >
@@ -138,7 +141,7 @@ const AddNewItemForm = ({ content }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Age Range{" "}
           </label>
-          <div className="flex mt-1 items-center rounded-lg border border-[#8891AA] overflow-hidden">
+          <div className="flex mt-1 items-center rounded-md border border-[#8891AA] overflow-hidden">
             <input
               disabled
               type="number"
@@ -163,7 +166,7 @@ const AddNewItemForm = ({ content }) => {
           </label>
           <select
             disabled
-            className="classic mt-1 p-2 disabled:opacity-100 border border-[#8891AA] rounded-lg focus:outline-none"
+            className="classic mt-1 p-2 disabled:opacity-100 border border-[#8891AA] rounded-md focus:outline-none"
             value={formData.healthConcerns}
             onChange={(e) =>
               handleInputChange("healthConcerns", e.target.value)
@@ -232,14 +235,11 @@ const AddNewItemForm = ({ content }) => {
           onChange={(value) => setAdditionalNotes(value)}
           placeholder="Write additional notes here..."
         />
-      </div>{console.log(disabled)}
+      </div>
+      {console.log(disabled)}
 
       {/* Submit Button */}
-      <BlueButton
-        onClickHandler={handleSubmit}
-        text={"Save"}
-        disabled={true}
-      />
+      <BlueButton onClickHandler={handleSubmit} text={"Save"} disabled={true} />
     </div>
   );
 };
