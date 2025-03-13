@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import informationIcon from "../../../Assets/icons/informationIcon.png"
 import closeIcon from "../../../Assets/icons/alert/close.png"
 import AddNewItemForm from "./components/AddNewItemForm";
 import BlueButton from "../../../ui/BlueButton"
 import { useNavigate } from "react-router-dom";
-import { contentLibraryData } from "./components/data";
+// import { contentLibraryData } from "./components/data";
 import { useAppContext } from "../../../utils/AppContext";
-// import axiosInstance from "../../../utils/AxiosInstance";
+import axiosInstance from "../../../utils/AxiosInstance";
 
 const TableComponent = ({ 
+  loaded,
   handleCreateNew,
-  contentLibraryData
+  contentLibraryData,
+  extractFirstH2
 }) => {
 
   const [ openIndex, setOpenIndex ] = useState([])
@@ -25,78 +27,94 @@ const TableComponent = ({
   };
 
   const handleClick = (item) => {
-    if (item.click) {
       handleCreateNew(item)
-    }
+      // console.log(item)
   }
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto pb-20">
       <table className="min-w-full">
         <thead>
           <tr className="bg-gray-100">
-            <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-gray-200">
+            <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-[#E1E3EA]">
               <div className="flex items-center gap-1">
-                <p className="">
-                  Topic
-                </p>
-                <img src={informationIcon} className="w-5" alt="" />
+                <p>Topic</p>
+                <img src={informationIcon} className="w-5" alt="info" />
               </div>
             </th>
-            <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-gray-200">
+            <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-[#E1E3EA]">
               <div className="flex items-center gap-1">
-                <p className="">
-                  Status
-                </p>
+                <p>Status</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
             </th>
           </tr>
         </thead>
         <tbody>
-          {contentLibraryData.map((category, index) => (
-            <React.Fragment key={index} className={``}>
+          {Object.entries(contentLibraryData).map(([categoryKey, categoryData], index) => (
+            <React.Fragment key={index}>
               <tr
                 onClick={() => handleOpenSubItems(index)}
                 className="bg-[#F9F9FA] cursor-pointer"
               >
-                <td className="px-4 py-3 border-b border-gray-200 text-sm text-[#121C2D]">
+                <td className="px-4 py-3 border-b border-[#E1E3EA] text-sm text-[#121C2D]">
                   <div className="flex gap-4 items-center">
                     <p className="w-4 text-xs text-[#606B85]">
-                      {!openIndex.includes(index)? <FaChevronDown /> : <FaChevronUp />}
+                      {!openIndex.includes(index) ? <FaChevronDown /> : <FaChevronUp />}
                     </p>
-                    <p className="">
-                      {category.category}
-                    </p>
+                    <p>{categoryKey.replace(/_/g, " ")}</p>
                   </div>
                 </td>
-                <td className="px-4 py-3 border-b border-gray-200">
-                  <div className="w-full flex gap-3 items-center">
-                    <div className="w-3 bg-[#0B602D] aspect-square rounded-full"></div>
-                    <p className="text-sm font-normal text-[#121C2D]">Active</p>
+                <td className="px-4 py-3 border-b border-[#E1E3EA]">
+                  <div className="w-full flex items-center">
+                    <div
+                      className={`w-3 aspect-square bg-[#0B602D] rounded-full `}
+                    ></div>
+                    <span
+                      className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
+                    >
+                      Active
+                    </span>
                   </div>
                 </td>
               </tr>
-              {openIndex.includes(index) && 
-              category.items.map((item, idx) => (
-                <tr key={idx} >
-                  <td className="px-4 py-3 border-b text-[#0263E0] text-sm font-semibold border-gray-200">
-                    <button onClick={() => handleClick(item)} disabled={!item.click? true : false} className="">
-                      {item.topic}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 border-b border-gray-200">
-                    <div className="w-full flex gap-3 items-center">
-                      <div className="w-3 bg-[#0B602D] aspect-square rounded-full"></div>
-                      <p className="font-normal text-sm text-[#121C2D]">{item.status}</p>
-                    </div>
-                  </td>
-                </tr>
-              ))}
+              {openIndex.includes(index) &&
+                contentLibraryData[categoryKey].content.map((item, idx) => (
+                  <tr key={idx}>
+                    <td className="px-4 py-3 border-b text-[#0263E0] text-sm overflow-hidden font-semibold border-[#E1E3EA]">
+                      <button
+                        onClick={() => handleClick(item)}
+                        // disabled={!item.click}
+                      >
+                        {extractFirstH2(item.body)}
+                      </button>
+                    </td>
+                    <td className="px-4 py-3 border-b border-[#E1E3EA]">
+                      <div className="w-full flex  items-center">
+                        <div
+                            className={`w-3 aspect-square ${
+                                item.active ? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rounded-sm rotate-45"
+                            }`}
+                        ></div>
+                        <span
+                            className={`inline-block px-2 py-1 text-[#121C2D] text-sm`}
+                        >
+                            {item.active ? "Active" : "Inactive"}
+                        </span>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
             </React.Fragment>
           ))}
         </tbody>
       </table>
+      {JSON.stringify(contentLibraryData) === JSON.stringify({}) && loaded &&
+        <div className={`border-b last:border-b-0 border-[#E1E3EA] flex items-center justify-center text-sm h-10`}>
+            <p className="">
+                No Content Found Under Selected Branch
+            </p>
+        </div>}
     </div>
   );
 };
@@ -107,34 +125,62 @@ const ContentLibraryPage = () => {
 
   const { 
     sidebarExpanded, 
-    // selectedBranch
+    selectedBranch
   } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false)
   const [ content, setContent ] = useState()
-
-  // const [ contentLibraryData, setContentLibraryData ] = useState([])
+  const [ loaded, setLoaded ] = useState(false)
+  const [ contentLibraryData, setContentLibraryData ] = useState([])
 
   const handleCreateNew = (item) => {
     setContent(item)
     setCreateNew(true)
   }
 
-  // useEffect(() => {
-  //   axiosInstance
-  //     .get(`/api/v1/content-library?businessBranchId=${selectedBranch.id}`)
-  //     .then(res => {
-  //       const response = res.data.data
-  //       setContentLibraryData(response)
-  //       console.log(response)
-  //     })
-  //     .catch(err => {
-  //       console.error(err)
-  //     })
-  // }, [])
+  useEffect(() => {
+    setLoaded(false)
+
+    axiosInstance
+      .get(`/api/v1/content-library?businessBranchId=${selectedBranch.id}`)
+      .then(res => {
+        const response = res.data.data
+        setContentLibraryData(response)
+        // console.log(response)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+      .finally(() => {
+        setLoaded(true)
+      })
+  }, [selectedBranch])
+
+  const fetchContent = () => {
+    setLoaded(false)
+
+    axiosInstance
+      .get(`/api/v1/content-library?businessBranchId=${selectedBranch.id}`)
+      .then(res => {
+        const response = res.data.data
+        setContentLibraryData(response)
+        setCreateNew(false)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+      .finally(() => {
+        setLoaded(true)
+      })
+  }
 
   const handleAdminClick = () => {
     navigate("/admin/branch-units")
+  }
+
+  function extractFirstH2(htmlString) {
+    const match = htmlString.match(/<h2>(.*?)<\/h2>/i);
+    return match ? match[1].replace(/&amp;/g, '&').replace(/:/g, '') : null;
   }
 
   return (
@@ -164,7 +210,9 @@ const ContentLibraryPage = () => {
     </div>
         
     <div className="mt-6">
-      <TableComponent 
+      <TableComponent
+        loaded={loaded}
+        extractFirstH2={extractFirstH2}
         handleCreateNew={handleCreateNew}
         contentLibraryData={contentLibraryData}
       />
@@ -182,7 +230,7 @@ const ContentLibraryPage = () => {
         <div className={`fixed top-0 shadow-2xl overflow-y-auto h-full bg-white w-[45rem] right-0`}>
             <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
               <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-                {content && content.topic}
+                {content && extractFirstH2(content.body)}
               </p>
               <button
                 onClick={() => setCreateNew(false)}
@@ -195,6 +243,7 @@ const ContentLibraryPage = () => {
             <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
               <AddNewItemForm 
                 content={content && content}
+                fetchContent={fetchContent}
               />
             </div>
         </div>

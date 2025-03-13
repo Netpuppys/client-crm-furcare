@@ -3,8 +3,12 @@ import _ from "lodash";
 import ReactQuill from "react-quill";
 import BlueButton from "../../../../ui/BlueButton";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
+import axiosInstance from "../../../../utils/AxiosInstance";
+import { useAlertContext } from "../../../../utils/AlertContext";
 
-const AddNewItemForm = ({ content }) => {
+const AddNewItemForm = ({ content, fetchContent }) => {
+  const { setAlert } = useAlertContext()
+
   const [initialData, setInitialData] = useState({
     category: "",
     gender: "",
@@ -23,8 +27,8 @@ const AddNewItemForm = ({ content }) => {
     sterilizationStatus: "",
   });
 
-  const [additionalNotes, setAdditionalNotes] = useState(content.content);
-  const [disabled, setDisabled] = useState(true);
+  const [ additionalNotes, setAdditionalNotes ] = useState(content.body);
+  const [ disabled, setDisabled ] = useState(true);
 
   useEffect(() => {
     setInitialData({
@@ -44,18 +48,31 @@ const AddNewItemForm = ({ content }) => {
   useEffect(() => {
     if (
       _.isEqual(initialData, formData) &&
-      additionalNotes === content.content
+      additionalNotes === content.body
     ) {
       setDisabled(true);
       return;
     }
 
-    // setDisabled(false);
+    setDisabled(false);
   }, [formData, initialData, additionalNotes, content]);
 
   const handleSubmit = () => {
+    const sendData = {
+      body: additionalNotes
+    }
+
     // Log the form data
-    console.log("Submitted Form Data: ", formData);
+    axiosInstance
+      .patch(`/api/v1/content-library/${content.id}`, sendData)
+      .then(res => {
+        // console.log(res)
+        setAlert("Updated Successfully")
+        fetchContent()
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
 
   return (
@@ -88,7 +105,7 @@ const AddNewItemForm = ({ content }) => {
               className={`py-2 px-4 border border-r-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Male"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
-                  : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
+                  : "border-[#8891AA] text-[#121C2D] rounded-l-md"
               }`}
               onClick={() => handleInputChange("gender", "Male")}
             >
@@ -100,7 +117,7 @@ const AddNewItemForm = ({ content }) => {
               className={`py-2 px-4 border border-l-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Female"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
-                  : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
+                  : "border-[#8891AA] text-[#121C2D] rounded-r-md"
               }`}
               onClick={() => handleInputChange("gender", "Female")}
             >
@@ -191,7 +208,7 @@ const AddNewItemForm = ({ content }) => {
               className={`py-2 px-4 disabled:opacity-100 border border-r-[0.5px] ${
                 formData.sterilizationStatus === "Intact"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
-                  : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
+                  : "border-[#8891AA] text-[#121C2D] rounded-l-md"
               }`}
               onClick={() => handleInputChange("sterilizationStatus", "Intact")}
             >
@@ -215,7 +232,7 @@ const AddNewItemForm = ({ content }) => {
               className={`py-2 px-4 disabled:opacity-100 border border-l-[0.5px] ${
                 formData.sterilizationStatus === "Unsure"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
-                  : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
+                  : "border-[#8891AA] text-[#121C2D] rounded-r-md"
               }`}
               onClick={() => handleInputChange("sterilizationStatus", "Unsure")}
             >
@@ -236,10 +253,13 @@ const AddNewItemForm = ({ content }) => {
           placeholder="Write additional notes here..."
         />
       </div>
-      {console.log(disabled)}
 
       {/* Submit Button */}
-      <BlueButton onClickHandler={handleSubmit} text={"Save"} disabled={true} />
+      <BlueButton 
+        onClickHandler={handleSubmit} 
+        text={"Save"}
+        disabled={disabled} 
+      />
     </div>
   );
 };
