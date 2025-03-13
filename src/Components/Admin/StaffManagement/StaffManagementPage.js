@@ -139,7 +139,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
+      .get(`/api/v1/roles?businessUnitId=${selectedBranch.businessUnitId}`)
       .then((res) => {
         const response = res.data.data.data;
         setRolesList(response);

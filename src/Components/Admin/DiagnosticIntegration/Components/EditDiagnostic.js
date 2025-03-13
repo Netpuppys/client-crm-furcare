@@ -40,14 +40,15 @@ const EditDiagnostic = ({
             (formData.city === "" || formData.city === editDiagnostic.city) &&
             (formData.state === "" || formData.state === editDiagnostic.state) &&
             (formData.country === "" || formData.country === editDiagnostic.country) &&
-            (Number(formData.postalCode) === "" || Number(formData.postalCode) === Number(editDiagnostic.postalCode))
+            (Number(formData.postalCode) === "" || Number(formData.postalCode) === Number(editDiagnostic.postalCode)) &&
+            active === editDiagnostic.active
         ) {
             setDisabled(true)
             return
         }
 
         setDisabled(false)
-    }, [formData, editDiagnostic])
+    }, [formData, editDiagnostic, active])
   
     const handleInputChange = (key, value) => {
       setFormData((prev) => ({ ...prev, [key]: value }));
@@ -74,6 +75,7 @@ const EditDiagnostic = ({
           console.log(res)
           setAlert("Updated Successfully")
           fetchDiagnosticsDetails()
+          
         })
         .catch(err => {
           console.error(err)

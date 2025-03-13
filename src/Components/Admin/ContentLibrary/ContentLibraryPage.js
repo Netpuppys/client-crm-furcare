@@ -7,9 +7,11 @@ import BlueButton from "../../../ui/BlueButton"
 import { useNavigate } from "react-router-dom";
 import { contentLibraryData } from "./components/data";
 import { useAppContext } from "../../../utils/AppContext";
+// import axiosInstance from "../../../utils/AxiosInstance";
 
 const TableComponent = ({ 
-  handleCreateNew 
+  handleCreateNew,
+  contentLibraryData
 }) => {
 
   const [ openIndex, setOpenIndex ] = useState([])
@@ -103,15 +105,33 @@ const TableComponent = ({
 const ContentLibraryPage = () => {
   const navigate = useNavigate()
 
-  const { sidebarExpanded } = useAppContext()
+  const { 
+    sidebarExpanded, 
+    // selectedBranch
+  } = useAppContext()
 
   const [ createNew, setCreateNew ] = useState(false)
   const [ content, setContent ] = useState()
+
+  // const [ contentLibraryData, setContentLibraryData ] = useState([])
 
   const handleCreateNew = (item) => {
     setContent(item)
     setCreateNew(true)
   }
+
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get(`/api/v1/content-library?businessBranchId=${selectedBranch.id}`)
+  //     .then(res => {
+  //       const response = res.data.data
+  //       setContentLibraryData(response)
+  //       console.log(response)
+  //     })
+  //     .catch(err => {
+  //       console.error(err)
+  //     })
+  // }, [])
 
   const handleAdminClick = () => {
     navigate("/admin/branch-units")
@@ -146,6 +166,7 @@ const ContentLibraryPage = () => {
     <div className="mt-6">
       <TableComponent 
         handleCreateNew={handleCreateNew}
+        contentLibraryData={contentLibraryData}
       />
     </div>
 

@@ -6,7 +6,7 @@ import { useAppContext } from "../../../../utils/AppContext";
 import { toast } from "react-toastify";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-const EditSupplyForm = ({ 
+const EditSupplyForm = ({
     editSupply,
     fetchSuppliesData
 }) => {
@@ -16,40 +16,56 @@ const EditSupplyForm = ({
   
     const [ vendorList, setVendorList ] = useState([])
     const [ disabled, setDisabled ] = useState(true)
-    const [ active, setActive ] = useState(false)
+    const [ active, setActive ] = useState(editSupply.active)
+    const [ removeItem, setRemoveItem ] = useState([])
     const [ formData, setFormData] = useState({
       name: editSupply.name,
       item: [ { name: "", vendor: {} } ]
     });
+
+    useEffect(() => {
+      if (editSupply.items.length>0) {
+        setFormData(prev => ({
+          ...prev,
+          item: editSupply.items.map(item => ({ name: item.name, vendor: item.vendor, id: item.id }))
+        }))
+      }
+    }, [editSupply])
   
     useEffect(() => {
-      if (formData.name.replace(/\s/g, "") === "") {
-        setDisabled(true)
-        return
+      // Check if main name field is empty
+      if (formData.name.trim() === "") {
+        setDisabled(true);
+        return;
       }
-      
-      if (formData.item.length>0) {
-        formData.item.forEach((item) => {
-          if (item.name.replace(/\s/g, "") === "") {
-            setDisabled(true)
-            return
+    
+      // Check if any item name is empty or vendor is empty
+      if (formData.item.length > 0) {
+        for (let item of formData.item) {
+          if (item.name.trim() === "" || JSON.stringify(item.vendor) === JSON.stringify({})) {
+            setDisabled(true);
+            return;
           }
-  
-          setDisabled(false)
-  
-          if (JSON.stringify(item.vendor) === JSON.stringify({})) {
-            setDisabled(true)
-            return
-          }
-  
-          setDisabled(false)
-        });
-  
-        return
+        }
       }
-  
-      setDisabled(false)
-    }, [formData])
+    
+      // Check if form has no changes
+      if (active === editSupply.active && formData.name === editSupply.name) {
+        if (formData.item.length === editSupply.items.length) {
+          let allItemsSame = formData.item.every((item, index) => 
+            item.name === editSupply.items[index]?.name && 
+            JSON.stringify(item.vendor) === JSON.stringify(editSupply.items[index]?.vendor)
+          );
+    
+          if (allItemsSame) {
+            setDisabled(true);
+            return;
+          }
+        }
+      }
+    
+      setDisabled(false);
+    }, [formData, editSupply, active]);    
   
     // fetch vendor list
     useEffect(() => {
@@ -58,7 +74,7 @@ const EditSupplyForm = ({
       }
   
       axiosInstance
-        .get(`/api/v1/vendors?businessUnitId=${selectedBranch.id}`)
+        .get(`/api/v1/vendors?businessUnitId=${selectedBranch.businessUnitId}`)
         .then(res => {
           const response = res.data.data.data;
           setVendorList(response)
@@ -95,57 +111,80 @@ const EditSupplyForm = ({
       });
     };
   
-    const handleDelete = (index) => {
+    const handleDelete = (index, item) => {
+      console.log(item)
+      if (item?.id) {
+        setRemoveItem(prev => ([
+          ...prev,
+          item.id
+        ]))
+      }
+
       setFormData((prev) => ({
         ...prev,
         item: prev.item.filter((_, i) => i !== index)
       }));
     };
+
+    async function removeItems() {
+      for (const item of removeItem) {
+        try {
+          const res = await axiosInstance.delete(`/api/v1/supplies/${editSupply.id}/items/${item}`);
+          console.log(res);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    }
   
     const handleSubmit = () => {
-      // Validation logic
-      if (!formData.name) {
-        alert("Name is required.");
-        return;
+      let addResources = [];
+
+      const sendResources = formData.item.map((item) => ({
+        name: item.name,
+        vendorId: item.vendor.id
+      }));
+
+      const initialResourcesId = editSupply.items.map((item) => ({
+        name: item.name,
+        vendorId: item.vendor.id
+      }));
+
+      // Find resources to add (present in sendResources but not in initialResourcesId)
+      addResources = sendResources.filter(
+        (item) => !initialResourcesId.some(res => JSON.stringify(item) === JSON.stringify(res))
+      );
+
+      if (addResources.length>0) {
+        const sendNewResources = {
+          items: addResources
       }
-  
-      // Validate each item in the item array
-      const itemErrors = formData.item.map((item) => {
-        const errors = {};
-        if (!item.name) {
-          errors.name = "Item name is required.";
-        }
-        if (!item.vendor?.id) {
-          errors.vendor = "Vendor is required.";
-        }
-        return errors;
-      });
-  
-      // Check if any item has errors
-      const hasErrors = itemErrors.some((error) => Object.keys(error).length > 0);
-  
-      if (hasErrors) {
-        // Alert the user or handle validation errors
-        toast.error("Please fill all required fields for each item.");
-        return;
+
+        axiosInstance
+          .post(`/api/v1/supplies/${editSupply.id}/items`, sendNewResources)
+          .then(res => {
+            console.log(res)
+          })
+          .catch(err => {
+            console.error(err)
+            
+          })
       }
-  
+
+      if (removeItem.length>0) {
+        removeItems()
+      }
+
       const sendData = {
         name: formData.name,
-        businessBranchId: selectedBranch.id,
-        items: formData.item.map((item) => (
-          {
-            name: item.name,
-            vendorId: item.vendor.id
-          }
-        ))
+        active: active
       }
-  
+
       axiosInstance
-        .post(`/api/v1/supplies?businessBranchId=${selectedBranch.id}`, sendData)
+        .patch(`/api/v1/supplies/${editSupply.id}`, sendData)
         .then(res => {
           console.log(res)
-          setAlert("Created Successfully")
+          setAlert("Updated Successfully")
           fetchSuppliesData()
         })
         .catch(err => {
@@ -217,6 +256,7 @@ const EditSupplyForm = ({
               </label>
               <input
                 type="text"
+                disabled={field.id? true : false}
                 className="w-full mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-lg"
                 placeholder="Placeholder"
                 value={field.name}
@@ -232,6 +272,7 @@ const EditSupplyForm = ({
               </div>
               <select
                 value={JSON.stringify(field.vendor) || ""}
+                disabled={field.id? true : false}
                 onChange={(e) => handleVendorFieldChange(index, "vendor", e.target.value)}
                 className="w-full classic mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-lg"
               >
@@ -247,7 +288,7 @@ const EditSupplyForm = ({
               </select>
             </div>
             <button
-              onClick={() => handleDelete(index)}
+              onClick={() => handleDelete(index, field)}
               className="h-[2.625rem] min-w-4 flex items-center justify-center"
             >
               <img src={deleteIcon} className="w-full " alt="" />

@@ -58,7 +58,7 @@ const SuppliesTable = ({
           </tr>
         </thead>
         <tbody className="divide-y divide-[#E1E3EA]">
-          {suppliesData?.map((item, index) => (
+          {suppliesData.length>0 && suppliesData?.map((item, index) => (
             <tr key={index} className="hover:bg-gray-50">
               <td className="px-4 py-2 text-sm text-[#121C2D] capitalize">
                 <button
@@ -138,7 +138,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
     }
     
     if (formData.item.length>0) {
-      formData.item.forEach((item) => {
+      formData.item.forEach((item, index) => {
         if (item.name.replace(/\s/g, "") === "") {
           setDisabled(true)
           return
@@ -167,7 +167,7 @@ const CreateNewForm = ({ fetchSuppliesData }) => {
     }
 
     axiosInstance
-      .get(`/api/v1/vendors?businessUnitId=${selectedBranch.id}`)
+      .get(`/api/v1/vendors?businessUnitId=${selectedBranch.businessUnitId}`)
       .then(res => {
         const response = res.data.data.data;
         setVendorList(response)
@@ -374,7 +374,9 @@ function SuppliesManagementPage() {
       .then(res => {
         const response = res.data.data.data;
         setSuppliesData(response)
-        setSuppliesData(true)
+        setLoaded(true)
+        setEditSupply(false)
+        setCreateNew(false)
       })
       .catch(err => {
         console.error(err)
@@ -462,7 +464,7 @@ function SuppliesManagementPage() {
         <div className={`fixed top-0 shadow-2xl overflow-y-auto h-full bg-white w-[45rem] right-0`}>
             <div className="flex items-center justify-between shadow-sm  bg-white z-20 relative h-[4.75rem] px-8">
               <p className="text-xl text-[#121C2D] font-semibold tracking-[0.05rem]">
-                Create Supply
+                Edit Supply
               </p>
               <button
                 onClick={() => setEditSupply(false)}

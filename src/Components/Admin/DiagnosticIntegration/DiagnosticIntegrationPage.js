@@ -3,16 +3,16 @@ import { toast } from "react-toastify";
 import { FaSearch } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import BlueButton from "../../../ui/BlueButton";
-import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import EditDiagnostic from "./Components/EditDiagnostic";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import { useAlertContext } from "../../../utils/AlertContext";
+import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 
-const DiagnosticTable = ({ 
+const DiagnosticTable = ({
   setEditDiagnostic,
   diagnosticIntegrationsData,
 }) => {
@@ -72,7 +72,7 @@ const DiagnosticTable = ({
                 {item.postalCode}
               </td>
               <td className="px-4 py-2 text-sm">
-                <a target="blank" href={item.url} className="text-blue-600 underline">
+                <a target="blank" href={item.url} className="text-[#006DFA] underline">
                   link
                 </a>
               </td>
@@ -422,6 +422,8 @@ const DiagnosticIntegrationPage = () => {
         const response = res.data.data.data
         console.log(response)
         setDiagnosticIntegrationsData(response)
+        setEditDiagnostic(false)
+        setCreateNew(false)
       })
       .catch(err => {
         console.error(err)

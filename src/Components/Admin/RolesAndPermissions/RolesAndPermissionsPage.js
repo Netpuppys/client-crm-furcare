@@ -24,7 +24,7 @@ const RolesAndPermissionsPage = () => {
 
   useEffect(() => {
     axiosInstance
-      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
+      .get(`/api/v1/roles?businessUnitId=${selectedBranch.businessUnitId}`)
       .then((res) => {
         const response = res.data.data.data;
         console.log(response);
@@ -40,11 +40,13 @@ const RolesAndPermissionsPage = () => {
 
   const fetchRolesList = () => {
     axiosInstance
-      .get(`/api/v1/roles?businessBranchId=${selectedBranch?.id}`)
+      .get(`/api/v1/roles?businessUnitId=${selectedBranch.businessUnitId}`)
       .then((res) => {
         const response = res.data.data.data;
         console.log(response);
         setRolesList(response);
+        setAddNewModal(false)
+        setEditRole(false)
       })
       .catch((err) => {
         console.error(err);

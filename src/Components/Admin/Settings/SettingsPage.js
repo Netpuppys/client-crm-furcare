@@ -28,6 +28,7 @@ const SettingsPage = () => {
 
     const [ activeButton, setActiveButton ] = useState(buttonsArray[0].serverName)
     const [ openModalIndex, setOpenModalIndex ] = useState(0);
+    const [ selectedOptions, setSelectedOptions ] = useState([]);
     const [ sendData, setSendData ] = useState({
         services: [],
         departments: [],
@@ -108,6 +109,8 @@ const SettingsPage = () => {
                     <ServiceForm
                         sendData={sendData}
                         setSendData={setSendData}
+                        selectedOptions={selectedOptions}
+                        setSelectedOptions={setSelectedOptions}
                     />
                 </div>
             </div>

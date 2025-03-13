@@ -232,13 +232,13 @@ const AddNewItemForm = ({ content }) => {
           onChange={(value) => setAdditionalNotes(value)}
           placeholder="Write additional notes here..."
         />
-      </div>
+      </div>{console.log(disabled)}
 
       {/* Submit Button */}
       <BlueButton
         onClickHandler={handleSubmit}
         text={"Save"}
-        disabled={disabled}
+        disabled={true}
       />
     </div>
   );
