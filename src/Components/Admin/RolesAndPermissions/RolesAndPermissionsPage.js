@@ -186,7 +186,7 @@ const RolesAndPermissionsPage = () => {
                   </p>
                 </td>
                 <td className="px-4 py-3 w-[20%] relative">
-                  <div className="text-[#0263E0] group relative cursor-pointer underline">
+                  <div onClick={() => { setEditRole(true); setSelectedRole(item) }} className="text-[#0263E0] group relative cursor-pointer underline">
                     List
                   </div>
                 </td>
