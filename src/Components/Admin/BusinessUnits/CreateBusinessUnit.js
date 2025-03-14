@@ -24,14 +24,14 @@ const appointmentSlots = [
   }
 ];
 
-const departments = [
-  {
-    id: "675b03cdcef11a5735b8c173",
-    name: "department A",
-    createdAt: new Date("2024-12-12T15:39:56.279Z"),
-    updatedAt: new Date("2024-12-12T15:39:51.502Z")
-  }
-];
+// const departments = [
+//   {
+//     id: "675b03cdcef11a5735b8c173",
+//     name: "department A",
+//     createdAt: new Date("2024-12-12T15:39:56.279Z"),
+//     updatedAt: new Date("2024-12-12T15:39:51.502Z")
+//   }
+// ];
 
 const CreateBusinessUnit = () => {
   const location = useLocation();
@@ -48,8 +48,12 @@ const CreateBusinessUnit = () => {
   const [ suggestions, setSuggestions ] = useState([]);
   const [ selectedOptions, setSelectedOptions ] = useState([]);
   const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
+  const [ isDropdownOpenDept, setIsDropdownOpenDept ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
   const [ options, setOptions ] = useState([])
+  const [ departments, setDepartments ] = useState([])
+  const [ selectedDepartments, setSelectedDepartments ] = useState([])
+  const [ selectedAppointments, setSelectedAppointments ] = useState([])
   const [ formData, setFormData ] = useState({
     unitName: "",
     branchType: "",
@@ -65,6 +69,10 @@ const CreateBusinessUnit = () => {
     appointment: "",
   });
 
+  const handleInputChange = (key, value) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
   useEffect(() => {
     axiosInstance
       .get("/api/v1/services")
@@ -75,6 +83,15 @@ const CreateBusinessUnit = () => {
       .catch(err => {
         console.error(err)
       })
+
+    axiosInstance
+      .get("/api/v1/departments")
+      .then((res) => {
+        setDepartments(res.data.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   }, [])
 
   useEffect(() => {
@@ -88,14 +105,15 @@ const CreateBusinessUnit = () => {
     }
   }, [formData, selectedOptions]);
 
-  const handleInputChange = (key, value) => {
-    setFormData((prev) => ({ ...prev, [key]: value }));
-  };
-
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
 
+  const toggleDropdownDept = () => {
+    setIsDropdownOpenDept((prevState) => !prevState);
+  };
+
+  // service change
   const handleCheckboxChange = (option) => {
     if (selectedOptions.some(obj => obj.service === option.name)) {
       setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
@@ -106,6 +124,25 @@ const CreateBusinessUnit = () => {
 
   const handleDeleteService = (option) => {
     setSelectedOptions(prev => prev.filter((item) => item.service !== option));
+  }
+
+  // department change
+  const handleCheckboxDepartmentChange = (option) => {
+    if (selectedDepartments.some(obj => obj.id === option.id)) {
+      setSelectedDepartments(selectedDepartments.filter((item) => item.id !== option.id));
+    } else {
+      setSelectedDepartments([...selectedDepartments, { name: option.name, id: option.id }]);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedAppointments(selectedDepartments.map(_ => ({
+      name: appointmentSlots[0].name
+    })))
+  }, [selectedDepartments])
+
+  const handleDeleteDepartment = (option) => {
+    setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
   }
 
   const handleServicePrice = (value, index) => {
@@ -126,6 +163,7 @@ const CreateBusinessUnit = () => {
         !toggleRef.current.contains(event.target)
       ) {
         setIsDropdownOpen(false);
+        setIsDropdownOpenDept(false)
       }
     };
 
@@ -213,7 +251,7 @@ const CreateBusinessUnit = () => {
   }
 
   const handleSubmit = () => {
-    const appointment = appointmentSlots.find(item => item.id === formData.appointment)
+    // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
 
     const services = selectedOptions.map((item) => ({
       serviceId: "675b03becef11a5735b8c16f", // string
@@ -233,16 +271,17 @@ const CreateBusinessUnit = () => {
       postalCode: formData.postalCode, // number / integer min length 4
       businessUnitId: businessUnitId, // number
       services: services, 
-      departments: [
-        {
-          departmentId: formData.department, // string
-        },
-      ],
+      departments: selectedDepartments.map(item => ({
+        departmentId: item.id
+      })),
       appointmentSlots: [
         {
-          name: appointment.name, // string
-          departmentId: formData.department, // string
-          reasons: appointment.reasons, // string
+          name: "Morning Slot", // string
+          departmentId: "675b03cdcef11a5735b8c173", // string
+          reasons: [
+            "Check-up",
+            "Follow-up"
+          ], // string
         },
       ],
     };
@@ -315,11 +354,13 @@ const CreateBusinessUnit = () => {
           </p>
         </div>
         <div className="flex items-center justify-center gap-5">
-          <Link to={"/admin/branch-units"}>
-            <button className="bg-[#FFFFFF] border border-[#CACDD8] px-3 h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center">
+          {/* <Link to={"/admin/branch-units"}> */}
+            <button 
+              onClick={() => navigate("/admin/branch-units")}
+              className="bg-[#FFFFFF] border border-[#CACDD8] px-3 h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center">
               Cancel
             </button>
-          </Link>
+          {/* </Link> */}
 
           <button
             disabled={disabled}
@@ -651,7 +692,7 @@ const CreateBusinessUnit = () => {
           </div>)}
 
           {/* Department Selection */}
-          <div className="flex w-full items-center justify-between gap-[50px]">
+          {/* <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
@@ -661,7 +702,7 @@ const CreateBusinessUnit = () => {
                 className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.department}
                 onChange={(e) =>
-                  handleInputChange("department", e.target.value)
+                  handleDepartmentClick(e.target.value)
                 }
               >
                 <option value="">Select</option>
@@ -669,6 +710,70 @@ const CreateBusinessUnit = () => {
                   <option key={index} value={item.id}>{item.name}</option>
                 ))}
               </select>
+            </div>
+          </div> */}
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-[calc(50%-25px)]">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                Department(s)
+              </label>
+              <div className="relative w-full">
+                <div
+                  ref={toggleRef}
+                  className={`classic w-full mt-1 ${
+                    selectedDepartments.length===0 ? "p-2" : "p-1 min-h-[42px]"
+                  } border border-[#8891AA] focus:outline-none rounded-md`}
+                  onClick={toggleDropdownDept}
+                >
+                  {selectedDepartments.length===0 && (
+                  <div>
+                    <p className="text-sm">Select</p>
+                  </div>)}
+
+                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                    {selectedDepartments?.map((option, index) => (
+                      <span
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        key={index}
+                      >
+                        {option.name}
+                        <button
+                          className="ml-2 text-[#606B85]"
+                          onClick={() => handleDeleteDepartment(option)}
+                        >
+                          <IoClose />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {isDropdownOpenDept && (
+                  <div
+                    ref={dropdownRef}
+                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                  >
+                    <ul className="list-none p-0 m-0">
+                      {departments?.map((option) => (
+                        <li className="p-2" key={option}>
+                          <label className="flex w-full items-center cursor-pointer capitalize">
+                            <input
+                              type="checkbox"
+                              className="mr-2 placeholder:italic text-sm"
+                              checked={selectedDepartments.some(obj => obj.id === option.id)}
+                              onChange={() => handleCheckboxDepartmentChange(option)}
+                            />
+                            <span className="capitalize">
+                            {option.name}
+                            </span>
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
@@ -679,8 +784,9 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
-              <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
+              {/* <select
+                disabled={true}
+                className="w-full classic mt-1 p-2 capitalize disabled:bg-[#F4F4F6] disabled:opacity-100 placeholder:italic text-sm border disabled:border-[#CACDD8] rounded-md focus:outline-none"
                 value={formData.appointment}
                 onChange={(e) =>
                   handleInputChange("appointment", e.target.value)
@@ -690,7 +796,36 @@ const CreateBusinessUnit = () => {
                 {appointmentSlots.map((item, index) => (
                   <option key={index} value={item.id}>{item.name}</option>
                 ))}
-              </select>
+              </select> */}
+              <div className="relative w-full">
+                <div
+                  className={`classic w-full mt-1 bg-[#F4F4F6] cursor-not-allowed ${
+                    selectedAppointments.length===0 ? "p-2" : "p-1 min-h-[42px]"
+                  } border border-[#CACDD8] focus:outline-none rounded-md`}
+                >
+                  {selectedAppointments.length===0 && (
+                  <div>
+                    <p className="text-sm">Select</p>
+                  </div>)}
+
+                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                    {selectedAppointments?.map((option, index) => (
+                      <span
+                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        key={index}
+                      >
+                        {option.name}
+                        <button
+                          className="ml-2 text-[#606B85]"
+                          onClick={() => handleDeleteDepartment(option)}
+                        >
+                          <IoClose />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

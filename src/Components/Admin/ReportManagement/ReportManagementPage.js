@@ -116,7 +116,7 @@ const ReportTable = ({
                 <td className="px-4 py-2 text-sm flex items-center">
                     <div
                         className={`w-3 aspect-square ${
-                            item.active ? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rounded-md rotate-45"
+                            item.active ? "bg-[#0B602D] rounded-full" : "bg-[#C72323] rounded-sm rotate-45"
                         }`}
                     ></div>
                     <span
@@ -271,6 +271,7 @@ function ReportManagementPage() {
           <div className="w-full h-[calc(100%-4.75rem)] overflow-y-auto">
             <EditReport 
               selectedReport={editGroup}
+              fetchAllReports={fetchAllReports}
             />
           </div>
         </div>

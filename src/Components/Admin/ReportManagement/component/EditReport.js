@@ -5,6 +5,8 @@ import { useAppContext } from "../../../../utils/AppContext";
 import { IoIosArrowRoundDown, IoIosArrowRoundUp } from "react-icons/io";
 import BlueButton from "../../../../ui/BlueButton";
 import ActiveButtons from "../../../../ui/ActiveButtons";
+import axiosInstance from "../../../../utils/AxiosInstance";
+import { useAlertContext } from "../../../../utils/AlertContext";
 
 const labelFields = [
   "Scheduled Appointments",
@@ -24,11 +26,13 @@ const appointmentTypes = [
   "leads",
 ];
 
-const EditReport = ({ selectedReport }) => {
+const EditReport = ({ selectedReport, fetchAllReports }) => {
   const { branchDetails } = useAppContext();
 
+  const { setAlert } = useAlertContext()
+
   const [showLabelOptions, setShowLabelOptions] = useState(false);
-  const [selectedLabelOptions, setSelectedLabelOptions] = useState([]);
+  const [selectedLabelOptions, setSelectedLabelOptions] = useState(selectedReport.fields);
   const [disabled, setDisabled] = useState(true);
   const [active, setActive] = useState(selectedReport.active);
   const [formData, setFormData] = useState({
@@ -41,26 +45,26 @@ const EditReport = ({ selectedReport }) => {
   });
 
   useEffect(() => {
-    console.log(selectedReport);
-    console.log(formData);
+    console.log(selectedLabelOptions, selectedReport.fields)
+    console.log(selectedLabelOptions.every((item, index) => item === selectedReport.fields[index]));
 
-    if (
-      (selectedReport.name.replace(/\s/g, "") ===
+    if ((selectedReport.name.replace(/\s/g, "") ===
         formData.name.replace(/\s/g, "") ||
         formData.name.replace(/\s/g, "") === "") &&
-      selectedReport.type === formData.type &&
-      // selectedReport.fields === formData.labelFields &&
-      selectedReport.frequency === formData.frequency &&
-      formData.location === "" &&
-      selectedReport.generateInBackground === formData.backgroundReport &&
-      active === selectedReport.active
-    ) {
-      setDisabled(true);
-      return;
-    }
+        selectedReport.type === formData.type &&
+        selectedLabelOptions.length === selectedReport.fields.length &&
+        selectedLabelOptions.every((item, index) => item === selectedReport.fields[index]) &&
+        selectedReport.frequency === formData.frequency &&
+        formData.location === "" &&
+        selectedReport.generateInBackground === formData.backgroundReport &&
+        active === selectedReport.active
+      ) {
+        setDisabled(true);
+        return;
+      }
 
     setDisabled(false);
-  }, [selectedReport, formData, active]);
+  }, [selectedReport, formData, active, selectedLabelOptions]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -69,6 +73,28 @@ const EditReport = ({ selectedReport }) => {
   const handleSubmit = () => {
     // Log the form data
     console.log("Submitted Form Data: ", formData);
+
+    const sendData = {
+      name: formData.name,
+      type: formData.type,
+      frequency: formData.frequency,
+      generateInBackground: formData.generateInBackground,
+      fields: selectedLabelOptions,
+      active: active
+    }
+
+    console.log(sendData)
+
+    axiosInstance
+      .patch(`/api/v1/reports/${selectedReport.id}`, sendData)
+      .then(res => {
+        console.log(res)
+        setAlert("Updated Successfully")
+        fetchAllReports()
+      })
+      .catch(err => {
+        console.error(err)
+      })
   };
 
   const handleAddLabels = (value) => {

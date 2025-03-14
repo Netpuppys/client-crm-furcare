@@ -18,14 +18,14 @@ const appointmentSlots = [
   },
 ];
 
-const departments = [
-  {
-    id: "675b03cdcef11a5735b8c173",
-    name: "department A",
-    createdAt: new Date("2024-12-12T15:39:56.279Z"),
-    updatedAt: new Date("2024-12-12T15:39:51.502Z"),
-  },
-];
+// const departments = [
+//   {
+//     id: "675b03cdcef11a5735b8c173",
+//     name: "department A",
+//     createdAt: new Date("2024-12-12T15:39:56.279Z"),
+//     updatedAt: new Date("2024-12-12T15:39:51.502Z"),
+//   },
+// ];
 
 const EditBusinessUnit = () => {
   const navigate = useNavigate();
@@ -44,10 +44,14 @@ const EditBusinessUnit = () => {
       basePrice: item.basePrice,
     }))
   );
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [disabled, setDisabled] = useState(false);
-  const [options, setOptions] = useState([]);
-  const [formData, setFormData] = useState({
+  const [ isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [ isDropdownOpenDept, setIsDropdownOpenDept ] = useState(false);
+  const [ disabled, setDisabled] = useState(false);
+  const [ options, setOptions] = useState([]);
+  const [ departments, setDepartments ] = useState([])
+  const [ selectedDepartments, setSelectedDepartments ] = useState(businessUnitData.departments.length> 0? businessUnitData.departments.map(item => ({ name: item?.departmentDetails.name, id: item?.departmentDetails.id })) : [])
+  const [ selectedAppointments, setSelectedAppointments ] = useState([])
+  const [ formData, setFormData] = useState({
     active: businessUnitData.active,
     unitName: businessUnitData.name,
     branchType: businessUnitData.type,
@@ -59,7 +63,7 @@ const EditBusinessUnit = () => {
     state: businessUnitData.state,
     country: businessUnitData.country,
     postalCode: businessUnitData.postalCode,
-    department: businessUnitData.departments[0].departmentDetails.id,
+    department: "",
     appointment: "675b049dc90ac3a44472a525",
   });
 
@@ -68,6 +72,15 @@ const EditBusinessUnit = () => {
       .get("/api/v1/services")
       .then((res) => {
         setOptions(res.data.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    axiosInstance
+      .get("/api/v1/departments")
+      .then((res) => {
+        setDepartments(res.data.data.data);
       })
       .catch((err) => {
         console.error(err);
@@ -104,8 +117,6 @@ const EditBusinessUnit = () => {
       formData.state === businessUnitData.state &&
       formData.country === businessUnitData.country &&
       formData.postalCode === businessUnitData.postalCode &&
-      formData.department ===
-        businessUnitData.departments[0].departmentDetails.id &&
       formData.appointment === "675b049dc90ac3a44472a525";
 
     console.log(valueChanged);
@@ -123,6 +134,10 @@ const EditBusinessUnit = () => {
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
+  };
+
+  const toggleDropdownDept = () => {
+    setIsDropdownOpenDept((prevState) => !prevState);
   };
 
   const handleCheckboxChange = (option) => {
@@ -153,6 +168,24 @@ const EditBusinessUnit = () => {
     });
   };
 
+  const handleCheckboxDepartmentChange = (option) => {
+    if (selectedDepartments.some(obj => obj.id === option.id)) {
+      setSelectedDepartments(selectedDepartments.filter((item) => item.id !== option.id));
+    } else {
+      setSelectedDepartments([...selectedDepartments, { name: option.name, id: option.id }]);
+    }
+  };
+
+  useEffect(() => {
+    setSelectedAppointments(selectedDepartments.map(_ => ({
+      name: appointmentSlots[0].name
+    })))
+  }, [selectedDepartments])
+
+  const handleDeleteDepartment = (option) => {
+    setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
+  }
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -162,6 +195,7 @@ const EditBusinessUnit = () => {
         !toggleRef.current.contains(event.target)
       ) {
         setIsDropdownOpen(false);
+        setIsDropdownOpenDept(false)
       }
     };
 
@@ -453,7 +487,7 @@ const EditBusinessUnit = () => {
               <div className="relative w-full">
                 <div
                   ref={toggleRef}
-                  className={`classic w-full mt-1 ${
+                  className={`classic pointer-events-none cursor-not-allowed w-full mt-1 ${
                     selectedOptions.length === 0 ? "p-2" : "p-1 min-h-[42px]"
                   } border border-[#8891AA] focus:outline-none rounded-md`}
                   onClick={toggleDropdown}
@@ -533,7 +567,8 @@ const EditBusinessUnit = () => {
                         </p>
                       </div>
                       <input
-                        className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
+                        disabled={true}
+                        className="w-full p-2 placeholder:italic text-sm disabled:opacity-30 disabled:cursor-not-allowed classic focus:outline-none"
                         value={selectedOptions[index].basePrice}
                         onChange={(e) => {
                           const value = e.target.value;
@@ -556,7 +591,7 @@ const EditBusinessUnit = () => {
           )}
 
           {/* Department Selection */}
-          <div className="flex w-full items-center justify-between">
+          {/* <div className="flex w-full items-center justify-between">
             <div className="w-[47.5%]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
@@ -577,6 +612,71 @@ const EditBusinessUnit = () => {
                 ))}
               </select>
             </div>
+          </div> */}
+
+          <div className="flex w-full items-center justify-between gap-[50px]">
+            <div className="w-[calc(50%-25px)]">
+              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                Department(s)
+              </label>
+              <div className="relative w-full">
+                <div
+                  ref={toggleRef}
+                  className={`classic pointer-events-none cursor-not-allowed w-full mt-1 ${
+                    selectedDepartments.length===0 ? "p-2" : "p-1 min-h-[42px]"
+                  } border border-[#8891AA] focus:outline-none rounded-md`}
+                  onClick={toggleDropdownDept}
+                >
+                  {selectedDepartments.length===0 && (
+                  <div>
+                    <p className="text-sm">Select</p>
+                  </div>)}
+
+                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                    {selectedDepartments?.map((option, index) => (
+                      <span
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        key={index}
+                      >
+                        {option.name}
+                        <button
+                          className="ml-2 text-[#606B85]"
+                          onClick={() => handleDeleteDepartment(option)}
+                        >
+                          <IoClose />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {isDropdownOpenDept && (
+                  <div
+                    ref={dropdownRef}
+                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                  >
+                    <ul className="list-none p-0 m-0">
+                      {departments?.map((option) => (
+                        <li className="p-2" key={option}>
+                          <label className="flex w-full items-center cursor-pointer capitalize">
+                            <input
+                              type="checkbox"
+                              className="mr-2 placeholder:italic text-sm"
+                              checked={selectedDepartments.some(obj => obj.id === option.id)}
+                              onChange={() => handleCheckboxDepartmentChange(option)}
+                            />
+                            <span className="capitalize">
+                            {option.name}
+                            </span>
+                          </label>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
           {/* Appointment Selection */}
@@ -586,7 +686,7 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
-              <select
+              {/* <select
                 className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
                 value={formData.appointment}
                 onChange={(e) =>
@@ -599,7 +699,36 @@ const EditBusinessUnit = () => {
                     {item.name}
                   </option>
                 ))}
-              </select>
+              </select> */}
+              <div className="relative w-full">
+                <div
+                  className={`classic w-full mt-1 bg-[#F4F4F6] cursor-not-allowed ${
+                    selectedAppointments.length===0 ? "p-2" : "p-1 min-h-[42px]"
+                  } border border-[#CACDD8] focus:outline-none rounded-md`}
+                >
+                  {selectedAppointments.length===0 && (
+                  <div>
+                    <p className="text-sm">Select</p>
+                  </div>)}
+
+                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                    {selectedAppointments?.map((option, index) => (
+                      <span
+                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        key={index}
+                      >
+                        {option.name}
+                        <button
+                          className="ml-2 text-[#606B85]"
+                          onClick={() => handleDeleteDepartment(option)}
+                        >
+                          <IoClose />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

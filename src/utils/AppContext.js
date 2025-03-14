@@ -10,6 +10,7 @@ export const AppProvider = ({
   const [ branchDetails, setBranchDetails ] = useState()
   const [ selectedBranch, setSelectedBranch ] = useState(JSON.parse(sessionStorage.getItem('selectedBranch')))
   const [ sidebarExpanded, setSidebarExpanded ] = useState(true);
+  const [ businessBranchesData, setBusinessBranchesData ] = useState()
 
   useEffect(() => {
     if (!selectedBranch && branchDetails) {
@@ -18,11 +19,23 @@ export const AppProvider = ({
     }
   }, [branchDetails, selectedBranch])
 
+  // useEffect(() => {
+  //   axiosInstance
+  //     .get("/api/v1/business-branches")
+  //     .then(res => {
+  //       setBusinessBranchesData(res.data.data.data)
+  //     })
+  //     .catch(err => {
+  //       console.error(err)
+  //     })
+  // }, [])
+
   const fetchBranchDetails = useCallback(() => {
     axiosInstance
       .get("/api/v1/business-branches")
       .then(res => {
         setBranchDetails(res.data.data.data)
+        setBusinessBranchesData(res.data.data.data)
       })
       .catch(err => {
         console.error(err)
@@ -41,6 +54,8 @@ export const AppProvider = ({
         setSelectedBranch,
         sidebarExpanded,
         setSidebarExpanded,
+        businessBranchesData,
+        setBusinessBranchesData
       }}
     >
       {children}
