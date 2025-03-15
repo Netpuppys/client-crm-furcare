@@ -4,6 +4,7 @@ import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
+import { useAppContext } from "../../../utils/AppContext";
 
 const appointmentSlots = [
   {
@@ -38,12 +39,16 @@ const EditBusinessUnit = () => {
 
   const { setAlert } = useAlertContext();
 
-  const [selectedOptions, setSelectedOptions] = useState(
+  const { setSelectedBranch } = useAppContext()
+
+  const [ selectedOptions, setSelectedOptions] = useState(
     businessUnitData.services.map((item) => ({
       service: item.serviceDetails.name,
       basePrice: item.basePrice,
+      serviceId: item.serviceId
     }))
   );
+  const [ changedService, setChangedService ] = useState([])
   const [ isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [ isDropdownOpenDept, setIsDropdownOpenDept ] = useState(false);
   const [ disabled, setDisabled] = useState(false);
@@ -66,6 +71,16 @@ const EditBusinessUnit = () => {
     department: "",
     appointment: "675b049dc90ac3a44472a525",
   });
+
+  // useEffect(() => {
+  //   const initial = businessUnitData?.services.map((item) => ({
+  //     service: item.serviceDetails.name,
+  //     basePrice: item.basePrice,
+  //     serviceId: item.serviceId
+  //   }))
+
+  //   setChangedService(initial)
+  // }, [businessUnitData])
 
   useEffect(() => {
     axiosInstance
@@ -98,8 +113,6 @@ const EditBusinessUnit = () => {
       "state",
       "country",
       "postalCode",
-      "department",
-      "appointment",
     ];
     const checkFromdata = requiredFields.every(
       (field) => formData[field].trim() !== ""
@@ -119,14 +132,15 @@ const EditBusinessUnit = () => {
       formData.postalCode === businessUnitData.postalCode &&
       formData.appointment === "675b049dc90ac3a44472a525";
 
-    console.log(valueChanged);
 
     if (checkFromdata && !valueChanged) {
+      setDisabled(false);
+    } else if (changedService.length>0) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [formData, selectedOptions, businessUnitData]);
+  }, [formData, selectedOptions, businessUnitData, changedService]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -159,13 +173,31 @@ const EditBusinessUnit = () => {
     );
   };
 
-  const handleServicePrice = (value, index) => {
+  const handleServicePrice = (value, index, serviceId) => {
     setSelectedOptions((prev) => {
       const arr = [...prev];
       arr[index].basePrice = value;
 
       return arr;
     });
+
+    setChangedService(prev => {
+      const arr = [...prev];
+      const selected = arr.find(item => item.serviceId === serviceId)
+
+      if (!selected) {
+        arr.push({
+          basePrice: value,
+          serviceId: serviceId
+        })
+
+        return arr;
+      } else {
+        selected.basePrice = value
+      }
+
+      return arr;
+  })
   };
 
   const handleCheckboxDepartmentChange = (option) => {
@@ -205,7 +237,28 @@ const EditBusinessUnit = () => {
     };
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+
+    try {
+      const promises = changedService.map((service) => {
+  
+        return axiosInstance.patch(
+          `/api/v1/business-branches/${businessUnitData.id}/services/${service.serviceId}`,
+          { basePrice: service.basePrice }
+        );
+      });
+  
+      const responses = await Promise.all(promises);
+      console.log("All updates successful:", responses);
+  
+      sessionStorage.removeItem("selectedBranch")
+      setSelectedBranch(null)
+      // setAlert("All branch units updated successfully");
+      // navigate("/admin/branch-units");
+    } catch (error) {
+      console.error("Error updating branch units:", error);
+    }
+
     const sendData = {
       name: formData.unitName,
       type: formData.branchType,
@@ -218,7 +271,7 @@ const EditBusinessUnit = () => {
       .then((response) => {
         console.log("Success:", response.data);
         setAlert("Branch unit updated successfully");
-        navigate("/admin/branch-units");
+        navigate("/admin/branch-units")
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -257,7 +310,6 @@ const EditBusinessUnit = () => {
           </button>
         </div>
       </div>
-
       {/* main form */}
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
@@ -497,7 +549,7 @@ const EditBusinessUnit = () => {
                       <p className="text-sm">Select</p>
                     </div>
                   )}
-                  {console.log(selectedOptions)}
+                  {/* {console.log(selectedOptions)} */}
                   <div className="flex w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
@@ -550,7 +602,7 @@ const EditBusinessUnit = () => {
               <div className="w-full mb-6">
                 <p className="capitalize text-lg font-semibold">Base Price</p>
               </div>
-
+            {/* {console.log(selectedOptions)} */}
               <div
                 className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
               >
@@ -567,7 +619,7 @@ const EditBusinessUnit = () => {
                         </p>
                       </div>
                       <input
-                        disabled={true}
+                        // disabled={true}
                         className="w-full p-2 placeholder:italic text-sm disabled:opacity-30 disabled:cursor-not-allowed classic focus:outline-none"
                         value={selectedOptions[index].basePrice}
                         onChange={(e) => {
@@ -579,7 +631,7 @@ const EditBusinessUnit = () => {
                           // Limit to 2 decimal places
                           const twoDecimalValue =
                             formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || "";
-                          handleServicePrice(twoDecimalValue, index);
+                          handleServicePrice(Number(twoDecimalValue), index, service.serviceId);
                         }}
                         type="text"
                       />
