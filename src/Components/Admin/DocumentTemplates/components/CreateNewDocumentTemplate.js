@@ -101,23 +101,16 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       <div className="flex w-full items-center justify-between gap-[50px]">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
-          {console.log(documents)}
           <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm">
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Type{" "}
           </label>
-          <select
-            value={formData.type}
-            onChange={(e) => handleInputChange("type", e.target.value)}
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
-          >
-            <option value={""}>Select</option>
-            {types.map((type, id) => (
-              <option key={id} value={type.serverName}>
-                {type.name}
-              </option>
-            ))}
-          </select>
+
+          <div className="mt-1 h-[2.25rem] px-2 border border-[#8891AA] bg-[#F4F4F6] rounded-md flex items-center justify-start">
+            <p className="text-sm text-[#121C2D] capitalize font-medium">
+              {types.find(item => item.serverName === formData.type).name}
+            </p>
+          </div>
         </div>
 
         {/* name */}
@@ -130,7 +123,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
             type="text"
             value={formData.name}
             placeholder="Placeholder"
-            className="mt-1 p-2 border capitalize border-[#8891AA] placeholder:italic focus:outline-none rounded-md classic"
+            className="mt-1 h-[2.25rem] text-sm font-medium px-2 border capitalize border-[#8891AA] placeholder:italic focus:outline-none rounded-md classic"
             onChange={(e) => {
               const value = e.target.value;
               if (/^[a-zA-Z0-9\s]*$/.test(value)) {
@@ -160,12 +153,14 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
                     className="flex capitalize text-sm items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                   >
                     {lang}
+
+                    {lang.toLowerCase()!=="english" &&
                     <button
                       onClick={() => removeLanguage(lang)}
                       className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                     >
                       ✕
-                    </button>
+                    </button>}
                   </div>
                 ))}
               </div>

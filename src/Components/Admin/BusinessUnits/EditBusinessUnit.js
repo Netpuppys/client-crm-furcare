@@ -1,10 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
+import chevronDown from "../../../Assets/icons/chevronDown.png"
 
 const appointmentSlots = [
   {
@@ -34,9 +35,6 @@ const EditBusinessUnit = () => {
 
   const businessUnitData = location.state?.businessUnitData;
 
-  const dropdownRef = useRef(null);
-  const toggleRef = useRef(null);
-
   const { setAlert } = useAlertContext();
 
   const { setSelectedBranch } = useAppContext()
@@ -49,13 +47,13 @@ const EditBusinessUnit = () => {
     }))
   );
   const [ changedService, setChangedService ] = useState([])
-  const [ isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [ isDropdownOpenDept, setIsDropdownOpenDept ] = useState(false);
   const [ disabled, setDisabled] = useState(false);
   const [ options, setOptions] = useState([]);
   const [ departments, setDepartments ] = useState([])
   const [ selectedDepartments, setSelectedDepartments ] = useState(businessUnitData.departments.length> 0? businessUnitData.departments.map(item => ({ name: item?.departmentDetails.name, id: item?.departmentDetails.id })) : [])
   const [ selectedAppointments, setSelectedAppointments ] = useState([])
+  const [ showDropdown, setShowDropdown ] = useState(false)
+  const [ showDropdownDept, setShowDropdownDept ] = useState(false)
   const [ formData, setFormData] = useState({
     active: businessUnitData.active,
     unitName: businessUnitData.name,
@@ -137,14 +135,6 @@ const EditBusinessUnit = () => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState);
-  };
-
-  const toggleDropdownDept = () => {
-    setIsDropdownOpenDept((prevState) => !prevState);
-  };
-
   const handleCheckboxChange = (option) => {
     if (selectedOptions.some((obj) => obj.service === option.name)) {
       setSelectedOptions(
@@ -209,25 +199,6 @@ const EditBusinessUnit = () => {
     setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
   }
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target)
-      ) {
-        setIsDropdownOpen(false);
-        setIsDropdownOpenDept(false)
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleSubmit = async () => {
 
     try {
@@ -267,9 +238,9 @@ const EditBusinessUnit = () => {
       });
   };
 
-  const filteredOptions = options?.filter(
-    (obj) => !selectedOptions.some((selected) => selected.service === obj.name)
-  );
+  // const filteredOptions = options?.filter(
+  //   (obj) => !selectedOptions.some((selected) => selected.service === obj.name)
+  // );
 
   return (
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
@@ -542,24 +513,18 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
               </label>
-              <div className="relative w-full">
-                <div
-                  ref={toggleRef}
-                  className={`classic pointer-events-none cursor-not-allowed w-full mt-1 ${
-                    selectedOptions.length === 0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#8891AA] focus:outline-none rounded-md`}
-                  onClick={toggleDropdown}
-                >
-                  {selectedOptions.length === 0 && (
-                    <div>
-                      <p className="text-sm">Select</p>
-                    </div>
-                  )}
-                  {/* {console.log(selectedOptions)} */}
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+                <div className={`w-full flex items-center justify-between gap-1 h-full`}>
+
+                  {selectedOptions.length===0 && (
+                  <div className="px-2">
+                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
+                  </div>)}
+
+                  <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.service}
@@ -572,26 +537,40 @@ const EditBusinessUnit = () => {
                       </span>
                     ))}
                   </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                      disabled
+                        onClick={() => setShowDropdown(prev => !prev)}
+                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                      <img
+                          src={chevronDown}
+                          className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
+                          alt='chevron down'
+                      />
+                    </button>
+                  </div>
                 </div>
 
-                {isDropdownOpen && (
+                {showDropdown && (
                   <div
-                    ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                    // ref={dropdownRef}
+                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {filteredOptions?.map((option) => (
-                        <li className="p-2" key={option}>
-                          <label className="flex w-full items-center cursor-pointer">
+                      {options?.map((option, index) => (
+                        <li className="p-2" key={index}>
+                          <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
                               type="checkbox"
-                              className="mr-2 placeholder:italic  text-sm"
-                              checked={selectedOptions.some(
-                                (obj) => obj.service === option
-                              )}
+                              className="mr-2 placeholder:italic text-sm"
+                              checked={selectedOptions.some(obj => obj.service === option.name)}
                               onChange={() => handleCheckboxChange(option)}
                             />
+                            <span className="capitalize">
                             {option.name}
+                            </span>
                           </label>
                         </li>
                       ))}
@@ -655,23 +634,17 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Department(s)
               </label>
-              <div className="relative w-full">
-                <div
-                  ref={toggleRef}
-                  className={`classic pointer-events-none cursor-not-allowed w-full mt-1 ${
-                    selectedDepartments.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#8891AA] focus:outline-none rounded-md`}
-                  onClick={toggleDropdownDept}
-                >
+              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+                <div className={`w-full h-full relative gap-1 flex items-center justify-between`}>
                   {selectedDepartments.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
+                  <div className="px-2">
+                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
                   </div>)}
 
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex w-full h-full px-3 items-center py-1 flex-wrap gap-1">
                     {selectedDepartments?.map((option, index) => (
                       <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.name}
@@ -684,16 +657,29 @@ const EditBusinessUnit = () => {
                       </span>
                     ))}
                   </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                      disabled
+                        onClick={() => setShowDropdownDept(prev => !prev)}
+                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                        <img
+                            src={chevronDown}
+                            className={`w-full h-full object-contain transition-all ${showDropdownDept? "rotate-180" : ""}`}
+                            alt='chevron down'
+                        />
+                    </button>
+                  </div>
                 </div>
 
-                {isDropdownOpenDept && (
+                {showDropdownDept && (
                   <div
-                    ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {departments?.map((option) => (
-                        <li className="p-2" key={option}>
+                      {departments?.map((option, index) => (
+                        <li className="p-2" key={index}>
                           <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
                               type="checkbox"
@@ -721,21 +707,19 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
-              <div className="relative w-full">
+              <div className="mt-1 w-full h-[2.25rem] border border-[#CACDD8] bg-[#F4F4F6] relative rounded-md">
                 <div
-                  className={`classic w-full mt-1 bg-[#F4F4F6] cursor-not-allowed ${
-                    selectedAppointments.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#CACDD8] focus:outline-none rounded-md`}
+                  className={`w-full h-full relative gap-1 flex items-center justify-between`}
                 >
                   {selectedAppointments.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
+                  <div className="px-2">
+                    <p className="text-sm text-[#AEB2C1] font-medium">Select</p>
                   </div>)}
 
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex px-3 w-full h-full items-center flex-wrap py-1 gap-1">
                     {selectedAppointments?.map((option, index) => (
                       <span
-                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.name}
@@ -747,6 +731,19 @@ const EditBusinessUnit = () => {
                         </button>
                       </span>
                     ))}
+                  </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                      disabled
+                      className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                      <img
+                          src={chevronDown}
+                          className={`w-full h-full object-contain transition-all`}
+                          alt='chevron down'
+                      />
+                    </button>
                   </div>
                 </div>
               </div>

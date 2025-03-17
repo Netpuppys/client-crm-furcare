@@ -20,7 +20,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
   const [language, setLanguage] = useState([]); // Initial language
   const [documents, setDocuments] = useState(openEditModule.body);
-  const [dropDownListStatic, setDropDownListStatic] = useState();
+  const [dropDownListStatic, setDropDownListStatic] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [selectedLanguage, setSelectedLanguage] = useState();
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
@@ -134,10 +134,10 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       });
   };
 
-  const handleQuillChange = (value) => {
+  const handleQuillChange = (value, editIndex) => {
     setDocuments((prev) => {
       return prev.map((doc, index) =>
-        index === langIndex ? { ...doc, body: value } : doc
+        index === editIndex ? { ...doc, body: value } : doc
       );
     });
   };
@@ -162,18 +162,11 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Type{" "}
           </label>
-          <select
-            value={formData.type}
-            onChange={(e) => handleInputChange("type", e.target.value)}
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
-          >
-            <option value={""}>Select</option>
-            {types.map((type, id) => (
-              <option value={type.serverName} key={id}>
-                {type.name}
-              </option>
-            ))}
-          </select>
+          <div className="mt-1 h-[2.25rem] px-2 border border-[#8891AA] bg-[#F4F4F6] rounded-md flex items-center justify-start">
+            <p className="text-sm text-[#121C2D] capitalize font-medium">
+              {types.find(item => item.serverName === formData.type).name}
+            </p>
+          </div>
         </div>
 
         {/* name */}
@@ -186,7 +179,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             type="text"
             value={formData.name}
             placeholder="Placeholder"
-            className="mt-1 p-2 border capitalize border-[#8891AA] placeholder:italic focus:outline-none rounded-md classic"
+            className="mt-1 h-[2.25rem] text-sm font-medium px-2 border capitalize border-[#8891AA] placeholder:italic focus:outline-none rounded-md classic"
             onChange={(e) => {
               const value = e.target.value;
               if (/^[a-zA-Z0-9\s]*$/.test(value)) {
@@ -215,12 +208,14 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
                     className="flex capitalize text-sm items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                   >
                     {lang}
+
+                    {lang.toLowerCase()!=="english" &&
                     <button
                       onClick={() => removeLanguage(lang)}
                       className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                     >
                       ✕
-                    </button>
+                    </button>}
                   </div>
                 ))}
               </div>
@@ -288,15 +283,17 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       </div>
 
       {/* Rich Text Editor */}
-      <div className="w-full flex flex-col">
+      {documents.map((doc, index) => (
+      <div className={`w-full flex-col ${index===langIndex? "flex" : "hidden"}`}>
         <ReactQuill
           className="mt-2 h-[400px] mb-12"
           theme="snow"
-          value={documents[langIndex]?.body}
-          onChange={(value) => handleQuillChange(value)}
+          value={doc.body}
+          onChange={(value) => handleQuillChange(value, index)}
           placeholder="Placeholder"
         />
-      </div>
+      </div>))}
+      {console.log(documents)}
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

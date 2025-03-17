@@ -6,6 +6,7 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
+import chevronDown from "../../../Assets/icons/chevronDown.png"
 
 const appointmentSlots = [
   {
@@ -38,21 +39,19 @@ const CreateBusinessUnit = () => {
 
   const businessUnitId = location.state?.businessUnitId;
 
-  const dropdownRef = useRef(null);
-  const toggleRef = useRef(null);
   const autocompleteServiceRef = useRef(null);
   
   const { setAlert } = useAlertContext()
   
   const [ suggestions, setSuggestions ] = useState([]);
   const [ selectedOptions, setSelectedOptions ] = useState([]);
-  const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
-  const [ isDropdownOpenDept, setIsDropdownOpenDept ] = useState(false);
   const [ disabled, setDisabled ] = useState(false)
   const [ options, setOptions ] = useState([])
   const [ departments, setDepartments ] = useState([])
   const [ selectedDepartments, setSelectedDepartments ] = useState([])
   const [ selectedAppointments, setSelectedAppointments ] = useState([])
+  const [ showDropdown, setShowDropdown ] = useState(false)
+  const [ showDropdownDept, setShowDropdownDept ] = useState(false)
   const [ formData, setFormData ] = useState({
     unitName: "",
     branchType: "",
@@ -76,7 +75,6 @@ const CreateBusinessUnit = () => {
     axiosInstance
       .get("/api/v1/services")
       .then(res => {
-        console.log(res.data.data.data)
         setOptions(res.data.data.data)
       })
       .catch(err => {
@@ -94,23 +92,17 @@ const CreateBusinessUnit = () => {
   }, [])
 
   useEffect(() => {
-    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode", "department", "appointment"];
+    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode"];
     const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
 
-    if (checkFromdata) {
+    const checkService = selectedOptions.every(item => typeof Number(item.basePrice) === "number" && item.basePrice>0)
+
+    if (checkFromdata && selectedOptions.length>0 && checkService && selectedDepartments.length>0 && selectedAppointments.length>0) {
       setDisabled(false)
     } else {
       setDisabled(true);
     }
-  }, [formData, selectedOptions]);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState);
-  };
-
-  const toggleDropdownDept = () => {
-    setIsDropdownOpenDept((prevState) => !prevState);
-  };
+  }, [formData, selectedOptions, selectedDepartments, selectedAppointments]);
 
   // service change
   const handleCheckboxChange = (option) => {
@@ -152,102 +144,6 @@ const CreateBusinessUnit = () => {
       return arr
     })
   }
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target)
-      ) {
-        setIsDropdownOpen(false);
-        setIsDropdownOpenDept(false)
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  // function validateSendData(sendData) {
-  //   setDisabled(true)
-
-  //   // Validate name
-  //   if (!sendData.name || typeof sendData.name !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate type
-  //   if (!sendData.type || typeof sendData.type !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate practice
-  //   if (!sendData.practice || typeof sendData.practice !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate currency
-  //   if (!sendData.currency || typeof sendData.currency !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate addressLine1
-  //   if (!sendData.addressLine1 || typeof sendData.addressLine1 !== "string" || sendData.addressLine1.length < 10) {
-  //     return
-  //   }
-  
-  //   // Validate addressLine2 (optional)
-  //   if (sendData.addressLine2 && typeof sendData.addressLine2 !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate country
-  //   if (!sendData.country || typeof sendData.country !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate state
-  //   if (!sendData.state || typeof sendData.state !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate city
-  //   if (!sendData.city || typeof sendData.city !== "string") {
-  //     return
-  //   }
-  
-  //   // Validate postalCode
-  //   if (!sendData.postalCode || typeof Number(sendData.postalCode) !== "number" || sendData.postalCode.toString().length < 4) {
-  //     return
-  //   }
-  
-  //   // Validate services
-  //   if (!Array.isArray(sendData.services) || sendData.services.length === 0) {
-  //     return
-  //   } else {
-  //     sendData.services.forEach((service, index) => {
-  //       if (typeof service.basePrice !== "number") {
-  //         return
-  //       }
-  //     });
-  //   }
-  
-  //   // Validate departments
-  //   if (!Array.isArray(sendData.departments) || sendData.departments.length === 0) {
-  //     toast.error("At least one department is required.");
-  //   } 
-  
-  //   // Validate appointmentSlots
-  //   if (!Array.isArray(sendData.appointmentSlots) || sendData.appointmentSlots.length === 0) {
-  //     toast.error("At least one appointment slot is required.");
-  //   }
-  
-  //   setDisabled(true)
-  // }
 
   const handleSubmit = () => {
     // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
@@ -598,27 +494,22 @@ const CreateBusinessUnit = () => {
           {/* Service Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+              <label className="font-medium mb-1 text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
               </label>
-              <div className="relative w-full">
-                <div
-                  ref={toggleRef}
-                  className={`classic w-full mt-1 ${
-                    selectedOptions.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#8891AA] focus:outline-none rounded-md`}
-                  onClick={toggleDropdown}
-                >
+              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+                <div className={`w-full flex items-center justify-between gap-1 h-full`}>
+
                   {selectedOptions.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
+                  <div className="px-2">
+                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
                   </div>)}
 
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.service}
@@ -631,16 +522,29 @@ const CreateBusinessUnit = () => {
                       </span>
                     ))}
                   </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                        onClick={() => setShowDropdown(prev => !prev)}
+                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                        <img
+                            src={chevronDown}
+                            className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
+                            alt='chevron down'
+                        />
+                    </button>
+                  </div>
                 </div>
 
-                {isDropdownOpen && (
+                {showDropdown && (
                   <div
-                    ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                    // ref={dropdownRef}
+                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {options?.map((option) => (
-                        <li className="p-2" key={option}>
+                      {options?.map((option, index) => (
+                        <li className="p-2" key={index}>
                           <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
                               type="checkbox"
@@ -701,49 +605,24 @@ const CreateBusinessUnit = () => {
           </div>)}
 
           {/* Department Selection */}
-          {/* <div className="flex w-full items-center justify-between gap-[50px]">
-            <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Department(s)
-              </label>
-              <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
-                value={formData.department}
-                onChange={(e) =>
-                  handleDepartmentClick(e.target.value)
-                }
-              >
-                <option value="">Select</option>
-                {departments.map((item, index) => (
-                  <option key={index} value={item.id}>{item.name}</option>
-                ))}
-              </select>
-            </div>
-          </div> */}
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+              <label className="font-medium mb-1 text-[#121C2D] text-sm flex items-center gap-1">
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Department(s)
               </label>
-              <div className="relative w-full">
-                <div
-                  ref={toggleRef}
-                  className={`classic w-full mt-1 ${
-                    selectedDepartments.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#8891AA] focus:outline-none rounded-md`}
-                  onClick={toggleDropdownDept}
-                >
+
+              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+                <div className={`w-full h-full relative gap-1 flex items-center justify-between`}>
                   {selectedDepartments.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
+                  <div className="px-2">
+                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
                   </div>)}
 
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex w-full h-full items-center py-1 px-3 flex-wrap gap-1">
                     {selectedDepartments?.map((option, index) => (
                       <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.name}
@@ -756,16 +635,28 @@ const CreateBusinessUnit = () => {
                       </span>
                     ))}
                   </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                        onClick={() => setShowDropdownDept(prev => !prev)}
+                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                        <img
+                            src={chevronDown}
+                            className={`w-full h-full object-contain transition-all ${showDropdownDept? "rotate-180" : ""}`}
+                            alt='chevron down'
+                        />
+                    </button>
+                  </div>
                 </div>
 
-                {isDropdownOpenDept && (
+                {showDropdownDept && (
                   <div
-                    ref={dropdownRef}
-                    className="absolute top-full left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-10 max-h-52 overflow-y-auto"
+                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
                   >
                     <ul className="list-none p-0 m-0">
-                      {departments?.map((option) => (
-                        <li className="p-2" key={option}>
+                      {departments?.map((option, index) => (
+                        <li className="p-2" key={index}>
                           <label className="flex w-full items-center cursor-pointer capitalize">
                             <input
                               type="checkbox"
@@ -793,34 +684,20 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
-              {/* <select
-                disabled={true}
-                className="w-full classic mt-1 p-2 capitalize disabled:bg-[#F4F4F6] disabled:opacity-100 placeholder:italic text-sm border disabled:border-[#CACDD8] rounded-md focus:outline-none"
-                value={formData.appointment}
-                onChange={(e) =>
-                  handleInputChange("appointment", e.target.value)
-                }
-              >
-                <option value="">Select</option>
-                {appointmentSlots.map((item, index) => (
-                  <option key={index} value={item.id}>{item.name}</option>
-                ))}
-              </select> */}
-              <div className="relative w-full">
+
+              <div className="mt-1 w-full h-[2.25rem] border border-[#CACDD8] bg-[#F4F4F6] relative rounded-md">
                 <div
-                  className={`classic w-full mt-1 bg-[#F4F4F6] cursor-not-allowed ${
-                    selectedAppointments.length===0 ? "p-2" : "p-1 min-h-[42px]"
-                  } border border-[#CACDD8] focus:outline-none rounded-md`}
+                  className={`w-full h-full relative gap-1 flex items-center justify-between`}
                 >
                   {selectedAppointments.length===0 && (
-                  <div>
-                    <p className="text-sm">Select</p>
+                  <div className="px-2">
+                    <p className="text-sm text-[#AEB2C1] font-medium">Select</p>
                   </div>)}
 
-                  <div className="flex w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex w-full h-full items-center flex-wrap px-3 py-1 gap-1">
                     {selectedAppointments?.map((option, index) => (
                       <span
-                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 py-1 rounded-full text-sm flex items-center"
+                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.name}
@@ -832,6 +709,19 @@ const CreateBusinessUnit = () => {
                         </button>
                       </span>
                     ))}
+                  </div>
+
+                  <div className='h-full aspect-square flex items-center justify-center'>
+                    <button
+                      disabled
+                      className='flex items-center justify-center w-5 h-5 aspect-square'
+                    >
+                      <img
+                          src={chevronDown}
+                          className={`w-full h-full object-contain transition-all`}
+                          alt='chevron down'
+                      />
+                    </button>
                   </div>
                 </div>
               </div>

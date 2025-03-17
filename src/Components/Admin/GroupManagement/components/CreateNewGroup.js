@@ -182,20 +182,24 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
             Resources{" "}
           </label>
 
-          <div className="mt-1 w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+          <div className={`mt-1 w-full h-[2.25rem] border relative rounded-md
+            ${resources.length===0? "pointer-events-none bg-[#F4F4F6] border-[#CACDD8]" : "border-[#8891AA] bg-white"}
+          `}>
             <div
               className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
               <div className="px-2 flex items-center justify-start gap-1 h-full py-1">
                 {selectedResources.length===0 &&
-                <p className="text-sm text-[#121C2D] font-medium">
+                <p className={`text-sm font-medium
+                  ${resources.length===0? "text-[#AEB2C1]" : "text-[#121C2D]"}
+                `}>
                   Select
                 </p>}
 
                 {selectedResources.length> 0 && selectedResources?.map((staff, index) => (
                   <div
                     key={index}
-                    className="flex mx-1 h-full items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                    className="flex mx-1 h-full items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] capitalize border border-[#CCE4FF] rounded-full"
                   >
                     {staff.name}
                     <button
