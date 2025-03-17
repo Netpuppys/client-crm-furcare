@@ -9,12 +9,13 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import { useAppContext } from "../../../utils/AppContext";
 import EditStaff from "./component/EditStaff";
 import { z } from "zod";
+import chevronDown from "../../../Assets/icons/chevronDown.png"
 
 const DiagnosticTable = ({ loaded, staffData, setEditStaff }) => {
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
-        <thead className="bg-[#F9F9FA]">
+        <thead className="bg-[#F9F9FA] border-b border-[#E1E3EA]">
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-1">
@@ -55,7 +56,7 @@ const DiagnosticTable = ({ loaded, staffData, setEditStaff }) => {
               className="hover:bg-gray-50"
               onClick={() => setEditStaff(item)}
             >
-              <td className="px-4 py-2 text-sm text-[#121C2D]">{item.name}</td>
+              <td className="px-4 py-2 text-sm capitalize text-[#121C2D]">{item.name}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.id}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">{item.email}</td>
               <td className="px-4 py-2 text-sm text-[#121C2D]">
@@ -115,10 +116,10 @@ const CreateNewForm = ({ fetchStaffData }) => {
   const [roles, setRoles] = useState([]); // Initial roles
   const [inputValue, setInputValue] = useState("");
   const [rolesList, setRolesList] = useState([]);
-  const [inputFocus, setInputFocus] = useState(false);
   const [dropDownList, setDropDownList] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [loader, setLoader] = useState(false);
+  const [ showDropdown, setShowDropdown ] = useState(false)
 
   useEffect(() => {
     if (
@@ -230,7 +231,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
         </label>
         <input
           type="text"
-          className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+          className="mt-1 px-2 h-[2.25rem] border border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Placeholder"
           value={formData.name}
           onChange={(e) => {
@@ -251,7 +252,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
           <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
             <input
               type="email"
-              className="w-full focus:outline-none p-2"
+              className="w-full focus:outline-none h-[2.25rem] px-2"
               placeholder="jdoe@oases.com"
               value={formData.email}
               onChange={(e) => {
@@ -275,7 +276,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
             </div>
             <input
               type="tel"
-              className="w-full focus:outline-none p-2"
+              className="w-full focus:outline-none h-[2.25rem] px-2"
               placeholder="9447010765"
               value={formData.phone}
               onChange={(e) => {
@@ -294,16 +295,20 @@ const CreateNewForm = ({ fetchStaffData }) => {
           <div className="w-1 aspect-square rounded-full bg-red-500"></div>
           Role(s)
         </label>
-        <div className="w-full relative gap-2 h-fit border border-[#8891AA] focus:outline-none rounded-md overflow-hidden">
+        <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
           <div
-            className={`w-full relative gap-2 flex p-2 ${
-              inputFocus && dropDownList.length > 0 ? "border-b" : ""
-            } border-[#8891AA] focus:outline-none`}
+            className={`w-full h-full flex items-center justify-between`}
           >
+          <div className='px-3 flex overflow-x-auto items-center justify-start gap-1 h-full py-1'>
+            {roles.length===0 &&
+            <p className="text-sm text-[#121C2D] font-medium">
+              Select
+            </p>}
+
             {roles?.map((role, index) => (
               <div
                 key={index}
-                className="flex items-center text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full capitalize"
+                className="flex h-full text-sm items-center text-nowrap gap-2 px-3 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full capitalize"
               >
                 {role.name}
                 <button
@@ -314,32 +319,33 @@ const CreateNewForm = ({ fetchStaffData }) => {
                 </button>
               </div>
             ))}
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onFocus={() => setInputFocus(true)}
-              onBlur={() =>
-                setTimeout(() => {
-                  setInputFocus(false);
-                }, 250)
-              }
-              className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
-            />
+            </div>
+            <div className='h-full aspect-square flex items-center justify-center'>
+                <button
+                    onClick={() => setShowDropdown(prev => !prev)}
+                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                >
+                    <img
+                        src={chevronDown}
+                        className='w-full h-full object-contain'
+                        alt='chevron down'
+                    />
+                </button>
+            </div>
           </div>
 
-          {inputFocus && (
-            <div className="w-full h-fit bg-white flex flex-col items-start px-2">
+          {showDropdown && (
+            <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
               {dropDownList.map((item, index) => (
                 <button
                   key={index}
                   onClick={() => handleDropDownClick(item)}
-                  className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
+                  className="h-10 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
                 >
                   <p className="capitalize text-sm">{item.name}</p>
                 </button>
               ))}
-              {dropDownList.length === 0 && (
+              {dropDownList.length === 0 && roles.length===0 && (
                 <div className="border-t w-full last:border-b-0 border-[#E1E3EA] flex items-center justify-center text-sm h-10">
                   Roles Not Found
                 </div>

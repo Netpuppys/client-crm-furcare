@@ -25,7 +25,7 @@ const GroupManagementTable = ({
     return (
         <div className="">
             <table className="min-w-full">
-                <thead className="bg-[#F9F9FA]">
+                <thead className="bg-[#F9F9FA] border-b border-[#E1E3EA]">
                     <tr>
                         <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
                             <div className="flex items-center gap-1">
@@ -72,7 +72,7 @@ const GroupManagementTable = ({
                             onClick={() => handleListClick(item.resources, index)}
                             className="text-[#0263E0] underline"
                         >
-                            list
+                            List
                         </button>
                         {showResourceList===index && 
                         <div className="absolute top-[calc(100%+0.3rem)] z-50 left-1">

@@ -165,9 +165,14 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
               type="text"
               placeholder="Role Name"
               ref={inputRef}
-              className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md  flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+              className="mt-1 focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md  flex items-center px-3 capitalize text-[#121C2D] text-sm"
               value={newRoleData.name}
-              onChange={(e) => handleInputChange(e, "name")}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                  handleInputChange(e, "name");
+                }
+              }}
             />
           </div>
         </div>
@@ -181,7 +186,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
               <select
                 value={newRoleData.accessLevel}
                 onChange={(e) => handleInputChange(e, "accessLevel")}
-                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm"
               >
                 <option value={""}>Select Option</option>
                 {accessLevelOptions.map((item, index) => (
@@ -201,7 +206,7 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
               <select
                 value={newRoleData.staff}
                 onChange={(e) => handleInputChange(e, "staff")}
-                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
+                className="mt-1 classic focus:outline-none border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.6rem] rounded-md flex items-center px-3 capitalize text-[#121C2D] text-sm"
               >
                 <option value={""}>Select Option</option>
                 <option value={true}>Yes</option>
@@ -220,9 +225,6 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
         <div className="px-10 flex flex-col gap-4 items-start">
           {permissions.map((item, index) => (
             <div key={index} className="flex items-center gap-2">
-              {/* <div className='w-[1.75rem] h-[1.125rem] rounded-full bg-[#006DFA] p-[0.125rem] flex items-center justify-end'>
-                                <div className='h-full aspect-square rounded-full bg-white '></div>
-                            </div> */}
               <label className="switch">
                 <input
                   type="checkbox"

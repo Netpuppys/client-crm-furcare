@@ -13,6 +13,7 @@ import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 
 const DiagnosticTable = ({
+  loaded,
   setEditDiagnostic,
   diagnosticIntegrationsData,
 }) => {
@@ -20,7 +21,7 @@ const DiagnosticTable = ({
   return (
     <div className="overflow-x-auto">
       <table className="min-w-full">
-        <thead className="bg-[#F9F9FA]">
+        <thead className="bg-[#F9F9FA] border-b border-[#E1E3EA]">
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-1">
@@ -92,6 +93,10 @@ const DiagnosticTable = ({
           ))}
         </tbody>
       </table>
+      {diagnosticIntegrationsData.length === 0 && loaded &&
+        <div className='w-full h-10 text-sm flex items-center justify-center'>
+          No Diagnostic Integrations Found
+        </div>}
     </div>
   );
 };
@@ -241,7 +246,12 @@ const CreateNewForm = ({
           className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Name"
           value={formData.name}
-          onChange={(e) => handleInputChange("name", e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value;
+            if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+              handleInputChange("name", value);
+            }
+          }}
         />
       </div>
 
@@ -309,10 +319,11 @@ const CreateNewForm = ({
             placeholder="City"
             value={formData.city}
             onChange={(e) => {
-              // Remove numbers from the input value
-              const filteredValue = e.target.value.replace(/[0-9]/g, "");
-              handleInputChange("city", filteredValue);
-            }}          
+              const value = e.target.value;
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                handleInputChange("city", value);
+              }
+            }}   
           />
         </div>
         <div className="w-[47.5%]">
@@ -392,6 +403,7 @@ const DiagnosticIntegrationPage = () => {
 
   const { sidebarExpanded, selectedBranch } = useAppContext()
 
+  const [ loaded, setLoaded ] = useState(false)
   const [ createNew, setCreateNew] = useState(false);
   const [ diagnosticIntegrationsData, setDiagnosticIntegrationsData ] = useState([])
   const [ editDiagnostic, setEditDiagnostic ] = useState(false)
@@ -409,6 +421,7 @@ const DiagnosticIntegrationPage = () => {
         const response = res.data.data.data
         console.log(response)
         setDiagnosticIntegrationsData(response)
+        setLoaded(true)
       })
       .catch(err => {
         console.error(err)
@@ -416,6 +429,8 @@ const DiagnosticIntegrationPage = () => {
   }, [selectedBranch])
 
   const fetchDiagnosticsDetails = () => {
+    setLoaded(false)
+
     axiosInstance
       .get(`/api/v1/diagnostic-integrations?businessBranchId=${selectedBranch?.id}`)
       .then(res => {
@@ -424,6 +439,7 @@ const DiagnosticIntegrationPage = () => {
         setDiagnosticIntegrationsData(response)
         setEditDiagnostic(false)
         setCreateNew(false)
+        setLoaded(true)
       })
       .catch(err => {
         console.error(err)
@@ -459,8 +475,9 @@ const DiagnosticIntegrationPage = () => {
 
       <div className="w-full mt-6">
         <DiagnosticTable 
-          diagnosticIntegrationsData={diagnosticIntegrationsData}
+          loaded={loaded}
           setEditDiagnostic={setEditDiagnostic}
+          diagnosticIntegrationsData={diagnosticIntegrationsData}
         />
       </div>
 

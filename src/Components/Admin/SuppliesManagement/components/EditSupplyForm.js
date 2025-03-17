@@ -213,7 +213,12 @@ const EditSupplyForm = ({ editSupply, fetchSuppliesData }) => {
             className="mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Placeholder"
             value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^[a-zA-Z\s]*$/.test(value)) {
+                handleInputChange("name", value);
+              }
+            }}
           />
         </div>
         <div className="">
@@ -265,7 +270,12 @@ const EditSupplyForm = ({ editSupply, fetchSuppliesData }) => {
               className="w-full mt-1 h-[2.25rem] px-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
               placeholder="Placeholder"
               value={field.name}
-              onChange={(e) => handleFieldChange(index, "name", e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  handleFieldChange(index, "name", value)
+                }
+              }}
             />
           </div>
           <div className="w-full">

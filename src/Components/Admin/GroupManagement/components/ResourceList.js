@@ -26,7 +26,7 @@ const ResourceList = ({
       <p className="text-[#121C2D] font-semibold pb-2">Resources</p>
       <div className="pb-6 flex flex-col items-start justify-start gap-[2px]">
         {selectedResources.map((item, index) => (
-          <p key={index} className="text-[#121C2D] text-sm">
+          <p key={index} className="text-[#121C2D] text-sm capitalize">
             Dr. {item.staffDetails.name}
           </p>
         ))}

@@ -178,7 +178,12 @@ const EditNewRoles = ({
               disabled
               className="mt-1 focus:outline-none disabled:cursor-not-allowed border border-[#8891AA] placeholder:text-[#8891AA] w-full h-[2.25rem] rounded-md bg-[#F4F4F6] flex items-center px-3 capitalize text-[#121C2D] text-sm font-medium"
               value={newRoleData.name}
-              onChange={(e) => handleInputChange(e, "name")}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                  handleInputChange(e, "name");
+                }
+              }}
             />
           </div>
         </div>

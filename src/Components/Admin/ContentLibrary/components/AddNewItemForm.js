@@ -86,7 +86,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-md"
+            className="mt-1 h-[2.25rem] px-2 border border-[#8891AA] disabled:bg-[#F4F4F6] disabled:opacity-100 focus:outline-none rounded-md"
             value={formData.category}
             onChange={(e) => handleInputChange("category", e.target.value)}
             disabled
@@ -102,7 +102,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           <div className="flex mt-1">
             <button
               disabled
-              className={`py-2 px-4 border border-r-[0.5px] disabled:opacity-100 ${
+              className={`h-[2.25rem] px-4 text-sm border disabled:bg-[#F4F4F6] border-r-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Male"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
                   : "border-[#8891AA] text-[#121C2D] rounded-l-md"
@@ -114,7 +114,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
 
             <button
               disabled
-              className={`py-2 px-4 border border-l-[0.5px] disabled:opacity-100 ${
+              className={`h-[2.25rem] px-4 text-sm border disabled:bg-[#F4F4F6] border-l-[0.5px] disabled:opacity-100 ${
                 formData.gender === "Female"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
                   : "border-[#8891AA] text-[#121C2D] rounded-r-md"
@@ -136,7 +136,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </label>
           <select
             disabled
-            className="mt-1 p-2 border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-md classic"
+            className="mt-1 px-2 h-[2.25rem] disabled:bg-[#F4F4F6] border border-[#8891AA] disabled:opacity-100 focus:outline-none rounded-md classic"
             value={formData.animalType}
             onChange={(e) => handleInputChange("animalType", e.target.value)}
           >
@@ -158,18 +158,20 @@ const AddNewItemForm = ({ content, fetchContent }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             Age Range{" "}
           </label>
-          <div className="flex mt-1 items-center rounded-md border border-[#8891AA] overflow-hidden">
+          <div className="flex mt-1 h-[2.25rem] items-center rounded-md border border-[#8891AA] overflow-hidden">
             <input
               disabled
               type="number"
-              className=" p-2 w-20 disabled:opacity-100 focus:outline-none"
+              className="p-2 w-20 h-full disabled:bg-[#F4F4F6] disabled:opacity-100 focus:outline-none"
               min={0}
               value={formData.ageRange}
               onChange={(e) => handleInputChange("ageRange", e.target.value)}
             />
-            <span className="w-full h-full p-2 bg-[#F9F9FA] text-[#606B85] border-l border-[#E1E3EA]">
-              months
-            </span>
+            <div className="bg-[#F9F9FA] h-full flex items-center justify-center w-full border-l border-[#E1E3EA]">
+              <span className="font-semibold text-sm text-[#606B85]">
+                months
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -183,7 +185,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </label>
           <select
             disabled
-            className="classic mt-1 p-2 disabled:opacity-100 border border-[#8891AA] rounded-md focus:outline-none"
+            className="classic mt-1 h-[2.25rem] px-2 disabled:bg-[#F4F4F6] disabled:opacity-100 border border-[#8891AA] rounded-md focus:outline-none"
             value={formData.healthConcerns}
             onChange={(e) =>
               handleInputChange("healthConcerns", e.target.value)
@@ -205,7 +207,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           <div className="flex mt-1">
             <button
               disabled
-              className={`py-2 px-4 disabled:opacity-100 border border-r-[0.5px] ${
+              className={`h-[2.25rem] px-4 text-sm disabled:bg-[#F4F4F6] disabled:opacity-100 border border-r-[0.5px] ${
                 formData.sterilizationStatus === "Intact"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
                   : "border-[#8891AA] text-[#121C2D] rounded-l-md"
@@ -216,7 +218,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
             </button>
             <button
               disabled
-              className={`py-2 px-4 disabled:opacity-100 ${
+              className={`h-[2.25rem] px-4 text-sm disabled:bg-[#F4F4F6] disabled:opacity-100 ${
                 formData.sterilizationStatus === "Sterilized"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-y text-[#006DFA]"
                   : "border-[#8891AA] text-[#121C2D] border"
@@ -229,7 +231,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
             </button>
             <button
               disabled
-              className={`py-2 px-4 disabled:opacity-100 border border-l-[0.5px] ${
+              className={`h-[2.25rem] px-4 text-sm disabled:bg-[#F4F4F6] disabled:opacity-100 border border-l-[0.5px] ${
                 formData.sterilizationStatus === "Unsure"
                   ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
                   : "border-[#8891AA] text-[#121C2D] rounded-r-md"

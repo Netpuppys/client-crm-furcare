@@ -128,7 +128,12 @@ const EditDiagnostic = ({
             className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Name"
             value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                handleInputChange("name", value);
+              }
+            }}
           />
         </div>
   
@@ -196,10 +201,11 @@ const EditDiagnostic = ({
               placeholder="City"
               value={formData.city}
               onChange={(e) => {
-                // Remove numbers from the input value
-                const filteredValue = e.target.value.replace(/[0-9]/g, "");
-                handleInputChange("city", filteredValue);
-              }}          
+                const value = e.target.value;
+                if (/^[a-zA-Z\s]*$/.test(value)) {
+                  handleInputChange("city", value);
+                }
+              }}     
             />
           </div>
           <div className="w-[47.5%]">

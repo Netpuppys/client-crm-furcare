@@ -32,7 +32,7 @@ const ReportTable = ({
   return (
     <div className="">
       <table className="min-w-full">
-        <thead className="bg-[#F9F9FA]">
+        <thead className="bg-[#F9F9FA] border-b border-[#E1E3EA]">
           <tr>
             <th className="px-4 py-3 text-left text-sm font-semibold text-[#606B85]">
               <div className="flex items-center gap-1">

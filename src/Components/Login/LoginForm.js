@@ -58,6 +58,7 @@ const LoginForm = () => {
         console.log(res);
         localStorage.setItem("access", res.data.data.token);
         localStorage.setItem("name", res.data.data.name);
+        localStorage.setItem("businessUnitId", res.data.data.businessUnitId)
         navigate("/admin/branch-units");
       })
       .catch((err) => {

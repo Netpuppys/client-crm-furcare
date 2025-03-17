@@ -35,7 +35,7 @@ const TableComponent = ({
     <div className="overflow-x-auto pb-20">
       <table className="min-w-full">
         <thead>
-          <tr className="bg-gray-100">
+          <tr className="bg-[#F9F9FA]">
             <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-[#E1E3EA]">
               <div className="flex items-center gap-1">
                 <p>Topic</p>

@@ -72,16 +72,6 @@ const EditBusinessUnit = () => {
     appointment: "675b049dc90ac3a44472a525",
   });
 
-  // useEffect(() => {
-  //   const initial = businessUnitData?.services.map((item) => ({
-  //     service: item.serviceDetails.name,
-  //     basePrice: item.basePrice,
-  //     serviceId: item.serviceId
-  //   }))
-
-  //   setChangedService(initial)
-  // }, [businessUnitData])
-
   useEffect(() => {
     axiosInstance
       .get("/api/v1/services")
@@ -114,6 +104,7 @@ const EditBusinessUnit = () => {
       "country",
       "postalCode",
     ];
+
     const checkFromdata = requiredFields.every(
       (field) => formData[field].trim() !== ""
     );
@@ -253,8 +244,6 @@ const EditBusinessUnit = () => {
   
       sessionStorage.removeItem("selectedBranch")
       setSelectedBranch(null)
-      // setAlert("All branch units updated successfully");
-      // navigate("/admin/branch-units");
     } catch (error) {
       console.error("Error updating branch units:", error);
     }
@@ -271,7 +260,7 @@ const EditBusinessUnit = () => {
       .then((response) => {
         console.log("Success:", response.data);
         setAlert("Branch unit updated successfully");
-        navigate("/admin/branch-units")
+        navigate("/admin/branch-units", { state: { branchEdited: true }})
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -325,7 +314,7 @@ const EditBusinessUnit = () => {
                   className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
                     formData.active
                       ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
-                      : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
+                      : "border-[#8891AA] text-[#121C2D] rounded-l-md"
                   }`}
                   onClick={() => handleInputChange("active", true)}
                 >
@@ -336,7 +325,7 @@ const EditBusinessUnit = () => {
                   className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
                     !formData.active
                       ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
-                      : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
+                      : "border-[#8891AA] text-[#121C2D] rounded-r-md"
                   }`}
                   onClick={() => handleInputChange("active", false)}
                 >
@@ -355,7 +344,12 @@ const EditBusinessUnit = () => {
                 className="w-full mt-1 p-2 border capitalize placeholder:italic text-sm border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Placeholder"
                 value={formData.unitName}
-                onChange={(e) => handleInputChange("unitName", e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                    handleInputChange("unitName", value);
+                  }
+                }}
               />
             </div>
 
@@ -471,9 +465,10 @@ const EditBusinessUnit = () => {
                 placeholder="Malad"
                 value={formData.city}
                 onChange={(e) => {
-                  // Remove numbers from the input value
-                  const filteredValue = e.target.value.replace(/[0-9]/g, "");
-                  handleInputChange("city", filteredValue);
+                  const value = e.target.value;
+                  if (/^[a-zA-Z\s]*$/.test(value)) {
+                    handleInputChange("city", value);
+                  }
                 }}
               />
             </div>
@@ -522,9 +517,20 @@ const EditBusinessUnit = () => {
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Postal Code"
                 value={formData.postalCode}
-                onChange={(e) =>
-                  handleInputChange("postalCode", e.target.value)
-                }
+                onChange={e => {
+                  const value = e.target.value;
+                  // Allow only numbers and a single decimal point
+                  const formattedValue = value
+                    .replace(/[^0-9.]/g, "")
+                    .replace(/(\..*?)\..*/g, "$1");
+
+                  if (
+                    /^\d*$/.test(formattedValue) &&
+                    formattedValue.length <= 6
+                  ) {
+                    handleInputChange("postalCode", formattedValue);
+                  }
+                }}
               />
             </div>
           </div>
@@ -643,29 +649,6 @@ const EditBusinessUnit = () => {
           )}
 
           {/* Department Selection */}
-          {/* <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Department(s)
-              </label>
-              <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
-                value={formData.department}
-                onChange={(e) =>
-                  handleInputChange("department", e.target.value)
-                }
-              >
-                <option value="">Select</option>
-                {departments.map((item, index) => (
-                  <option key={index} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div> */}
-
           <div className="flex w-full items-center justify-between gap-[50px]">
             <div className="w-[calc(50%-25px)]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
@@ -738,20 +721,6 @@ const EditBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Appointment Slot(s)
               </label>
-              {/* <select
-                className="w-full classic mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] rounded-md focus:outline-none"
-                value={formData.appointment}
-                onChange={(e) =>
-                  handleInputChange("appointment", e.target.value)
-                }
-              >
-                <option value="">Select</option>
-                {appointmentSlots.map((item, index) => (
-                  <option key={index} value={item.id}>
-                    {item.name}
-                  </option>
-                ))}
-              </select> */}
               <div className="relative w-full">
                 <div
                   className={`classic w-full mt-1 bg-[#F4F4F6] cursor-not-allowed ${

@@ -17,10 +17,10 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
   const [initialResources, setInitialResources] = useState([]);
   const [dropDownList, setDropDownList] = useState([]);
   const [inputValue, setInputValue] = useState("");
-  const [inputFocus, setInputFocus] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [showError, setShowError] = useState(false);
   const [active, setActive] = useState(editGroup.active);
+  const [ showDropdown, setShowDropdown ] = useState(false)
   const [formData, setFormData] = useState({
     name: editGroup.name,
     description: editGroup.description,
@@ -179,8 +179,6 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
       (id) => !initialResourcesId.includes(id)
     );
 
-    console.log(removeResources, addResources);
-
     const data = {
       name: formData.name,
       description: formData.description,
@@ -257,7 +255,12 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
             } focus:outline-none rounded-md`}
             placeholder="Placeholder"
             value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                handleInputChange("name", value);
+              }
+            }}
           />
 
           {showError && (
@@ -279,46 +282,47 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
             Resources{" "}
           </label>
 
-          <div className="mt-1 w-full relative gap-2 h-fit min-h-10 border border-[#8891AA] focus:outline-none rounded-md overflow-">
+          <div className="mt-1 w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
             <div
-              className={`w-full min-h-10 relative gap-2 flex px-2 py-1 focus:outline-none`}
+              className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
-              {selectedResources?.map((staff, index) => (
-                <div
-                  key={index}
-                  className="flex items-center text-nowrap gap-2 px-3 h-8 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
-                >
-                  {staff.name}
-                  <button
-                    onClick={() => removeRole(staff.id)}
-                    className="text-[#606B85] text-lg"
+              <div className="px-2 flex items-center justify-start gap-1 h-full py-1">
+                {selectedResources.length===0 &&
+                <p className="text-sm">
+                  Select
+                </p>}
+
+                {selectedResources.length> 0 && selectedResources?.map((staff, index) => (
+                  <div
+                    key={index}
+                    className="flex mx-1 h-full items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                   >
-                    <IoClose />
-                  </button>
-                </div>
-              ))}
-
-              <div className="absolute w-full top-0 pointer-events-none left-0 h-10 flex items-center justify-between px-2">
-                <p className="text-sm text-[#121C2D] font-medium">
-                  {selectedResources.length === 0 && "Select"}
-                </p>
-
-                <img src={chevronDown} className="h-5" alt="" />
+                    {staff.name}
+                    <button
+                      onClick={() => removeRole(staff.id)}
+                      className="text-[#606B85] text-lg"
+                    >
+                      <IoClose />
+                    </button>
+                  </div>
+                ))}
               </div>
 
-              <select
-                type="text"
-                onFocus={() => setInputFocus(true)}
-                onBlur={() =>
-                  setTimeout(() => {
-                    setInputFocus(false);
-                  }, 150)
-                }
-                className="flex-grow w-full placeholder:italic border-none opacity-0 focus:ring-0 capitalize focus:outline-none text-sm"
-              ></select>
+              <div className='h-full aspect-square flex items-center justify-center'>
+                <button
+                    onClick={() => setShowDropdown(prev => !prev)}
+                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                >
+                    <img
+                        src={chevronDown}
+                        className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
+                        alt='chevron down'
+                    />
+                </button>
+              </div>
             </div>
 
-            {inputFocus && (
+            {showDropdown && (
               <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white flex flex-col items-start px-2">
                 {dropDownList.map((item, index) => (
                   <button
@@ -329,6 +333,13 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
                     <p className="capitalize text-sm">{item.name}</p>
                   </button>
                 ))}
+                {dropDownList.length === 0 && selectedResources.length===0 && (
+                  <div className="h-10 w-full flex items-center justify-center border-b border-[#8891AA] last:border-b-0">
+                    <p className="capitalize text-sm font-medium">
+                      No Active Staff Found
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </div>

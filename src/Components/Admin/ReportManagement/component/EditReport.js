@@ -129,7 +129,12 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
             className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Appointment Name"
             value={formData.name}
-            onChange={(e) => handleInputChange("name", e.target.value)}
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                handleInputChange("name", value);
+              }
+            }}
           />
         </div>
         <div className="flex flex-col w-full">

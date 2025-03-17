@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import "react-quill/dist/quill.snow.css"; // React Quill styles
+import chevronDown from "../../../../Assets/icons/chevronDown.png"
 
 const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   const dropDownList = ["english", "hindi"];
@@ -26,9 +27,8 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       body: "",
     },
   ]);
-  const [inputValue, setInputValue] = useState("");
-  const [inputFocus, setInputFocus] = useState(false);
-  const [disabled, setDisabled] = useState(true);
+  const [ disabled, setDisabled] = useState(true);
+  const [ showDropdown, setShowDropdown ] = useState(false)
 
   const removeLanguage = (langToRemove) => {
     setLanguages(languages.filter((lang) => lang !== langToRemove));
@@ -61,7 +61,6 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
         body: "",
       },
     ]);
-    setInputValue("");
   };
 
   const handleInputChange = (key, value) => {
@@ -73,16 +72,6 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       type: formData.type,
       name: formData.name,
       body: documents,
-      // [
-      //     {
-      //         language: "english",
-      //         body: documents[0].body
-      //     },
-      //     {
-      //         language: "hindi",
-      //         body: "प्रिय {patientName}, आपकी नियुक्ति {appointmentDate} को {appointmentTime} बजे निर्धारित है। कृपया 15 मिनट पहले पहुंचें।"
-      //     }
-      // ],
       businessBranchId: selectedBranch.id,
     };
 
@@ -141,8 +130,13 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
             type="text"
             value={formData.name}
             placeholder="Placeholder"
-            onChange={(e) => handleInputChange("name", e.target.value)}
             className="mt-1 p-2 border capitalize border-[#8891AA] placeholder:italic focus:outline-none rounded-md classic"
+            onChange={(e) => {
+              const value = e.target.value;
+              if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                handleInputChange("name", value);
+              }
+            }}
           />
         </div>
       </div>
@@ -154,56 +148,57 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             {"Language(s)"}{" "}
           </label>
-          <div className="mt-1 w-full relative gap-2 h-fit border border-[#8891AA] focus:outline-none rounded-md overflow-hidden">
-            <div
-              className={`w-full relative gap-2 flex p-2 ${
-                inputFocus && dropDownList.length > 0 ? "border-b" : ""
-              } border-[#8891AA] focus:outline-none`}
-            >
-              {languages?.map((lang, index) => (
-                <div
-                  key={index}
-                  className="flex items-center capitalize text-nowrap gap-2 px-3 py-1 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
-                >
-                  {lang}
-                  <button
-                    onClick={() => removeLanguage(lang)}
-                    className="text-[#606B85] hover:text-blue-900 focus:outline-none"
-                  >
-                    ✕
-                  </button>
-                </div>
-              ))}
 
-              <input
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onFocus={() => setInputFocus(true)}
-                onBlur={() =>
-                  setTimeout(() => {
-                    setInputFocus(false);
-                  }, 250)
-                }
-                className="flex-grow w-full border-none focus:ring-0 focus:outline-none text-sm"
-              />
+          <div className="mt-1 w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+            <div
+              className={`w-full h-full relative gap-1 flex items-center justify-between`}
+            >
+              <div className="px-3 flex items-center justify-start gap-1 h-full py-1">
+                {languages?.map((lang, index) => (
+                  <div
+                    key={index}
+                    className="flex capitalize text-sm items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
+                  >
+                    {lang}
+                    <button
+                      onClick={() => removeLanguage(lang)}
+                      className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div className='h-full aspect-square flex items-center justify-center'>
+                <button
+                    onClick={() => setShowDropdown(prev => !prev)}
+                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                >
+                    <img
+                        src={chevronDown}
+                        className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
+                        alt='chevron down'
+                    />
+                </button>
+              </div>
             </div>
 
-            {inputFocus && dropDownList.length > 0 && (
-              <div className="w-full h-fit bg-white flex flex-col items-start px-2">
-                {dropDownList
-                  .filter((lang) => !languages.includes(lang))
-                  .map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDropDownClick(item)}
-                      className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                    >
-                      <p className="capitalize text-sm">{item}</p>
-                    </button>
-                  ))}
-              </div>
-            )}
+            {showDropdown && dropDownList.length > 0 && (
+            <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
+              {dropDownList
+                .filter((lang) => !languages.includes(lang))
+                .map((item, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleDropDownClick(item)}
+                    className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
+                  >
+                    <p className="capitalize text-sm">
+                      {item}
+                    </p>
+                  </button>
+                ))}
+            </div>)}
           </div>
         </div>
       </div>

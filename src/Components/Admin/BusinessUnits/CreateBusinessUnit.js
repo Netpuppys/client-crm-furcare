@@ -4,7 +4,6 @@ import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
-import { toast } from "react-toastify";
 import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 
@@ -173,82 +172,82 @@ const CreateBusinessUnit = () => {
     };
   }, []);
 
-  function validateSendData(sendData) {
-    const errors = [];
+  // function validateSendData(sendData) {
+  //   setDisabled(true)
+
+  //   // Validate name
+  //   if (!sendData.name || typeof sendData.name !== "string") {
+  //     return
+  //   }
   
-    // Validate name
-    if (!sendData.name || typeof sendData.name !== "string") {
-      toast.error("Unit name is required.");
-    }
+  //   // Validate type
+  //   if (!sendData.type || typeof sendData.type !== "string") {
+  //     return
+  //   }
   
-    // Validate type
-    if (!sendData.type || typeof sendData.type !== "string") {
-      toast.error("Branch type is required.");
-    }
+  //   // Validate practice
+  //   if (!sendData.practice || typeof sendData.practice !== "string") {
+  //     return
+  //   }
   
-    // Validate practice
-    if (!sendData.practice || typeof sendData.practice !== "string") {
-      toast.error("Practice type is required.");
-    }
+  //   // Validate currency
+  //   if (!sendData.currency || typeof sendData.currency !== "string") {
+  //     return
+  //   }
   
-    // Validate currency
-    if (!sendData.currency || typeof sendData.currency !== "string") {
-      toast.error("Currency is required.");
-    }
+  //   // Validate addressLine1
+  //   if (!sendData.addressLine1 || typeof sendData.addressLine1 !== "string" || sendData.addressLine1.length < 10) {
+  //     return
+  //   }
   
-    // Validate addressLine1
-    if (!sendData.addressLine1 || typeof sendData.addressLine1 !== "string" || sendData.addressLine1.length < 10) {
-      toast.error("Address Line 1 is required, and at least 10 characters long.");
-    }
+  //   // Validate addressLine2 (optional)
+  //   if (sendData.addressLine2 && typeof sendData.addressLine2 !== "string") {
+  //     return
+  //   }
   
-    // Validate addressLine2 (optional)
-    if (sendData.addressLine2 && typeof sendData.addressLine2 !== "string") {
-      toast.error("Address Line 2 if provided.");
-    }
+  //   // Validate country
+  //   if (!sendData.country || typeof sendData.country !== "string") {
+  //     return
+  //   }
   
-    // Validate country
-    if (!sendData.country || typeof sendData.country !== "string") {
-      toast.error("Country is required.");
-    }
+  //   // Validate state
+  //   if (!sendData.state || typeof sendData.state !== "string") {
+  //     return
+  //   }
   
-    // Validate state
-    if (!sendData.state || typeof sendData.state !== "string") {
-      toast.error("State is required.");
-    }
+  //   // Validate city
+  //   if (!sendData.city || typeof sendData.city !== "string") {
+  //     return
+  //   }
   
-    // Validate city
-    if (!sendData.city || typeof sendData.city !== "string") {
-      toast.error("City is required.");
-    }
+  //   // Validate postalCode
+  //   if (!sendData.postalCode || typeof Number(sendData.postalCode) !== "number" || sendData.postalCode.toString().length < 4) {
+  //     return
+  //   }
   
-    // Validate postalCode
-    if (!sendData.postalCode || typeof Number(sendData.postalCode) !== "number" || sendData.postalCode.toString().length < 4) {
-      toast.error("Postal Code is required, must be a number, and at least 4 digits long.");
-    }
+  //   // Validate services
+  //   if (!Array.isArray(sendData.services) || sendData.services.length === 0) {
+  //     return
+  //   } else {
+  //     sendData.services.forEach((service, index) => {
+  //       if (typeof service.basePrice !== "number") {
+  //         return
+  //       }
+  //     });
+  //   }
   
-    // Validate services
-    if (!Array.isArray(sendData.services) || sendData.services.length === 0) {
-      toast.error("At least one service is required.");
-    } else {
-      sendData.services.forEach((service, index) => {
-        if (typeof service.basePrice !== "number") {
-          toast.error(`Base Price must be a number.`);
-        }
-      });
-    }
+  //   // Validate departments
+  //   if (!Array.isArray(sendData.departments) || sendData.departments.length === 0) {
+  //     toast.error("At least one department is required.");
+  //   } 
   
-    // Validate departments
-    if (!Array.isArray(sendData.departments) || sendData.departments.length === 0) {
-      toast.error("At least one department is required.");
-    } 
+  //   // Validate appointmentSlots
+  //   if (!Array.isArray(sendData.appointmentSlots) || sendData.appointmentSlots.length === 0) {
+  //     toast.error("At least one appointment slot is required.");
+  //   }
   
-    // Validate appointmentSlots
-    if (!Array.isArray(sendData.appointmentSlots) || sendData.appointmentSlots.length === 0) {
-      toast.error("At least one appointment slot is required.");
-    }
-  
-    return errors;
-  }
+  //   setDisabled(true)
+  // }
 
   const handleSubmit = () => {
     // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
@@ -286,7 +285,7 @@ const CreateBusinessUnit = () => {
       ],
     };
 
-    validateSendData(sendData)
+    // validateSendData(sendData)
     
     axiosInstance.post("/api/v1/business-branches", sendData)
       .then(response => {
@@ -389,7 +388,12 @@ const CreateBusinessUnit = () => {
                 className="w-full mt-1 p-2 capitalize border placeholder:italic text-sm border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Placeholder"
                 value={formData.unitName}
-                onChange={(e) => handleInputChange("unitName", e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (/^[a-zA-Z0-9\s]*$/.test(value)) {
+                    handleInputChange("unitName", value);
+                  }
+                }}
               />
             </div>
 
@@ -515,10 +519,11 @@ const CreateBusinessUnit = () => {
                 placeholder="City"
                 value={formData.city}
                 onChange={(e) => {
-                  // Remove numbers from the input value
-                  const filteredValue = e.target.value.replace(/[0-9]/g, "");
-                  handleInputChange("city", filteredValue);
-                }} 
+                  const value = e.target.value;
+                  if (/^[a-zA-Z\s]*$/.test(value)) {
+                    handleInputChange("city", value);
+                  }
+                }}
               />
             </div>
             {/* state selection */}
@@ -572,15 +577,19 @@ const CreateBusinessUnit = () => {
                 className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Postal Code"
                 value={formData.postalCode}
-                // onChange={(e) =>
-                //   handleInputChange("postalCode", e.target.value)
-                // }
                 onChange={e => {
                   const value = e.target.value;
                   // Allow only numbers and a single decimal point
-                  const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-                  // Limit to 2 decimal places
-                  handleInputChange("postalCode", formattedValue);
+                  const formattedValue = value
+                    .replace(/[^0-9.]/g, "")
+                    .replace(/(\..*?)\..*/g, "$1");
+
+                  if (
+                    /^\d*$/.test(formattedValue) &&
+                    formattedValue.length <= 6
+                  ) {
+                    handleInputChange("postalCode", formattedValue);
+                  }
                 }}
               />
             </div>

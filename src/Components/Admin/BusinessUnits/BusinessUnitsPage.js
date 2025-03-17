@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import OtherInfo from "./OtherInfo";
 import BlueButton from "../../../ui/BlueButton";
 import axiosInstance from "../../../utils/AxiosInstance";
@@ -60,7 +60,7 @@ const Card = ({
           <p className="text-wrap">{address}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
-          <p className="">Type:</p>
+          <p className="">Business Type:</p>
           <p className="capitalize">{type}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
@@ -81,12 +81,26 @@ const BusinessUnitsPage = () => {
 
   const { selectedBranch, setSelectedBranch } = useAppContext()
 
-  const [ businessBranchesData, setBusinessBranchesData ] = useState()
+  const [ businessBranchesData, setBusinessBranchesData ] = useState([])
   const [ selectedBusiness, setSelectedBusiness ] = useState(0)
 
+  const location = useLocation();
+
+  const branchEdited = location.state?.branchEdited? true : false;
+
   useEffect(() => {
+    if (branchEdited && businessBranchesData.length>0) {
+      setSelectedBusiness(0);
+      setSelectedBranch(businessBranchesData[0]);
+      sessionStorage.setItem('selectedBranch', JSON.stringify(businessBranchesData[0]))
+    }
+  }, [businessBranchesData, branchEdited])
+
+  useEffect(() => {
+    const businessUnitId = localStorage.getItem("businessUnitId")
+
     axiosInstance
-      .get("/api/v1/business-branches")
+      .get(`/api/v1/business-branches?businessUnitId=${businessUnitId}`)
       .then(res => {
         setBusinessBranchesData(res.data.data.data)
       })
@@ -99,15 +113,19 @@ const BusinessUnitsPage = () => {
     navigate("/admin/branch-units")
   }
 
-  const navigateToCreate = () => {
-    navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });
-  };
-
   const handleCardClick = (item, index) => {
+    if (item.active === false) {
+      return
+    }
+
     setSelectedBusiness(index);
     setSelectedBranch(item);
     sessionStorage.setItem('selectedBranch', JSON.stringify(item))
   }
+
+  const navigateToCreate = () => {
+    navigate("/admin/branch-units/create-business-unit", { state: { businessUnitId: businessBranchesData[selectedBusiness].businessUnitId } });
+  };
 
   return (
     <div className="w-full min-h-full px-[36px] py-4 overflow-y-auto">
@@ -131,8 +149,12 @@ const BusinessUnitsPage = () => {
       </div>
 
       <div className="flex items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
-        {businessBranchesData?.map((item, index) => (
-          <div className="max-w-[calc(33.333%-4.16666rem)]" onClick={() => handleCardClick(item, index)} key={index}>
+        {businessBranchesData?.sort((a, b) => b.active - a.active).map((item, index) => (
+          <div 
+            key={index}
+            onClick={() => handleCardClick(item, index)} 
+            className={`max-w-[calc(33.333%-4.16666rem)] ${item.active===false? "" : "cursor-pointer"}`}
+          >
             <Card
               active={item.active}
               branch={item.name}
