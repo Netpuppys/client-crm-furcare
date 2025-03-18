@@ -3,7 +3,7 @@ import smallLogo from "../Assets/logo/smallLogo.png";
 import sidebarItems from "../data/sidebarItems";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import closeIcon from "../Assets/icons/sidebar/close.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppContext } from "../utils/AppContext";
 
 const NestedComponents = ({ 
@@ -143,12 +143,12 @@ const SidebarComp = ({
         fixed top-0 h-screen bg-[#1F304C] border-r-2 border-[#394762]`}
     >
       <div className="w-full h-full relative">
-        <div className="w-full h-[4.1875rem] border-b-2 border-[#394762] flex items-center justify-start gap-4 px-8">
+        <Link to={"/onboarding"} className="w-full h-[4.1875rem] border-b-2 border-[#394762] flex items-center justify-start gap-4 px-8">
           <img src={smallLogo} className="w-6" alt="" />
           {sidebarExpanded && (
             <p className="font-semibold text-white">furcare</p>
           )}
-        </div>
+        </Link>
 
         <div className="w-full px-2 hideScrollbar py-10 flex h-[calc(100%-4.1875rem)] overflow-y-auto flex-col items-start justify-start gap-3">
           {sidebarItems.map((item, id) => (

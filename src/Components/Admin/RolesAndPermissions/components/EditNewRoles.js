@@ -5,7 +5,16 @@ import { useAppContext } from "../../../../utils/AppContext";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-const accessLevelOptions = ["businessUnit", "businessBranch"];
+const accessLevelOptions = [
+  {
+    serverName: "businessUnit",
+    name: "Business Unit"
+  },
+  {
+    serverName: "businessBranch",
+    name: "Business Branch"
+  }
+];
 
 const permissions = [
   {
@@ -65,7 +74,7 @@ const EditNewRoles = ({
   const [newRoleData, setNewRoleData] = useState({
     name: selectedRole?.name,
     permissions: selectedRole?.permissions,
-    accessLevel: selectedRole?.accessLevel,
+    accessLevel: selectedRole.accessLevel,
     staff: selectedRole?.isStaff,
   });
 
@@ -73,7 +82,7 @@ const EditNewRoles = ({
     const initialData = {
       name: selectedRole?.name,
       permissions: selectedRole?.permissions,
-      accessLevel: selectedRole?.accessLevel,
+      accessLevel: selectedRole.accessLevel,
       staff: selectedRole?.isStaff,
     };
 
@@ -194,6 +203,7 @@ const EditNewRoles = ({
                 <div className="w-[4px] h-[4px] rounded-full bg-[#EB5656]"></div>
                 Access Level
               </label>
+              {console.log(selectedRole)}
               <select
                 value={newRoleData.accessLevel}
                 onChange={(e) => handleInputChange(e, "accessLevel")}
@@ -201,8 +211,8 @@ const EditNewRoles = ({
               >
                 <option value={""}>Select Option</option>
                 {accessLevelOptions.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
+                  <option key={index} value={item.serverName}>
+                    {item.name}
                   </option>
                 ))}
               </select>

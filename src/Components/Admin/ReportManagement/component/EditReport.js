@@ -7,6 +7,8 @@ import BlueButton from "../../../../ui/BlueButton";
 import ActiveButtons from "../../../../ui/ActiveButtons";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import { IoClose } from "react-icons/io5";
+import PreviewGraph from "./PreviewGraph";
 
 const labelFields = [
   "Scheduled Appointments",
@@ -16,6 +18,7 @@ const labelFields = [
   "Doctors",
 ];
 const frequencyArray = ["day", "week", "month"];
+
 const appointmentTypes = [
   "appointments",
   "admin",
@@ -26,16 +29,40 @@ const appointmentTypes = [
   "leads",
 ];
 
+const ReportGraph = ({ setShowReport }) => {
+
+  return (
+    <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50 bg-[#606B85] bg-opacity-50'>
+      <div className="max-w-[55.2rem] w-full h-full p-8 max-h-[25rem] bg-white rounded-lg border border-[#E1E3EA] shadow-[0px_4px_16px_0px_rgba(18,_28,_45,_0.20)]">
+        <div className='w-full mb-8 flex items-center justify-between'>
+            <p className='text-xl font-semibold text-[#121C2D] tracking-[-0.025rem] '>
+                Preview Report
+            </p>
+            <button 
+                onClick={() => setShowReport(false)}
+                className='w-[1.75rem] aspect-square flex items-center text-3xl text-[#606B85]'>
+                <IoClose />
+            </button>
+        </div>
+
+
+        <PreviewGraph />
+      </div>
+    </div>
+  )
+}
+
 const EditReport = ({ selectedReport, fetchAllReports }) => {
   const { branchDetails } = useAppContext();
 
   const { setAlert } = useAlertContext()
 
-  const [showLabelOptions, setShowLabelOptions] = useState(false);
-  const [selectedLabelOptions, setSelectedLabelOptions] = useState(selectedReport.fields);
-  const [disabled, setDisabled] = useState(true);
-  const [active, setActive] = useState(selectedReport.active);
-  const [formData, setFormData] = useState({
+  const [ showReport, setShowReport ] = useState(false)
+  const [ showLabelOptions, setShowLabelOptions] = useState(false);
+  const [ selectedLabelOptions, setSelectedLabelOptions] = useState(selectedReport.fields);
+  const [ disabled, setDisabled] = useState(true);
+  const [ active, setActive] = useState(selectedReport.active);
+  const [ formData, setFormData] = useState({
     name: selectedReport.name,
     type: selectedReport.type,
     labelFields: selectedReport.fields,
@@ -117,6 +144,8 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
 
   return (
     <div className="p-6 flex h-full flex-col justify-start items-start mx-auto bg-white rounded-md space-y-6">
+      {showReport && <ReportGraph setShowReport={setShowReport} />}
+
       <div className="flex gap-10 w-full">
         {/* Name Input */}
         <div className="flex flex-col w-full">
@@ -285,40 +314,17 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
         </div>
       </div>
 
-      {/* <div className=''>
-            <p className='text-sm font-semibold text-[#121C2D] flex items-center justify-start gap-1'>
-                <span className='w-[4px] h-[4px] rounded-full bg-[#EB5656]'></span>
-                Status
-            </p>
-            <div className="flex mt-1 h-[2.25rem]">
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-r-[0.5px] ${
-                        active===true
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-r-[#8891AA] text-[#006DFA]"
-                        : "border-[#8891AA] text-[#121C2D] rounded-l-lg"
-                    }`}
-                    onClick={() => setActive(true)}
-                >
-                    Active
-                </button>
-
-                <button
-                    className={`h-full flex items-center justify-center px-4 border border-l-[0.5px] ${
-                        active===false
-                        ? "bg-[#F4F9FF] border-[#006DFA] border-l-[#8891AA] text-[#006DFA]"
-                        : "border-[#8891AA] text-[#121C2D] rounded-r-lg"
-                    }`}
-                    onClick={() => setActive(false)}
-                >
-                    Inactive 
-                </button>
-            </div>
-        </div> */}
-
       <ActiveButtons active={active} setActive={setActive} />
 
       {/* Submit Button */}
-      <div className="h-full w-full items-end flex justify-end ">
+      <div className="h-full w-full items-end flex justify-end gap-[20px]">
+        <button
+          onClick={() => setShowReport(true)}
+          className="bg-transparent px-3 border disabled:border-opacity-50 border-[#CACDD8] disabled:text-[#AEB2C1] disabled:bg-transparent h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center"
+        >
+          <p className="">Preview</p>
+        </button>
+
         <BlueButton
           text={"Save"}
           onClickHandler={handleSubmit}

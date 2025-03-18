@@ -5,7 +5,16 @@ import { useAppContext } from "../../../../utils/AppContext";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAlertContext } from "../../../../utils/AlertContext";
 
-const accessLevelOptions = ["businessUnit", "businessBranch"];
+const accessLevelOptions = [
+  {
+    serverName: "businessUnit",
+    name: "Business Unit"
+  },
+  {
+    serverName: "businessBranch",
+    name: "Business Branch"
+  }
+];
 
 const permissions = [
   {
@@ -190,8 +199,8 @@ const CreateNewRole = ({ setAddNewModal, fetchRolesList }) => {
               >
                 <option value={""}>Select Option</option>
                 {accessLevelOptions.map((item, index) => (
-                  <option key={index} value={item}>
-                    {item}
+                  <option key={index} value={item.serverName}>
+                    {item.name}
                   </option>
                 ))}
               </select>

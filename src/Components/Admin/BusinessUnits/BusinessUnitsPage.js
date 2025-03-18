@@ -60,7 +60,7 @@ const Card = ({
           <p className="text-wrap">{address}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">
-          <p className="">Business Type:</p>
+          <p className="">Branch Type:</p>
           <p className="capitalize">{type}</p>
         </div>
         <div className="flex w-full items-start gap-1 capitalize">

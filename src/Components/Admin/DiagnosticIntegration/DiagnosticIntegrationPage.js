@@ -109,6 +109,7 @@ const CreateNewForm = ({
   const { selectedBranch } = useAppContext()
 
   const autocompleteServiceRef = useRef(null);
+  const placesServiceRef = useRef(null);
 
   const [ suggestions, setSuggestions ] = useState([]);
   const [ disabled, setDisabled ] = useState(true)
@@ -123,15 +124,6 @@ const CreateNewForm = ({
   });
 
   useEffect(() => {
-    // console.log(formData, editDiagnostic)
-
-    // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
-    // console.log(formData.name.replace(/\s/g, "") === editDiagnostic.name.replace(/\s/g, ""))
-    // console.log(formData.address2.replace(/\s/g, "") === editDiagnostic.addressLine2.replace(/\s/g, ""))
-    // console.log(formData.city.replace(/\s/g, "") === editDiagnostic.city.replace(/\s/g, ""))
-    // console.log(formData.state.replace(/\s/g, "") === editDiagnostic.state.replace(/\s/g, ""))
-    // console.log(formData.country.replace(/\s/g, "") === editDiagnostic.country.replace(/\s/g, ""))
-    // console.log(Number(formData.postalCode) === Number(editDiagnostic.postalCode))
 
     if (
         (formData.name?.replace(/\s/g, "") === "") &&
@@ -226,12 +218,77 @@ const CreateNewForm = ({
     } else {
       setSuggestions([]);
     }
-  };  
+  }; 
 
   const handleSuggestionClick = (place) => {
-    handleInputChange("address1", place.description);
+    // handleInputChange("address1", place.description);
     setSuggestions([]);
-    console.log(place); // Pass the selected address back to the parent component
+
+    // Initialize Places Service if needed
+    if (!placesServiceRef.current && window.google) {
+      const dummyDiv = document.createElement("div");
+      placesServiceRef.current = new window.google.maps.places.PlacesService(
+        dummyDiv
+      );
+    }
+
+    // Get place details
+    if (placesServiceRef.current) {
+      placesServiceRef.current.getDetails(
+        { placeId: place.place_id },
+        (placeDetails, status) => {
+          console.log("Place Details:", placeDetails);
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            const addressComponents = placeDetails.address_components || [];
+            let addressLine1 = "";
+            let addressLine2 = "";
+            let city = "";
+            let state = "";
+            let postalCode = "";
+
+            console.log(addressComponents)
+            addressComponents.forEach((component) => {
+              const types = component.types;
+              if (
+                // types.includes("plus_code") ||
+                types.includes("subpremise") ||
+                types.includes("premise") ||
+                types.includes("street_number") ||
+                types.includes("route")
+              ) {
+                addressLine1 += component.long_name + " ";
+              } else if (
+                types.includes("sublocality") ||
+                types.includes("neighborhood")
+              ) {
+                addressLine2 += component.long_name + " ";
+              } else if (types.includes("locality")) {
+                city = component.long_name;
+              } else if (
+                types.includes("administrative_area_level_2") &&
+                !city
+              ) {
+                city = component.long_name;
+              } else if (types.includes("administrative_area_level_1")) {
+                state = component.long_name;
+              } else if (types.includes("postal_code")) {
+                postalCode = component.long_name;
+              }
+            });
+
+            // Update form data
+            setFormData((prev) => ({
+              ...prev,
+              address1: addressLine1.trim(),
+              address2: addressLine2.trim(),
+              city: city,
+              state: state,
+              postalCode: postalCode,
+            }));
+          }
+        }
+      );
+    }
   };
 
   return (
@@ -243,7 +300,7 @@ const CreateNewForm = ({
         </label>
         <input
           type="text"
-          className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md"
+          className="mt-1 h-[2.25rem] px-2 text-sm border capitalize border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Name"
           value={formData.name}
           onChange={(e) => {
@@ -263,19 +320,19 @@ const CreateNewForm = ({
             Address line 1
           </label>
           <GoogleMapsLoader>
-            <div className="flex mt-1  border border-[#8891AA] rounded-md relative">
-              <div className="p-2 border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
+            <div className="flex mt-1 border border-[#8891AA] rounded-md relative">
+              <div className="px-2 h-[2.25rem] border-r border-[#E1E3EA] rounded-l-lg bg-[#F9F9FA] w-fit">
                 <FaSearch className="text-[#606B85] h-full" />
               </div>
               <input
                 type="search"
-                className="w-full capitalize rounded-r-lg focus:outline-none p-2"
+                className="w-full capitalize text-sm rounded-r-lg focus:outline-none h-[2.25rem] px-2"
                 placeholder="Address line 1"
                 value={formData.address1}
                 onChange={handleAddressInputChange}
               />
               {suggestions.length > 0 && (
-                <ul className="absolute top-full mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
+                <ul className="absolute list-none top-full mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
                   {suggestions.map((suggestion) => (
                     <li
                       key={suggestion.place_id}
@@ -298,7 +355,7 @@ const CreateNewForm = ({
           </label>
           <input
             type="text"
-            className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+            className="w-full capitalize mt-1 text-sm h-[2.25rem] px-2 border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Address line 2"
             value={formData.address2}
             onChange={(e) => handleInputChange("address2", e.target.value)}
@@ -315,7 +372,7 @@ const CreateNewForm = ({
           </label>
           <input
             type="text"
-            className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+            className="w-full capitalize mt-1 text-sm h-[2.25rem] px-2 border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="City"
             value={formData.city}
             onChange={(e) => {
@@ -332,7 +389,7 @@ const CreateNewForm = ({
             State
           </label>
           <select
-            className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
+            className="w-full capitalize mt-1 text-sm h-[2.25rem] px-2 border border-[#8891AA] focus:outline-none rounded-md classic"
             value={formData.state}
             onChange={(e) => handleInputChange("state", e.target.value)}
           >
@@ -359,7 +416,7 @@ const CreateNewForm = ({
           <input
             type="text"
             disabled
-            className="w-full capitalize mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6] disabled:opacity-70"
+            className="w-full capitalize mt-1 text-sm h-[2.25rem] px-2 border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6] disabled:opacity-70"
             placeholder="Country"
             value={formData.country}
             onChange={(e) => handleInputChange("country", e.target.value)}
@@ -373,7 +430,7 @@ const CreateNewForm = ({
           </label>
           <input
             type="text"
-            className="w-full mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+            className="w-full mt-1 h-[2.25rem] text-sm px-2 border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Postal Code"
             value={formData.postalCode}
              onChange={(e) => {

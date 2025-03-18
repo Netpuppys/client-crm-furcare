@@ -299,11 +299,11 @@ const OnboardingPage = () => {
           onClickHandler={handleSubmit}
         />
       </div>
-      {console.log(sendData)}
-      <div className="w-full flex flex-col items-center justify-start gap-[1.25rem] transition-all mt-6">
+
+      <div className="w-full flex flex-col overflow-visible items-center justify-start gap-[1.25rem] transition-all mt-6">
         {/* business unit form */}
         <div
-          className={`w-full transition-all duration-200 border border-[#D9D9D9] rounded-md overflow-hidden ${
+          className={`w-full transition-all duration-200 border border-[#D9D9D9] rounded-md overflow- ${
             openModalIndex === 0 ? "bg-white" : "bg-[#F5F5F5]"
           }`}
         >
@@ -321,14 +321,14 @@ const OnboardingPage = () => {
 
           <div
             className={`${
-              openModalIndex === 0 ? "h-fit" : "h-0 overflow-hidden"
+              openModalIndex === 0 ? "h-fit overflow-visible" : "h-0 overflow-hidden"
             } w-full transition-all duration-300 px-4`}
           >
             <p className="text-[#1E1E1E] ">
               Answer the frequently asked question in a simple sentence, a
               longish paragraph, or even in a list.
             </p>
-            <div className="w-full h-fit">
+            <div className="w-full h-fit overflow-visible">
               <BusinessForm sendData={sendData} setSendData={setSendData} />
             </div>
           </div>

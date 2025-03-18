@@ -34,6 +34,8 @@ const CreateBusinessUnit = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
+  const placesServiceRef = useRef(null);
+
   const businessUnitId = location.state?.businessUnitId;
 
   const autocompleteServiceRef = useRef(null);
@@ -254,8 +256,6 @@ const CreateBusinessUnit = () => {
     }
   };
 
-  const placesServiceRef = useRef(null);
-
   const handleSuggestionClick = (place) => {
     // handleInputChange("address1", place.description);
     setSuggestions([]);
@@ -282,6 +282,7 @@ const CreateBusinessUnit = () => {
             let state = "";
             let postalCode = "";
 
+            console.log(addressComponents)
             addressComponents.forEach((component) => {
               const types = component.types;
               if (
