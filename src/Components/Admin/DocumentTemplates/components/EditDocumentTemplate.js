@@ -299,7 +299,6 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
           />
         </div>
       ))}
-      {console.log(documents)}
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

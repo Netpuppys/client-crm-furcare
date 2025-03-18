@@ -44,6 +44,10 @@ const AddNewItemForm = ({ content, fetchContent }) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleChange = (value) => {
+    setAdditionalNotes(value)
+  }
+
   useEffect(() => {
     if (_.isEqual(initialData, formData) && additionalNotes === content.body) {
       setDisabled(true);
@@ -122,7 +126,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </div>
         </div>
       </div>
-
+              {console.log(additionalNotes)}
       <div className="w-full flex items-center justify-between">
         {/* Animal Type Input */}
         <div className="flex flex-col w-[70%]">
@@ -243,16 +247,18 @@ const AddNewItemForm = ({ content, fetchContent }) => {
       <div className="w-full">
         <Syncfusion
           value={additionalNotes}
-          onChangeFunction={(value) => setAdditionalNotes(value)}
+          onChangeFunction={handleChange}
         />
       </div>
 
       {/* Submit Button */}
-      <BlueButton
-        onClickHandler={handleSubmit}
-        text={"Save"}
-        disabled={disabled}
-      />
+      <div className="w-fit h-fit absolute bottom-8 right-6">
+        <BlueButton
+          onClickHandler={handleSubmit}
+          text={"Save"}
+          disabled={disabled}
+        />
+      </div>
     </div>
   );
 };

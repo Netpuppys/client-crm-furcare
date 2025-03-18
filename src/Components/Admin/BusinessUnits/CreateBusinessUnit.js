@@ -464,11 +464,11 @@ const CreateBusinessUnit = () => {
                     onChange={handleAddressInputChange}
                   />
                   {suggestions.length > 0 && (
-                    <ul className="absolute top-full mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
+                    <ul className="absolute top-full list-none mt-2 z-50 bg-white border border-[#8891AA] rounded-md shadow-md w-full">
                       {suggestions.map((suggestion) => (
                         <li
                           key={suggestion.place_id}
-                          className="px-4 py-2 text-sm cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
+                          className="px-4 py-2 text-sm list-none cursor-pointer border-b last:border-b-0 border-[#E1E3EA] hover:bg-gray-100"
                           onClick={() => handleSuggestionClick(suggestion)}
                         >
                           {suggestion.description}

@@ -7,7 +7,7 @@ import {
   RichTextEditorComponent,
   Toolbar,
 } from "@syncfusion/ej2-react-richtexteditor";
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import "@syncfusion/ej2-base/styles/bootstrap5.css";
 import "@syncfusion/ej2-icons/styles/bootstrap5.css";
 import "@syncfusion/ej2-buttons/styles/bootstrap5.css";
@@ -19,6 +19,22 @@ import "@syncfusion/ej2-popups/styles/bootstrap5.css";
 import "@syncfusion/ej2-richtexteditor/styles/bootstrap5.css";
 
 function Syncfusion({ value, index, onChangeFunction }) {
+  const editorRef = useRef(null); // Reference to the editor
+
+  useEffect(() => {
+    if (editorRef.current) {
+      const editorInstance = editorRef.current;
+      
+      // Add an input event listener to detect changes instantly
+      editorInstance.element.addEventListener("input", () => {
+        const newValue = editorInstance.getContent(); // Get updated content
+        if (onChangeFunction && newValue) {
+          onChangeFunction(newValue.lastChild.innerHTML, index); // Update parent component instantly
+        }
+      });
+    }
+  }, [index]);
+
   const toolbarSettings = {
     items: [
       "Undo",
@@ -40,21 +56,12 @@ function Syncfusion({ value, index, onChangeFunction }) {
     ],
   };
 
-  const handleChange = (args) => {
-    // console.log("Editor Value:", args.value);
-    // if (onChangeFunction) {
-      onChangeFunction(args.value, index);
-      console.log(args)
-    // }
-  };
-
   return (
     <RichTextEditorComponent
+      ref={editorRef} // Attach reference
       value={value}
       height={400}
       toolbarSettings={toolbarSettings}
-      change={handleChange} // Use `change` instead of `onChange`
-      saveInterval={0}
     >
       <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
     </RichTextEditorComponent>

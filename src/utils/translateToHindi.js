@@ -1,3 +1,5 @@
+
+
 export const translateToHindi = async (text) => {
   const apiKey = process.env.REACT_APP_TRANSLATE_API_KEY; // Replace with your API key
   const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
@@ -17,7 +19,9 @@ export const translateToHindi = async (text) => {
     });
 
     const data = await response.json();
-    return data?.data?.translations?.[0]?.translatedText || "";
+
+    const convertedString = data.data.translations[0].translatedText || ""
+    return convertedString;
   } catch (error) {
     console.error("Translation API error:", error);
     return "";
