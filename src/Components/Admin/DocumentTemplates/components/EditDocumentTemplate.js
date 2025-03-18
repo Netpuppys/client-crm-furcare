@@ -1,6 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "react-quill/dist/quill.snow.css"; // React Quill styles
-import ReactQuill from "react-quill";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
