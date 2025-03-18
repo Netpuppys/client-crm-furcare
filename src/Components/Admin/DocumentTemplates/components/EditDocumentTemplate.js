@@ -6,9 +6,10 @@ import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import ActiveButtons from "../../../../ui/ActiveButtons";
-import chevronDown from "../../../../Assets/icons/chevronDown.png"
+import chevronDown from "../../../../Assets/icons/chevronDown.png";
+import Syncfusion from "../../../../ui/Syncfusion";
 
-const dropDownList = [ "English", "Hindi" ]
+const dropDownList = ["English", "Hindi"];
 
 const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   const { setAlert } = useAlertContext();
@@ -26,7 +27,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const [langIndex, setLangIndex] = useState(0);
   const [active, setActive] = useState(openEditModule.active);
-  const [ showDropdown, setShowDropdown ] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false);
 
   // set static languages
   useEffect(() => {
@@ -44,7 +45,9 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   // set languages
   useEffect(() => {
     if (openEditModule.body) {
-      const newArr = openEditModule.body.map((item) => capitalizeWord(item.language));
+      const newArr = openEditModule.body.map((item) =>
+        capitalizeWord(item.language)
+      );
       setLanguage(newArr);
     }
   }, [openEditModule]);
@@ -114,7 +117,6 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   };
 
   const handleSubmit = () => {
-
     const sendData = {
       type: formData.type,
       name: formData.name,
@@ -154,7 +156,6 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
   return (
     <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-md space-y-6 h-full relative">
-       
       <div className="flex w-full items-center justify-between gap-12">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
@@ -164,7 +165,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
           </label>
           <div className="mt-1 h-[2.25rem] px-2 border border-[#8891AA] bg-[#F4F4F6] rounded-md flex items-center justify-start">
             <p className="text-sm text-[#121C2D] capitalize font-medium">
-              {types.find(item => item.serverName === formData.type).name}
+              {types.find((item) => item.serverName === formData.type).name}
             </p>
           </div>
         </div>
@@ -209,45 +210,47 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
                   >
                     {lang}
 
-                    {lang.toLowerCase()!=="english" &&
-                    <button
-                      onClick={() => removeLanguage(lang)}
-                      className="text-[#606B85] hover:text-blue-900 focus:outline-none"
-                    >
-                      ✕
-                    </button>}
+                    {lang.toLowerCase() !== "english" && (
+                      <button
+                        onClick={() => removeLanguage(lang)}
+                        className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
-              <div className='h-full aspect-square flex items-center justify-center'>
+              <div className="h-full aspect-square flex items-center justify-center">
                 <button
-                    onClick={() => setShowDropdown(prev => !prev)}
-                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                  className="flex items-center justify-center w-5 h-5 aspect-square"
                 >
                   <img
-                      src={chevronDown}
-                      className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
-                      alt='chevron down'
+                    src={chevronDown}
+                    className={`w-full h-full object-contain transition-all ${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                    alt="chevron down"
                   />
                 </button>
               </div>
             </div>
             {showDropdown && dropDownList.length > 0 && (
-            <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
-              {dropDownList
-                .filter((lang) => !language.includes(lang))
-                .map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleDropDownClick(item)}
-                    className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                  >
-                    <p className="capitalize text-sm">
-                      {item}
-                    </p>
-                  </button>
-                ))}
-            </div>)}
+              <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
+                {dropDownList
+                  .filter((lang) => !language.includes(lang))
+                  .map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleDropDownClick(item)}
+                      className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
+                    >
+                      <p className="capitalize text-sm">{item}</p>
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -284,15 +287,17 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
       {/* Rich Text Editor */}
       {documents.map((doc, index) => (
-      <div className={`w-full flex-col ${index===langIndex? "flex" : "hidden"}`}>
-        <ReactQuill
-          className="mt-2 h-[400px] mb-12"
-          theme="snow"
-          value={doc.body}
-          onChange={(value) => handleQuillChange(value, index)}
-          placeholder="Placeholder"
-        />
-      </div>))}
+        <div
+          className={`w-full flex-col ${
+            index === langIndex ? "flex" : "hidden"
+          }`}
+        >
+          <Syncfusion
+            value={doc.body}
+            onChangeFunction={(value) => handleQuillChange(value, index)}
+          />
+        </div>
+      ))}
       {console.log(documents)}
 
       {/* Submit Button */}

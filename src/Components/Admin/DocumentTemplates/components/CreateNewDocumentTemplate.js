@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
-import ReactQuill from "react-quill";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
-import "react-quill/dist/quill.snow.css"; // React Quill styles
-import chevronDown from "../../../../Assets/icons/chevronDown.png"
+import chevronDown from "../../../../Assets/icons/chevronDown.png";
+import Syncfusion from "../../../../ui/Syncfusion";
 
 const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   const dropDownList = ["english", "hindi"];
@@ -27,8 +26,8 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       body: "",
     },
   ]);
-  const [ disabled, setDisabled] = useState(true);
-  const [ showDropdown, setShowDropdown ] = useState(false)
+  const [disabled, setDisabled] = useState(true);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const removeLanguage = (langToRemove) => {
     setLanguages(languages.filter((lang) => lang !== langToRemove));
@@ -108,7 +107,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
 
           <div className="mt-1 h-[2.25rem] px-2 border border-[#8891AA] bg-[#F4F4F6] rounded-md flex items-center justify-start">
             <p className="text-sm text-[#121C2D] capitalize font-medium">
-              {types.find(item => item.serverName === formData.type).name}
+              {types.find((item) => item.serverName === formData.type).name}
             </p>
           </div>
         </div>
@@ -154,46 +153,48 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
                   >
                     {lang}
 
-                    {lang.toLowerCase()!=="english" &&
-                    <button
-                      onClick={() => removeLanguage(lang)}
-                      className="text-[#606B85] hover:text-blue-900 focus:outline-none"
-                    >
-                      ✕
-                    </button>}
+                    {lang.toLowerCase() !== "english" && (
+                      <button
+                        onClick={() => removeLanguage(lang)}
+                        className="text-[#606B85] hover:text-blue-900 focus:outline-none"
+                      >
+                        ✕
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
-              <div className='h-full aspect-square flex items-center justify-center'>
+              <div className="h-full aspect-square flex items-center justify-center">
                 <button
-                    onClick={() => setShowDropdown(prev => !prev)}
-                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                  className="flex items-center justify-center w-5 h-5 aspect-square"
                 >
-                    <img
-                        src={chevronDown}
-                        className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
-                        alt='chevron down'
-                    />
+                  <img
+                    src={chevronDown}
+                    className={`w-full h-full object-contain transition-all ${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                    alt="chevron down"
+                  />
                 </button>
               </div>
             </div>
 
             {showDropdown && dropDownList.length > 0 && (
-            <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
-              {dropDownList
-                .filter((lang) => !languages.includes(lang))
-                .map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleDropDownClick(item)}
-                    className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                  >
-                    <p className="capitalize text-sm">
-                      {item}
-                    </p>
-                  </button>
-                ))}
-            </div>)}
+              <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
+                {dropDownList
+                  .filter((lang) => !languages.includes(lang))
+                  .map((item, index) => (
+                    <button
+                      key={index}
+                      onClick={() => handleDropDownClick(item)}
+                      className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
+                    >
+                      <p className="capitalize text-sm">{item}</p>
+                    </button>
+                  ))}
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -201,12 +202,9 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       {/* Rich Text Editor */}
       <div className="w-full flex flex-col">
         {/* <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
-        <ReactQuill
-          theme="snow"
-          placeholder="Placeholder"
-          className="mt-2 h-[400px] mb-12"
+        <Syncfusion
           value={documents[0].body}
-          onChange={(value) => handleQuillChange(value)}
+          onChangeFunction={(value) => handleQuillChange(value)}
         />
       </div>
 

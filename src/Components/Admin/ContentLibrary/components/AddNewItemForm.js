@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import _ from "lodash";
-import ReactQuill from "react-quill";
 import BlueButton from "../../../../ui/BlueButton";
-import "react-quill/dist/quill.snow.css"; // React Quill styles
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAlertContext } from "../../../../utils/AlertContext";
+import Syncfusion from "../../../../ui/Syncfusion";
 
 const AddNewItemForm = ({ content, fetchContent }) => {
-  const { setAlert } = useAlertContext()
+  const { setAlert } = useAlertContext();
 
   const [initialData, setInitialData] = useState({
     category: "",
@@ -27,8 +26,8 @@ const AddNewItemForm = ({ content, fetchContent }) => {
     sterilizationStatus: "",
   });
 
-  const [ additionalNotes, setAdditionalNotes ] = useState(content.body);
-  const [ disabled, setDisabled ] = useState(true);
+  const [additionalNotes, setAdditionalNotes] = useState(content.body);
+  const [disabled, setDisabled] = useState(true);
 
   useEffect(() => {
     setInitialData({
@@ -46,10 +45,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
   };
 
   useEffect(() => {
-    if (
-      _.isEqual(initialData, formData) &&
-      additionalNotes === content.body
-    ) {
+    if (_.isEqual(initialData, formData) && additionalNotes === content.body) {
       setDisabled(true);
       return;
     }
@@ -59,20 +55,20 @@ const AddNewItemForm = ({ content, fetchContent }) => {
 
   const handleSubmit = () => {
     const sendData = {
-      body: additionalNotes
-    }
+      body: additionalNotes,
+    };
 
     // Log the form data
     axiosInstance
       .patch(`/api/v1/content-library/${content.id}`, sendData)
-      .then(res => {
+      .then((res) => {
         // console.log(res)
-        setAlert("Updated Successfully")
-        fetchContent()
+        setAlert("Updated Successfully");
+        fetchContent();
       })
-      .catch(err => {
-        console.error(err)
-      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -243,24 +239,19 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </div>
         </div>
       </div>
-
       {/* Rich Text Editor */}
-      <div className="w-full flex flex-col">
-        {/* <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
-        <ReactQuill
-          className="mt-2 h-[400px] mb-12"
-          theme="snow"
+      <div className="w-full">
+        <Syncfusion
           value={additionalNotes}
-          onChange={(value) => setAdditionalNotes(value)}
-          placeholder="Write additional notes here..."
+          onChangeFunction={(value) => setAdditionalNotes(value)}
         />
       </div>
 
       {/* Submit Button */}
-      <BlueButton 
-        onClickHandler={handleSubmit} 
+      <BlueButton
+        onClickHandler={handleSubmit}
         text={"Save"}
-        disabled={disabled} 
+        disabled={disabled}
       />
     </div>
   );
