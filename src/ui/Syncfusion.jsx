@@ -34,6 +34,7 @@ function Syncfusion({ value, onChangeFunction }) {
       "UnorderedList",
       "OrderedList",
       "CreateLink",
+      "BlockQuote",
       "Image",
     ],
   };
