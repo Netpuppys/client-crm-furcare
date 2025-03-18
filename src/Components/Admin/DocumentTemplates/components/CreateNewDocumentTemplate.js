@@ -6,9 +6,10 @@ import BlueButton from "../../../../ui/BlueButton";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import chevronDown from "../../../../Assets/icons/chevronDown.png";
 import Syncfusion from "../../../../ui/Syncfusion";
+import { translateToHindi } from "../../../../utils/translateToHindi";
 
 const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
-  const dropDownList = ["english", "hindi"];
+  const dropDownList = [ "english", "hindi" ];
 
   const { setAlert } = useAlertContext();
   const { selectedBranch } = useAppContext();
@@ -61,6 +62,11 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       },
     ]);
   };
+
+  useEffect(() => {
+    const text  = translateToHindi(documents[0].body)
+    console.log(text)
+  }, [documents])
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -204,7 +210,8 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
         {/* <label className="font-medium text-[#121C2D] flex items-center gap-1 text-sm"><div className="w-1 aspect-square rounded-full bg-red-500"></div> Category </label> */}
         <Syncfusion
           value={documents[0].body}
-          onChangeFunction={(value) => handleQuillChange(value)}
+          // index={index}
+          onChangeFunction={handleQuillChange}
         />
       </div>
 

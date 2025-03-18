@@ -135,6 +135,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   };
 
   const handleQuillChange = (value, editIndex) => {
+    console.log(value)
     setDocuments((prev) => {
       return prev.map((doc, index) =>
         index === editIndex ? { ...doc, body: value } : doc
@@ -286,13 +287,15 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       {/* Rich Text Editor */}
       {documents.map((doc, index) => (
         <div
+          key={index}
           className={`w-full flex-col ${
             index === langIndex ? "flex" : "hidden"
           }`}
         >
           <Syncfusion
             value={doc.body}
-            onChangeFunction={(value) => handleQuillChange(value, index)}
+            index={index}
+            onChangeFunction={handleQuillChange}
           />
         </div>
       ))}

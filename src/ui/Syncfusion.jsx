@@ -17,7 +17,8 @@ import "@syncfusion/ej2-lists/styles/bootstrap5.css";
 import "@syncfusion/ej2-navigations/styles/bootstrap5.css";
 import "@syncfusion/ej2-popups/styles/bootstrap5.css";
 import "@syncfusion/ej2-richtexteditor/styles/bootstrap5.css";
-function Syncfusion({ value, onChangeFunction }) {
+
+function Syncfusion({ value, index, onChangeFunction }) {
   const toolbarSettings = {
     items: [
       "Undo",
@@ -38,12 +39,22 @@ function Syncfusion({ value, onChangeFunction }) {
       "Image",
     ],
   };
+
+  const handleChange = (args) => {
+    // console.log("Editor Value:", args.value);
+    // if (onChangeFunction) {
+      onChangeFunction(args.value, index);
+      console.log(args)
+    // }
+  };
+
   return (
     <RichTextEditorComponent
       value={value}
       height={400}
       toolbarSettings={toolbarSettings}
-      onChange={onChangeFunction}
+      change={handleChange} // Use `change` instead of `onChange`
+      saveInterval={0}
     >
       <Inject services={[Toolbar, Image, Link, HtmlEditor, QuickToolbar]} />
     </RichTextEditorComponent>
