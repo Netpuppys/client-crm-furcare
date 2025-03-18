@@ -1,5 +1,5 @@
 export const translateToHindi = async (text) => {
-  const apiKey = process.env.REACT_APP_GOOGLE_API_KEY; // Replace with your API key
+  const apiKey = process.env.REACT_APP_TRANSLATE_API_KEY; // Replace with your API key
   const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
 
   try {
