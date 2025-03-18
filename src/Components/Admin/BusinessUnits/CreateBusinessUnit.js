@@ -6,22 +6,19 @@ import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
-import chevronDown from "../../../Assets/icons/chevronDown.png"
+import chevronDown from "../../../Assets/icons/chevronDown.png";
 
 const appointmentSlots = [
   {
     id: "675b049dc90ac3a44472a525",
     name: "Morning Slot",
     departmentId: "675b03cdcef11a5735b8c173",
-    reasons: [
-      "Check-up",
-      "Follow-up"
-    ],
+    reasons: ["Check-up", "Follow-up"],
     branchId: "675b049dc90ac3a44472a522",
     active: true,
     createdAt: new Date("2024-12-12T15:43:24.967Z"),
-    updatedAt: new Date("2024-12-12T15:43:24.967Z")
-  }
+    updatedAt: new Date("2024-12-12T15:43:24.967Z"),
+  },
 ];
 
 // const departments = [
@@ -35,24 +32,24 @@ const appointmentSlots = [
 
 const CreateBusinessUnit = () => {
   const location = useLocation();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const businessUnitId = location.state?.businessUnitId;
 
   const autocompleteServiceRef = useRef(null);
-  
-  const { setAlert } = useAlertContext()
-  
-  const [ suggestions, setSuggestions ] = useState([]);
-  const [ selectedOptions, setSelectedOptions ] = useState([]);
-  const [ disabled, setDisabled ] = useState(false)
-  const [ options, setOptions ] = useState([])
-  const [ departments, setDepartments ] = useState([])
-  const [ selectedDepartments, setSelectedDepartments ] = useState([])
-  const [ selectedAppointments, setSelectedAppointments ] = useState([])
-  const [ showDropdown, setShowDropdown ] = useState(false)
-  const [ showDropdownDept, setShowDropdownDept ] = useState(false)
-  const [ formData, setFormData ] = useState({
+
+  const { setAlert } = useAlertContext();
+
+  const [suggestions, setSuggestions] = useState([]);
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [disabled, setDisabled] = useState(false);
+  const [options, setOptions] = useState([]);
+  const [departments, setDepartments] = useState([]);
+  const [selectedDepartments, setSelectedDepartments] = useState([]);
+  const [selectedAppointments, setSelectedAppointments] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [showDropdownDept, setShowDropdownDept] = useState(false);
+  const [formData, setFormData] = useState({
     unitName: "",
     branchType: "",
     practiceType: "",
@@ -74,12 +71,12 @@ const CreateBusinessUnit = () => {
   useEffect(() => {
     axiosInstance
       .get("/api/v1/services")
-      .then(res => {
-        setOptions(res.data.data.data)
+      .then((res) => {
+        setOptions(res.data.data.data);
       })
-      .catch(err => {
-        console.error(err)
-      })
+      .catch((err) => {
+        console.error(err);
+      });
 
     axiosInstance
       .get("/api/v1/departments")
@@ -89,16 +86,36 @@ const CreateBusinessUnit = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [])
+  }, []);
 
   useEffect(() => {
-    const requiredFields = ["unitName", "branchType", "practiceType", "currency", "address1", "city", "state", "country", "postalCode"];
-    const checkFromdata = requiredFields.every((field) => formData[field].trim() !== "")
+    const requiredFields = [
+      "unitName",
+      "branchType",
+      "practiceType",
+      "currency",
+      "address1",
+      "city",
+      "state",
+      "country",
+      "postalCode",
+    ];
+    const checkFromdata = requiredFields.every(
+      (field) => formData[field].trim() !== ""
+    );
 
-    const checkService = selectedOptions.every(item => typeof Number(item.basePrice) === "number" && item.basePrice>0)
+    const checkService = selectedOptions.every(
+      (item) => typeof Number(item.basePrice) === "number" && item.basePrice > 0
+    );
 
-    if (checkFromdata && selectedOptions.length>0 && checkService && selectedDepartments.length>0 && selectedAppointments.length>0) {
-      setDisabled(false)
+    if (
+      checkFromdata &&
+      selectedOptions.length > 0 &&
+      checkService &&
+      selectedDepartments.length > 0 &&
+      selectedAppointments.length > 0
+    ) {
+      setDisabled(false);
     } else {
       setDisabled(true);
     }
@@ -106,44 +123,60 @@ const CreateBusinessUnit = () => {
 
   // service change
   const handleCheckboxChange = (option) => {
-    if (selectedOptions.some(obj => obj.service === option.name)) {
-      setSelectedOptions(selectedOptions.filter((item) => item.service !== option.name));
+    if (selectedOptions.some((obj) => obj.service === option.name)) {
+      setSelectedOptions(
+        selectedOptions.filter((item) => item.service !== option.name)
+      );
     } else {
-      setSelectedOptions([...selectedOptions, { service: option.name, basePrice: "" }]);
+      setSelectedOptions([
+        ...selectedOptions,
+        { service: option.name, basePrice: "" },
+      ]);
     }
   };
 
   const handleDeleteService = (option) => {
-    setSelectedOptions(prev => prev.filter((item) => item.service !== option));
-  }
+    setSelectedOptions((prev) =>
+      prev.filter((item) => item.service !== option)
+    );
+  };
 
   // department change
   const handleCheckboxDepartmentChange = (option) => {
-    if (selectedDepartments.some(obj => obj.id === option.id)) {
-      setSelectedDepartments(selectedDepartments.filter((item) => item.id !== option.id));
+    if (selectedDepartments.some((obj) => obj.id === option.id)) {
+      setSelectedDepartments(
+        selectedDepartments.filter((item) => item.id !== option.id)
+      );
     } else {
-      setSelectedDepartments([...selectedDepartments, { name: option.name, id: option.id }]);
+      setSelectedDepartments([
+        ...selectedDepartments,
+        { name: option.name, id: option.id },
+      ]);
     }
   };
 
   useEffect(() => {
-    setSelectedAppointments(selectedDepartments.map(_ => ({
-      name: appointmentSlots[0].name
-    })))
-  }, [selectedDepartments])
+    setSelectedAppointments(
+      selectedDepartments.map((_) => ({
+        name: appointmentSlots[0].name,
+      }))
+    );
+  }, [selectedDepartments]);
 
   const handleDeleteDepartment = (option) => {
-    setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
-  }
+    setSelectedDepartments((prev) =>
+      prev.filter((item) => item.id !== option.id)
+    );
+  };
 
   const handleServicePrice = (value, index) => {
-    setSelectedOptions(prev => {
-      const arr = [...prev]
-      arr[index].basePrice = value
+    setSelectedOptions((prev) => {
+      const arr = [...prev];
+      arr[index].basePrice = value;
 
-      return arr
-    })
-  }
+      return arr;
+    });
+  };
 
   const handleSubmit = () => {
     // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
@@ -151,7 +184,7 @@ const CreateBusinessUnit = () => {
     const services = selectedOptions.map((item) => ({
       serviceId: "675b03becef11a5735b8c16f", // string
       basePrice: Number(item.basePrice), // number
-    }))
+    }));
 
     const sendData = {
       name: formData.unitName, // string
@@ -165,44 +198,43 @@ const CreateBusinessUnit = () => {
       city: formData.city, // string
       postalCode: formData.postalCode, // number / integer min length 4
       businessUnitId: businessUnitId, // number
-      services: services, 
-      departments: selectedDepartments.map(item => ({
-        departmentId: item.id
+      services: services,
+      departments: selectedDepartments.map((item) => ({
+        departmentId: item.id,
       })),
       appointmentSlots: [
         {
           name: "Morning Slot", // string
           departmentId: "675b03cdcef11a5735b8c173", // string
-          reasons: [
-            "Check-up",
-            "Follow-up"
-          ], // string
+          reasons: ["Check-up", "Follow-up"], // string
         },
       ],
     };
 
     // validateSendData(sendData)
-    
-    axiosInstance.post("/api/v1/business-branches", sendData)
-      .then(response => {
+
+    axiosInstance
+      .post("/api/v1/business-branches", sendData)
+      .then((response) => {
         console.log("Success:", response.data);
-        setAlert("Created Successfully")
-        navigate("/admin/branch-units")
-        setAlert("Created Successfully")
+        setAlert("Created Successfully");
+        navigate("/admin/branch-units");
+        setAlert("Created Successfully");
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error:", error);
       });
   };
 
   const handleAddressInputChange = (e) => {
     handleInputChange("address1", e.target.value);
-  
+
     // Fetch autocomplete predictions
     if (!autocompleteServiceRef.current && window.google) {
-      autocompleteServiceRef.current = new window.google.maps.places.AutocompleteService();
+      autocompleteServiceRef.current =
+        new window.google.maps.places.AutocompleteService();
     }
-  
+
     if (autocompleteServiceRef.current && e.target.value) {
       autocompleteServiceRef.current.getPlacePredictions(
         {
@@ -220,41 +252,102 @@ const CreateBusinessUnit = () => {
     } else {
       setSuggestions([]);
     }
-  };  
+  };
+
+  const placesServiceRef = useRef(null);
 
   const handleSuggestionClick = (place) => {
-    handleInputChange("address1", place.description);
+    // handleInputChange("address1", place.description);
     setSuggestions([]);
-    console.log(place); // Pass the selected address back to the parent component
+
+    // Initialize Places Service if needed
+    if (!placesServiceRef.current && window.google) {
+      const dummyDiv = document.createElement("div");
+      placesServiceRef.current = new window.google.maps.places.PlacesService(
+        dummyDiv
+      );
+    }
+
+    // Get place details
+    if (placesServiceRef.current) {
+      placesServiceRef.current.getDetails(
+        { placeId: place.place_id },
+        (placeDetails, status) => {
+          console.log("Place Details:", placeDetails);
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            const addressComponents = placeDetails.address_components || [];
+            let addressLine1 = "";
+            let addressLine2 = "";
+            let city = "";
+            let state = "";
+            let postalCode = "";
+
+            addressComponents.forEach((component) => {
+              const types = component.types;
+              if (
+                // types.includes("plus_code") ||
+                types.includes("subpremise") ||
+                types.includes("premise") ||
+                types.includes("street_number") ||
+                types.includes("route")
+              ) {
+                addressLine1 += component.long_name + " ";
+              } else if (
+                types.includes("sublocality") ||
+                types.includes("neighborhood")
+              ) {
+                addressLine2 += component.long_name + " ";
+              } else if (types.includes("locality")) {
+                city = component.long_name;
+              } else if (
+                types.includes("administrative_area_level_2") &&
+                !city
+              ) {
+                city = component.long_name;
+              } else if (types.includes("administrative_area_level_1")) {
+                state = component.long_name;
+              } else if (types.includes("postal_code")) {
+                postalCode = component.long_name;
+              }
+            });
+
+            // Update form data
+            setFormData((prev) => ({
+              ...prev,
+              address1: addressLine1.trim(),
+              address2: addressLine2.trim(),
+              city: city,
+              state: state,
+              postalCode: postalCode,
+            }));
+          }
+        }
+      );
+    }
   };
 
   return (
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
       <div className="flex items-start justify-between">
         <div className="text-[#0263E0] text-xs">
-          <p
-            className="underline inline cursor-default"
-          >
-            Admin
-          </p>
+          <p className="underline inline cursor-default">Admin</p>
           <span> / </span>
           <Link to={"/admin/branch-units"} className="underline">
             Business Units
           </Link>
           <span> / </span>
-          <p
-            className="underline inline cursor-default"
-          >
+          <p className="underline inline cursor-default">
             Create Business Unit
           </p>
         </div>
         <div className="flex items-center justify-center gap-5">
           {/* <Link to={"/admin/branch-units"}> */}
-            <button 
-              onClick={() => navigate("/admin/branch-units")}
-              className="bg-[#FFFFFF] border border-[#CACDD8] px-3 h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center">
-              Cancel
-            </button>
+          <button
+            onClick={() => navigate("/admin/branch-units")}
+            className="bg-[#FFFFFF] border border-[#CACDD8] px-3 h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center"
+          >
+            Cancel
+          </button>
           {/* </Link> */}
 
           <button
@@ -435,10 +528,7 @@ const CreateBusinessUnit = () => {
               >
                 <option value={""}>State</option>
                 {statesAndCitiesInIndia.map((item, index) => (
-                  <option
-                    key={index}
-                    value={item.state}
-                  >
+                  <option key={index} value={item.state}>
                     {item.state}
                   </option>
                 ))}
@@ -473,7 +563,7 @@ const CreateBusinessUnit = () => {
                 className="w-full mt-1 p-2 capitalize placeholder:italic text-sm border border-[#8891AA] focus:outline-none rounded-md"
                 placeholder="Postal Code"
                 value={formData.postalCode}
-                onChange={e => {
+                onChange={(e) => {
                   const value = e.target.value;
                   // Allow only numbers and a single decimal point
                   const formattedValue = value
@@ -499,12 +589,16 @@ const CreateBusinessUnit = () => {
                 Service(s)
               </label>
               <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
-                <div className={`w-full flex items-center justify-between gap-1 h-full`}>
-
-                  {selectedOptions.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
-                  </div>)}
+                <div
+                  className={`w-full flex items-center justify-between gap-1 h-full`}
+                >
+                  {selectedOptions.length === 0 && (
+                    <div className="px-2">
+                      <p className="text-sm text-[#121C2D] font-medium">
+                        Select
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
@@ -523,16 +617,18 @@ const CreateBusinessUnit = () => {
                     ))}
                   </div>
 
-                  <div className='h-full aspect-square flex items-center justify-center'>
+                  <div className="h-full aspect-square flex items-center justify-center">
                     <button
-                        onClick={() => setShowDropdown(prev => !prev)}
-                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                      onClick={() => setShowDropdown((prev) => !prev)}
+                      className="flex items-center justify-center w-5 h-5 aspect-square"
                     >
-                        <img
-                            src={chevronDown}
-                            className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
-                            alt='chevron down'
-                        />
+                      <img
+                        src={chevronDown}
+                        className={`w-full h-full object-contain transition-all ${
+                          showDropdown ? "rotate-180" : ""
+                        }`}
+                        alt="chevron down"
+                      />
                     </button>
                   </div>
                 </div>
@@ -549,12 +645,12 @@ const CreateBusinessUnit = () => {
                             <input
                               type="checkbox"
                               className="mr-2 placeholder:italic text-sm"
-                              checked={selectedOptions.some(obj => obj.service === option.name)}
+                              checked={selectedOptions.some(
+                                (obj) => obj.service === option.name
+                              )}
                               onChange={() => handleCheckboxChange(option)}
                             />
-                            <span className="capitalize">
-                            {option.name}
-                            </span>
+                            <span className="capitalize">{option.name}</span>
                           </label>
                         </li>
                       ))}
@@ -567,42 +663,48 @@ const CreateBusinessUnit = () => {
 
           {/* Service Value Currency Input */}
           {selectedOptions.length > 0 && (
-          <div className="w-full">
-            <div className="w-full mb-6">
-              <p className="capitalize text-lg font-semibold">Base Price</p>
-            </div>
+            <div className="w-full">
+              <div className="w-full mb-6">
+                <p className="capitalize text-lg font-semibold">Base Price</p>
+              </div>
 
-            <div
-              className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
-            >
-              {selectedOptions.map((service, index) => (
-                <div key={index} className="w-[220px]">
-                  <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                    <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                    {service.service}
-                  </label>
-                  <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
-                    <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
-                      <p className="text-[#606B85] text-sm h-full">{formData.currency? formData.currency : "INR"}</p>
+              <div
+                className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
+              >
+                {selectedOptions.map((service, index) => (
+                  <div key={index} className="w-[220px]">
+                    <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
+                      <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
+                      {service.service}
+                    </label>
+                    <div className="flex mt-1 overflow-hidden border border-[#8891AA] rounded-md">
+                      <div className="p-2 border-r border-[#E1E3EA] bg-[#F9F9FA] w-fit">
+                        <p className="text-[#606B85] text-sm h-full">
+                          {formData.currency ? formData.currency : "INR"}
+                        </p>
+                      </div>
+                      <input
+                        className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
+                        value={selectedOptions[index].basePrice}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only numbers and a single decimal point
+                          const formattedValue = value
+                            .replace(/[^0-9.]/g, "")
+                            .replace(/(\..*?)\..*/g, "$1");
+                          // Limit to 2 decimal places
+                          const twoDecimalValue =
+                            formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || "";
+                          handleServicePrice(twoDecimalValue, index);
+                        }}
+                        type="text"
+                      />
                     </div>
-                    <input
-                      className="w-full p-2 placeholder:italic text-sm classic focus:outline-none"
-                      value={selectedOptions[index].basePrice}
-                      onChange={e => {
-                        const value = e.target.value;
-                        // Allow only numbers and a single decimal point
-                        const formattedValue = value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');
-                        // Limit to 2 decimal places
-                        const twoDecimalValue = formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || '';
-                        handleServicePrice(twoDecimalValue, index);
-                      }}
-                      type="text"
-                    />
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>)}
+          )}
 
           {/* Department Selection */}
           <div className="flex w-full items-center justify-between gap-[50px]">
@@ -613,11 +715,16 @@ const CreateBusinessUnit = () => {
               </label>
 
               <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
-                <div className={`w-full h-full relative gap-1 flex items-center justify-between`}>
-                  {selectedDepartments.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
-                  </div>)}
+                <div
+                  className={`w-full h-full relative gap-1 flex items-center justify-between`}
+                >
+                  {selectedDepartments.length === 0 && (
+                    <div className="px-2">
+                      <p className="text-sm text-[#121C2D] font-medium">
+                        Select
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex w-full h-full items-center py-1 px-3 flex-wrap gap-1">
                     {selectedDepartments?.map((option, index) => (
@@ -636,24 +743,24 @@ const CreateBusinessUnit = () => {
                     ))}
                   </div>
 
-                  <div className='h-full aspect-square flex items-center justify-center'>
+                  <div className="h-full aspect-square flex items-center justify-center">
                     <button
-                        onClick={() => setShowDropdownDept(prev => !prev)}
-                        className='flex items-center justify-center w-5 h-5 aspect-square'
+                      onClick={() => setShowDropdownDept((prev) => !prev)}
+                      className="flex items-center justify-center w-5 h-5 aspect-square"
                     >
-                        <img
-                            src={chevronDown}
-                            className={`w-full h-full object-contain transition-all ${showDropdownDept? "rotate-180" : ""}`}
-                            alt='chevron down'
-                        />
+                      <img
+                        src={chevronDown}
+                        className={`w-full h-full object-contain transition-all ${
+                          showDropdownDept ? "rotate-180" : ""
+                        }`}
+                        alt="chevron down"
+                      />
                     </button>
                   </div>
                 </div>
 
                 {showDropdownDept && (
-                  <div
-                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
-                  >
+                  <div className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto">
                     <ul className="list-none p-0 m-0">
                       {departments?.map((option, index) => (
                         <li className="p-2" key={index}>
@@ -661,12 +768,14 @@ const CreateBusinessUnit = () => {
                             <input
                               type="checkbox"
                               className="mr-2 placeholder:italic text-sm"
-                              checked={selectedDepartments.some(obj => obj.id === option.id)}
-                              onChange={() => handleCheckboxDepartmentChange(option)}
+                              checked={selectedDepartments.some(
+                                (obj) => obj.id === option.id
+                              )}
+                              onChange={() =>
+                                handleCheckboxDepartmentChange(option)
+                              }
                             />
-                            <span className="capitalize">
-                            {option.name}
-                            </span>
+                            <span className="capitalize">{option.name}</span>
                           </label>
                         </li>
                       ))}
@@ -689,10 +798,13 @@ const CreateBusinessUnit = () => {
                 <div
                   className={`w-full h-full relative gap-1 flex items-center justify-between`}
                 >
-                  {selectedAppointments.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#AEB2C1] font-medium">Select</p>
-                  </div>)}
+                  {selectedAppointments.length === 0 && (
+                    <div className="px-2">
+                      <p className="text-sm text-[#AEB2C1] font-medium">
+                        Select
+                      </p>
+                    </div>
+                  )}
 
                   <div className="flex w-full h-full items-center flex-wrap px-3 py-1 gap-1">
                     {selectedAppointments?.map((option, index) => (
@@ -711,15 +823,15 @@ const CreateBusinessUnit = () => {
                     ))}
                   </div>
 
-                  <div className='h-full aspect-square flex items-center justify-center'>
+                  <div className="h-full aspect-square flex items-center justify-center">
                     <button
                       disabled
-                      className='flex items-center justify-center w-5 h-5 aspect-square'
+                      className="flex items-center justify-center w-5 h-5 aspect-square"
                     >
                       <img
-                          src={chevronDown}
-                          className={`w-full h-full object-contain transition-all`}
-                          alt='chevron down'
+                        src={chevronDown}
+                        className={`w-full h-full object-contain transition-all`}
+                        alt="chevron down"
                       />
                     </button>
                   </div>

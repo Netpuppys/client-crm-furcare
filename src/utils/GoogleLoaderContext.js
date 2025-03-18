@@ -1,16 +1,23 @@
-import React from 'react';
-import { useLoadScript } from '@react-google-maps/api';
+import React, { useEffect, useState } from "react";
+// import { useLoadScript } from "@react-google-maps/api";
 
-const libraries = ['places'];
+// const libraries = ["places"];
 
 export const GoogleMapsLoader = ({ children }) => {
-  const { isLoaded, loadError } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
-    libraries,
-  });
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
-  if (loadError) return <div>Error loading Google Maps API</div>;
-  if (!isLoaded) return <div>Loading...</div>;
+  useEffect(() => {
+    if (!window.google) {
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.REACT_APP_GOOGLE_API_KEY}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => setScriptLoaded(true);
+      document.head.appendChild(script);
+    } else {
+      setScriptLoaded(true);
+    }
+  }, []);
 
-  return <>{children}</>;
+  return scriptLoaded ? children : null;
 };
