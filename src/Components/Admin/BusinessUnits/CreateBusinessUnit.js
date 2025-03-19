@@ -21,6 +21,23 @@ const appointmentSlots = [
   },
 ];
 
+const branchTypeValues = [
+  "Hospital, Clinic",
+  "Boarding Centre",
+  "Shelter Home",
+  "Mobile Clinic"
+]
+
+const practiceType = [
+  "Emergency/Critical Animal Care",
+  "General practice",
+  "Boarding",
+  "Specialty",
+  "Primary Care",
+  "Secondary Care",
+  "Veterinary Teaching Facility"
+]
+
 // const departments = [
 //   {
 //     id: "675b03cdcef11a5735b8c173",
@@ -401,9 +418,9 @@ const CreateBusinessUnit = () => {
                 }
               >
                 <option value="">Placeholder</option>
-                <option value="Select Option 1">Select Option 1</option>
-                <option value="Select Option 2">Select Option 2</option>
-                <option value="Select Option 3">Select Option 3</option>
+                {branchTypeValues.map((item, index) => (
+                  <option key={index} value={item}>{item}</option>
+                ))}
               </select>
             </div>
           </div>
@@ -423,9 +440,9 @@ const CreateBusinessUnit = () => {
                 }
               >
                 <option value="">Placeholder</option>
-                <option value="Select Option 1">Select Option 1</option>
-                <option value="Select Option 2">Select Option 2</option>
-                <option value="Select Option 3">Select Option 3</option>
+                {practiceType.map((item, index) => (
+                  <option key={index} value={item}>{item}</option>
+                ))}
               </select>
             </div>
             {/* currency selection */}
