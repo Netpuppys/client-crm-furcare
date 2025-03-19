@@ -136,7 +136,7 @@ const EditNewRoles = ({
       .post(`/api/v1/roles`, data)
       .then((res) => {
         console.log(res);
-        setAlert("Role Added Successfully");
+        setAlert("Role Updated Successfully");
         fetchRolesList();
       })
       .catch((err) => {
