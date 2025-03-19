@@ -530,6 +530,7 @@ const EditBusinessUnit = () => {
                         {option.service}
                         <button
                           className="ml-2 text-[#606B85]"
+                          disabled
                           onClick={() => handleDeleteService(option.service)}
                         >
                           <IoClose />
@@ -587,7 +588,6 @@ const EditBusinessUnit = () => {
               <div className="w-full mb-6">
                 <p className="capitalize text-lg font-semibold">Base Price</p>
               </div>
-            {/* {console.log(selectedOptions)} */}
               <div
                 className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
               >
@@ -649,6 +649,7 @@ const EditBusinessUnit = () => {
                       >
                         {option.name}
                         <button
+                        disabled
                           className="ml-2 text-[#606B85]"
                           onClick={() => handleDeleteDepartment(option)}
                         >
