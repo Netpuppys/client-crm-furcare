@@ -42,12 +42,12 @@ const TableComponent = ({
                 <img src={informationIcon} className="w-5" alt="info" />
               </div>
             </th>
-            <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-[#E1E3EA]">
+            {/* <th className="text-left text-sm font-normal text-[#606B85] px-4 py-3 border-b border-[#E1E3EA]">
               <div className="flex items-center gap-1">
                 <p>Status</p>
                 <img src={informationIcon} className="w-5" alt="" />
               </div>
-            </th>
+            </th> */}
           </tr>
         </thead>
         <tbody>
@@ -65,7 +65,7 @@ const TableComponent = ({
                     <p>{categoryKey.replace(/_/g, " ")}</p>
                   </div>
                 </td>
-                <td className="px-4 py-3 border-b border-[#E1E3EA]">
+                {/* <td className="px-4 py-3 border-b border-[#E1E3EA]">
                   <div className="w-full flex items-center">
                     <div
                       className={`w-3 aspect-square bg-[#0B602D] rounded-full `}
@@ -76,7 +76,7 @@ const TableComponent = ({
                       Active
                     </span>
                   </div>
-                </td>
+                </td> */}
               </tr>
               {openIndex.includes(index) &&
                 contentLibraryData[categoryKey].content.map((item, idx) => (
@@ -89,7 +89,7 @@ const TableComponent = ({
                         {extractFirstH2(item.body)}
                       </button>
                     </td>
-                    <td className="px-4 py-3 border-b border-[#E1E3EA]">
+                    {/* <td className="px-4 py-3 border-b border-[#E1E3EA]">
                       <div className="w-full flex  items-center">
                         <div
                             className={`w-3 aspect-square ${
@@ -102,7 +102,7 @@ const TableComponent = ({
                             {item.active ? "Active" : "Inactive"}
                         </span>
                       </div>
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
             </React.Fragment>

@@ -38,15 +38,6 @@ const practiceType = [
   "Veterinary Teaching Facility"
 ]
 
-// const departments = [
-//   {
-//     id: "675b03cdcef11a5735b8c173",
-//     name: "department A",
-//     createdAt: new Date("2024-12-12T15:39:56.279Z"),
-//     updatedAt: new Date("2024-12-12T15:39:51.502Z")
-//   }
-// ];
-
 const CreateBusinessUnit = () => {
   const location = useLocation();
   const navigate = useNavigate();

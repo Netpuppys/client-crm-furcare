@@ -201,7 +201,7 @@ const ServiceTable = ({ branchData }) => {
                         : "bg-[#0B602D] rounded-full"
                     }`}
                   ></span>
-                  {service.active ? "Active" : "inactive"}
+                  {service.active ? "Active" : "Inactive"}
                 </div>
               </td>
             </tr>

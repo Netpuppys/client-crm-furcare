@@ -21,7 +21,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   });
 
   const [languages, setLanguages] = useState(["english"]); // Initial languages
-  const [translation, setTranslation ] = useState()
+  // const [translation, setTranslation ] = useState()
   const [documents, setDocuments] = useState([
     {
       language: "english",
@@ -76,65 +76,57 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const translateToHindi = async (text) => {
-    const apiKey = process.env.REACT_APP_TRANSLATE_API_KEY; // Replace with your API key
-    const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
+  // const translateToHindi = async (text) => {
+  //   const apiKey = process.env.REACT_APP_TRANSLATE_API_KEY; // Replace with your API key
+  //   const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
   
-    try {
-      const response = await fetch(url, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          q: text,
-          source: "en",
-          target: "hi",
-          format: "text",
-        }),
-      });
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({
+  //         q: text,
+  //         source: "en",
+  //         target: "hi",
+  //         format: "text",
+  //       }),
+  //     });
   
-      const data = await response.json();
+  //     const data = await response.json();
   
-      const convertedString = data.data.translations[0].translatedText || ""
-      if (typeof convertedString === "string") {
-        setTranslation(convertedString)
-        console.log(convertedString)
-      }
-    } catch (error) {
-      console.error("Translation API error:", error);
-      return "";
-    }
-  };
+  //     const convertedString = data.data.translations[0].translatedText || ""
+  //     if (typeof convertedString === "string") {
+  //       setTranslation(convertedString)
+  //       console.log(convertedString)
+  //     }
+  //   } catch (error) {
+  //     console.error("Translation API error:", error);
+  //     return "";
+  //   }
+  // };
 
   const handleSubmit = () => {
-    if (documents[0].body !== "") {
-      setTimeout(() => {
-        translateToHindi(documents[0].body)
-      }, 3000)
-    }
+    
+    const sendData = {
+      type: formData.type,
+      name: formData.name,
+      body: documents,
+      businessBranchId: selectedBranch.id,
+    };
 
-    if (translation) {
-
-      const sendData = {
-        type: formData.type,
-        name: formData.name,
-        body: documents,
-        businessBranchId: selectedBranch.id,
-      };
-  
-      axiosInstance
-        .post("/api/v1/document-templates", sendData)
-        .then((res) => {
-          console.log(res);
-          setAlert("Added Successfully");
-          fetchData();
-        })
-        .catch((err) => {
-          console.error(err);
-          toast.error("Something Went Wrong");
-        });
-    }
+    axiosInstance
+      .post("/api/v1/document-templates", sendData)
+      .then((res) => {
+        console.log(res);
+        setAlert("Added Successfully");
+        fetchData();
+      })
+      .catch((err) => {
+        console.error(err);
+        toast.error("Something Went Wrong");
+      });
   };
 
   const handleQuillChange = (value) => {

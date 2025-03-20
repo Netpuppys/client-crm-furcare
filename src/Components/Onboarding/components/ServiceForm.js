@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { IoClose, IoSearchOutline } from "react-icons/io5";
 import axiosInstance from "../../../utils/AxiosInstance";
+import chevronDown from "../../../Assets/icons/chevronDown.png"
 
 const ServiceForm = ({
   sendData,
@@ -8,8 +9,6 @@ const ServiceForm = ({
   selectedOptions,
   setSelectedOptions,
 }) => {
-  const dropdownRef = useRef(null);
-  const toggleRef = useRef(null);
 
   // const [ selectedOptions, setSelectedOptions ] = useState([]);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -40,10 +39,6 @@ const ServiceForm = ({
         console.error(err);
       });
   }, []);
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen((prevState) => !prevState);
-  };
 
   const handleServiceTag = (option) => {
     if (selectedOptions.some((obj) => obj.service === option.name)) {
@@ -86,25 +81,6 @@ const ServiceForm = ({
     });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target) &&
-        toggleRef.current &&
-        !toggleRef.current.contains(event.target)
-      ) {
-        setIsDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleServicePrice = (value, index) => {
     setSelectedOptions((prev) => {
       const arr = [...prev];
@@ -123,11 +99,9 @@ const ServiceForm = ({
 
       <div className="relative w-full">
         <div
-          ref={toggleRef}
-          className={`classic w-full mt-1 ${
+          className={`classic w-full mt-1 flex items-center justify-between ${
             selectedOptions.length === 0 ? "p-2" : "p-1 min-h-[42px]"
           } border border-[#8891AA] focus:outline-none rounded-md`}
-          onClick={toggleDropdown}
         >
           {selectedOptions.length === 0 && <p className="text-sm">Select</p>}
 
@@ -147,11 +121,23 @@ const ServiceForm = ({
               </span>
             ))}
           </div>
+
+          <div className='h-full aspect-square flex items-center justify-center'>
+            <button
+              onClick={() => setIsDropdownOpen(prev => !prev)}
+              className='flex items-center justify-center w-5 h-5 aspect-square'
+            >
+              <img
+                  src={chevronDown}
+                  className={`w-full h-full object-contain transition-all ${isDropdownOpen? "rotate-180" : ""}`}
+                  alt='chevron down'
+              />
+            </button>
+          </div>
         </div>
 
         {isDropdownOpen && (
           <div
-            ref={dropdownRef}
             className="absolute z-50 top-full left-0 w-full bg-white hideScrollbar shadow-2xl rounded-md border-[#8891AA] max-h-[18.5rem] overflow-y-auto"
           >
             <div className="h-[2.8rem] flex items-center justify-start px-3 border-b border-[#E1E3EA]">

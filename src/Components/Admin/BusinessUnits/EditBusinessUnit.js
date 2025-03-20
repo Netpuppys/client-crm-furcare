@@ -5,7 +5,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
-import chevronDown from "../../../Assets/icons/chevronDown.png"
+import chevronDown from "../../../Assets/icons/chevronDown.png";
+import HandleEditServices from "./components/HandleEditServices";
+import { toast } from "react-toastify";
 
 const appointmentSlots = [
   {
@@ -19,15 +21,6 @@ const appointmentSlots = [
     updatedAt: new Date("2024-12-12T15:43:24.967Z"),
   },
 ];
-
-// const departments = [
-//   {
-//     id: "675b03cdcef11a5735b8c173",
-//     name: "department A",
-//     createdAt: new Date("2024-12-12T15:39:56.279Z"),
-//     updatedAt: new Date("2024-12-12T15:39:51.502Z"),
-//   },
-// ];
 
 const branchTypeValues = [
   "Hospital, Clinic",
@@ -57,11 +50,14 @@ const EditBusinessUnit = () => {
   const { setSelectedBranch } = useAppContext()
 
   const [ selectedOptions, setSelectedOptions] = useState(
-    businessUnitData.services.map((item) => ({
+    businessUnitData.services.map((item) => {
+      return {
       service: item.serviceDetails.name,
       basePrice: item.basePrice,
-      serviceId: item.serviceId
-    }))
+      serviceId: item.serviceId,
+      active: item.active,
+      type: "server"
+    }})
   );
   const [ changedService, setChangedService ] = useState([])
   const [ disabled, setDisabled] = useState(false);
@@ -71,6 +67,8 @@ const EditBusinessUnit = () => {
   const [ selectedAppointments, setSelectedAppointments ] = useState([])
   const [ showDropdown, setShowDropdown ] = useState(false)
   const [ showDropdownDept, setShowDropdownDept ] = useState(false)
+  const [ activeServices, setActiveServices ] = useState([])
+  const [ inActiveServices, setInactiveServices ] = useState([])
   const [ formData, setFormData] = useState({
     active: businessUnitData.active,
     unitName: businessUnitData.name,
@@ -88,8 +86,9 @@ const EditBusinessUnit = () => {
   });
 
   useEffect(() => {
+    // ?businessUnitId=${businessUnitData.businessUnitId}
     axiosInstance
-      .get("/api/v1/services")
+      .get(`/api/v1/services`)
       .then((res) => {
         setOptions(res.data.data.data);
       })
@@ -98,7 +97,7 @@ const EditBusinessUnit = () => {
       });
 
     axiosInstance
-      .get("/api/v1/departments")
+      .get(`/api/v1/departments`)
       .then((res) => {
         setDepartments(res.data.data.data);
       })
@@ -141,37 +140,18 @@ const EditBusinessUnit = () => {
 
     if (checkFromdata && !valueChanged) {
       setDisabled(false);
-    } else if (changedService.length>0) {
+    } else if (changedService.length>0 || inActiveServices.length>0 || activeServices.length>0 || selectedOptions.length !== businessUnitData.services.length) {
       setDisabled(false);
     } else {
       setDisabled(true);
     }
-  }, [formData, selectedOptions, businessUnitData, changedService]);
+  }, [formData, selectedOptions, businessUnitData, changedService, activeServices, inActiveServices]);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleCheckboxChange = (option) => {
-    if (selectedOptions.some((obj) => obj.service === option.name)) {
-      setSelectedOptions(
-        selectedOptions.filter((item) => item.service !== option)
-      );
-    } else {
-      setSelectedOptions([
-        ...selectedOptions,
-        { service: option.name, basePrice: "" },
-      ]);
-    }
-  };
-
-  const handleDeleteService = (option) => {
-    setSelectedOptions((prev) =>
-      prev.filter((item) => item.service !== option)
-    );
-  };
-
-  const handleServicePrice = (value, index, serviceId) => {
+  const handleServicePrice = (value, index, serviceId, serviceType) => {
     setSelectedOptions((prev) => {
       const arr = [...prev];
       arr[index].basePrice = value;
@@ -179,23 +159,25 @@ const EditBusinessUnit = () => {
       return arr;
     });
 
-    setChangedService(prev => {
-      const arr = [...prev];
-      const selected = arr.find(item => item.serviceId === serviceId)
+    if (serviceType === "server") {
+      setChangedService(prev => {
+        const arr = [...prev];
+        const selected = arr.find(item => item.serviceId === serviceId)
 
-      if (!selected) {
-        arr.push({
-          basePrice: value,
-          serviceId: serviceId
-        })
+        if (!selected) {
+          arr.push({
+            basePrice: value,
+            serviceId: serviceId
+          })
+
+          return arr;
+        } else {
+          selected.basePrice = value
+        }
 
         return arr;
-      } else {
-        selected.basePrice = value
-      }
-
-      return arr;
-  })
+      })
+    }
   };
 
   const handleCheckboxDepartmentChange = (option) => {
@@ -214,26 +196,90 @@ const EditBusinessUnit = () => {
 
   const handleDeleteDepartment = (option) => {
     setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
+    console.log(option)
   }
 
   const handleSubmit = async () => {
 
-    try {
-      const promises = changedService.map((service) => {
-  
-        return axiosInstance.patch(
-          `/api/v1/business-branches/${businessUnitData.id}/services/${service.serviceId}`,
-          { basePrice: service.basePrice }
-        );
-      });
-  
-      const responses = await Promise.all(promises);
-      console.log("All updates successful:", responses);
-  
-      sessionStorage.removeItem("selectedBranch")
-      setSelectedBranch(null)
-    } catch (error) {
-      console.error("Error updating branch units:", error);
+    if (changedService.length>0) {
+      try {
+        const promises = changedService.map((service) => {
+    
+          return axiosInstance.patch(
+            `/api/v1/business-branches/${businessUnitData.id}/services/${service.serviceId}`,
+            { basePrice: service.basePrice }
+          );
+        });
+    
+        const responses = await Promise.all(promises);
+        console.log("All updates successful:", responses);
+    
+        sessionStorage.removeItem("selectedBranch")
+        setSelectedBranch(null)
+      } catch (error) {
+        console.error("Error updating branch units:", error);
+      }
+    }
+
+    if (inActiveServices.length>0) {
+      try {
+        const promises = inActiveServices.map((service) => {
+    
+          return axiosInstance.patch(
+            `/api/v1/business-branches/${businessUnitData.id}/services/${service.serviceId}`,
+            { active: false }
+          );
+        });
+    
+        const responses = await Promise.all(promises);
+        console.log("All updates successful:", responses);
+    
+        sessionStorage.removeItem("selectedBranch")
+        setSelectedBranch(null)
+      } catch (error) {
+        console.error("Error updating branch units:", error);
+      }
+    }
+
+    if (activeServices.length>0) {
+      try {
+        const promises = activeServices.map((service) => {
+    
+          return axiosInstance.patch(
+            `/api/v1/business-branches/${businessUnitData.id}/services/${service.serviceId}`,
+            { active: true }
+          );
+        });
+    
+        const responses = await Promise.all(promises);
+        console.log("All updates successful:", responses);
+    
+        sessionStorage.removeItem("selectedBranch")
+        setSelectedBranch(null)
+      } catch (error) {
+        console.error("Error updating branch units:", error);
+      }
+    }
+
+    const addedServices = selectedOptions.filter(obj => 
+      !businessUnitData.services.some(item => obj.serviceId === item.serviceId)
+    );
+
+    if (addedServices.length>0) {
+      const sendNewServices = addedServices.map(item => ({
+        serviceId: item.serviceId,
+        basePrice: item.basePrice
+      }))
+
+      axiosInstance
+        .post(`/api/v1/business-branches/${businessUnitData.id}/services`, { services: sendNewServices})
+        .then(res => {
+          console.log(res)
+        })
+        .catch(err => {
+          console.log(err)
+          toast.error('Adding new services failed')
+        })
     }
 
     const sendData = {
@@ -254,10 +300,6 @@ const EditBusinessUnit = () => {
         console.error("Error:", error);
       });
   };
-
-  // const filteredOptions = options?.filter(
-  //   (obj) => !selectedOptions.some((selected) => selected.service === obj.name)
-  // );
 
   return (
     <div className="w-full h-[calc(100vh-4.75rem)] hideScrollbar overflow-scroll px-8 py-4 pb-10">
@@ -286,7 +328,7 @@ const EditBusinessUnit = () => {
             Save
           </button>
         </div>
-      </div>
+      </div>{console.log(selectedOptions)}
       {/* main form */}
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
@@ -340,7 +382,7 @@ const EditBusinessUnit = () => {
                 }}
               />
             </div>
-
+            
             {/* type input */}
             <div className="w-[47.5%]">
               <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
@@ -392,6 +434,7 @@ const EditBusinessUnit = () => {
                 type="text"
                 className="w-full mt-1 p-2 placeholder:italic uppercase text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 disabled
+                readOnly
                 placeholder="INR"
                 value={formData.currency}
                 onChange={(e) => handleInputChange("currency", e.target.value)}
@@ -415,6 +458,7 @@ const EditBusinessUnit = () => {
                   className="w-full placeholder:italic text-sm capitalize focus:outline-none p-2 disabled:bg-[#F4F4F6]"
                   placeholder="Placeholder"
                   disabled
+                  readOnly
                   value={formData.address1}
                   onChange={(e) =>
                     handleInputChange("address1", e.target.value)
@@ -431,6 +475,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
+                readOnly
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Placeholder"
                 value={formData.address2}
@@ -449,6 +494,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
+                readOnly
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Malad"
                 value={formData.city}
@@ -469,6 +515,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
+                readOnly
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Maharashtra"
                 value={formData.state}
@@ -487,6 +534,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
+                readOnly
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="India"
                 value={formData.country}
@@ -502,6 +550,7 @@ const EditBusinessUnit = () => {
               <input
                 type="text"
                 disabled
+                readOnly
                 className="w-full mt-1 p-2 placeholder:italic capitalize text-sm border border-[#8891AA] focus:outline-none rounded-md disabled:bg-[#F4F4F6]"
                 placeholder="Postal Code"
                 value={formData.postalCode}
@@ -524,83 +573,20 @@ const EditBusinessUnit = () => {
           </div>
 
           {/* Service Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Service(s)
-              </label>
-              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
-                <div className={`w-full flex items-center justify-between gap-1 h-full`}>
-
-                  {selectedOptions.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
-                  </div>)}
-
-                  <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
-                    {selectedOptions?.map((option, index) => (
-                      <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
-                        key={index}
-                      >
-                        {option.service}
-                        <button
-                          className="ml-2 text-[#606B85]"
-                          disabled
-                          onClick={() => handleDeleteService(option.service)}
-                        >
-                          <IoClose />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className='h-full aspect-square flex items-center justify-center'>
-                    <button
-                      disabled
-                        onClick={() => setShowDropdown(prev => !prev)}
-                        className='flex items-center justify-center w-5 h-5 aspect-square'
-                    >
-                      <img
-                          src={chevronDown}
-                          className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
-                          alt='chevron down'
-                      />
-                    </button>
-                  </div>
-                </div>
-
-                {showDropdown && (
-                  <div
-                    // ref={dropdownRef}
-                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
-                  >
-                    <ul className="list-none p-0 m-0">
-                      {options?.map((option, index) => (
-                        <li className="p-2" key={index}>
-                          <label className="flex w-full items-center cursor-pointer capitalize">
-                            <input
-                              type="checkbox"
-                              className="mr-2 placeholder:italic text-sm"
-                              checked={selectedOptions.some(obj => obj.service === option.name)}
-                              onChange={() => handleCheckboxChange(option)}
-                            />
-                            <span className="capitalize">
-                            {option.name}
-                            </span>
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
+          <HandleEditServices 
+            options={options}
+            selectedOptions={selectedOptions}
+            setSelectedOptions={setSelectedOptions}
+            activeServices={activeServices}
+            setActiveServices={setActiveServices}
+            inActiveServices={inActiveServices}
+            setInactiveServices={setInactiveServices}
+            showDropdown={showDropdown}
+            setShowDropdown={setShowDropdown}
+          />
 
           {/* Service Value Currency Input */}
-          {selectedOptions.length > 0 && (
+          {(selectedOptions.length!==0 && !selectedOptions.every(item => item.active === false)) && (
             <div className="w-full">
               <div className="w-full mb-6">
                 <p className="capitalize text-lg font-semibold">Base Price</p>
@@ -609,7 +595,7 @@ const EditBusinessUnit = () => {
                 className={`flex w-full gap-x-10 flex-wrap gap-y-6 items-center`}
               >
                 {selectedOptions.map((service, index) => (
-                  <div key={index} className="w-[220px]">
+                  <div key={index} className={`w-[220px] ${service.active? "" : "hidden"}`}>
                     <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
                       <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                       {service.service}
@@ -633,7 +619,7 @@ const EditBusinessUnit = () => {
                           // Limit to 2 decimal places
                           const twoDecimalValue =
                             formattedValue.match(/^\d+(\.\d{0,2})?/)?.[0] || "";
-                          handleServicePrice(Number(twoDecimalValue), index, service.serviceId);
+                          handleServicePrice(Number(twoDecimalValue), index, service.serviceId, service.type);
                         }}
                         type="text"
                       />
