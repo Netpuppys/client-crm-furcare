@@ -15,6 +15,7 @@ const labelFields = [
   "Appointment Slots",
   "Doctors",
 ];
+
 const frequencyArray = ["day", "week", "month"];
 
 const appointmentTypes = [
@@ -28,19 +29,22 @@ const appointmentTypes = [
 ];
 
 const CreateNewReport = ({ fetchAllReports }) => {
+
   const { setAlert } = useAlertContext();
   const { branchDetails, selectedBranch } = useAppContext();
 
-  const [showLabelOptions, setShowLabelOptions] = useState(false);
-  const [selectedLabelOptions, setSelectedLabelOptions] = useState([]);
-  const [disabled, setDisabled] = useState(true);
-  const [formData, setFormData] = useState({
+  const [ showLabelOptions, setShowLabelOptions ] = useState(false);
+  const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([]);
+  const [ disabled, setDisabled ] = useState(true);
+  const [ formData, setFormData ] = useState({
     name: "",
     type: "",
     labelFields: "",
     frequency: "",
     location: selectedBranch.name,
     generateInBackground: false,
+    businessBranchId: "",
+    businessUnitId: ""
   });
 
   useEffect(() => {
@@ -61,6 +65,18 @@ const CreateNewReport = ({ fetchAllReports }) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleLocationChange = (item) => {
+    const value = JSON.parse(item)
+
+    if (value.type === "business") {
+      setFormData((prev) => ({ ...prev, businessUnitId: value.id, businessBranchId: "" }));
+    } else if (value.type === "branch") {
+      setFormData((prev) => ({ ...prev, businessBranchId: value.id, businessUnitId: "" }));
+    }
+
+    setFormData((prev) => ({ ...prev, location: item }));
+  };
+
   const handleSubmit = () => {
     const sendData = {
       name: formData.name,
@@ -68,7 +84,8 @@ const CreateNewReport = ({ fetchAllReports }) => {
       frequency: formData.frequency,
       generateInBackground: formData.generateInBackground,
       fields: selectedLabelOptions,
-      businessBranchId: selectedBranch.id,
+      ...(formData.businessBranchId !== "" && { businessBranchId: formData.businessBranchId }),
+      ...(formData.businessUnitId !== "" && { businessUnitId: formData.businessUnitId }),
     };
 
     axiosInstance
@@ -113,7 +130,7 @@ const CreateNewReport = ({ fetchAllReports }) => {
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+            className="mt-1 p-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Name"
             value={formData.name}
             onChange={(e) => {
@@ -132,12 +149,12 @@ const CreateNewReport = ({ fetchAllReports }) => {
           <select
             value={formData.type}
             onChange={(e) => handleInputChange("type", e.target.value)}
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
+            className="mt-1 p-2 capitalize border border-[#8891AA] focus:outline-none rounded-md classic"
           >
             <option value={""}>Select</option>
             {appointmentTypes.map((item, index) => (
               <option key={index} value={item}>
-                {item}
+                {item?.replace(/_/g, " ")}
               </option>
             ))}
           </select>
@@ -236,13 +253,13 @@ const CreateNewReport = ({ fetchAllReports }) => {
           </label>
           <select
             value={formData.location}
-            onChange={(e) => handleInputChange("location", e.target.value)}
+            onChange={(e) => handleLocationChange(e.target.value)}
             className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md classic"
           >
             <option value={""}>Select</option>
-            <option value={"All"}>All</option>
+            <option value={JSON.stringify({ id: selectedBranch.businessUnitId, type: 'business'})}>All</option>
             {branchDetails?.map((item, index) => (
-              <option key={index} value={item.name}>
+              <option key={index} value={JSON.stringify({ id: item.id, type: 'branch'})}>
                 {item.name}
               </option>
             ))}
@@ -255,10 +272,8 @@ const CreateNewReport = ({ fetchAllReports }) => {
           <input
             id="checkbox"
             type="checkbox"
-            value={formData.generateInBackground}
-            onChange={(e) =>
-              handleInputChange("generateInBackground", Boolean(e.target.value))
-            }
+            checked={formData.generateInBackground}
+            onChange={(e) => handleInputChange("generateInBackground", Boolean(e.target.checked))}
             className="min-w-4 aspect-square cursor-pointer"
           />
           <label htmlFor="checkbox" className="cursor-pointer">

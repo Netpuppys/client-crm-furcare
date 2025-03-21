@@ -17,6 +17,7 @@ const labelFields = [
   "Appointment Slots",
   "Doctors",
 ];
+
 const frequencyArray = ["day", "week", "month"];
 
 const appointmentTypes = [
@@ -38,13 +39,12 @@ const ReportGraph = ({ setShowReport }) => {
             <p className='text-xl font-semibold text-[#121C2D] tracking-[-0.025rem] '>
                 Preview Report
             </p>
-            <button 
+            <button
                 onClick={() => setShowReport(false)}
                 className='w-[1.75rem] aspect-square flex items-center text-3xl text-[#606B85]'>
                 <IoClose />
             </button>
         </div>
-
 
         <PreviewGraph />
       </div>
@@ -53,9 +53,9 @@ const ReportGraph = ({ setShowReport }) => {
 }
 
 const EditReport = ({ selectedReport, fetchAllReports }) => {
-  const { branchDetails } = useAppContext();
-
+  
   const { setAlert } = useAlertContext()
+  const { branchDetails, selectedBranch } = useAppContext();
 
   const [ showReport, setShowReport ] = useState(false)
   const [ showLabelOptions, setShowLabelOptions] = useState(false);
@@ -67,22 +67,22 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
     type: selectedReport.type,
     labelFields: selectedReport.fields,
     frequency: selectedReport.frequency,
-    location: "",
+    location: (selectedReport.businessBranchId? JSON.stringify({ id: selectedReport.businessBranchId, type: "branch" }) : JSON.stringify({ id: selectedReport.businessUnitId, type: "business" })),
     backgroundReport: selectedReport.generateInBackground,
+    businessBranchId: "",
+    businessUnitId: "",
   });
 
   useEffect(() => {
-    console.log(selectedLabelOptions, selectedReport.fields)
-    console.log(selectedLabelOptions.every((item, index) => item === selectedReport.fields[index]));
+    // console.log(selectedLabelOptions, selectedReport.fields)
+    // console.log(selectedLabelOptions.every((item, index) => item === selectedReport.fields[index]));
 
-    if ((selectedReport.name.replace(/\s/g, "") ===
-        formData.name.replace(/\s/g, "") ||
-        formData.name.replace(/\s/g, "") === "") &&
+    if ((selectedReport.name.replace(/\s/g, "") === formData.name.replace(/\s/g, "") || formData.name.replace(/\s/g, "") === "") &&
         selectedReport.type === formData.type &&
         selectedLabelOptions.length === selectedReport.fields.length &&
         selectedLabelOptions.every((item, index) => item === selectedReport.fields[index]) &&
         selectedReport.frequency === formData.frequency &&
-        formData.location === "" &&
+        formData.location === (selectedReport.businessBranchId? JSON.stringify({ id: selectedReport.businessBranchId, type: "branch" }) : JSON.stringify({ id: selectedReport.businessUnitId, type: "business" })) &&
         selectedReport.generateInBackground === formData.backgroundReport &&
         active === selectedReport.active
       ) {
@@ -95,6 +95,19 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
+    console.log(value)
+  };
+
+  const handleLocationChange = (item) => {
+    const value = JSON.parse(item)
+
+    if (value.type === "business") {
+      setFormData((prev) => ({ ...prev, businessUnitId: value.id, businessBranchId: "" }));
+    } else if (value.type === "branch") {
+      setFormData((prev) => ({ ...prev, businessBranchId: value.id, businessUnitId: "" }));
+    }
+
+    setFormData((prev) => ({ ...prev, location: item }));
   };
 
   const handleSubmit = () => {
@@ -107,10 +120,10 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
       frequency: formData.frequency,
       generateInBackground: formData.generateInBackground,
       fields: selectedLabelOptions,
-      active: active
+      active: active,
+      ...(formData.businessBranchId !== "" && { businessBranchId: formData.businessBranchId }),
+      ...(formData.businessUnitId !== "" && { businessUnitId: formData.businessUnitId }),
     }
-
-    console.log(sendData)
 
     axiosInstance
       .patch(`/api/v1/reports/${selectedReport.id}`, sendData)
@@ -155,7 +168,7 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
           </label>
           <input
             type="text"
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md"
+            className="mt-1 p-2 capitalize border border-[#8891AA] focus:outline-none rounded-md"
             placeholder="Appointment Name"
             value={formData.name}
             onChange={(e) => {
@@ -174,12 +187,12 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
           <select
             value={formData.type}
             onChange={(e) => handleInputChange("type", e.target.value)}
-            className="mt-1 p-2 border border-[#8891AA] focus:outline-none rounded-md classic"
+            className="mt-1 p-2 capitalize border border-[#8891AA] focus:outline-none rounded-md classic"
           >
             <option value={""}>Select</option>
             {appointmentTypes.map((item, index) => (
               <option key={index} value={item}>
-                {item}
+                {item?.replace(/_/g, " ")}
               </option>
             ))}
           </select>
@@ -278,28 +291,34 @@ const EditReport = ({ selectedReport, fetchAllReports }) => {
           </label>
           <select
             value={formData.location}
-            onChange={(e) => handleInputChange("location", e.target.value)}
+            onChange={(e) => handleLocationChange(e.target.value)}
             className="mt-1 p-2 border capitalize border-[#8891AA] focus:outline-none rounded-md classic"
           >
             <option value={""}>Select</option>
-            <option value={"All"}>All</option>
+            {/* <option value={"All"}>All</option>
             {branchDetails?.map((item, index) => (
               <option key={index} value={item.name}>
+                {item.name}
+              </option>
+            ))} */}
+            <option value={JSON.stringify({ id: selectedBranch.businessUnitId, type: 'business'})}>All</option>
+            {branchDetails?.map((item, index) => (
+              <option key={index} value={JSON.stringify({ id: item.id, type: 'branch'})}>
                 {item.name}
               </option>
             ))}
           </select>
         </div>
-      </div>
+      </div>{console.log(formData)}
 
       <div className="">
         <div className="flex gap-2 cursor-pointer">
           <input
             id="checkbox"
             type="checkbox"
-            value={formData.backgroundReport}
+            checked={formData.backgroundReport}
             onChange={(e) =>
-              handleInputChange("backgroundReport", Boolean(e.target.value))
+              handleInputChange("backgroundReport", e.target.checked)
             }
             className="min-w-4 aspect-square cursor-pointer"
           />

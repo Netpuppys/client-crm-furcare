@@ -285,20 +285,20 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       </div>
 
       {/* Rich Text Editor */}
-      {documents.map((doc, index) => (
+      {/* {documents.map((doc, index) => (
         <div
           key={index}
-          className={`w-full flex-col ${
-            index === langIndex ? "flex" : "hidden"
-          }`}
-        >
+          className={`w-full flex-col 
+           ${index === langIndex ? "flex" : "hidden"}
+          `}
+        > */}
           <Syncfusion
-            value={doc.body}
-            index={index}
+            value={documents[langIndex].body}
+            index={langIndex}
             onChangeFunction={handleQuillChange}
           />
-        </div>
-      ))}
+        {/* </div>
+      ))} */}
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

@@ -45,8 +45,8 @@ const AddNewItemForm = ({ content, fetchContent }) => {
   };
 
   const handleChange = (value) => {
-    setAdditionalNotes(value)
-  }
+    setAdditionalNotes(value);
+  };
 
   useEffect(() => {
     if (_.isEqual(initialData, formData) && additionalNotes === content.body) {
@@ -126,7 +126,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </div>
         </div>
       </div>
-              {console.log(additionalNotes)}
+      {console.log(additionalNotes)}
       <div className="w-full flex items-center justify-between">
         {/* Animal Type Input */}
         <div className="flex flex-col w-[70%]">
@@ -245,10 +245,7 @@ const AddNewItemForm = ({ content, fetchContent }) => {
       </div>
       {/* Rich Text Editor */}
       <div className="w-full">
-        <Syncfusion
-          value={additionalNotes}
-          onChangeFunction={handleChange}
-        />
+        <Syncfusion value={additionalNotes} onChangeFunction={handleChange} />
       </div>
 
       {/* Submit Button */}

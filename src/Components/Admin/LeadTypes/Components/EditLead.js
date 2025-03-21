@@ -18,6 +18,7 @@ const EditLead = ({
             <input
                 placeholder='placeholder'
                 value={selectedLead.name}
+                readOnly
                 className='w-full mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
             />
         </div>
@@ -38,6 +39,7 @@ const EditLead = ({
             <input
                 placeholder='placeholder'
                 value={selectedLead.source}
+                readOnly
                 className='w-full mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
             />
         </div>
@@ -47,6 +49,7 @@ const EditLead = ({
             </label>
             <textarea
                 placeholder='Field Text'
+                readOnly
                 className='w-full min-h-[4.75rem] pt-1 mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
             />
             <p className='text-[#606B85] text-sm'>

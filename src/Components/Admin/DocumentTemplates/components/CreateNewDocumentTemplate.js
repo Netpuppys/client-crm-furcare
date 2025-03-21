@@ -116,6 +116,8 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       businessBranchId: selectedBranch.id,
     };
 
+    // console.log(sendData)
+
     axiosInstance
       .post("/api/v1/document-templates", sendData)
       .then((res) => {
@@ -132,7 +134,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   const handleQuillChange = (value) => {
     setDocuments((prev) => {
       return prev.map((doc, index) =>
-        index === 0 ? { ...doc, body: value } : doc
+         ({ ...doc, body: value } )
       );
     });
   };
