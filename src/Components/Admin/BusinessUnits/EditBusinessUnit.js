@@ -1,27 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { FaSearch } from "react-icons/fa";
-import { IoClose } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAlertContext } from "../../../utils/AlertContext";
 import axiosInstance from "../../../utils/AxiosInstance";
 import { useAppContext } from "../../../utils/AppContext";
-import chevronDown from "../../../Assets/icons/chevronDown.png";
 import HandleEditServices from "./components/HandleEditServices";
 import { toast } from "react-toastify";
 import HandleEditDepartments from "./components/HandleEditDepartments";
-
-// const appointmentSlots = [
-//   {
-//     id: "675b049dc90ac3a44472a525",
-//     name: "Morning Slot",
-//     departmentId: "675b03cdcef11a5735b8c173",
-//     reasons: ["Check-up", "Follow-up"],
-//     branchId: "675b049dc90ac3a44472a522",
-//     active: true,
-//     createdAt: new Date("2024-12-12T15:43:24.967Z"),
-//     updatedAt: new Date("2024-12-12T15:43:24.967Z"),
-//   },
-// ];
 
 const branchTypeValues = [
   "Hospital, Clinic",
@@ -43,6 +28,9 @@ const practiceType = [
 const EditBusinessUnit = () => {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const serviceBoxRef = useRef(null);
+  const departmentRef = useRef(null);
 
   const businessUnitData = location.state?.businessUnitData;
 
@@ -114,7 +102,22 @@ const EditBusinessUnit = () => {
   });
 
   useEffect(() => {
-    // ?businessUnitId=${businessUnitData.businessUnitId}
+    function handleClickOutside(event) {
+      if (serviceBoxRef.current && !serviceBoxRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+
+      if (departmentRef.current && !departmentRef.current.contains(event.target)) {
+        setShowDropdownDept(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
     axiosInstance
       .get(`/api/v1/services`)
       .then((res) => {
@@ -137,7 +140,7 @@ const EditBusinessUnit = () => {
       .get("/api/v1/appointment")
       .then((res) => {
         const response = res.data.data
-        setAppointmentSlots(res.data.data);
+        setAppointmentSlots(response);
       })
       .catch((err) => {
         console.error(err);
@@ -618,6 +621,7 @@ const EditBusinessUnit = () => {
           {/* Service Selection */}
           <HandleEditServices 
             options={options}
+            serviceBoxRef={serviceBoxRef}
             selectedOptions={selectedOptions}
             setSelectedOptions={setSelectedOptions}
             activeServices={activeServices}
@@ -674,9 +678,9 @@ const EditBusinessUnit = () => {
           )}
 
           <HandleEditDepartments
+            departmentRef={departmentRef}
             selectedDepartments={selectedDepartments}
             setSelectedDepartments={setSelectedDepartments}
-
             setShowDropdownDept={setShowDropdownDept}
             showDropdownDept={showDropdownDept}
             departments={departments}

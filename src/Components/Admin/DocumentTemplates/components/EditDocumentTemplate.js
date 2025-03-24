@@ -17,42 +17,20 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
     name: openEditModule?.name,
   });
 
-  const [language, setLanguage] = useState([]); // Initial language
-  const [documents, setDocuments] = useState(openEditModule.body);
-  const [dropDownListStatic, setDropDownListStatic] = useState([]);
   const [disabled, setDisabled] = useState(true);
-  const [selectedLanguage, setSelectedLanguage] = useState();
-  const [selectedLanguageIndex, setSelectedLanguageIndex] = useState(0);
   const [langIndex, setLangIndex] = useState(0);
+  const [documents, setDocuments] = useState(openEditModule.body);
   const [active, setActive] = useState(openEditModule.active);
   const [showDropdown, setShowDropdown] = useState(false);
 
-  // set static languages
-  useEffect(() => {
-    const langArr = openEditModule.body.map((item) => item.language);
-
-    setDropDownListStatic(langArr);
-    setSelectedLanguage(langArr[0]);
-  }, [openEditModule]);
-
-  function capitalizeWord(word) {
-    if (!word) return ""; // Handle empty string
-    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
-  }
-
-  // set languages
-  useEffect(() => {
-    if (openEditModule.body) {
-      const newArr = openEditModule.body.map((item) =>
-        capitalizeWord(item.language)
-      );
-      setLanguage(newArr);
-    }
-  }, [openEditModule]);
+  const language = documents.map((item) => item.language);
+  const dropDownListStatic = [...language];
 
   // remove language
   const removeLanguage = (langToRemove) => {
-    setLanguage(language.filter((lang) => lang !== langToRemove));
+    // setLanguage(language.filter((lang) => lang !== langToRemove));
+    setLangIndex(0)
+
 
     setDocuments((prev) =>
       prev.filter((item) => item.language !== langToRemove)
@@ -61,11 +39,6 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
   // change disabled state
   useEffect(() => {
-    const newArr = openEditModule.body.map((item) => item.language);
-
-    const languagesChange = newArr.every(
-      (value, index) => value === language[index]
-    );
 
     if (
       formData.type === "" ||
@@ -80,8 +53,10 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
     if (
       formData.name === openEditModule.name &&
       formData.type === openEditModule.type &&
-      documents[langIndex].body === openEditModule.body[langIndex].body &&
-      languagesChange &&
+      // documents[langIndex].body === openEditModule.body[langIndex].body &&
+      documents.every((item, index) => item.body === openEditModule.body[index].body) &&
+      documents.length === openEditModule.body.length &&
+      // languagesChange &&
       active === openEditModule.active
     ) {
       setDisabled(true);
@@ -93,21 +68,33 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
     formData,
     language,
     openEditModule,
-    selectedLanguageIndex,
     langIndex,
     documents,
     active,
   ]);
 
   const handleDropDownClick = (value) => {
-    setLanguage((prev) => [...prev, value]);
-    setDocuments((prev) => [
-      ...prev,
-      {
-        language: value,
-        body: "",
-      },
-    ]);
+
+    const lang = value.toLowerCase()
+    const findItem = openEditModule.body.find(item => item.language === lang)
+
+    if (findItem) {
+      setDocuments((prev) => [
+        ...prev,
+        {
+          language: lang,
+          body: findItem.body,
+        },
+      ]);
+    } else {
+      setDocuments((prev) => [
+        ...prev,
+        {
+          language: lang,
+          body: "",
+        },
+      ]);
+    }
   };
 
   const handleInputChange = (key, value) => {
@@ -121,6 +108,8 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       body: documents,
       active: active,
     };
+
+    console.log(sendData)
 
     axiosInstance
       .patch(`/api/v1/document-templates/${openEditModule.id}`, sendData)
@@ -143,14 +132,12 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
     });
   };
 
-  const handleLanguageChange = (lang, index) => {
-    setSelectedLanguage(lang);
+  const handleLanguageChange = (index) => {
     setLangIndex(index);
-    setSelectedLanguageIndex(index);
-    setFormData((prev) => ({
-      ...prev,
-      additionalNotes: openEditModule?.body[index].body,
-    }));
+    // setFormData((prev) => ({
+    //   ...prev,
+    //   additionalNotes: openEditModule?.body[index].body,
+    // }));
   };
 
   return (
@@ -202,16 +189,16 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
               className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
               <div className="px-3 flex items-center justify-start gap-1 h-full py-1">
-                {language?.map((lang, index) => (
+                {documents?.map((lang, index) => (
                   <div
                     key={index}
                     className="flex capitalize text-sm items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                   >
-                    {lang}
+                    {lang.language}
 
-                    {lang.toLowerCase() !== "english" && (
+                    {lang.language.toLowerCase() !== "english" && (
                       <button
-                        onClick={() => removeLanguage(lang)}
+                        onClick={() => removeLanguage(lang.language)}
                         className="text-[#606B85] hover:text-blue-900 focus:outline-none"
                       >
                         ✕
@@ -238,7 +225,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             {showDropdown && dropDownList.length > 0 && (
               <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
                 {dropDownList
-                  .filter((lang) => !language.includes(lang))
+                  // .filter((lang) => !language.includes(lang))
                   .map((item, index) => (
                     <button
                       key={index}
@@ -267,11 +254,11 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
                   <button
                     key={id}
                     className={`h-full px-4 border first:border-r-[0.5px] last:border-l-[0.5px] capitalize ${
-                      selectedLanguage === lang
+                      langIndex === id
                         ? "bg-[#F4F9FF] border-[#006DFA] first:border-r-[#8891AA] last:border-l-[#8891AA] text-[#006DFA]"
                         : "border-[#8891AA] text-[#121C2D] first:rounded-l-md last:rounded-r-md"
                     }`}
-                    onClick={() => handleLanguageChange(lang, id)}
+                    onClick={() => handleLanguageChange(id)}
                   >
                     {lang}
                   </button>
@@ -285,7 +272,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       </div>
 
       {/* Rich Text Editor */}
-      {/* {documents.map((doc, index) => (
+      {documents.map((doc, index) => (
         <div
           key={index}
           className={`w-full flex-col 
@@ -298,14 +285,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             onChangeFunction={handleQuillChange}
           />
         </div>
-      ))} */}
-
-      {console.log(documents[langIndex].body, langIndex)}
-      <Syncfusion
-        value={documents[langIndex].body}
-        index={langIndex}
-        onChangeFunction={handleQuillChange}
-      />
+      ))}
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

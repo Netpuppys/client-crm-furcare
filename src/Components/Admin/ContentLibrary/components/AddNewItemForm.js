@@ -126,7 +126,6 @@ const AddNewItemForm = ({ content, fetchContent }) => {
           </div>
         </div>
       </div>
-      {console.log(additionalNotes)}
       <div className="w-full flex items-center justify-between">
         {/* Animal Type Input */}
         <div className="flex flex-col w-[70%]">

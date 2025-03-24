@@ -204,22 +204,27 @@ const CreateNewForm = ({ fetchStaffData }) => {
   };
 
   useEffect(() => {
-    if (inputValue) {
-      const data = rolesList.filter((item) =>
-        item.name.toLowerCase().startsWith(inputValue.toLowerCase())
-      );
-      const finalData = data.filter((item) => !roles.includes(item.name));
-      setDropDownList(finalData);
-    } else {
-      setDropDownList(
-        rolesList.filter((item) => roles.every((role) => role.id !== item?.id))
-      );
-    }
+    // if (inputValue) {
+    //   const data = rolesList.filter((item) =>
+    //     item.name.toLowerCase().startsWith(inputValue.toLowerCase())
+    //   );
+    //   const finalData = data.filter((item) => !roles.includes(item.name));
+    //   setDropDownList(finalData);
+    // } else {
+    //   setDropDownList(
+    //     rolesList.filter((item) => roles.every((role) => role.id !== item?.id))
+    //   );
+    // }
+    setDropDownList(rolesList);
   }, [roles, rolesList, inputValue]);
 
   const handleDropDownClick = (value) => {
-    setRoles((prev) => [...prev, value]);
-    setInputValue("");
+    if (roles.some(item => item.id === value.id)) {
+      setRoles(roles.filter(item => item.id !== value.id))
+    } else {
+      setRoles((prev) => [...prev, value]);
+      setInputValue("");
+    }
   };
 
   return (
@@ -335,15 +340,26 @@ const CreateNewForm = ({ fetchStaffData }) => {
           </div>
 
           {showDropdown && (
-            <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
-              {dropDownList.map((item, index) => (
-                <button
+            <div className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 overflow-y-auto">
+              {dropDownList?.map((option, index) => (
+                <div 
+                  // onClick={() => handleDropDownClick(option)} 
+                  className="p-2 block w-full"
                   key={index}
-                  onClick={() => handleDropDownClick(item)}
-                  className="h-10 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
                 >
-                  <p className="capitalize text-sm">{item.name}</p>
-                </button>
+                  <label className="flex w-full items-center cursor-pointer capitalize">
+                    <input
+                      readOnly
+                      type="checkbox"
+                      className="mr-2 placeholder:italic text-sm"
+                      checked={roles.some(
+                        (obj) => obj.id === option.id
+                      )}
+                      onChange={() => handleDropDownClick(option)}
+                    />
+                    <span className="capitalize">{option.name}</span>
+                  </label>
+                </div>
               ))}
               {dropDownList.length === 0 && roles.length===0 && (
                 <div className="border-t w-full last:border-b-0 border-[#E1E3EA] flex items-center justify-center text-sm h-10">

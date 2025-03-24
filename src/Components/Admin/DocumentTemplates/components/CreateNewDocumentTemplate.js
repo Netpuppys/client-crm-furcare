@@ -64,48 +64,9 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
     ]);
   };
 
-  // useEffect(() => {
-  //   if (documents[0].body !== "") {
-  //     const text  = translateToHindi(documents[0].body)
-      
-  //     console.log(text)
-  //   }
-  // }, [documents])
-
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
-
-  // const translateToHindi = async (text) => {
-  //   const apiKey = process.env.REACT_APP_TRANSLATE_API_KEY; // Replace with your API key
-  //   const url = `https://translation.googleapis.com/language/translate/v2?key=${apiKey}`;
-  
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({
-  //         q: text,
-  //         source: "en",
-  //         target: "hi",
-  //         format: "text",
-  //       }),
-  //     });
-  
-  //     const data = await response.json();
-  
-  //     const convertedString = data.data.translations[0].translatedText || ""
-  //     if (typeof convertedString === "string") {
-  //       setTranslation(convertedString)
-  //       console.log(convertedString)
-  //     }
-  //   } catch (error) {
-  //     console.error("Translation API error:", error);
-  //     return "";
-  //   }
-  // };
 
   const handleSubmit = () => {
     
@@ -116,7 +77,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
       businessBranchId: selectedBranch.id,
     };
 
-    // console.log(sendData)
+    console.log(sendData)
 
     axiosInstance
       .post("/api/v1/document-templates", sendData)
@@ -133,7 +94,7 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
 
   const handleQuillChange = (value) => {
     setDocuments((prev) => {
-      return prev.map((doc, index) =>
+      return prev.map((doc) =>
          ({ ...doc, body: value } )
       );
     });

@@ -3,6 +3,7 @@ import { IoClose } from 'react-icons/io5'
 import chevronDown from "../../../../Assets/icons/chevronDown.png"
 
 const HandleEditDepartments = ({
+    departmentRef,
     selectedDepartments,
     setSelectedDepartments,
     // handleDeleteDepartment,
@@ -177,7 +178,7 @@ const HandleEditDepartments = ({
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Department(s)
             </label>
-            <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+            <div ref={departmentRef} className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
                 <div className={`w-full h-full relative gap-1 flex items-center justify-between`}>
                 {selectedDepartments.length===0 && (
                 <div className="px-2">

@@ -68,7 +68,7 @@ const AppointmentsTable = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-[#E1E3EA]">
-            {tableData.map((item, index) => (
+            {tableData?.map((item, index) => (
               <tr key={index} onClick={() => setOpenEditModule(item)} className={`cursor-pointer ${openEditModule && openEditModule.id === item.id? "bg-gray-50" : "hover:bg-gray-50"}`}>
                 <td className="px-4 py-2 capitalize text-sm text-[#121C2D]">{item.name}</td>
                 <td className="px-4 py-2 text-sm">
@@ -120,7 +120,7 @@ const DocumentTemplatePage = () => {
       .get(`/api/v1/document-templates?businessBranchId=${selectedBranch.id}&type=${activeButton}`)
       .then(res => {
         console.log(res)
-        setTableData(res.data.data.data)
+        setTableData(res.data.data)
         setOpenEditModule(false)
         setCreateNew(false)
       })
@@ -136,7 +136,7 @@ const DocumentTemplatePage = () => {
       .get(`/api/v1/document-templates?businessBranchId=${selectedBranch.id}&type=${activeButton}`)
       .then(res => {
         console.log(res)
-        setTableData(res.data.data.data)
+        setTableData(res.data.data)
       })
       .catch(err => {
         console.error(err)

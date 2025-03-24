@@ -4,6 +4,7 @@ import chevronDown from "../../../../Assets/icons/chevronDown.png"
 
 const HandleEditServices = ({
     options,
+    serviceBoxRef,
     selectedOptions,
     setSelectedOptions,
     activeServices,
@@ -104,7 +105,7 @@ const HandleEditServices = ({
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
             </label>
-            <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+            <div ref={serviceBoxRef} className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
                 <div className={`w-full flex items-center justify-between gap-1 h-full`}>
                 {/* || selectedOptions.every(item => item.active === false))  */}
                     {selectedOptions.length===0 && (

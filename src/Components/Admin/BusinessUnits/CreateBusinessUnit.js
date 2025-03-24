@@ -8,19 +8,6 @@ import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import chevronDown from "../../../Assets/icons/chevronDown.png";
 
-// const appointmentSlots = [
-//   {
-//     id: "675b049dc90ac3a44472a525",
-//     name: "Morning Slot",
-//     departmentId: "675b03cdcef11a5735b8c173",
-//     reasons: ["Check-up", "Follow-up"],
-//     branchId: "675b049dc90ac3a44472a522",
-//     active: true,
-//     createdAt: new Date("2024-12-12T15:43:24.967Z"),
-//     updatedAt: new Date("2024-12-12T15:43:24.967Z"),
-//   },
-// ];
-
 const branchTypeValues = [
   "Hospital, Clinic",
   "Boarding Centre",
@@ -43,6 +30,8 @@ const CreateBusinessUnit = () => {
   const navigate = useNavigate();
 
   const placesServiceRef = useRef(null);
+  const serviceBoxRef = useRef(null);
+  const departmentRef = useRef(null);
 
   const businessUnitId = location.state?.businessUnitId;
 
@@ -74,6 +63,22 @@ const CreateBusinessUnit = () => {
     department: "",
     appointment: "",
   });
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (serviceBoxRef.current && !serviceBoxRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+
+      if (departmentRef.current && !departmentRef.current.contains(event.target)) {
+        setShowDropdownDept(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -181,14 +186,6 @@ const CreateBusinessUnit = () => {
       console.log(filterredSlots)
     }
   };
-
-  // useEffect(() => {
-  //   setSelectedAppointments(
-  //     selectedDepartments.map((_) => ({
-  //       name: appointmentSlots[0].name,
-  //     }))
-  //   );
-  // }, [selectedDepartments, appointmentSlots]);
 
   const handleDeleteDepartment = (option) => {
     setSelectedDepartments((prev) =>
@@ -611,7 +608,7 @@ const CreateBusinessUnit = () => {
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Service(s)
               </label>
-              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+              <div ref={serviceBoxRef} className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
                 <div
                   className={`w-full flex items-center justify-between gap-1 h-full`}
                 >
@@ -737,7 +734,7 @@ const CreateBusinessUnit = () => {
                 Department(s)
               </label>
 
-              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+              <div ref={departmentRef} className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
                 <div
                   className={`w-full h-full relative gap-1 flex items-center justify-between`}
                 >

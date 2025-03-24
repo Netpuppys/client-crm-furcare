@@ -24,8 +24,16 @@ function Syncfusion({ value, index, onChangeFunction }) {
   useEffect(() => {
     if (editorRef.current) {
       const editorInstance = editorRef.current;
+      // console.log(editorInstance.getContent())
       
       // Add an input event listener to detect changes instantly
+      editorInstance.element.addEventListener("click", () => {
+        const newValue = editorInstance.getContent(); // Get updated content
+        if (onChangeFunction && newValue) {
+          onChangeFunction(newValue.lastChild.innerHTML, index); // Update parent component instantly
+        }
+      });
+
       editorInstance.element.addEventListener("input", () => {
         const newValue = editorInstance.getContent(); // Get updated content
         if (onChangeFunction && newValue) {
@@ -33,7 +41,7 @@ function Syncfusion({ value, index, onChangeFunction }) {
         }
       });
     }
-  }, [index]);
+  }, [index, editorRef.current]);
 
   const toolbarSettings = {
     items: [
