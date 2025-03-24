@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { useAppContext } from "../../../../utils/AppContext";
 import { toast } from "react-toastify";
@@ -14,6 +14,8 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   const { setAlert } = useAlertContext();
   const { selectedBranch } = useAppContext();
 
+  const dropdownRef = useRef(null)
+
   const [formData, setFormData] = useState({
     name: "",
     type: selectedType,
@@ -21,7 +23,6 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   });
 
   const [languages, setLanguages] = useState(["english"]); // Initial languages
-  // const [translation, setTranslation ] = useState()
   const [documents, setDocuments] = useState([
     {
       language: "english",
@@ -30,6 +31,18 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
   ]);
   const [disabled, setDisabled] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const removeLanguage = (langToRemove) => {
     setLanguages(languages.filter((lang) => lang !== langToRemove));
@@ -52,17 +65,6 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
 
     setDisabled(false);
   }, [formData, languages, documents]);
-
-  const handleDropDownClick = (value) => {
-    setLanguages((prev) => [...prev, value]);
-    setDocuments((prev) => [
-      ...prev,
-      {
-        language: value,
-        body: "",
-      },
-    ]);
-  };
 
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
@@ -98,6 +100,25 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
          ({ ...doc, body: value } )
       );
     });
+  };
+
+  const handleCheckboxChange = (lang) => {
+    const option = lang.toLowerCase()
+
+    if (documents.some((obj) => obj.language === option)) {
+      setDocuments(documents.filter((item) => item.language !== option));
+
+      setLanguages(languages.filter(item => item !== option))
+    } else {
+      setLanguages((prev) => [...prev, option]);
+      setDocuments((prev) => [
+        ...prev,
+        {
+          language: option,
+          body: documents[0].body,
+        },
+      ]);
+    }
   };
 
   return (
@@ -185,19 +206,28 @@ const CreateNewDocumentTemplate = ({ types, fetchData, selectedType }) => {
               </div>
             </div>
 
-            {showDropdown && dropDownList.length > 0 && (
-              <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
-                {dropDownList
-                  .filter((lang) => !languages.includes(lang))
-                  .map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDropDownClick(item)}
-                      className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                    >
-                      <p className="capitalize text-sm">{item}</p>
-                    </button>
+            {showDropdown && (
+              <div
+                className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
+              >
+                <ul className="list-none p-0 m-0">
+                  {dropDownList?.map((option, index) => (
+                    <li className="p-2" key={index}>
+                      <label className="flex w-full items-center cursor-pointer capitalize">
+                        <input
+                          type="checkbox"
+                          disabled={option.toLowerCase() === "english"? true : false}
+                          className="mr-2 placeholder:italic text-sm"
+                          checked={documents.some(
+                            (obj) => obj.language.toLowerCase() === option.toLowerCase()
+                          )}
+                          onChange={() => handleCheckboxChange(option)}
+                        />
+                        <span className="capitalize">{option}</span>
+                      </label>
+                    </li>
                   ))}
+                </ul>
               </div>
             )}
           </div>

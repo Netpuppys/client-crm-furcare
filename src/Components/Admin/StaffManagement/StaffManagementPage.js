@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import informationIcon from "../../../Assets/icons/informationIcon.png";
 import closeIcon from "../../../Assets/icons/alert/close.png";
 import axiosInstance from "../../../utils/AxiosInstance";
@@ -103,6 +103,8 @@ const staffSchema = z.object({
 const CreateNewForm = ({ fetchStaffData }) => {
   const { setAlert } = useAlertContext();
 
+  const dropdownRef = useRef()
+
   const { selectedBranch } = useAppContext();
 
   const [formData, setFormData] = useState({
@@ -120,6 +122,18 @@ const CreateNewForm = ({ fetchStaffData }) => {
   const [disabled, setDisabled] = useState(true);
   const [loader, setLoader] = useState(false);
   const [ showDropdown, setShowDropdown ] = useState(false)
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     if (
@@ -300,7 +314,7 @@ const CreateNewForm = ({ fetchStaffData }) => {
           <div className="w-1 aspect-square rounded-full bg-red-500"></div>
           Role(s)
         </label>
-        <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+        <div ref={dropdownRef} className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
           <div
             className={`w-full h-full flex items-center justify-between`}
           >

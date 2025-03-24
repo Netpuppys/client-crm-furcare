@@ -239,7 +239,7 @@ const CreateBusinessUnit = () => {
       .then((response) => {
         console.log("Success:", response.data);
         setAlert("Created Successfully");
-        navigate("/admin/branch-units");
+        navigate("/admin/branch-units", { state: { branchEdited: true }});
         setAlert("Created Successfully");
       })
       .catch((error) => {
@@ -369,7 +369,7 @@ const CreateBusinessUnit = () => {
             Cancel
           </button>
           {/* </Link> */}
-{console.log(selectedOptions)}
+
           <button
             disabled={disabled}
             onClick={handleSubmit}

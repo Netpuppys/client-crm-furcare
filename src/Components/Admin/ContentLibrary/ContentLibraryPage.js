@@ -86,7 +86,7 @@ const TableComponent = ({
                         onClick={() => handleClick(item)}
                         // disabled={!item.click}
                       >
-                        {extractFirstH2(item.body)}
+                        {item.title!==""? item.title :  extractFirstH2(item.body)}
                       </button>
                     </td>
                     {/* <td className="px-4 py-3 border-b border-[#E1E3EA]">

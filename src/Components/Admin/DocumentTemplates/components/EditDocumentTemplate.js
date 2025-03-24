@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import BlueButton from "../../../../ui/BlueButton";
@@ -11,6 +11,8 @@ const dropDownList = ["English", "Hindi"];
 
 const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   const { setAlert } = useAlertContext();
+
+  const dropdownRef = useRef(null)
 
   const [formData, setFormData] = useState({
     type: openEditModule?.type,
@@ -25,6 +27,18 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
   const language = documents.map((item) => item.language);
   const dropDownListStatic = [...language];
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   // remove language
   const removeLanguage = (langToRemove) => {
@@ -73,30 +87,6 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
     active,
   ]);
 
-  const handleDropDownClick = (value) => {
-
-    const lang = value.toLowerCase()
-    const findItem = openEditModule.body.find(item => item.language === lang)
-
-    if (findItem) {
-      setDocuments((prev) => [
-        ...prev,
-        {
-          language: lang,
-          body: findItem.body,
-        },
-      ]);
-    } else {
-      setDocuments((prev) => [
-        ...prev,
-        {
-          language: lang,
-          body: "",
-        },
-      ]);
-    }
-  };
-
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
@@ -134,10 +124,36 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
 
   const handleLanguageChange = (index) => {
     setLangIndex(index);
-    // setFormData((prev) => ({
-    //   ...prev,
-    //   additionalNotes: openEditModule?.body[index].body,
-    // }));
+  };
+
+  const handleCheckboxChange = (lang) => {
+    const option = lang.toLowerCase()
+
+    if (documents.some((obj) => obj.language === option)) {
+      setDocuments(
+        documents.filter((item) => item.language !== option)
+      );
+    } else {
+      const findItem = openEditModule.body.find(item => item.language === option)
+
+      if (findItem) {
+        setDocuments((prev) => [
+          ...prev,
+          {
+            language: option,
+            body: findItem.body,
+          },
+        ]);
+      } else {
+        setDocuments((prev) => [
+          ...prev,
+          {
+            language: option,
+            body: "",
+          },
+        ]);
+      }
+    }
   };
 
   return (
@@ -184,7 +200,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
             {"Language(s)"}{" "}
           </label>
-          <div className="mt-1 w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
+          <div ref={dropdownRef} className="mt-1 w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
             <div
               className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
@@ -222,19 +238,28 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
                 </button>
               </div>
             </div>
-            {showDropdown && dropDownList.length > 0 && (
-              <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white z-50 flex flex-col items-start justify-start px-2">
-                {dropDownList
-                  // .filter((lang) => !language.includes(lang))
-                  .map((item, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleDropDownClick(item)}
-                      className="py-2 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                    >
-                      <p className="capitalize text-sm">{item}</p>
-                    </button>
+            {showDropdown && (
+              <div
+                className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
+              >
+                <ul className="list-none p-0 m-0">
+                  {dropDownList?.map((option, index) => (
+                    <li className="p-2" key={index}>
+                      <label className="flex w-full items-center cursor-pointer capitalize">
+                        <input
+                          type="checkbox"
+                          disabled={option.toLowerCase() === "english"? true : false}
+                          className="mr-2 placeholder:italic text-sm"
+                          checked={documents.some(
+                            (obj) => obj.language.toLowerCase() === option.toLowerCase()
+                          )}
+                          onChange={() => handleCheckboxChange(option)}
+                        />
+                        <span className="capitalize">{option}</span>
+                      </label>
+                    </li>
                   ))}
+                </ul>
               </div>
             )}
           </div>

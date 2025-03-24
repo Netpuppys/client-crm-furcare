@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "../../../../utils/AppContext";
 import axiosInstance from "../../../../utils/AxiosInstance";
 import errorIcon from "../../../../Assets/icons/errorIcon.svg";
@@ -11,6 +11,8 @@ import { toast } from "react-toastify";
 const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
   const { setAlert } = useAlertContext();
   const { selectedBranch } = useAppContext();
+
+  const dropdownRef = useRef(null)
 
   const [selectedResources, setSelectedResources] = useState([]);
   const [resources, setResources] = useState([]);
@@ -39,6 +41,18 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
     setShowError(false);
   }, [formData, groupData]);
 
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   // fetch all the staff
   useEffect(() => {
     axiosInstance
@@ -55,16 +69,6 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
         console.error(err);
       });
   }, [selectedBranch]);
-
-  // filter out selected staff members from dropdown
-  useEffect(() => {
-    const filtered = resources.filter((item) =>
-      selectedResources.every((staff) => staff.id !== item.id)
-    );
-
-    setDropDownList(filtered);
-    return;
-  }, [selectedResources, resources]);
 
   // drop down click function
   const handleDropDownClick = (value) => {
@@ -148,6 +152,17 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
       });
   };
 
+  const handleCheckboxChange = (option) => {
+    console.log(option)
+    // const option = lang.toLowerCase()
+
+    if (selectedResources.some((obj) => obj.id === option.id)) {
+      removeRole(option.id)
+    } else {
+      handleDropDownClick(option)
+    }
+  };
+
   return (
     <div className="p-6 flex h-full flex-col justify-start items-start mx-auto bg-white rounded-md space-y-6">
       <div className="flex gap-10 w-full">
@@ -191,7 +206,7 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
             Resources{" "}
           </label>
 
-          <div className={`mt-1 w-full h-[2.25rem] border relative rounded-md
+          <div ref={dropdownRef} className={`mt-1 w-full h-[2.25rem] border relative rounded-md
             ${resources.length===0? "pointer-events-none bg-[#F4F4F6] border-[#CACDD8]" : "border-[#8891AA] bg-white"}
           `}>
             <div
@@ -236,24 +251,34 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
             </div>
 
             {showDropdown && (
-              <div className="w-[calc(100%+2px)] h-fit absolute top-[calc(100%+1px)] left-[-1px] shadow-2xl rounded-md bg-white flex flex-col items-start justify-start px-2">
-                {dropDownList.map((item, index) => (
-                  <button
-                    key={index}
-                    onClick={() => handleDropDownClick(item)}
-                    className="h-10 w-full flex items-center justify-start border-b border-[#8891AA] last:border-b-0"
-                  >
-                    <p className="capitalize text-sm">{item.name}</p>
-                  </button>
+            <div
+              className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
+            >
+              <ul className="list-none p-0 m-0">
+                {dropDownList?.map((option, index) => (
+                  <li className="p-2" key={index}>
+                    <label className="flex w-full items-center cursor-pointer capitalize">
+                      <input
+                        type="checkbox"
+                        className="mr-2 placeholder:italic text-sm"
+                        checked={selectedResources.some(
+                          (obj) => obj.id === option.id
+                        )}
+                        onChange={() => handleCheckboxChange(option)}
+                      />
+                      <span className="capitalize">{option.name}</span>
+                    </label>
+                  </li>
                 ))}
-                {dropDownList.length === 0 && selectedResources.length===0 && (
-                  <div className="h-10 w-full flex items-center justify-center border-b border-[#8891AA] last:border-b-0">
-                    <p className="capitalize text-sm font-medium">
-                      No Active Staff Found
-                    </p>
-                  </div>
-                )}
-              </div>
+              </ul>
+              {dropDownList.length === 0 && selectedResources.length===0 && (
+                <div className="h-10 w-full flex items-center justify-center border-b border-[#8891AA] last:border-b-0">
+                  <p className="capitalize text-sm font-medium">
+                    No Active Staff Found
+                  </p>
+                </div>
+              )}
+            </div>
             )}
           </div>
         </div>
