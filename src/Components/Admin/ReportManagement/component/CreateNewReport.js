@@ -7,6 +7,8 @@ import axiosInstance from "../../../../utils/AxiosInstance";
 import { toast } from "react-toastify";
 import { useAlertContext } from "../../../../utils/AlertContext";
 import BlueButton from "../../../../ui/BlueButton";
+import PreviewGraph from "./PreviewGraph";
+import { IoClose } from "react-icons/io5";
 
 const labelFields = [
   "Scheduled Appointments",
@@ -28,11 +30,34 @@ const appointmentTypes = [
   "leads",
 ];
 
+const ReportGraph = ({ setShowReport }) => {
+
+  return (
+    <div className='fixed top-0 left-0 w-screen h-screen flex items-center justify-center z-50 bg-[#606B85] bg-opacity-50'>
+      <div className="max-w-[55.2rem] w-full h-full p-8 max-h-[25rem] bg-white rounded-lg border border-[#E1E3EA] shadow-[0px_4px_16px_0px_rgba(18,_28,_45,_0.20)]">
+        <div className='w-full mb-8 flex items-center justify-between'>
+            <p className='text-xl font-semibold text-[#121C2D] tracking-[-0.025rem] '>
+                Preview Report
+            </p>
+            <button
+                onClick={() => setShowReport(false)}
+                className='w-[1.75rem] aspect-square flex items-center text-3xl text-[#606B85]'>
+                <IoClose />
+            </button>
+        </div>
+
+        <PreviewGraph />
+      </div>
+    </div>
+  )
+}
+
 const CreateNewReport = ({ fetchAllReports }) => {
 
   const { setAlert } = useAlertContext();
   const { branchDetails, selectedBranch } = useAppContext();
 
+  const [ showReport, setShowReport ] = useState(false)
   const [ showLabelOptions, setShowLabelOptions ] = useState(false);
   const [ selectedLabelOptions, setSelectedLabelOptions ] = useState([]);
   const [ disabled, setDisabled ] = useState(true);
@@ -84,9 +109,11 @@ const CreateNewReport = ({ fetchAllReports }) => {
       frequency: formData.frequency,
       generateInBackground: formData.generateInBackground,
       fields: selectedLabelOptions,
-      ...(formData.businessBranchId !== "" && { businessBranchId: formData.businessBranchId }),
-      ...(formData.businessUnitId !== "" && { businessUnitId: formData.businessUnitId }),
+      businessBranchId: formData.businessBranchId,
+      businessUnitId: formData.businessUnitId
     };
+
+    console.log(sendData)
 
     axiosInstance
       .post(`/api/v1/reports`, sendData)
@@ -121,6 +148,8 @@ const CreateNewReport = ({ fetchAllReports }) => {
 
   return (
     <div className="p-6 flex h-full flex-col justify-start items-start mx-auto bg-white rounded-md space-y-6">
+      {showReport && <ReportGraph setShowReport={setShowReport} />}
+
       <div className="flex gap-10 w-full">
         {/* Name Input */}
         <div className="flex flex-col w-full">
@@ -288,7 +317,15 @@ const CreateNewReport = ({ fetchAllReports }) => {
       </div>
 
       {/* Submit Button */}
-      <div className="h-full w-full items-end flex justify-end ">
+      <div className="h-full w-full items-end flex justify-end gap-[20px]">
+        <button
+          onClick={() => setShowReport(true)}
+          disabled={disabled}
+          className="bg-transparent disabled:opacity-60 px-3 border disabled:border-opacity-50 border-[#CACDD8] disabled:text-[#AEB2C1] disabled:bg-transparent h-[2.375rem] rounded-md flex text-[#121C2D] font-semibold text-sm items-center justify-center"
+        >
+          <p className="">Preview</p>
+        </button>
+
         <BlueButton
           text={"Save"}
           onClickHandler={handleSubmit}

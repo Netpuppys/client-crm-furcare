@@ -8,19 +8,20 @@ import { useAppContext } from "../../../utils/AppContext";
 import chevronDown from "../../../Assets/icons/chevronDown.png";
 import HandleEditServices from "./components/HandleEditServices";
 import { toast } from "react-toastify";
+import HandleEditDepartments from "./components/HandleEditDepartments";
 
-const appointmentSlots = [
-  {
-    id: "675b049dc90ac3a44472a525",
-    name: "Morning Slot",
-    departmentId: "675b03cdcef11a5735b8c173",
-    reasons: ["Check-up", "Follow-up"],
-    branchId: "675b049dc90ac3a44472a522",
-    active: true,
-    createdAt: new Date("2024-12-12T15:43:24.967Z"),
-    updatedAt: new Date("2024-12-12T15:43:24.967Z"),
-  },
-];
+// const appointmentSlots = [
+//   {
+//     id: "675b049dc90ac3a44472a525",
+//     name: "Morning Slot",
+//     departmentId: "675b03cdcef11a5735b8c173",
+//     reasons: ["Check-up", "Follow-up"],
+//     branchId: "675b049dc90ac3a44472a522",
+//     active: true,
+//     createdAt: new Date("2024-12-12T15:43:24.967Z"),
+//     updatedAt: new Date("2024-12-12T15:43:24.967Z"),
+//   },
+// ];
 
 const branchTypeValues = [
   "Hospital, Clinic",
@@ -49,6 +50,11 @@ const EditBusinessUnit = () => {
 
   const { setSelectedBranch } = useAppContext()
 
+  // services
+  const [ changedService, setChangedService ] = useState([])
+  const [ options, setOptions] = useState([]);
+  const [ activeServices, setActiveServices ] = useState([])
+  const [ inActiveServices, setInactiveServices ] = useState([])
   const [ selectedOptions, setSelectedOptions] = useState(
     businessUnitData.services.map((item) => {
       return {
@@ -59,16 +65,38 @@ const EditBusinessUnit = () => {
       type: "server"
     }})
   );
-  const [ changedService, setChangedService ] = useState([])
-  const [ disabled, setDisabled] = useState(false);
-  const [ options, setOptions] = useState([]);
+  // departments
   const [ departments, setDepartments ] = useState([])
-  const [ selectedDepartments, setSelectedDepartments ] = useState(businessUnitData.departments.length> 0? businessUnitData.departments.map(item => ({ name: item?.departmentDetails.name, id: item?.departmentDetails.id })) : [])
-  const [ selectedAppointments, setSelectedAppointments ] = useState([])
+  const [ activeDepartments, setActiveDepartments ] = useState([])
+  const [ inactiveDepartments, setInactiveDepartments ] = useState([])
+  const [ selectedDepartments, setSelectedDepartments ] = useState(businessUnitData.departments.length> 0?
+    businessUnitData.departments.map(item => (
+      { 
+        name: item?.departmentDetails.name, 
+        id: item?.departmentDetails.id,
+        active: item.active,
+        type: "server"
+      }
+    )) : [])
+  // appointment slots
+  const [ appointmentSlots, setAppointmentSlots ] = useState([])
+  const [ activeSlots, setActiveSlots ] = useState([])
+  const [ inactiveSlots, setInactiveSlots ] = useState([])
+  const [ selectedAppointments, setSelectedAppointments ] = useState(businessUnitData.appointmentSlots.length> 0?
+    businessUnitData.appointmentSlots.map(item => (
+      { 
+        name: item?.name, 
+        id: item?.id,
+        departmentId: item.departmentId,
+        active: item.active,
+        type: "server"
+      }
+    )) : [])
+  // others
+  const [ disabled, setDisabled] = useState(false);
   const [ showDropdown, setShowDropdown ] = useState(false)
   const [ showDropdownDept, setShowDropdownDept ] = useState(false)
-  const [ activeServices, setActiveServices ] = useState([])
-  const [ inActiveServices, setInactiveServices ] = useState([])
+  
   const [ formData, setFormData] = useState({
     active: businessUnitData.active,
     unitName: businessUnitData.name,
@@ -100,6 +128,16 @@ const EditBusinessUnit = () => {
       .get(`/api/v1/departments`)
       .then((res) => {
         setDepartments(res.data.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+      axiosInstance
+      .get("/api/v1/appointment")
+      .then((res) => {
+        const response = res.data.data
+        setAppointmentSlots(res.data.data);
       })
       .catch((err) => {
         console.error(err);
@@ -180,24 +218,29 @@ const EditBusinessUnit = () => {
     }
   };
 
-  const handleCheckboxDepartmentChange = (option) => {
-    if (selectedDepartments.some(obj => obj.id === option.id)) {
-      setSelectedDepartments(selectedDepartments.filter((item) => item.id !== option.id));
-    } else {
-      setSelectedDepartments([...selectedDepartments, { name: option.name, id: option.id }]);
-    }
-  };
+  // const handleCheckboxDepartmentChange = (option) => {
+  //   if (selectedDepartments.some(obj => obj.id === option.id)) {
+  //     setSelectedDepartments(selectedDepartments.filter((item) => item.id !== option.id));
 
-  useEffect(() => {
-    setSelectedAppointments(selectedDepartments.map(_ => ({
-      name: appointmentSlots[0].name
-    })))
-  }, [selectedDepartments])
+  //     setSelectedAppointments(selectedAppointments.filter(item => item.departmentId !== option.id))
+  //   } else {
+  //     setSelectedDepartments([...selectedDepartments, { name: option.name, id: option.id }]);
 
-  const handleDeleteDepartment = (option) => {
-    setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
-    console.log(option)
-  }
+  //     const filterredSlots = appointmentSlots.filter(item => item.departmentId === option.id)
+  //     setSelectedAppointments(prev => ([...prev, ...filterredSlots]))
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   setSelectedAppointments(selectedDepartments.map(_ => ({
+  //     name: appointmentSlots[0].name
+  //   })))
+  // }, [selectedDepartments])
+
+  // const handleDeleteDepartment = (option) => {
+  //   setSelectedDepartments(prev => prev.filter((item) => item.id !== option.id));
+  //   setSelectedAppointments(selectedAppointments.filter(item => item.departmentId !== option.id))
+  // }
 
   const handleSubmit = async () => {
 
@@ -328,7 +371,7 @@ const EditBusinessUnit = () => {
             Save
           </button>
         </div>
-      </div>{console.log(selectedOptions)}
+      </div>
       {/* main form */}
       <div className="flex flex-col items-start flex-wrap justify-start gap-x-[6.25rem] gap-y-6 mt-6">
         <p className="capitalize text-lg font-semibold">Branch Unit Details</p>
@@ -630,129 +673,24 @@ const EditBusinessUnit = () => {
             </div>
           )}
 
-          {/* Department Selection */}
-          <div className="flex w-full items-center justify-between gap-[50px]">
-            <div className="w-[calc(50%-25px)]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Department(s)
-              </label>
-              <div className="w-full h-[2.25rem] border border-[#8891AA] bg-white relative rounded-md">
-                <div className={`w-full h-full relative gap-1 flex items-center justify-between`}>
-                  {selectedDepartments.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#121C2D] font-medium">Select</p>
-                  </div>)}
+          <HandleEditDepartments
+            selectedDepartments={selectedDepartments}
+            setSelectedDepartments={setSelectedDepartments}
 
-                  <div className="flex w-full h-full px-3 items-center py-1 flex-wrap gap-1">
-                    {selectedDepartments?.map((option, index) => (
-                      <span
-                        className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
-                        key={index}
-                      >
-                        {option.name}
-                        <button
-                        disabled
-                          className="ml-2 text-[#606B85]"
-                          onClick={() => handleDeleteDepartment(option)}
-                        >
-                          <IoClose />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className='h-full aspect-square flex items-center justify-center'>
-                    <button
-                      disabled
-                        onClick={() => setShowDropdownDept(prev => !prev)}
-                        className='flex items-center justify-center w-5 h-5 aspect-square'
-                    >
-                        <img
-                            src={chevronDown}
-                            className={`w-full h-full object-contain transition-all ${showDropdownDept? "rotate-180" : ""}`}
-                            alt='chevron down'
-                        />
-                    </button>
-                  </div>
-                </div>
-
-                {showDropdownDept && (
-                  <div
-                    className="absolute top-[calc(100%+1px)] left-0 w-full bg-[#F4F4F6] hideScrollbar border-[#8891AA] z-50 max-h-52 overflow-y-auto"
-                  >
-                    <ul className="list-none p-0 m-0">
-                      {departments?.map((option, index) => (
-                        <li className="p-2" key={index}>
-                          <label className="flex w-full items-center cursor-pointer capitalize">
-                            <input
-                              type="checkbox"
-                              className="mr-2 placeholder:italic text-sm"
-                              checked={selectedDepartments.some(obj => obj.id === option.id)}
-                              onChange={() => handleCheckboxDepartmentChange(option)}
-                            />
-                            <span className="capitalize">
-                            {option.name}
-                            </span>
-                          </label>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Appointment Selection */}
-          <div className="flex w-full items-center justify-between">
-            <div className="w-[47.5%]">
-              <label className="font-medium text-[#121C2D] text-sm flex items-center gap-1">
-                <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
-                Appointment Slot(s)
-              </label>
-              <div className="mt-1 w-full h-[2.25rem] border border-[#CACDD8] bg-[#F4F4F6] relative rounded-md">
-                <div
-                  className={`w-full h-full relative gap-1 flex items-center justify-between`}
-                >
-                  {selectedAppointments.length===0 && (
-                  <div className="px-2">
-                    <p className="text-sm text-[#AEB2C1] font-medium">Select</p>
-                  </div>)}
-
-                  <div className="flex px-3 w-full h-full items-center flex-wrap py-1 gap-1">
-                    {selectedAppointments?.map((option, index) => (
-                      <span
-                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
-                        key={index}
-                      >
-                        {option.name}
-                        <button
-                          className="ml-2 text-[#606B85]"
-                          onClick={() => handleDeleteDepartment(option)}
-                        >
-                          <IoClose />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className='h-full aspect-square flex items-center justify-center'>
-                    <button
-                      disabled
-                      className='flex items-center justify-center w-5 h-5 aspect-square'
-                    >
-                      <img
-                          src={chevronDown}
-                          className={`w-full h-full object-contain transition-all`}
-                          alt='chevron down'
-                      />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+            setShowDropdownDept={setShowDropdownDept}
+            showDropdownDept={showDropdownDept}
+            departments={departments}
+            selectedAppointments={selectedAppointments}
+            setSelectedAppointments={setSelectedAppointments}
+            activeDepartments={activeDepartments}
+            setActiveDepartments={setActiveDepartments}
+            inactiveDepartments={inactiveDepartments}
+            setInactiveDepartments={setInactiveDepartments}
+            activeSlots={activeSlots}
+            setActiveSlots={setActiveSlots}
+            inactiveSlots={inactiveSlots}
+            setInactiveSlots={setInactiveSlots}
+          />
         </div>
       </div>
     </div>

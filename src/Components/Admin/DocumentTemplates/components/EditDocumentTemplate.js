@@ -154,7 +154,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   };
 
   return (
-    <div className="p-6 flex flex-col justify-start items-end mx-auto bg-white rounded-md space-y-6 h-full relative">
+    <div className="p-6 flex flex-col overflow-y-auto  justify-start items-end mx-auto bg-white rounded-md space-y-6 h-full relative">
       <div className="flex w-full items-center justify-between gap-12">
         {/* Category Input */}
         <div className="flex flex-col w-1/2">
@@ -285,20 +285,27 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       </div>
 
       {/* Rich Text Editor */}
-      {/* {documents.map((doc, index) => (
+      {documents.map((doc, index) => (
         <div
           key={index}
           className={`w-full flex-col 
            ${index === langIndex ? "flex" : "hidden"}
           `}
-        > */}
+        >
+          <Syncfusion
+            value={doc.body}
+            index={index}
+            onChangeFunction={handleQuillChange}
+          />
+        </div>
+      ))}
+
+        {/* {console.log(documents[langIndex].body, langIndex)}
           <Syncfusion
             value={documents[langIndex].body}
             index={langIndex}
             onChangeFunction={handleQuillChange}
-          />
-        {/* </div>
-      ))} */}
+          /> */}
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

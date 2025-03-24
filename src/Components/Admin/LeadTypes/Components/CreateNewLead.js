@@ -7,23 +7,22 @@ const CreateNewLead = () => {
 
   return (
     <div className='w-full h-[100%] relative overflow-y-auto px-[2.8rem] pt-[1.6rem]'>
-        <div className=''>
+        <div className='w-full'>
             <label className='flex items-center gap-2 text-[#121C2D] text-sm font-medium '>
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Name
             </label>
             <input
                 placeholder='placeholder'
-                readOnly
-                className='w-full mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
+                className='w-full mt-1 px-3 h-[2.25rem] focus:outline-none text-sm placeholder:italic border border-[#8891AA] rounded-md'
             />
         </div>
-        <div className='mt-[1.75rem]'>
-            <label className='flex items-center gap-2 text-[#121C2D] text-sm font-medium '>
+        <div className='mt-[1.75rem] w-full'>
+            <label className='flex items-center gap-2 text-[#121C2D] text-sm font-medium'>
                 <div className="w-1 aspect-square rounded-full bg-red-500"></div>{" "}
                 Source(s)
             </label>
-            <div className={`mt-1 w-full h-[2.25rem] border relative rounded-md border-[#8891AA] bg-white`}>
+            <div className={`mt-1 w-[calc(100%+2px)] h-[calc(2.25rem+2px)] border relative rounded-md border-[#8891AA] bg-white`}>
             <div
               className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
@@ -74,8 +73,7 @@ const CreateNewLead = () => {
             </label>
             <textarea
                 placeholder='Field Text'
-                readOnly
-                className='w-full min-h-[4.75rem] pt-1 mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
+                className='w-full min-h-[4.75rem] focus:outline-none pt-1 mt-1 px-3 h-[2.25rem] text-sm placeholder:italic border border-[#8891AA] rounded-md'
             />
             <p className='text-[#606B85] text-sm'>
                 Max 50 chars

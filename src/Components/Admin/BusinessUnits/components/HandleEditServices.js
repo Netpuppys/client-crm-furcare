@@ -112,7 +112,7 @@ const HandleEditServices = ({
                         <p className="text-sm text-[#121C2D] font-medium">Select</p>
                     </div>)}
 
-                    <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
+                    <div className="flex px-3 py-1 overflow-x-auto hideScrollbar w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                     <span
                         className={`flex border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm items-center

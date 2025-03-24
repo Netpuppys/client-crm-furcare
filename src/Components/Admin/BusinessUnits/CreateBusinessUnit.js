@@ -8,18 +8,18 @@ import statesAndCitiesInIndia from "../../../data/StatesIndia";
 import { GoogleMapsLoader } from "../../../utils/GoogleLoaderContext";
 import chevronDown from "../../../Assets/icons/chevronDown.png";
 
-const appointmentSlots = [
-  {
-    id: "675b049dc90ac3a44472a525",
-    name: "Morning Slot",
-    departmentId: "675b03cdcef11a5735b8c173",
-    reasons: ["Check-up", "Follow-up"],
-    branchId: "675b049dc90ac3a44472a522",
-    active: true,
-    createdAt: new Date("2024-12-12T15:43:24.967Z"),
-    updatedAt: new Date("2024-12-12T15:43:24.967Z"),
-  },
-];
+// const appointmentSlots = [
+//   {
+//     id: "675b049dc90ac3a44472a525",
+//     name: "Morning Slot",
+//     departmentId: "675b03cdcef11a5735b8c173",
+//     reasons: ["Check-up", "Follow-up"],
+//     branchId: "675b049dc90ac3a44472a522",
+//     active: true,
+//     createdAt: new Date("2024-12-12T15:43:24.967Z"),
+//     updatedAt: new Date("2024-12-12T15:43:24.967Z"),
+//   },
+// ];
 
 const branchTypeValues = [
   "Hospital, Clinic",
@@ -56,9 +56,10 @@ const CreateBusinessUnit = () => {
   const [options, setOptions] = useState([]);
   const [departments, setDepartments] = useState([]);
   const [selectedDepartments, setSelectedDepartments] = useState([]);
-  const [selectedAppointments, setSelectedAppointments] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showDropdownDept, setShowDropdownDept] = useState(false);
+  const [ appointmentSlots, setAppointmentSlots ] = useState([])
+  const [selectedAppointments, setSelectedAppointments] = useState([]);
   const [formData, setFormData] = useState({
     unitName: "",
     branchType: "",
@@ -92,6 +93,17 @@ const CreateBusinessUnit = () => {
       .get("/api/v1/departments")
       .then((res) => {
         setDepartments(res.data.data.data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+
+    axiosInstance
+      .get("/api/v1/appointment")
+      .then((res) => {
+        const response = res.data.data
+        setAppointmentSlots(res.data.data);
+        console.log(response)
       })
       .catch((err) => {
         console.error(err);
@@ -133,14 +145,15 @@ const CreateBusinessUnit = () => {
 
   // service change
   const handleCheckboxChange = (option) => {
-    if (selectedOptions.some((obj) => obj.service === option.name)) {
+    console.log(option)
+    if (selectedOptions.some((obj) => obj.id === option.id)) {
       setSelectedOptions(
-        selectedOptions.filter((item) => item.service !== option.name)
+        selectedOptions.filter((item) => item.id !== option.id)
       );
     } else {
       setSelectedOptions([
         ...selectedOptions,
-        { service: option.name, basePrice: "" },
+        { service: option.name, basePrice: "", id: option.id },
       ]);
     }
   };
@@ -157,26 +170,31 @@ const CreateBusinessUnit = () => {
       setSelectedDepartments(
         selectedDepartments.filter((item) => item.id !== option.id)
       );
+      setSelectedAppointments(selectedAppointments.filter(item => item.departmentId !== option.id))
     } else {
       setSelectedDepartments([
         ...selectedDepartments,
         { name: option.name, id: option.id },
       ]);
+      const filterredSlots = appointmentSlots.filter(item => item.departmentId === option.id)
+      setSelectedAppointments(prev => ([...prev, ...filterredSlots]))
+      console.log(filterredSlots)
     }
   };
 
-  useEffect(() => {
-    setSelectedAppointments(
-      selectedDepartments.map((_) => ({
-        name: appointmentSlots[0].name,
-      }))
-    );
-  }, [selectedDepartments]);
+  // useEffect(() => {
+  //   setSelectedAppointments(
+  //     selectedDepartments.map((_) => ({
+  //       name: appointmentSlots[0].name,
+  //     }))
+  //   );
+  // }, [selectedDepartments, appointmentSlots]);
 
   const handleDeleteDepartment = (option) => {
     setSelectedDepartments((prev) =>
       prev.filter((item) => item.id !== option.id)
     );
+    setSelectedAppointments(selectedAppointments.filter(item => item.departmentId !== option.id))
   };
 
   const handleServicePrice = (value, index) => {
@@ -189,12 +207,6 @@ const CreateBusinessUnit = () => {
   };
 
   const handleSubmit = () => {
-    // const appointment = appointmentSlots.find(item => item.id === formData.appointment)
-
-    const services = selectedOptions.map((item) => ({
-      serviceId: "675b03becef11a5735b8c16f", // string
-      basePrice: Number(item.basePrice), // number
-    }));
 
     const sendData = {
       name: formData.unitName, // string
@@ -208,20 +220,22 @@ const CreateBusinessUnit = () => {
       city: formData.city, // string
       postalCode: formData.postalCode, // number / integer min length 4
       businessUnitId: businessUnitId, // number
-      services: services,
+
+      services: selectedOptions.map((item) => ({
+        serviceId: item.id, // string
+        basePrice: Number(item.basePrice), // number
+      })),
+
       departments: selectedDepartments.map((item) => ({
         departmentId: item.id,
       })),
-      appointmentSlots: [
-        {
-          name: "Morning Slot", // string
-          departmentId: "675b03cdcef11a5735b8c173", // string
-          reasons: ["Check-up", "Follow-up"], // string
-        },
-      ],
-    };
 
-    // validateSendData(sendData)
+      appointmentSlots: selectedAppointments.map(item => ({
+        name: item.name,
+        departmentId: item.departmentId,
+        reasons: item.reasons
+      }))      
+    };
 
     axiosInstance
       .post("/api/v1/business-branches", sendData)
@@ -358,7 +372,7 @@ const CreateBusinessUnit = () => {
             Cancel
           </button>
           {/* </Link> */}
-
+{console.log(selectedOptions)}
           <button
             disabled={disabled}
             onClick={handleSubmit}
@@ -609,7 +623,7 @@ const CreateBusinessUnit = () => {
                     </div>
                   )}
 
-                  <div className="flex px-3 py-1 w-full h-full items-center flex-wrap gap-1">
+                  <div className="flex px-3 py-1 overflow-x-auto hideScrollbar w-full h-full items-center flex-wrap gap-1">
                     {selectedOptions?.map((option, index) => (
                       <span
                         className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
@@ -655,7 +669,7 @@ const CreateBusinessUnit = () => {
                               type="checkbox"
                               className="mr-2 placeholder:italic text-sm"
                               checked={selectedOptions.some(
-                                (obj) => obj.service === option.name
+                                (obj) => obj.id === option.id
                               )}
                               onChange={() => handleCheckboxChange(option)}
                             />
@@ -735,7 +749,7 @@ const CreateBusinessUnit = () => {
                     </div>
                   )}
 
-                  <div className="flex w-full h-full items-center py-1 px-3 flex-wrap gap-1">
+                  <div className="flex w-full overflow-x-auto hideScrollbar h-full items-center py-1 px-3 flex-wrap gap-1">
                     {selectedDepartments?.map((option, index) => (
                       <span
                         className="bg-[#F4F9FF] border capitalize border-[#CCE4FF] text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
@@ -815,14 +829,15 @@ const CreateBusinessUnit = () => {
                     </div>
                   )}
 
-                  <div className="flex w-full h-full items-center flex-wrap px-3 py-1 gap-1">
+                  <div className="flex w-full h-full overflow-x-auto hideScrollbar items-center flex-nowrap px-3 py-1 gap-1">
                     {selectedAppointments?.map((option, index) => (
                       <span
-                        className="bg-[#E1E3EA] border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
+                        className="bg-[#E1E3EA] text-nowrap border capitalize text-[#121C2D] px-2 h-full rounded-full text-sm flex items-center"
                         key={index}
                       >
                         {option.name}
                         <button
+                          disabled
                           className="ml-2 text-[#606B85]"
                           onClick={() => handleDeleteDepartment(option)}
                         >
