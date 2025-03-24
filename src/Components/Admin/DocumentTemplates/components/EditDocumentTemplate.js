@@ -135,7 +135,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
   };
 
   const handleQuillChange = (value, editIndex) => {
-    console.log(value)
+    console.log(value);
     setDocuments((prev) => {
       return prev.map((doc, index) =>
         index === editIndex ? { ...doc, body: value } : doc
@@ -285,7 +285,7 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
       </div>
 
       {/* Rich Text Editor */}
-      {documents.map((doc, index) => (
+      {/* {documents.map((doc, index) => (
         <div
           key={index}
           className={`w-full flex-col 
@@ -298,14 +298,14 @@ const EditDocumentTemplate = ({ types, fetchData, openEditModule }) => {
             onChangeFunction={handleQuillChange}
           />
         </div>
-      ))}
+      ))} */}
 
-        {/* {console.log(documents[langIndex].body, langIndex)}
-          <Syncfusion
-            value={documents[langIndex].body}
-            index={langIndex}
-            onChangeFunction={handleQuillChange}
-          /> */}
+      {console.log(documents[langIndex].body, langIndex)}
+      <Syncfusion
+        value={documents[langIndex].body}
+        index={langIndex}
+        onChangeFunction={handleQuillChange}
+      />
 
       {/* Submit Button */}
       <div className="w-fit h-fit absolute bottom-8 right-6">

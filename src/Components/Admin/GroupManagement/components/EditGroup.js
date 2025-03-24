@@ -20,7 +20,7 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
   const [disabled, setDisabled] = useState(true);
   const [showError, setShowError] = useState(false);
   const [active, setActive] = useState(editGroup.active);
-  const [ showDropdown, setShowDropdown ] = useState(false)
+  const [showDropdown, setShowDropdown] = useState(false);
   const [formData, setFormData] = useState({
     name: editGroup.name,
     description: editGroup.description,
@@ -147,7 +147,14 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
   const handleInputChange = (key, value) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
+  const handleTextAreaChange = (value) => {
+    // Allow alphabets, numbers, and special characters only if they are mixed with text
+    const regex = /[a-zA-Z0-9]/; // Ensure at least one letter or number is present
 
+    if (regex.test(value) || value === "") {
+      setFormData((prev) => ({ ...prev, description: value }));
+    }
+  };
   // function fetch table data when a new group is created
   const refreshList = () => {
     axiosInstance
@@ -287,37 +294,39 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
               className={`w-full h-full relative gap-1 flex items-center justify-between`}
             >
               <div className="px-2 flex items-center justify-start gap-1 h-full py-1">
-                {selectedResources.length===0 &&
-                <p className="text-sm">
-                  Select
-                </p>}
+                {selectedResources.length === 0 && (
+                  <p className="text-sm">Select</p>
+                )}
 
-                {selectedResources.length> 0 && selectedResources?.map((staff, index) => (
-                  <div
-                    key={index}
-                    className="flex mx-1 h-full items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
-                  >
-                    {staff.name}
-                    <button
-                      onClick={() => removeRole(staff.id)}
-                      className="text-[#606B85] text-lg"
+                {selectedResources.length > 0 &&
+                  selectedResources?.map((staff, index) => (
+                    <div
+                      key={index}
+                      className="flex mx-1 h-full items-center text-nowrap gap-2 px-2 bg-[#F4F9FF] text-[#121C2D] border border-[#CCE4FF] rounded-full"
                     >
-                      <IoClose />
-                    </button>
-                  </div>
-                ))}
+                      {staff.name}
+                      <button
+                        onClick={() => removeRole(staff.id)}
+                        className="text-[#606B85] text-lg"
+                      >
+                        <IoClose />
+                      </button>
+                    </div>
+                  ))}
               </div>
 
-              <div className='h-full aspect-square flex items-center justify-center'>
+              <div className="h-full aspect-square flex items-center justify-center">
                 <button
-                    onClick={() => setShowDropdown(prev => !prev)}
-                    className='flex items-center justify-center w-5 h-5 aspect-square'
+                  onClick={() => setShowDropdown((prev) => !prev)}
+                  className="flex items-center justify-center w-5 h-5 aspect-square"
                 >
-                    <img
-                        src={chevronDown}
-                        className={`w-full h-full object-contain transition-all ${showDropdown? "rotate-180" : ""}`}
-                        alt='chevron down'
-                    />
+                  <img
+                    src={chevronDown}
+                    className={`w-full h-full object-contain transition-all ${
+                      showDropdown ? "rotate-180" : ""
+                    }`}
+                    alt="chevron down"
+                  />
                 </button>
               </div>
             </div>
@@ -333,13 +342,14 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
                     <p className="capitalize text-sm">{item.name}</p>
                   </button>
                 ))}
-                {dropDownList.length === 0 && selectedResources.length===0 && (
-                  <div className="h-10 w-full flex items-center justify-center border-b border-[#8891AA] last:border-b-0">
-                    <p className="capitalize text-sm font-medium">
-                      No Active Staff Found
-                    </p>
-                  </div>
-                )}
+                {dropDownList.length === 0 &&
+                  selectedResources.length === 0 && (
+                    <div className="h-10 w-full flex items-center justify-center border-b border-[#8891AA] last:border-b-0">
+                      <p className="capitalize text-sm font-medium">
+                        No Active Staff Found
+                      </p>
+                    </div>
+                  )}
               </div>
             )}
           </div>
@@ -355,7 +365,7 @@ const EditGroup = ({ editGroup, groupData, setGroupData, setEditGroup }) => {
           className="mt-1 p-2 text-sm capitalize border placeholder:italic w-full h-20 border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Field text"
           value={formData.description}
-          onChange={(e) => handleInputChange("description", e.target.value)}
+          onChange={(e) => handleTextAreaChange(e.target.value)}
           maxLength={50}
         />
         <p className="text-[#606B85] text-sm mt-2">Max 50 chars</p>

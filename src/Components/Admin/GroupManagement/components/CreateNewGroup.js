@@ -102,6 +102,15 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
+  const handleTextAreaChange = (value) => {
+    // Allow alphabets, numbers, and special characters only if they are mixed with text
+    const regex = /[a-zA-Z0-9]/; // Ensure at least one letter or number is present
+
+    if (regex.test(value) || value === "") {
+      setFormData((prev) => ({ ...prev, description: value }));
+    }
+  };
+
   // function fetch table data when a new group is created
   const refreshList = () => {
     axiosInstance
@@ -259,7 +268,7 @@ const CreateNewGroup = ({ groupData, setGroupData, setCreateNew }) => {
           className="mt-1 p-2 text-sm capitalize border placeholder:italic w-full h-20 border-[#8891AA] focus:outline-none rounded-md"
           placeholder="Field text"
           value={formData.description}
-          onChange={(e) => handleInputChange("description", e.target.value)}
+          onChange={(e) => handleTextAreaChange(e.target.value)}
           maxLength={50}
         />
         <p className="text-[#606B85] text-sm mt-2">Max 50 chars</p>
